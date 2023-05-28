@@ -1,7 +1,0 @@
-[0.001s]	[info]	Initialized engine
-[0.911s]	[info]	Initialized input handler.
-[0.911s]	[info]	Creating window 'lyoEngine v0.1' (1920x1080)
-[0.911s]	[info]	Initialized image loader with flags 2
-[0.932s]	[info]	Initialized sound manager with 16 channels
-[1.001s]	[info]	Created new spritesheet (texture size 555x43, frame size 100x43)
-[47.580s]	[info]	Exiting. Last SDL error: Invalid audio device ID
