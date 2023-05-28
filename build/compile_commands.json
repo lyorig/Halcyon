@@ -1,0 +1,82 @@
+[
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/main.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/main.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/main.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/engine.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/engine.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/engine.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/components/display_info.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/display_info.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/display_info.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/image_loader.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/image_loader.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/image_loader.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/ttf_engine.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/ttf_engine.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/ttf_engine.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/mixer.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/mixer.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/mixer.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/input_handler.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/input_handler.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/input_handler.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/debug.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/texture.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/texture.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/texture.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/spritesheet.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/spritesheet.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/spritesheet.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/components/music.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/music.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/music.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/components/chunk.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/chunk.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/chunk.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/window.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/window.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/window.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/components/surface.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/surface.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/surface.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/components/font.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/font.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/font.cpp"
+},
+{
+  "directory": "/home/lyorig/Desktop/Programming/HalodaQuest/build",
+  "command": "/usr/bin/c++  -I/home/lyorig/Desktop/Programming/HalodaQuest -O3 -DNDEBUG -Wall -Wpedantic -std=gnu++20 -o CMakeFiles/HalodaQuest.dir/halcyon/components/renderer.cpp.o -c /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/renderer.cpp",
+  "file": "/home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/renderer.cpp"
+}
+]
