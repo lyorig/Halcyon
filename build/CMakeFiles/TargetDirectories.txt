@@ -1,3 +1,0 @@
-/home/lyorig/Desktop/Programming/HalodaQuest/build/CMakeFiles/HalodaQuest.dir
-/home/lyorig/Desktop/Programming/HalodaQuest/build/CMakeFiles/edit_cache.dir
-/home/lyorig/Desktop/Programming/HalodaQuest/build/CMakeFiles/rebuild_cache.dir
