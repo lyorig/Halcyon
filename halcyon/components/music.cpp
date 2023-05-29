@@ -2,7 +2,7 @@
 
 using namespace halcyon;
 
-void music::play() noexcept
+void music::play() const noexcept
 {
     HALCYON_VERIFY(m_object != nullptr, "Tried to play null music");
 
@@ -18,7 +18,7 @@ void music::play(const char* path, lyo::u16 loops) noexcept
     HALCYON_VERIFY(::Mix_PlayMusic(m_object, loops) == 0, "Couldn't play music");
 }
 
-void music::pause() noexcept
+void music::pause() const noexcept
 {
     HALCYON_VERIFY(m_object != nullptr, "Tried pause null music");
 
@@ -37,17 +37,21 @@ void music::fade_out(double time) const noexcept
 
 lyo::u8 music::volume() const noexcept
 {
-    return static_cast<lyo::u8>(::Mix_VolumeMusic(-1));
+    const auto ret { ::Mix_VolumeMusic(-1) };
+
+    HALCYON_VERIFY(ret == 0, "Couldn't get music volume");
+
+    return static_cast<lyo::u8>(ret);
 }
 
-void music::set_volume(lyo::u8 volume) noexcept
+void music::set_volume(lyo::u8 volume) const noexcept
 {
     HALCYON_VERIFY(m_object != nullptr, "Tried to set volume of null music");
 
     ::Mix_VolumeMusic(volume);
 }
 
-void music::jump(double time) noexcept
+void music::jump(double time) const noexcept
 {
     ::Mix_RewindMusic();
 

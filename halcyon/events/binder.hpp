@@ -29,31 +29,43 @@ namespace halcyon
 
             void update() const noexcept
             {
+                /* Set to true only in case of an emergency, whatever that might be. */
+                constexpr bool performance_mode { false };
+
                 for (const auto& bind : m_binds)
                 {
-                    bool should_trigger;
-
-                    switch (bind.second.first)
+                    if constexpr (!performance_mode)
                     {
-                        case press:
-                            should_trigger = m_input.pressed(bind.first);
-                            break;
+                        bool should_trigger;
 
-                        case hold:
-                            should_trigger = m_input.held(bind.first);
-                            break;
+                        switch (bind.second.first)
+                        {
+                            case press:
+                                should_trigger = m_input.pressed(bind.first);
+                                break;
 
-                        case release:
-                            should_trigger = m_input.released(bind.first);
-                            break;
+                            case hold:
+                                should_trigger = m_input.held(bind.first);
+                                break;
 
-                        default:
-                            should_trigger = false;
-                            break;
+                            case release:
+                                should_trigger = m_input.released(bind.first);
+                                break;
+
+                            default:
+                                should_trigger = false;
+                                break;
+                        }
+
+                        if (should_trigger)
+                            bind.second.second(m_hook);
                     }
 
-                    if (should_trigger)
-                        bind.second.second(m_hook);
+                    else  // Probably UB. But it's cool, right?
+                    {
+                        if ((*(((input_handler::key_storage*)&m_input) + bind.second.first))[bind.first])
+                            bind.second.second(m_hook);
+                    }
                 }
             }
 

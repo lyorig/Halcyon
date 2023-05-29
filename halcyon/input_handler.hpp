@@ -2,8 +2,9 @@
 
 #include <SDL2/SDL_scancode.h>
 
+#include <lyo/bitset.hpp>
+
 #include "internal/subsystem.hpp"
-#include "lyo/bitset.hpp"
 
 namespace halcyon
 {
