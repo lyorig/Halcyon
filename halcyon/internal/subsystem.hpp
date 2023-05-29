@@ -2,12 +2,14 @@
 
 #include <SDL2/SDL.h>
 
+#include <lyo/types.hpp>
+
 /* subsystem.hpp:
    A simple way to initialize SDL subsystems. */
 
 namespace halcyon
 {
-    enum subsystem_t
+    enum subsystem_t : lyo::u16
     {
         video      = SDL_INIT_VIDEO,
         audio      = SDL_INIT_AUDIO,

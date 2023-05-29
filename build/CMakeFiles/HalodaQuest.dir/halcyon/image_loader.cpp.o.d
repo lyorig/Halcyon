@@ -228,16 +228,7 @@ CMakeFiles/HalodaQuest.dir/halcyon/image_loader.cpp.o: \
  /usr/include/SDL2/SDL_timer.h /usr/include/SDL2/SDL_version.h \
  /usr/include/SDL2/SDL_locale.h /usr/include/SDL2/SDL_misc.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/texture.hpp \
- /usr/include/SDL2/SDL_render.h /usr/include/c++/11/optional \
- /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
- /usr/include/c++/11/initializer_list /usr/include/c++/11/exception \
- /usr/include/c++/11/bits/exception_ptr.h \
- /usr/include/c++/11/bits/cxxabi_init_exception.h \
- /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/hash_bytes.h \
- /usr/include/c++/11/bits/nested_exception.h \
- /usr/include/c++/11/bits/enable_special_members.h \
- /usr/include/c++/11/bits/functional_hash.h \
- /usr/include/c++/11/bits/stl_construct.h \
+ /usr/include/SDL2/SDL_render.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/surface.hpp \
  /usr/include/SDL2/SDL_surface.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/types.hpp \
@@ -250,6 +241,8 @@ CMakeFiles/HalodaQuest.dir/halcyon/image_loader.cpp.o: \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/sdl_object.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
+ /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
+ /usr/include/c++/11/initializer_list \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/window.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/timer.hpp \
  /usr/include/c++/11/chrono /usr/include/c++/11/ratio \
@@ -260,8 +253,16 @@ CMakeFiles/HalodaQuest.dir/halcyon/image_loader.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
  /usr/include/c++/11/bits/parse_numbers.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/renderer.hpp \
+ /usr/include/c++/11/optional /usr/include/c++/11/exception \
+ /usr/include/c++/11/bits/exception_ptr.h \
+ /usr/include/c++/11/bits/cxxabi_init_exception.h \
+ /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/hash_bytes.h \
+ /usr/include/c++/11/bits/nested_exception.h \
+ /usr/include/c++/11/bits/enable_special_members.h \
+ /usr/include/c++/11/bits/functional_hash.h \
+ /usr/include/c++/11/bits/stl_construct.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/input_handler.hpp \
  /usr/include/SDL2/SDL_scancode.h \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/internal/subsystem.hpp \
- /usr/include/SDL2/SDL.h
+ /usr/include/SDL2/SDL.h \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp

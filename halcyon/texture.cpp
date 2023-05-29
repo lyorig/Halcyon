@@ -8,21 +8,21 @@
 using namespace halcyon;
 
 texture::texture(const window& wnd) noexcept :
-    sdl_object { ::SDL_CreateTexture(wnd.render, ::SDL_GetWindowPixelFormat(wnd), SDL_TEXTUREACCESS_STATIC, 0, 0), "Default texture creation failed" },
+    sdl_object { ::SDL_CreateTexture(wnd.renderer, ::SDL_GetWindowPixelFormat(wnd), SDL_TEXTUREACCESS_STATIC, 0, 0), "Default texture creation failed" },
     m_size { 0, 0 },
     m_window { wnd }
 {
 }
 
 texture::texture(const window& wnd, const pixel_size& size) noexcept :
-    sdl_object { ::SDL_CreateTexture(wnd.render, ::SDL_GetWindowPixelFormat(wnd), SDL_TEXTUREACCESS_STATIC, size.x, size.y), "Sized default texture creation failed" },
+    sdl_object { ::SDL_CreateTexture(wnd.renderer, ::SDL_GetWindowPixelFormat(wnd), SDL_TEXTUREACCESS_STATIC, size.x, size.y), "Sized default texture creation failed" },
     m_size { 0, 0 },
     m_window { wnd }
 {
 }
 
 texture::texture(const window& wnd, surface image) noexcept :
-    sdl_object { ::SDL_CreateTextureFromSurface(wnd.render, image), "Image-to-texture conversion failed" },
+    sdl_object { ::SDL_CreateTextureFromSurface(wnd.renderer, image), "Image-to-texture conversion failed" },
     m_size { image.size() },
     m_window { wnd }
 {
@@ -49,7 +49,7 @@ lyo::u8 texture::opacity() const noexcept
 
 void texture::draw(const coordinate& pos) const noexcept
 {
-    this->render_copy(pos, std::nullopt, 1.0, 0.0, none);
+    this->render_copy(pos, 1.0, 0.0, none);
 }
 
 void texture::draw(const coordinate& pos, const pixel_area& src) const noexcept
@@ -59,7 +59,7 @@ void texture::draw(const coordinate& pos, const pixel_area& src) const noexcept
 
 void texture::draw(const coordinate& pos, double scale, double angle, flip_t flip) const noexcept
 {
-    this->render_copy(pos, std::nullopt, scale, angle, flip);
+    this->render_copy(pos, scale, angle, flip);
 }
 
 void texture::draw(const coordinate& pos, const pixel_area& src, double scale, double angle, flip_t flip) const noexcept
@@ -67,34 +67,35 @@ void texture::draw(const coordinate& pos, const pixel_area& src, double scale, d
     this->render_copy(pos, src, scale, angle, flip);
 }
 
-void texture::render_copy(const coordinate& pos, std::optional<pixel_area> src, double scale, double angle, flip_t flip) const noexcept
+void texture::render_copy(const coordinate& pos, double scale, double angle, flip_t flip) const noexcept
 {
-    using dest_t = std::conditional_t<float_draw, SDL_FRect, SDL_Rect>;
-
-    const world_area dest { (pos + (src ? src->size : this->size())) * scale };
+    const world_area dest { (pos + this->size()) * scale };
 
     if (this->opacity() != 0 && dest | m_window.size().rect())
     {
         const dest_t sdl_dest = dest;
 
-        if (!src)
-        {
-            if constexpr (float_draw)
-                HALCYON_VERIFY(::SDL_RenderCopyExF(m_window.render, m_object, NULL, reinterpret_cast<const SDL_FRect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, "Texture drawing (floating-point) failed");
-
-            else
-                HALCYON_VERIFY(::SDL_RenderCopyEx(m_window.render, m_object, NULL, reinterpret_cast<const SDL_Rect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, "Texture drawing (integral) failed");
-        }
+        if constexpr (float_draw)
+            HALCYON_VERIFY(::SDL_RenderCopyExF(m_window.renderer, m_object, NULL, reinterpret_cast<const SDL_FRect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, "Texture drawing (floating-point) failed");
 
         else
-        {
-            SDL_Rect src_rect = *src;
+            HALCYON_VERIFY(::SDL_RenderCopyEx(m_window.renderer, m_object, NULL, reinterpret_cast<const SDL_Rect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, "Texture drawing (integral) failed");
+    }
+}
 
-            if constexpr (float_draw)
-                HALCYON_VERIFY(::SDL_RenderCopyExF(m_window.render, m_object, &src_rect, reinterpret_cast<const SDL_FRect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, "Texture drawing (floating-point) failed");
+void texture::render_copy(const coordinate& pos, const pixel_area& src, double scale, double angle, flip_t flip) const noexcept
+{
+    const world_area dest { (pos + src.size) * scale };
 
-            else
-                HALCYON_VERIFY(::SDL_RenderCopyEx(m_window.render, m_object, &src_rect, reinterpret_cast<const SDL_Rect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, "Texture drawing (integral) failed");
-        }
+    if (this->opacity() != 0 && dest | m_window.size().rect())
+    {
+        const dest_t   dst_rect = dest;
+        const SDL_Rect src_rect = src;
+
+        if constexpr (float_draw)
+            HALCYON_VERIFY(::SDL_RenderCopyExF(m_window.renderer, m_object, &src_rect, reinterpret_cast<const SDL_FRect*>(&dst_rect), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, "Texture drawing (floating-point) failed");
+
+        else
+            HALCYON_VERIFY(::SDL_RenderCopyEx(m_window.renderer, m_object, &src_rect, reinterpret_cast<const SDL_Rect*>(&dst_rect), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, "Texture drawing (integral) failed");
     }
 }

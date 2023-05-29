@@ -12,7 +12,9 @@ namespace halcyon
         {
           public:
 
-            enum event_t
+            using key_type = input_handler::button_t;
+
+            enum event_t : lyo::u8
             {
                 press,
                 hold,
@@ -55,19 +57,20 @@ namespace halcyon
                 }
             }
 
-            void bind(SDL_Scancode key, event_t type, callback<Hook&> func) noexcept
+            void bind(key_type key, event_t type, callback<Hook&> func) noexcept
             {
                 m_binds.emplace(std::piecewise_construct, std::forward_as_tuple(key), std::forward_as_tuple(type, func));
             }
 
-            void unbind(SDL_Scancode key) noexcept
+            void unbind(key_type key) noexcept
             {
                 m_binds.erase(key);
             }
 
           private:
 
-            std::unordered_map<SDL_Scancode, std::pair<event_t, callback<Hook&>>> m_binds;
+            // TODO: Add support for multi-key binds.
+            std::unordered_map<key_type, std::pair<event_t, callback<Hook&>>> m_binds;
 
             const input_handler& m_input;
 

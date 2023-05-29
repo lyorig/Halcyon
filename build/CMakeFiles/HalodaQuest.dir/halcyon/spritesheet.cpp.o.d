@@ -150,14 +150,10 @@ CMakeFiles/HalodaQuest.dir/halcyon/spritesheet.cpp.o: \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/texture.hpp \
  /usr/include/SDL2/SDL_render.h /usr/include/SDL2/SDL_rect.h \
  /usr/include/SDL2/SDL_video.h /usr/include/SDL2/SDL_surface.h \
- /usr/include/SDL2/SDL_blendmode.h /usr/include/c++/11/optional \
- /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
- /usr/include/c++/11/exception /usr/include/c++/11/bits/exception_ptr.h \
- /usr/include/c++/11/bits/cxxabi_init_exception.h \
- /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
- /usr/include/c++/11/bits/enable_special_members.h \
+ /usr/include/SDL2/SDL_blendmode.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/surface.hpp \
  /usr/include/SDL2/SDL_surface.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/sdl_object.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.hpp \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
+ /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h

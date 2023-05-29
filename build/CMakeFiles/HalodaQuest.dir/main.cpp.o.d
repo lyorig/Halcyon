@@ -238,8 +238,8 @@ CMakeFiles/HalodaQuest.dir/main.cpp.o: \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/events/binder.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/input_handler.hpp \
  /usr/include/SDL2/SDL_scancode.h \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/internal/subsystem.hpp \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp \
  /usr/include/c++/11/unordered_map /usr/include/c++/11/initializer_list \
  /usr/include/c++/11/bits/allocator.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h \
@@ -266,10 +266,6 @@ CMakeFiles/HalodaQuest.dir/main.cpp.o: \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/image_loader.hpp \
  /usr/include/SDL2/SDL_image.h /usr/include/SDL2/SDL.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/texture.hpp \
- /usr/include/c++/11/optional /usr/include/c++/11/exception \
- /usr/include/c++/11/bits/exception_ptr.h \
- /usr/include/c++/11/bits/cxxabi_init_exception.h \
- /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/surface.hpp \
  /usr/include/SDL2/SDL_surface.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/sdl_object.hpp \
@@ -301,4 +297,8 @@ CMakeFiles/HalodaQuest.dir/main.cpp.o: \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/font.hpp \
  /usr/include/SDL2/SDL_ttf.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/window.hpp \
- /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/renderer.hpp
+ /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/renderer.hpp \
+ /usr/include/c++/11/optional /usr/include/c++/11/exception \
+ /usr/include/c++/11/bits/exception_ptr.h \
+ /usr/include/c++/11/bits/cxxabi_init_exception.h \
+ /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h

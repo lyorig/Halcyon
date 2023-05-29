@@ -36,23 +36,20 @@ int main(int argc, char* argv[])
 
     const halcyon::input_handler& input { wnd.input() };
 
-    sm.mus.play("assets/ost/Legend of the Keeper.mp3");
+    sm.music.play("assets/ost/Legend of the Keeper.mp3");
 
     halcyon::events::binder<halcyon::texture> bin { input, soyjak };
 
-    bin.bind(SDL_SCANCODE_Q, bin.press, [](halcyon::texture& tx)
-        { tx.set_opacity(0); });
+    bin.bind(input.lmb, bin.press, [](halcyon::texture& tx)
+        { puts("Pressed LMB"); });
 
-    bin.bind(SDL_SCANCODE_W, bin.press, [](halcyon::texture& tx)
-        { tx.set_opacity(64); });
+    bin.bind(input.mmb, bin.hold, [](halcyon::texture& tx)
+        { puts("Holding MMB"); });
 
-    bin.bind(SDL_SCANCODE_E, bin.press, [](halcyon::texture& tx)
-        { tx.set_opacity(128); });
+    bin.bind(input.rmb, bin.release, [](halcyon::texture& tx)
+        { puts("Released RMB"); });
 
-    bin.bind(SDL_SCANCODE_R, bin.press, [](halcyon::texture& tx)
-        { tx.set_opacity(196); });
-
-    while (!input.pressed(SDL_SCANCODE_ESCAPE))
+    while (!input.pressed(input.esc))
     {
         soyjak.draw({ 0, 0 });
         logo.draw({ 0, 0 }, ss[0][0]);

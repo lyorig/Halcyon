@@ -4,6 +4,9 @@
 #include <lyo/timer.hpp>
 #include <vector>
 
+/* scheduler.hpp:
+   A simple way to schedule regular operations on an object. */
+
 namespace halcyon
 {
     namespace events

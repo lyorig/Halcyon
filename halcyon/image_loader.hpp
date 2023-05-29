@@ -12,7 +12,7 @@ namespace halcyon
     {
       public:
 
-        enum image_type  // Image types, adapted from SDL.
+        enum image_type : lyo::u8  // Image types, adapted from SDL.
         {
             jpg  = IMG_INIT_JPG,
             png  = IMG_INIT_PNG,

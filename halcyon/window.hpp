@@ -16,9 +16,9 @@ namespace halcyon
     {
       public:
 
-        renderer render;
+        halcyon::renderer renderer;
 
-        enum flag_t
+        enum flag_t : lyo::u16
         {
             fullscreen = SDL_WINDOW_FULLSCREEN_DESKTOP,
             hidden     = SDL_WINDOW_HIDDEN,

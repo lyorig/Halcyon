@@ -2,8 +2,6 @@
 
 #include <SDL2/SDL_render.h>
 
-#include <optional>
-
 #include "components/surface.hpp"
 
 /* texture.cpp:
@@ -22,7 +20,7 @@ namespace halcyon
     {
       public:
 
-        enum flip_t
+        enum flip_t : lyo::u8
         {
             none = SDL_FLIP_NONE,
             x    = SDL_FLIP_HORIZONTAL,
@@ -48,10 +46,13 @@ namespace halcyon
 
       private:
 
+        using dest_t = std::conditional_t<float_draw, SDL_FRect, SDL_Rect>;
+
         pixel_size m_size;
 
         const window& m_window;
 
-        void render_copy(const coordinate& pos, std::optional<pixel_area> src, double scale, double angle, flip_t flip) const noexcept;
+        void render_copy(const coordinate& pos, double scale, double angle, flip_t flip) const noexcept;
+        void render_copy(const coordinate& pos, const pixel_area& src, double scale, double angle, flip_t flip) const noexcept;
     };
 }  // namespace halcyon

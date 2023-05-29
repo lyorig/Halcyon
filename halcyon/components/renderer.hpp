@@ -2,10 +2,10 @@
 
 #include <SDL2/SDL_render.h>
 
+#include <halcyon/types.hpp>
 #include <optional>
 
 #include "sdl_object.hpp"
-#include <halcyon/types.hpp>
 
 namespace halcyon
 {
@@ -18,7 +18,7 @@ namespace halcyon
 
       public:
 
-        enum flag_t
+        enum flag_t : lyo::u8
         {
             software    = SDL_RENDERER_SOFTWARE,
             accelerated = SDL_RENDERER_ACCELERATED,

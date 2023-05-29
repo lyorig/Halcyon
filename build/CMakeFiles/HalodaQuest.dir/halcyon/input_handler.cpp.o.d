@@ -120,9 +120,6 @@ CMakeFiles/HalodaQuest.dir/halcyon/input_handler.cpp.o: \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/types.hpp \
- /usr/include/c++/11/cstdint \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/internal/subsystem.hpp \
  /usr/include/SDL2/SDL.h /usr/include/SDL2/SDL_main.h \
  /usr/include/SDL2/SDL_assert.h /usr/include/SDL2/SDL_atomic.h \
@@ -231,6 +228,9 @@ CMakeFiles/HalodaQuest.dir/halcyon/input_handler.cpp.o: \
  /usr/include/SDL2/SDL_shape.h /usr/include/SDL2/SDL_system.h \
  /usr/include/SDL2/SDL_timer.h /usr/include/SDL2/SDL_version.h \
  /usr/include/SDL2/SDL_locale.h /usr/include/SDL2/SDL_misc.h \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/types.hpp \
+ /usr/include/c++/11/cstdint \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp \
  /usr/include/SDL2/SDL_events.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/engine.hpp \

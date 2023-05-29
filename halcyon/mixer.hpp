@@ -14,7 +14,7 @@ namespace halcyon
     {
       public:
 
-        enum music_types
+        enum music_types : lyo::u8
         {
             none = 0,
             flac = MIX_INIT_FLAC,
@@ -33,7 +33,7 @@ namespace halcyon
         [[no_unique_address]] subsystem<audio> m_subsys;
 
         /* Warning - only a single Mix_Music instance is allowed globally! */
-        music mus;
+        halcyon::music music;
 
       private:
     };

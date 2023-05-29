@@ -81,17 +81,17 @@ void input_handler::update() noexcept
     }
 }
 
-bool input_handler::pressed(SDL_Scancode key) const noexcept
+bool input_handler::pressed(button_t key) const noexcept
 {
     return m_pressed[key];
 }
 
-bool input_handler::held(SDL_Scancode key) const noexcept
+bool input_handler::held(button_t key) const noexcept
 {
     return m_held[key];
 }
 
-bool input_handler::released(SDL_Scancode key) const noexcept
+bool input_handler::released(button_t key) const noexcept
 {
     return m_released[key];
 }

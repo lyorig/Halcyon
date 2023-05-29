@@ -127,8 +127,8 @@ CMakeFiles/HalodaQuest.dir/halcyon/components/chunk.cpp.o: \
  /usr/include/SDL2/SDL_version.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/sdl_object.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.hpp \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/types.hpp \
+ /usr/include/c++/11/cstdint \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
  /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
- /usr/include/c++/11/initializer_list \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/types.hpp \
- /usr/include/c++/11/cstdint
+ /usr/include/c++/11/initializer_list

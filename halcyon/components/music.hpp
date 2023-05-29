@@ -17,9 +17,14 @@ namespace halcyon
       public:
 
         void play() noexcept;
-        void play(const char* path, int loops = INT32_MAX) noexcept;
+        void play(const char* path, lyo::u16 loops = 0) noexcept;
 
         void pause() noexcept;
+
+        void fade_in(double time, lyo::u16 loops = 0) const noexcept;
+        void fade_out(double time) const noexcept;
+
+        lyo::u8 volume() const noexcept;
 
         void set_volume(lyo::u8 volume) noexcept;
         void jump(double time) noexcept;

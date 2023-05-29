@@ -151,9 +151,9 @@ CMakeFiles/HalodaQuest.dir/halcyon/mixer.cpp.o: \
  /usr/include/SDL2/SDL_version.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/sdl_object.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.hpp \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/types.hpp \
  /usr/include/c++/11/cstdint \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/music.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/timer.hpp \
  /usr/include/c++/11/chrono /usr/include/c++/11/ratio \

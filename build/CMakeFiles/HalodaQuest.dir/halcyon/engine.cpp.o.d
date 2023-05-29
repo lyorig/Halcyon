@@ -240,20 +240,12 @@ CMakeFiles/HalodaQuest.dir/halcyon/engine.cpp.o: \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/image_loader.hpp \
  /usr/include/SDL2/SDL_image.h /usr/include/SDL2/SDL.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/texture.hpp \
- /usr/include/c++/11/optional /usr/include/c++/11/utility \
- /usr/include/c++/11/bits/stl_relops.h \
- /usr/include/c++/11/initializer_list /usr/include/c++/11/exception \
- /usr/include/c++/11/bits/exception_ptr.h \
- /usr/include/c++/11/bits/cxxabi_init_exception.h \
- /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/hash_bytes.h \
- /usr/include/c++/11/bits/nested_exception.h \
- /usr/include/c++/11/bits/enable_special_members.h \
- /usr/include/c++/11/bits/functional_hash.h \
- /usr/include/c++/11/bits/stl_construct.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/surface.hpp \
  /usr/include/SDL2/SDL_surface.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/sdl_object.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
+ /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
+ /usr/include/c++/11/initializer_list \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/internal/subsystem.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/mixer.hpp \
  /usr/include/c++/11/unordered_map /usr/include/c++/11/bits/allocator.h \
@@ -262,14 +254,19 @@ CMakeFiles/HalodaQuest.dir/halcyon/engine.cpp.o: \
  /usr/include/c++/11/bits/memoryfwd.h \
  /usr/include/c++/11/ext/alloc_traits.h \
  /usr/include/c++/11/bits/alloc_traits.h \
+ /usr/include/c++/11/bits/stl_construct.h \
  /usr/include/c++/11/ext/aligned_buffer.h \
  /usr/include/c++/11/bits/stl_function.h \
  /usr/include/c++/11/backward/binders.h \
+ /usr/include/c++/11/bits/functional_hash.h \
+ /usr/include/c++/11/bits/hash_bytes.h \
  /usr/include/c++/11/bits/hashtable.h \
  /usr/include/c++/11/bits/hashtable_policy.h /usr/include/c++/11/tuple \
  /usr/include/c++/11/array /usr/include/c++/11/bits/range_access.h \
  /usr/include/c++/11/bits/uses_allocator.h \
- /usr/include/c++/11/bits/invoke.h /usr/include/c++/11/bits/node_handle.h \
+ /usr/include/c++/11/bits/invoke.h \
+ /usr/include/c++/11/bits/enable_special_members.h \
+ /usr/include/c++/11/bits/node_handle.h \
  /usr/include/c++/11/bits/unordered_map.h \
  /usr/include/c++/11/bits/erase_if.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/chunk.hpp \
@@ -285,6 +282,10 @@ CMakeFiles/HalodaQuest.dir/halcyon/engine.cpp.o: \
  /usr/include/c++/11/bits/parse_numbers.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/window.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/renderer.hpp \
+ /usr/include/c++/11/optional /usr/include/c++/11/exception \
+ /usr/include/c++/11/bits/exception_ptr.h \
+ /usr/include/c++/11/bits/cxxabi_init_exception.h \
+ /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/input_handler.hpp \
  /usr/include/SDL2/SDL_scancode.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp

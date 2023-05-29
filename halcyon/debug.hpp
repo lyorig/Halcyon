@@ -10,6 +10,8 @@
     #include <iostream>
     #include <lyo/timer.hpp>
     #include <sstream>
+#else
+    #include <lyo/types.hpp>
 #endif
 
 namespace halcyon
@@ -18,12 +20,13 @@ namespace halcyon
     {
       public:
 
-        enum severity
+        enum severity : lyo::u8
         {
             info,
             warning,
             error
         };
+
 #ifndef NDEBUG
         /* Output any amount of arguments to stdout/stderr and an output file. */
         template <typename... Args>

@@ -124,6 +124,13 @@ CMakeFiles/HalodaQuest.dir/halcyon/components/renderer.cpp.o: \
  /usr/include/SDL2/SDL_pixels.h /usr/include/SDL2/SDL_endian.h \
  /usr/include/SDL2/SDL_rwops.h /usr/include/SDL2/SDL_video.h \
  /usr/include/SDL2/SDL_surface.h /usr/include/SDL2/SDL_blendmode.h \
+ /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/types.hpp \
+ /usr/include/SDL2/SDL_rect.h \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/concepts.hpp \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/types.hpp \
+ /usr/include/c++/11/cstdint \
+ /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/types/point.hpp \
+ /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/types/rectangle.hpp \
  /usr/include/c++/11/optional /usr/include/c++/11/utility \
  /usr/include/c++/11/bits/stl_relops.h \
  /usr/include/c++/11/initializer_list /usr/include/c++/11/exception \
@@ -137,13 +144,6 @@ CMakeFiles/HalodaQuest.dir/halcyon/components/renderer.cpp.o: \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/sdl_object.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/types.hpp \
- /usr/include/c++/11/cstdint \
- /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/types.hpp \
- /usr/include/SDL2/SDL_rect.h \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/concepts.hpp \
- /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/types/point.hpp \
- /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/types/rectangle.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/window.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/timer.hpp \
  /usr/include/c++/11/chrono /usr/include/c++/11/ratio \
@@ -155,7 +155,6 @@ CMakeFiles/HalodaQuest.dir/halcyon/components/renderer.cpp.o: \
  /usr/include/c++/11/bits/parse_numbers.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/input_handler.hpp \
  /usr/include/SDL2/SDL_scancode.h \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/internal/subsystem.hpp \
  /usr/include/SDL2/SDL.h /usr/include/SDL2/SDL_main.h \
  /usr/include/SDL2/SDL_assert.h /usr/include/SDL2/SDL_atomic.h \
@@ -260,6 +259,7 @@ CMakeFiles/HalodaQuest.dir/halcyon/components/renderer.cpp.o: \
  /usr/include/SDL2/SDL_system.h /usr/include/SDL2/SDL_timer.h \
  /usr/include/SDL2/SDL_version.h /usr/include/SDL2/SDL_locale.h \
  /usr/include/SDL2/SDL_misc.h \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/bitset.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/texture.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/surface.hpp \
  /usr/include/SDL2/SDL_surface.h

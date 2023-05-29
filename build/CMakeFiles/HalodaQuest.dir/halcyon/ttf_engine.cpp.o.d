@@ -253,9 +253,9 @@ CMakeFiles/HalodaQuest.dir/halcyon/ttf_engine.cpp.o: \
  /usr/include/SDL2/SDL_locale.h /usr/include/SDL2/SDL_misc.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/sdl_object.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/debug.hpp \
- /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/lyo/types.hpp \
  /usr/include/c++/11/cstdint \
+ /home/lyorig/Desktop/Programming/HalodaQuest/lyo/capsule.hpp \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/components/surface.hpp \
  /usr/include/SDL2/SDL_surface.h \
  /home/lyorig/Desktop/Programming/HalodaQuest/halcyon/types.hpp \
