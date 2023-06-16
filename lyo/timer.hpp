@@ -1,7 +1,6 @@
 #pragma once
 
 #include <chrono>
-
 #include <lyo/types.hpp>
 
 /* timer.hpp:
@@ -15,7 +14,7 @@ namespace lyo
     template <lyo::clock Clock>
     class timer
     {
-        using second_type = std::chrono::duration<double>;
+        using second_type = std::chrono::duration<lyo::f64>;
 
       public:
 
@@ -31,19 +30,26 @@ namespace lyo
             return *this;
         }
 
-        double operator()() const noexcept
+        f64 operator()() const noexcept
         {
-            return std::chrono::duration<double> { Clock::now() - m_epoch }.count();
+            return std::chrono::duration<f64> { Clock::now() - m_epoch }.count();
         }
 
-        timer& operator+=(double time) noexcept
+        timer& operator=(f64 time) noexcept
+        {
+            m_epoch = Clock::now() - second_type { time };
+
+            return *this;
+        }
+
+        timer& operator+=(f64 time) noexcept
         {
             m_epoch -= second_type { time };
 
             return *this;
         }
 
-        timer& operator-=(double time) noexcept
+        timer& operator-=(f64 time) noexcept
         {
             m_epoch += second_type { time };
 
@@ -52,7 +58,7 @@ namespace lyo
 
       private:
 
-        std::chrono::time_point<Clock, std::chrono::duration<double, typename Clock::period>> m_epoch;
+        std::chrono::time_point<Clock, std::chrono::duration<f64, typename Clock::period>> m_epoch;
     };
 
     using steady_timer  = timer<std::chrono::steady_clock>;

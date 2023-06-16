@@ -3,24 +3,24 @@
 #include <halcyon/debug.hpp>
 #include <lyo/capsule.hpp>
 
-namespace halcyon
+namespace hal
 {
     class engine;
 
-    template <typename Type, lyo::function<void, Type*> Deleter>
+    template <typename Type, lyo::func_ptr<void, Type*> Deleter>
     class sdl_object
     {
       public:
 
         sdl_object() noexcept = default;
 
-        sdl_object(Type* object, const char* error_if_null) noexcept :
+        sdl_object(Type* object) noexcept :
             m_object { object }
         {
-            HALCYON_VERIFY(m_object != nullptr, error_if_null);
+            HAL_DEBUG_VERIFY(m_object != nullptr, ::SDL_GetError());
         }
 
-        operator Type*() const noexcept
+        Type* ptr() const noexcept
         {
             return m_object;
         }
@@ -29,4 +29,4 @@ namespace halcyon
 
         lyo::capsule<Type, Deleter> m_object;
     };
-}  // namespace halcyon
+}  // namespace hal

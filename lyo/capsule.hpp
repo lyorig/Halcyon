@@ -13,7 +13,7 @@ namespace lyo
     using capsule_base_type = std::remove_all_extents_t<T>;
 
     template <typename T>
-    using capsule_deleter = lyo::function<void, capsule_base_type<T>*>;
+    using capsule_deleter = lyo::func_ptr<void, capsule_base_type<T>*>;
 
     template <typename T>
     constexpr void default_delete(capsule_base_type<T>* ptr) noexcept
@@ -25,7 +25,8 @@ namespace lyo
             delete ptr;
     }
 
-    template <typename Type, capsule_deleter<Type> Deleter = default_delete<Type>>
+    template <typename Type, auto Deleter = default_delete<Type>>
+        requires(requires(capsule_base_type<Type>* ptr) { static_cast<void>(Deleter(ptr)); })
     class capsule
     {
       public:
@@ -105,13 +106,14 @@ namespace lyo
         constexpr void destroy() const noexcept
         {
             if (m_pointer)
-                Deleter(m_pointer);
+                static_cast<void>(Deleter(m_pointer));
         }
 
         base_type* m_pointer;
     };
 
-    template <typename Type, capsule_deleter<Type> Deleter = default_delete<Type>>
+    template <typename Type, auto Deleter = default_delete<Type>>
+        requires(requires(capsule_base_type<Type>* ptr) { static_cast<void>(Deleter(ptr)); })
     class shareable
     {
       public:
@@ -231,7 +233,7 @@ namespace lyo
 
             if (m_pointer && --(*m_count) == 0)
             {
-                Deleter(m_pointer);
+                static_cast<void>(Deleter(m_pointer));
                 delete m_count;
             }
         }

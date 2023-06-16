@@ -1,10 +1,10 @@
 #include "ttf_engine.hpp"
 
-using namespace halcyon;
+using namespace hal;
 
 ttf_engine::ttf_engine(engine& engine) noexcept
 {
-    HALCYON_VERIFY(::TTF_Init() == 0, "SDL_ttf initialization failed");
+    HAL_DEBUG_VERIFY(::TTF_Init() == 0, ::TTF_GetError());
 }
 
 ttf_engine::~ttf_engine()

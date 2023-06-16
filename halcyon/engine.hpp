@@ -7,7 +7,7 @@
 /* core.hpp:
    The core of Halcyon, without which nothing can be initialized. */
 
-namespace halcyon
+namespace hal
 {
     class engine
     {

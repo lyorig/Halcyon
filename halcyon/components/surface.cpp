@@ -5,20 +5,20 @@
 
 #include "font.hpp"
 
-using namespace halcyon;
+using namespace hal;
 
 surface::surface(const char* path) noexcept :
-    sdl_object { ::IMG_Load(path), "Image loading failed" }
+    sdl_object { ::IMG_Load(path) }
 {
 }
 
 surface::surface(const font& fnt, const char* text) noexcept :
-    sdl_object { ::TTF_RenderUTF8_Blended_Wrapped(fnt, text, { 255, 255, 255, 255 }, 0), "Couldn't render text" }
+    sdl_object { ::TTF_RenderUTF8_Blended_Wrapped(fnt.ptr(), text, { 255, 255, 255, 255 }, 0) }
 {
 }
 
 surface::surface(const font& fnt, const char* text, color_t color) noexcept :
-    sdl_object { ::TTF_RenderUTF8_Blended_Wrapped(fnt, text, { static_cast<Uint8>(color >> 16), static_cast<Uint8>(color >> 8), static_cast<Uint8>(color), 255 }, 0), "Couldn't render colored text" }
+    sdl_object { ::TTF_RenderUTF8_Blended_Wrapped(fnt.ptr(), text, { static_cast<Uint8>(color >> 16), static_cast<Uint8>(color >> 8), static_cast<Uint8>(color), 255 }, 0) }
 {
 }
 

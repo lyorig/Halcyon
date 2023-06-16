@@ -4,7 +4,9 @@
 
 #include "sdl_object.hpp"
 
-namespace halcyon
+// TODO: Convert to OpenAL
+
+namespace hal
 {
     class engine;
     class mixer;
@@ -21,4 +23,4 @@ namespace halcyon
 
         chunk(const char* path) noexcept;
     };
-}  // namespace halcyon
+}  // namespace hal

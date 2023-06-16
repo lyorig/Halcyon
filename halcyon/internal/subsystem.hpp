@@ -5,11 +5,11 @@
 #include <lyo/types.hpp>
 
 /* subsystem.hpp:
-   A simple way to initialize SDL subsystems. */
+   A "smart pointer way" to initialize SDL subsystems. */
 
-namespace halcyon
+namespace hal
 {
-    enum subsystem_t : lyo::u16
+    enum subsystem_type : lyo::u16
     {
         video      = SDL_INIT_VIDEO,
         audio      = SDL_INIT_AUDIO,
@@ -19,7 +19,7 @@ namespace halcyon
         all        = SDL_INIT_EVERYTHING
     };
 
-    template <subsystem_t System>
+    template <subsystem_type System>
     class subsystem
     {
       public:
@@ -34,4 +34,4 @@ namespace halcyon
             ::SDL_QuitSubSystem(static_cast<Uint32>(System));
         }
     };
-}  // namespace halcyon
+}  // namespace hal

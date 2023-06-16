@@ -5,7 +5,7 @@
 #include "components/font.hpp"
 #include "components/surface.hpp"
 
-namespace halcyon
+namespace hal
 {
     class engine;
 

@@ -8,13 +8,13 @@
 #include "mixer.hpp"
 #include "window.hpp"
 
-using namespace halcyon;
+using namespace hal;
 
 engine::engine() noexcept
 {
-    HALCYON_VERIFY(::SDL_Init(0) == 0, "SDL initialization failed");
+    HAL_DEBUG_VERIFY(::SDL_Init(0) == 0, ::SDL_GetError());
 
-    HALCYON_PRINT(debug::info, "Initialized engine");
+    HAL_DEBUG_PRINT(debug::info, "Initialized engine");
 }
 
 engine::~engine()
@@ -28,7 +28,7 @@ display_info engine::monitor_info(lyo::u8 index) const noexcept
 
     SDL_DisplayMode dm;
 
-    HALCYON_VERIFY(::SDL_GetDesktopDisplayMode(index, &dm) == 0, "Couldn't get display info");
+    HAL_DEBUG_VERIFY(::SDL_GetDesktopDisplayMode(index, &dm) == 0, ::SDL_GetError());
 
     return dm;
 }
@@ -41,6 +41,6 @@ void engine::exit() noexcept
 
 void engine::deinitialize() noexcept
 {
-    HALCYON_PRINT(debug::info, "Exiting. Last SDL error: ", std::strlen(::SDL_GetError()) > 0 ? ::SDL_GetError() : "none");
+    HAL_DEBUG_PRINT(debug::info, "Exiting. Last SDL error: ", std::strlen(::SDL_GetError()) > 0 ? ::SDL_GetError() : "none");
     ::SDL_Quit();
 }

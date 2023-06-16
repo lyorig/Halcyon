@@ -2,13 +2,13 @@
 
 #include "window.hpp"
 
-using namespace halcyon;
+using namespace hal;
 
 image_loader::image_loader(engine& engine, int type_flags) noexcept
 {
-    HALCYON_VERIFY(::IMG_Init(type_flags) == type_flags, "SDL_image initialization failed");
+    HAL_DEBUG_VERIFY(::IMG_Init(type_flags) == type_flags, ::SDL_GetError());
 
-    HALCYON_PRINT(debug::info, "Initialized image loader with flags ", type_flags);
+    HAL_DEBUG_PRINT(debug::info, "Initialized image loader with flags ", type_flags);
 }
 
 image_loader::~image_loader()

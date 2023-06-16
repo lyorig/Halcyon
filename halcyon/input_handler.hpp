@@ -6,7 +6,7 @@
 
 #include "internal/subsystem.hpp"
 
-namespace halcyon
+namespace hal
 {
     class engine;
 
@@ -17,7 +17,7 @@ namespace halcyon
         /* The usual scancodes, plus mouse buttons. */
         using key_storage = lyo::bitset<SDL_NUM_SCANCODES + 5, lyo::u64>;
 
-        enum button_t : lyo::u16
+        enum button : lyo::u16
         {
             A = SDL_SCANCODE_A,
             B = SDL_SCANCODE_B,
@@ -92,15 +92,15 @@ namespace halcyon
 
         void update() noexcept;
 
-        bool pressed(button_t key) const noexcept;
-        bool held(button_t key) const noexcept;
-        bool released(button_t key) const noexcept;
+        bool pressed(button btn) const noexcept;
+        bool held(button btn) const noexcept;
+        bool released(button btn) const noexcept;
 
       private:
 
-        /* If the layout is ever modified, make sure the binder is aware of it. */
+        /* If the layout is ever modified, make sure the binder's "performance mode" is aware of it. */
         key_storage m_pressed, m_held, m_released;
 
         engine& m_engine;
     };
-}  // namespace halcyon
+}  // namespace hal

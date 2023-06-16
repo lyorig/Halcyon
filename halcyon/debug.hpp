@@ -14,7 +14,7 @@
     #include <lyo/types.hpp>
 #endif
 
-namespace halcyon
+namespace hal
 {
     class debug
     {
@@ -61,10 +61,10 @@ namespace halcyon
         }
 
         /* Show a message box with an error message. */
-        static void panic(const char* reason) noexcept;
+        static void panic(const char* title, const char* message) noexcept;
 
         /* Check a condition, and panic if it's false. */
-        static void verify(bool condition, const char* if_false) noexcept;
+        static void verify(bool condition, const char* func, const char* info) noexcept;
 
       private:
 
@@ -72,18 +72,18 @@ namespace halcyon
         static const lyo::precise_timer m_timer;
 #endif
     };
-}  // namespace halcyon
+}  // namespace hal
 
 #ifndef NDEBUG
 
-    #define HALCYON_PRINT  halcyon::debug::print
-    #define HALCYON_PANIC  halcyon::debug::panic
-    #define HALCYON_VERIFY halcyon::debug::verify
+    #define HAL_DEBUG_PRINT                  hal::debug::print
+    #define HAL_DEBUG_PANIC                  hal::debug::panic
+    #define HAL_DEBUG_VERIFY(cond, if_false) hal::debug::verify(cond, #cond " eval'd to false", if_false)
 
 #else
 
-    #define HALCYON_PRINT(...)                  (void(0))
-    #define HALCYON_PANIC(reason)               (void(0))
-    #define HALCYON_VERIFY(condition, if_false) (void(condition))  // Make sure functions with side effects get called.
+    #define HAL_DEBUG_PRINT(...)                 (static_cast<void>(0))
+    #define HAL_DEBUG_PANIC(title, message)      (static_cast<void>(0))
+    #define HAL_DEBUG_PRINT(condition, if_false) (static_cast<void>(condition))  // Make sure functions with side effects get called.
 
 #endif

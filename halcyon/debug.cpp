@@ -5,23 +5,24 @@
 
     #include <cstring>
 
-using namespace halcyon;
+using namespace hal;
 
 /* Static private variables. */
 std::ofstream            debug::m_output { "Halcyon debug output.txt" };
 const lyo::precise_timer debug::m_timer {};
 
-void debug::panic(const char* reason) noexcept
+void debug::panic(const char* title, const char* message) noexcept
 {
-    const char* err { std::strlen(::SDL_GetError()) ? ::SDL_GetError() : "no SDL error" };
-    debug::print(severity::error, __func__, ": ", reason, " - ", err);
+    const char* fmt_msg { std::strlen(message) > 0 ? message : "No info recieved." };
 
-    const SDL_MessageBoxButtonData buttons[] {
+    debug::print(severity::error, __func__, ": ", fmt_msg);
+
+    constexpr SDL_MessageBoxButtonData buttons[] {
         {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT,  0, "Exit"      },
         { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Run anyway"}
     };
 
-    const SDL_MessageBoxData msgbox { SDL_MESSAGEBOX_ERROR, NULL, reason, err, SDL_arraysize(buttons), buttons, NULL };
+    const SDL_MessageBoxData msgbox { SDL_MESSAGEBOX_ERROR, NULL, title, fmt_msg, SDL_arraysize(buttons), buttons, NULL };
 
     int response { 0 };
 
@@ -35,9 +36,9 @@ void debug::panic(const char* reason) noexcept
         std::exit(EXIT_FAILURE);
 }
 
-void debug::verify(bool condition, const char* if_false) noexcept
+void debug::verify(bool condition, const char* func, const char* info) noexcept
 {
     if (!condition)
-        debug::panic(if_false);
+        debug::panic(func, info);
 }
 #endif

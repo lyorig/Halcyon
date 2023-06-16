@@ -7,7 +7,7 @@
 
 #include "sdl_object.hpp"
 
-namespace halcyon
+namespace hal
 {
     class window;
     class texture;
@@ -18,7 +18,7 @@ namespace halcyon
 
       public:
 
-        enum flag_t : lyo::u8
+        enum flag : lyo::u8
         {
             software    = SDL_RENDERER_SOFTWARE,
             accelerated = SDL_RENDERER_ACCELERATED,
@@ -37,4 +37,4 @@ namespace halcyon
 
         pixel_size output_size() const noexcept;
     };
-}  // namespace halcyon
+}  // namespace hal

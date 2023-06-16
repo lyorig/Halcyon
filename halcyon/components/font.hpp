@@ -4,7 +4,7 @@
 
 #include "sdl_object.hpp"
 
-namespace halcyon
+namespace hal
 {
     class ttf_engine;
 
@@ -12,9 +12,6 @@ namespace halcyon
     {
         friend class ttf_engine;
 
-      public:
-      private:
-
         font(const char* path, lyo::u8 size) noexcept;
     };
-}  // namespace halcyon
+}  // namespace hal

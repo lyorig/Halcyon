@@ -1,9 +1,10 @@
 #pragma once
 
 #include <halcyon/input_handler.hpp>
+#include <halcyon/internal/config.hpp>
 #include <unordered_map>
 
-namespace halcyon
+namespace hal
 {
     namespace events
     {
@@ -12,9 +13,9 @@ namespace halcyon
         {
           public:
 
-            using key_type = input_handler::button_t;
+            using key_type = input_handler::button;
 
-            enum event_t : lyo::u8
+            enum event : lyo::u8
             {
                 press,
                 hold,
@@ -29,12 +30,9 @@ namespace halcyon
 
             void update() const noexcept
             {
-                /* Set to true only in case of an emergency, whatever that might be. */
-                constexpr bool performance_mode { false };
-
                 for (const auto& bind : m_binds)
                 {
-                    if constexpr (!performance_mode)
+                    if constexpr (!cfg::performance_mode)
                     {
                         bool should_trigger;
 
@@ -63,13 +61,13 @@ namespace halcyon
 
                     else  // Probably UB. But it's cool, right?
                     {
-                        if ((*(((input_handler::key_storage*)&m_input) + bind.second.first))[bind.first])
+                        if ((((const input_handler::key_storage*)&m_input) + bind.second.first)->operator[](bind.first))
                             bind.second.second(m_hook);
                     }
                 }
             }
 
-            void bind(key_type key, event_t type, callback<Hook&> func) noexcept
+            void bind(key_type key, event type, callback<Hook&> func) noexcept
             {
                 m_binds.emplace(std::piecewise_construct, std::forward_as_tuple(key), std::forward_as_tuple(type, func));
             }
@@ -82,11 +80,11 @@ namespace halcyon
           private:
 
             // TODO: Add support for multi-key binds.
-            std::unordered_map<key_type, std::pair<event_t, callback<Hook&>>> m_binds;
+            std::unordered_map<key_type, std::pair<event, callback<Hook&>>> m_binds;
 
             const input_handler& m_input;
 
             Hook& m_hook;
         };
     }  // namespace events
-}  // namespace halcyon
+}  // namespace hal

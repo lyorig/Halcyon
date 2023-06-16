@@ -1,10 +1,10 @@
 #include "music.hpp"
 
-using namespace halcyon;
+using namespace hal;
 
 void music::play() const noexcept
 {
-    HALCYON_VERIFY(m_object != nullptr, "Tried to play null music");
+    HAL_DEBUG_VERIFY(m_object != nullptr, ::Mix_GetError());
 
     ::Mix_ResumeMusic();
 }
@@ -13,47 +13,54 @@ void music::play(const char* path, lyo::u16 loops) noexcept
 {
     m_object = ::Mix_LoadMUS(path);
 
-    HALCYON_VERIFY(m_object != nullptr, "Tried to pause null music");
+    HAL_DEBUG_VERIFY(m_object != nullptr, "Tried to play null music");
 
-    HALCYON_VERIFY(::Mix_PlayMusic(m_object, loops) == 0, "Couldn't play music");
+    HAL_DEBUG_VERIFY(::Mix_PlayMusic(m_object, loops) == 0, ::Mix_GetError());
 }
 
 void music::pause() const noexcept
 {
-    HALCYON_VERIFY(m_object != nullptr, "Tried pause null music");
+    HAL_DEBUG_VERIFY(m_object != nullptr, "Tried to pause null music");
 
     ::Mix_PauseMusic();
 }
 
 void music::fade_in(double time, lyo::u16 loops) const noexcept
 {
-    HALCYON_VERIFY(::Mix_FadeInMusic(m_object, loops, time * 1000.0) == 0, "Couldn't fade in music");
+    HAL_DEBUG_VERIFY(::Mix_FadeInMusic(m_object, loops, time * 1000.0) == 0, ::Mix_GetError());
 }
 
 void music::fade_out(double time) const noexcept
 {
-    HALCYON_VERIFY(::Mix_FadeOutMusic(time * 1000.0) == 0, "Couldn't fade out music");
+    HAL_DEBUG_VERIFY(::Mix_FadeOutMusic(time * 1000.0) == 0, ::Mix_GetError());
 }
 
 lyo::u8 music::volume() const noexcept
 {
     const auto ret { ::Mix_VolumeMusic(-1) };
 
-    HALCYON_VERIFY(ret == 0, "Couldn't get music volume");
+    HAL_DEBUG_VERIFY(ret == 0, ::Mix_GetError());
 
     return static_cast<lyo::u8>(ret);
 }
 
+lyo::f64 music::position() const noexcept
+{
+    return m_timer();
+}
+
 void music::set_volume(lyo::u8 volume) const noexcept
 {
-    HALCYON_VERIFY(m_object != nullptr, "Tried to set volume of null music");
+    HAL_DEBUG_VERIFY(m_object != nullptr, ::Mix_GetError());
 
     ::Mix_VolumeMusic(volume);
 }
 
-void music::jump(double time) const noexcept
+void music::jump(double time) noexcept
 {
     ::Mix_RewindMusic();
 
-    HALCYON_VERIFY(::Mix_SetMusicPosition(time) == 0, "Couldn't set music position");
+    HAL_DEBUG_VERIFY(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
+
+    m_timer = time;
 }

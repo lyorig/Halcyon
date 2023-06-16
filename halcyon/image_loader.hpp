@@ -4,7 +4,7 @@
 
 #include "texture.hpp"
 
-namespace halcyon
+namespace hal
 {
     class engine;
 
@@ -27,4 +27,4 @@ namespace halcyon
 
       private:
     };
-}  // namespace halcyon
+}  // namespace hal

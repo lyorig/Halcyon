@@ -11,10 +11,10 @@
 /* types.hpp:
    Types used throughout Halcyon. */
 
-namespace halcyon
+namespace hal
 {
     using pixel_t    = lyo::i16;
-    using position_t = double;
+    using position_t = lyo::f64;
 
     using pixel_size = point<pixel_t>;
     using coordinate = point<position_t>;
@@ -23,5 +23,5 @@ namespace halcyon
     using world_area = rectangle<position_t>;
 
     template <typename... Params>
-    using callback = lyo::function<void, Params...>;
-}  // namespace halcyon
+    using callback = lyo::func_ptr<void, Params...>;
+}  // namespace hal

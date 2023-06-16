@@ -1,10 +1,13 @@
 #pragma once
 
+#include <cmath>
 #include <cstdint>
 #include <type_traits>
 
+#define MAYBE_EMPTY [[no_unique_address]]
+
 /* types.hpp:
-   Various type aliases and related settings. */
+   Various type aliases and related stuff. */
 
 namespace lyo
 {
@@ -23,6 +26,9 @@ namespace lyo
     using u32 = std::make_unsigned_t<i32>;
     using u64 = std::make_unsigned_t<i64>;
 
+    using f32 = CFT<float, std::float_t>;
+    using f64 = CFT<double, std::double_t>;
+
     template <typename Return_type, typename... Args>
-    using function = Return_type (*)(Args...);
+    using func_ptr = Return_type (*)(Args...);
 }  // namespace lyo

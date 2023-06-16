@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <concepts>
 
 #include "types.hpp"
@@ -10,6 +11,7 @@
 namespace lyo
 {
     template <lyo::u64 Size, std::unsigned_integral Storage_type = unsigned char>
+        requires(Size > 0)
     class bitset
     {
       public:
@@ -48,8 +50,14 @@ namespace lyo
             for (Storage_type& unit : m_storage) unit = static_cast<Storage_type>(0);
         }
 
+        constexpr lyo::u64 size() const noexcept
+        {
+            return Size;
+        }
+
         constexpr bool operator[](lyo::u64 pos) const noexcept
         {
+            assert(pos < Size);
             return static_cast<bool>((m_storage[storage_index(pos)] >> (pos % (sizeof(Storage_type) * 8))) & static_cast<Storage_type>(1));
         }
 

@@ -12,28 +12,28 @@
    be queued in a lambda -> bool, providing an an alternative way to decide whether
    or not the event should be executed and popped. I'm not touching this again, BTW. */
 
-namespace halcyon
+namespace hal
 {
     template <typename T>
-    struct cond_object
+    struct cond_delayer
     {
         using type = const T&;
     };
 
     template <>
-    struct cond_object<void>
+    struct cond_delayer<void>
     {
         using type = std::monostate;
     };
 
     template <typename T>
-    using cond_object_t = cond_object<T>::type;
+    using cond_object = cond_delayer<T>::type;
 
     template <typename T>
-    using cond_func_t = lyo::function<bool, const cond_object_t<T>&>;
+    using cond_func = lyo::func_ptr<bool, const cond_object<T>&>;
 
     template <typename T = void>
-    using holder_t = std::conditional_t<std::is_void_v<T>, double, std::variant<double, cond_func_t<T>>>;
+    using holder = std::conditional_t<std::is_void_v<T>, double, std::variant<double, cond_func<T>>>;
 
     namespace events
     {
@@ -47,7 +47,7 @@ namespace halcyon
             {
             }
 
-            queue(T& object, cond_object_t<Query> cond_object) noexcept :
+            queue(T& object, cond_object<Query> cond_object) noexcept :
                 m_object { object },
                 m_cond { cond_object }
             {
@@ -75,7 +75,7 @@ namespace halcyon
 
                         else
                         {
-                            if (std::get<cond_func_t<Query>>(pair.second)(m_cond))
+                            if (std::get<cond_func<Query>>(pair.second)(m_cond))
                             {
                                 pair.first(m_object);
                                 m_queue.pop();
@@ -98,7 +98,7 @@ namespace halcyon
                 }
             }
 
-            void add(callback<T&> func, holder_t<Query> conditional) noexcept
+            void add(hal::callback<T&> func, holder<Query> conditional) noexcept
             {
                 m_queue.emplace(func, conditional);
             }
@@ -110,13 +110,13 @@ namespace halcyon
 
           private:
 
-            std::queue<std::pair<callback<T&>, holder_t<Query>>> m_queue;
+            std::queue<std::pair<hal::callback<T&>, holder<Query>>> m_queue;
 
             lyo::precise_timer m_timer;
 
             T& m_object;
 
-            [[no_unique_address]] cond_object_t<Query> m_cond;
+            [[no_unique_address]] cond_object<Query> m_cond;
         };
     }  // namespace events
-}  // namespace halcyon
+}  // namespace hal

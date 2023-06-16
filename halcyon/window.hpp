@@ -8,7 +8,7 @@
 #include "texture.hpp"
 #include "types.hpp"
 
-namespace halcyon
+namespace hal
 {
     class engine;
 
@@ -16,9 +16,9 @@ namespace halcyon
     {
       public:
 
-        halcyon::renderer renderer;
+        hal::renderer renderer;
 
-        enum flag_t : lyo::u16
+        enum flag : lyo::u16
         {
             fullscreen = SDL_WINDOW_FULLSCREEN_DESKTOP,
             hidden     = SDL_WINDOW_HIDDEN,
@@ -31,16 +31,13 @@ namespace halcyon
 
         void present() noexcept;
 
-        const input_handler& input() const noexcept;
-        const pixel_size&    size() const noexcept;
-        double               delta_time() const noexcept;
+        const pixel_size& size() const noexcept;
+        double            delta_time() const noexcept;
 
       private:
-
-        input_handler m_input;
 
         pixel_size m_size;
 
         lyo::precise_timer m_delta;
     };
-}  // namespace halcyon
+}  // namespace hal

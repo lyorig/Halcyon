@@ -2,10 +2,10 @@
 
 #include <halcyon/window.hpp>
 
-using namespace halcyon;
+using namespace hal;
 
 renderer::renderer(window& window, lyo::u32 flags) noexcept :
-    sdl_object { ::SDL_CreateRenderer(window, -1, flags), "Couldn't create renderer" }
+    sdl_object { ::SDL_CreateRenderer(window.ptr(), -1, flags) }
 {
 }
 
@@ -16,22 +16,22 @@ void renderer::present() const noexcept
 
 void renderer::clear() const noexcept
 {
-    HALCYON_VERIFY(::SDL_RenderClear(m_object) == 0, "SDL_RenderClear failed");
+    HAL_DEBUG_VERIFY(::SDL_RenderClear(m_object) == 0, ::SDL_GetError());
 }
 
 pixel_size renderer::output_size() const noexcept
 {
     point<int> size;
-    HALCYON_VERIFY(::SDL_GetRendererOutputSize(m_object, &size.x, &size.y) == 0, "Couldn't get renderer output size");
+    HAL_DEBUG_VERIFY(::SDL_GetRendererOutputSize(m_object, &size.x, &size.y) == 0, ::SDL_GetError());
     return size;
 }
 
 void renderer::set_target(texture& tx) const noexcept
 {
-    HALCYON_VERIFY(::SDL_SetRenderTarget(m_object, tx) == 0, "Couldn't set render target");
+    HAL_DEBUG_VERIFY(::SDL_SetRenderTarget(m_object, tx.ptr()) == 0, ::SDL_GetError());
 }
 
 void renderer::reset_target() const noexcept
 {
-    HALCYON_VERIFY(::SDL_SetRenderTarget(m_object, NULL) == 0, "Couldn't set render target");
+    HAL_DEBUG_VERIFY(::SDL_SetRenderTarget(m_object, NULL) == 0, ::SDL_GetError());
 }

@@ -6,7 +6,9 @@
 
 #include "sdl_object.hpp"
 
-namespace halcyon
+// TODO: Convert to OpenAL.
+
+namespace hal
 {
     class mixer;
 
@@ -24,15 +26,16 @@ namespace halcyon
         void fade_in(double time, lyo::u16 loops = 0) const noexcept;
         void fade_out(double time) const noexcept;
 
-        lyo::u8 volume() const noexcept;
+        lyo::u8  volume() const noexcept;
+        lyo::f64 position() const noexcept;
 
         void set_volume(lyo::u8 volume) const noexcept;
-        void jump(double time) const noexcept;
+        void jump(double time) noexcept;
 
       private:
 
-        music() = default;
+        music() noexcept = default;
 
         lyo::precise_timer m_timer;
     };
-}  // namespace halcyon
+}  // namespace hal

@@ -6,7 +6,7 @@
 
 #include "sdl_object.hpp"
 
-namespace halcyon
+namespace hal
 {
     using color_t = lyo::u32;
 

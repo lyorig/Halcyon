@@ -2,7 +2,7 @@
 
 #include <lyo/concepts.hpp>
 
-namespace halcyon
+namespace hal
 {
     template <lyo::arithmetic T>
     struct rectangle;

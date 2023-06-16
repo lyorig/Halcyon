@@ -1,10 +1,9 @@
 #pragma once
 
+#include <halcyon/types.hpp>
 #include <vector>
 
-#include "types.hpp"
-
-namespace halcyon
+namespace hal
 {
     using frame_t = lyo::u8;
 
@@ -22,4 +21,4 @@ namespace halcyon
 
         std::vector<std::vector<pixel_area>> m_rects;
     };
-}  // namespace halcyon
+}  // namespace hal

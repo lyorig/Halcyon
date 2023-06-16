@@ -1,6 +1,6 @@
 #include "display_info.hpp"
 
-using namespace halcyon;
+using namespace hal;
 
 display_info::display_info(const SDL_DisplayMode& dm) noexcept :
     size { static_cast<pixel_t>(dm.w), static_cast<pixel_t>(dm.h) },

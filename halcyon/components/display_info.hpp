@@ -4,7 +4,7 @@
 
 #include <halcyon/types.hpp>
 
-namespace halcyon
+namespace hal
 {
     class engine;
 
@@ -22,4 +22,4 @@ namespace halcyon
 
         display_info(const SDL_DisplayMode& dm) noexcept;
     };
-}  // namespace halcyon
+}  // namespace hal

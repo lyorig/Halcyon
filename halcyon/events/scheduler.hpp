@@ -7,7 +7,7 @@
 /* scheduler.hpp:
    A simple way to schedule regular operations on an object. */
 
-namespace halcyon
+namespace hal
 {
     namespace events
     {

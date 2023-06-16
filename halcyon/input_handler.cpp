@@ -5,12 +5,12 @@
 #include "debug.hpp"
 #include "engine.hpp"
 
-using namespace halcyon;
+using namespace hal;
 
 input_handler::input_handler(engine& engine) noexcept :
     m_engine { engine }
 {
-    HALCYON_PRINT(debug::info, "Initialized input handler.");
+    HAL_DEBUG_PRINT(debug::info, "Initialized input handler.");
 }
 
 void input_handler::update() noexcept
@@ -75,23 +75,23 @@ void input_handler::update() noexcept
                 break;
 
             default:
-                // HALCYON_PRINT(debug::info, "Unknown event type received: ", event.type);
+                // HAL_DEBUG_PRINT(debug::info, "Unknown event type received: ", event.type);
                 break;
         }
     }
 }
 
-bool input_handler::pressed(button_t key) const noexcept
+bool input_handler::pressed(button btn) const noexcept
 {
-    return m_pressed[key];
+    return m_pressed[btn];
 }
 
-bool input_handler::held(button_t key) const noexcept
+bool input_handler::held(button btn) const noexcept
 {
-    return m_held[key];
+    return m_held[btn];
 }
 
-bool input_handler::released(button_t key) const noexcept
+bool input_handler::released(button btn) const noexcept
 {
-    return m_released[key];
+    return m_released[btn];
 }

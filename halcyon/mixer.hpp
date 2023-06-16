@@ -1,12 +1,10 @@
 #pragma once
 
-#include <unordered_map>
-
 #include "components/chunk.hpp"
 #include "components/music.hpp"
 #include "internal/subsystem.hpp"
 
-namespace halcyon
+namespace hal
 {
     class engine;
 
@@ -14,27 +12,34 @@ namespace halcyon
     {
       public:
 
-        enum music_types : lyo::u8
+        music m_music;
+
+        enum chunk_quality : lyo::u16
         {
-            none = 0,
-            flac = MIX_INIT_FLAC,
-            mod  = MIX_INIT_MOD,
-            mp3  = MIX_INIT_MP3,
-            ogg  = MIX_INIT_OGG,
-            mid  = MIX_INIT_MID,
-            opus = MIX_INIT_OPUS
+            low    = 1024,
+            medium = 2048,
+            high   = 4096
         };
 
-        mixer(engine& engine, int music_types, lyo::u16 freq, lyo::u8 channels) noexcept;
-        ~mixer();
+        mixer(engine& eng);
+        mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
 
-        chunk load_sfx(const char* path) const noexcept;
-
-        [[no_unique_address]] subsystem<audio> m_subsys;
-
-        /* Warning - only a single Mix_Music instance is allowed globally! */
-        halcyon::music music;
+        chunk load_sfx(const char* path) noexcept;
 
       private:
+
+        MAYBE_EMPTY subsystem<audio> m_subsys;
+
+        MAYBE_EMPTY class init
+        {
+          public:
+
+            init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
+            ~init();
+        } m_init;
+
+      public:
+
+        music mus;
     };
-}  // namespace halcyon
+}  // namespace hal

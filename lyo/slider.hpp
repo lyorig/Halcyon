@@ -1,11 +1,12 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 
 #include "concepts.hpp"
 
 /* slider.hpp:
-   A variable with a minimum and maximum value. */
+   An arithmetic value with a minimum and maximum value. */
 
 namespace lyo
 {
@@ -14,69 +15,71 @@ namespace lyo
     {
       public:
 
-        constexpr slider(T lower_bound, T upper_bound) :
-            m_value { (lower_bound + upper_bound) / 2.0 },
-            m_min { lower_bound },
-            m_max { upper_bound }
+        constexpr slider(T min, T max) :
+            m_value { static_cast<T>((min + max) / 2.0) },
+            m_min { min },
+            m_max { max }
         {
+            assert(min < max);
         }
 
-        constexpr slider(T lower_bound, T upper_bound, T value) noexcept :
-            m_value { std::clamp(value, lower_bound, upper_bound) },
-            m_min { lower_bound },
-            m_max { upper_bound }
+        constexpr slider(T min, T max, T value) noexcept :
+            m_value { std::clamp(value, min, max) },
+            m_min { min },
+            m_max { max }
         {
+            assert(min < max);
         }
 
-        operator T() const noexcept
+        constexpr operator T() const noexcept
         {
             return m_value;
         }
 
-        T min() const noexcept
+        constexpr T min() const noexcept
         {
             return m_min;
         }
 
-        T max() const noexcept
+        constexpr T max() const noexcept
         {
             return m_max;
         }
 
-        bool on_border() const noexcept
+        constexpr bool on_border() const noexcept
         {
             return m_value == m_min || m_value == m_max;
         }
 
-        slider& set_min(T value) noexcept
+        constexpr slider& set_min(T value) noexcept
         {
             m_value = std::max(m_value, m_min = value);
 
             return *this;
         }
 
-        slider& set_max(T value) noexcept
+        constexpr slider& set_max(T value) noexcept
         {
             m_value = std::min(m_value, m_max = value);
 
             return *this;
         }
 
-        slider& operator=(T value) noexcept
+        constexpr slider& operator=(T value) noexcept
         {
             m_value = std::clamp(value, m_min, m_max);
 
             return *this;
         }
 
-        slider& operator+=(T add) noexcept
+        constexpr slider& operator+=(T add) noexcept
         {
             m_value = std::clamp(m_value + add, m_min, m_max);
 
             return *this;
         }
 
-        slider& operator-=(T subtract) noexcept
+        constexpr slider& operator-=(T subtract) noexcept
         {
             m_value = std::clamp(m_value - subtract, m_min, m_max);
 
@@ -85,16 +88,21 @@ namespace lyo
 
       private:
 
-        T m_value, m_min, m_max;  // sizeof(T) * 3b
+        T m_value, m_min, m_max;
     };
 
-    /* Todo: Fix this nonstandard floating-point template parameter bullshit */
     template <lyo::arithmetic T, T Min, T Max>
+        requires(Min < Max)
     class static_slider
     {
       public:
 
-        constexpr static_slider(T value = static_cast<T>((Min + Max) / 2.0)) noexcept :
+        constexpr static_slider() noexcept :
+            m_value { static_cast<T>((Min + Max) / 2.0) }
+        {
+        }
+
+        constexpr static_slider(T value) noexcept :
             m_value { std::clamp(value, Min, Max) }
         {
         }

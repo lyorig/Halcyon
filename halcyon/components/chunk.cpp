@@ -2,14 +2,14 @@
 
 #include <halcyon/debug.hpp>
 
-using namespace halcyon;
+using namespace hal;
 
 chunk::chunk(const char* path) noexcept :
-    sdl_object { ::Mix_LoadWAV(path), "Couldn't load chunk" }
+    sdl_object { ::Mix_LoadWAV(path) }
 {
 }
 
 void chunk::play() noexcept
 {
-    HALCYON_VERIFY(::Mix_PlayChannel(-1, m_object, 0) != -1, "Couldn't play chunk");
+    HAL_DEBUG_VERIFY(::Mix_PlayChannel(-1, m_object, 0) != -1, ::Mix_GetError());
 }
