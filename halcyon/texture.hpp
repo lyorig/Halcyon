@@ -18,13 +18,14 @@ namespace hal
     {
       public:
 
-        enum flip_type : lyo::u8
+        enum flip : lyo::u8
         {
             none = SDL_FLIP_NONE,
             x    = SDL_FLIP_HORIZONTAL,
             y    = SDL_FLIP_VERTICAL,
             both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
         };
+
         texture(const window& wnd) noexcept;
 
         texture(const window& wnd, const pixel_size& size) noexcept;
@@ -36,11 +37,8 @@ namespace hal
 
         void set_opacity(lyo::u8 value) const noexcept;
 
-        void draw(const coordinate& pos) const noexcept;
-        void draw(const coordinate& pos, const pixel_area& src) const noexcept;
-
-        void draw(const coordinate& pos, double scale, double angle, flip_type flip) const noexcept;
-        void draw(const coordinate& pos, const pixel_area& src, double scale, double angle, flip_type flip) const noexcept;
+        void draw(const coordinate& pos, double scale = 1.0, double angle = 0.0, flip flip = none) const noexcept;
+        void draw(const coordinate& pos, const pixel_area& src, double scale = 1.0, double angle = 0.0, flip flip = none) const noexcept;
 
       private:
 
@@ -48,7 +46,7 @@ namespace hal
 
         const window& m_window;
 
-        void render_copy(const coordinate& pos, double scale, double angle, flip_type flip) const noexcept;
-        void render_copy(const coordinate& pos, const pixel_area& src, double scale, double angle, flip_type flip) const noexcept;
+        void render_copy(const coordinate& pos, double scale, double angle, flip flip) const noexcept;
+        void render_copy(const coordinate& pos, const pixel_area& src, double scale, double angle, flip flip) const noexcept;
     };
 }  // namespace hal

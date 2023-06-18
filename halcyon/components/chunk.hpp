@@ -2,9 +2,9 @@
 
 #include <SDL2/SDL_mixer.h>
 
-#include "sdl_object.hpp"
+#include <lyo/pass_key.hpp>
 
-// TODO: Convert to OpenAL
+#include "sdl_object.hpp"
 
 namespace hal
 {
@@ -13,14 +13,10 @@ namespace hal
 
     class chunk : public sdl_object<Mix_Chunk, ::Mix_FreeChunk>
     {
-        friend class mixer;
-
       public:
 
+        chunk(const char* path, lyo::pass_key<mixer>) noexcept;
+
         void play() noexcept;
-
-      private:
-
-        chunk(const char* path) noexcept;
     };
 }  // namespace hal

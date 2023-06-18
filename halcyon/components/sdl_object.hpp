@@ -5,8 +5,6 @@
 
 namespace hal
 {
-    class engine;
-
     template <typename Type, lyo::func_ptr<void, Type*> Deleter>
     class sdl_object
     {

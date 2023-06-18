@@ -18,5 +18,5 @@ image_loader::~image_loader()
 
 surface image_loader::load_image(const char* path) const noexcept
 {
-    return path;
+    return { path, {} };
 }

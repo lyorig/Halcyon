@@ -26,11 +26,10 @@ namespace hal
             warning,
             error
         };
-
 #ifndef NDEBUG
-        /* Output any amount of arguments to stdout/stderr and an output file. */
+        // Output any amount of arguments to stdout/stderr and an output file.
         template <typename... Args>
-        static void print(severity type, Args... args) noexcept
+        static void print(severity type, Args&&... args) noexcept
         {
             std::stringstream ss;
 
@@ -38,32 +37,32 @@ namespace hal
 
             switch (type)
             {
-                case severity::info:
+                case info:
                     ss << "[info]\t";
                     break;
 
-                case severity::warning:
+                case warning:
                     ss << "[warning]\t";
                     break;
 
-                case severity::error:
+                case error:
                     ss << "[error]\t";
                     break;
             }
 
-            /* Fold expression to properly output every argument. */
+            // Fold expression to properly output every argument.
             (ss << ... << args);
 
             const std::string str { ss.str() };
 
             m_output << str << std::endl;
-            (type == severity::error ? std::cerr : std::cout) << str << std::endl;
+            (type == error ? std::cerr : std::cout) << str << std::endl;
         }
 
-        /* Show a message box with an error message. */
+        // Show a message box with an error message.
         static void panic(const char* title, const char* message) noexcept;
 
-        /* Check a condition, and panic if it's false. */
+        // Check a condition, and panic if it's false.
         static void verify(bool condition, const char* func, const char* info) noexcept;
 
       private:
@@ -82,8 +81,8 @@ namespace hal
 
 #else
 
-    #define HAL_DEBUG_PRINT(...)                 (static_cast<void>(0))
-    #define HAL_DEBUG_PANIC(title, message)      (static_cast<void>(0))
-    #define HAL_DEBUG_PRINT(condition, if_false) (static_cast<void>(condition))  // Make sure functions with side effects get called.
+    #define HAL_DEBUG_PRINT(...)                  (static_cast<void>(0))
+    #define HAL_DEBUG_PANIC(title, message)       (static_cast<void>(0))
+    #define HAL_DEBUG_VERIFY(condition, if_false) (static_cast<void>(condition))  // Make sure functions with side effects get called.
 
 #endif

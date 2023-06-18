@@ -22,17 +22,6 @@ engine::~engine()
     this->deinitialize();
 }
 
-display_info engine::monitor_info(lyo::u8 index) const noexcept
-{
-    subsystem<video> subsys;
-
-    SDL_DisplayMode dm;
-
-    HAL_DEBUG_VERIFY(::SDL_GetDesktopDisplayMode(index, &dm) == 0, ::SDL_GetError());
-
-    return dm;
-}
-
 void engine::exit() noexcept
 {
     this->deinitialize();

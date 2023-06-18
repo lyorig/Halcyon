@@ -6,11 +6,12 @@
 #include "input_handler.hpp"
 #include "internal/subsystem.hpp"
 #include "texture.hpp"
-#include "types.hpp"
 
 namespace hal
 {
     class engine;
+
+    constexpr pixel_size fs_size {};
 
     class window : public sdl_object<SDL_Window, ::SDL_DestroyWindow>
     {
@@ -36,7 +37,7 @@ namespace hal
 
       private:
 
-        pixel_size m_size;
+        const pixel_size m_size;
 
         lyo::precise_timer m_delta;
     };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/types.hpp>
+#include <halcyon/types/types.hpp>
 
 namespace hal
 {

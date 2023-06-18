@@ -2,11 +2,10 @@
 
 #include <SDL2/SDL_mixer.h>
 
+#include <lyo/pass_key.hpp>
 #include <lyo/timer.hpp>
 
 #include "sdl_object.hpp"
-
-// TODO: Convert to OpenAL.
 
 namespace hal
 {
@@ -14,9 +13,9 @@ namespace hal
 
     class music : public sdl_object<Mix_Music, ::Mix_FreeMusic>
     {
-        friend class mixer;
-
       public:
+
+        music(lyo::pass_key<mixer>) noexcept;
 
         void play() const noexcept;
         void play(const char* path, lyo::u16 loops = 0) noexcept;
@@ -33,8 +32,6 @@ namespace hal
         void jump(double time) noexcept;
 
       private:
-
-        music() noexcept = default;
 
         lyo::precise_timer m_timer;
     };

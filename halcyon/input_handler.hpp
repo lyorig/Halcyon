@@ -14,9 +14,6 @@ namespace hal
     {
       public:
 
-        /* The usual scancodes, plus mouse buttons. */
-        using key_storage = lyo::bitset<SDL_NUM_SCANCODES + 5, lyo::u64>;
-
         enum button : lyo::u16
         {
             A = SDL_SCANCODE_A,
@@ -88,6 +85,9 @@ namespace hal
             rmb
         };
 
+        // The usual scancodes, plus mouse buttons.
+        using key_storage = lyo::bitset<SDL_NUM_SCANCODES + 5, lyo::u64>;
+
         input_handler(engine& engine) noexcept;
 
         void update() noexcept;
@@ -98,7 +98,7 @@ namespace hal
 
       private:
 
-        /* If the layout is ever modified, make sure the binder's "performance mode" is aware of it. */
+        // If the layout is ever modified, make sure the binder's "performance mode" is aware of it.
         key_storage m_pressed, m_held, m_released;
 
         engine& m_engine;

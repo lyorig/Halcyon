@@ -4,7 +4,7 @@
 
 using namespace hal;
 
-chunk::chunk(const char* path) noexcept :
+chunk::chunk(const char* path, lyo::pass_key<mixer>) noexcept :
     sdl_object { ::Mix_LoadWAV(path) }
 {
 }

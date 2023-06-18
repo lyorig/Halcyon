@@ -1,4 +1,5 @@
 #ifndef NDEBUG
+
     #include "debug.hpp"
 
     #include <SDL2/SDL_messagebox.h>

@@ -12,7 +12,7 @@ namespace hal
     {
       public:
 
-        music m_music;
+        static music mus;
 
         enum chunk_quality : lyo::u16
         {
@@ -37,9 +37,5 @@ namespace hal
             init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
             ~init();
         } m_init;
-
-      public:
-
-        music mus;
     };
 }  // namespace hal

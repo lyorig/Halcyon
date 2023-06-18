@@ -1,6 +1,13 @@
 #include "music.hpp"
 
+#include <functional>
+
 using namespace hal;
+
+music::music(lyo::pass_key<mixer>) noexcept
+{
+    // TODO: Mix_HookMusicFinished to reset the timer when the music finishes.
+}
 
 void music::play() const noexcept
 {
@@ -46,7 +53,7 @@ lyo::u8 music::volume() const noexcept
 
 lyo::f64 music::position() const noexcept
 {
-    return m_timer();
+    return ::Mix_PlayingMusic() ? m_timer() : 0.0;
 }
 
 void music::set_volume(lyo::u8 volume) const noexcept

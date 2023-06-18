@@ -53,27 +53,17 @@ lyo::u8 texture::opacity() const noexcept
     return alpha;
 }
 
-void texture::draw(const coordinate& pos) const noexcept
-{
-    this->render_copy(pos, 1.0, 0.0, none);
-}
-
-void texture::draw(const coordinate& pos, const pixel_area& src) const noexcept
-{
-    this->render_copy(pos, src, 1.0, 0.0, none);
-}
-
-void texture::draw(const coordinate& pos, double scale, double angle, flip_type flip) const noexcept
+void texture::draw(const coordinate& pos, double scale, double angle, flip flip) const noexcept
 {
     this->render_copy(pos, scale, angle, flip);
 }
 
-void texture::draw(const coordinate& pos, const pixel_area& src, double scale, double angle, flip_type flip) const noexcept
+void texture::draw(const coordinate& pos, const pixel_area& src, double scale, double angle, flip flip) const noexcept
 {
     this->render_copy(pos, src, scale, angle, flip);
 }
 
-void texture::render_copy(const coordinate& pos, double scale, double angle, flip_type flip) const noexcept
+void texture::render_copy(const coordinate& pos, double scale, double angle, flip flip) const noexcept
 {
     const world_area dest { (pos + this->size()) * scale };
 
@@ -89,7 +79,7 @@ void texture::render_copy(const coordinate& pos, double scale, double angle, fli
     }
 }
 
-void texture::render_copy(const coordinate& pos, const pixel_area& src, double scale, double angle, flip_type flip) const noexcept
+void texture::render_copy(const coordinate& pos, const pixel_area& src, double scale, double angle, flip flip) const noexcept
 {
     const world_area dest { (pos + src.size) * scale };
 

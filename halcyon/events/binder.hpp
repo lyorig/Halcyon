@@ -28,6 +28,8 @@ namespace hal
             {
             }
 
+            // Check all binds. This doesn't call update() on the underlying
+            // input handler, you need to do that yourself!
             void update() const noexcept
             {
                 for (const auto& bind : m_binds)
@@ -59,7 +61,7 @@ namespace hal
                             bind.second.second(m_hook);
                     }
 
-                    else  // Probably UB. But it's cool, right?
+                    else  // Not exactly eye candy, but should be better than branching.
                     {
                         if ((((const input_handler::key_storage*)&m_input) + bind.second.first)->operator[](bind.first))
                             bind.second.second(m_hook);

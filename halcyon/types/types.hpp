@@ -1,12 +1,10 @@
 #pragma once
 
-#include <SDL2/SDL_rect.h>
-
 #include <lyo/concepts.hpp>
 #include <lyo/types.hpp>
 
-#include "types/point.hpp"
-#include "types/rectangle.hpp"
+#include "point.hpp"
+#include "rectangle.hpp"
 
 /* types.hpp:
    Types used throughout Halcyon. */
@@ -21,6 +19,8 @@ namespace hal
 
     using pixel_area = rectangle<pixel_t>;
     using world_area = rectangle<position_t>;
+
+    using color_t = lyo::u32;
 
     template <typename... Params>
     using callback = lyo::func_ptr<void, Params...>;
