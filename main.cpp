@@ -10,37 +10,36 @@
 int main(int argc, char* argv[])
 {
     hal::engine eng;
-    hal::mixer  mxr { eng };
 
-    hal::window wnd { eng, "blabla", hal::fs_size, wnd.fullscreen, wnd.renderer.accelerated | wnd.renderer.vsync };
+    hal::input_handler inp { eng };
+    hal::mixer         mxr { eng };
+
+    hal::window wnd { eng, "Halcyon", hal::fullscreen, wnd.renderer.accelerated | wnd.renderer.vsync };
 
     const hal::font_loader fl { wnd };
 
     mxr.mus.play("assets/ost/checkpoint.mp3");
 
-    const hal::font   fnt { fl.load("assets/fonts/m5x7.ttf", 42) };
+    const hal::font   m5x7 { fl.load("assets/fonts/m5x7.ttf", 42) };
     const std::string pos { "Current music position: " };
-
-    hal::input_handler inp { eng };
 
     hal::events::binder<hal::window> bin { inp, wnd };
 
-    bin.bind(inp.A, bin.press, [](hal::window&)
-        { CONSOLE_LOG(hal::console::info, "Pressed A."); });
-    bin.bind(inp.W, bin.press, [](hal::window&)
-        { CONSOLE_LOG(hal::console::error, "Pressed W."); });
+    CONSOLE_LOG(hal::success, "Initialized. Godspeed, soldier.");
 
-    for (; !inp.pressed(inp.esc); inp.update())
+    while (!inp.pressed(inp.esc))
     {
         hal::texture {
-            wnd, {fnt, (pos + std::to_string(mxr.mus.position())).c_str(), hal::orange}
+            wnd, {m5x7, (pos + std::to_string(mxr.mus.position())).c_str(), hal::orange}
         }
             .draw({ 1000, 10 });
 
         bin.update();
 
-        CONSOLE_DRAW(fnt, wnd);
+        CONSOLE_DRAW(m5x7, wnd);
         wnd.present();
+
+        inp.update();
     }
 
     return EXIT_SUCCESS;

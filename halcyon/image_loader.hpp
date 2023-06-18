@@ -2,11 +2,11 @@
 
 #include <SDL2/SDL_image.h>
 
-#include "texture.hpp"
+#include "components/surface.hpp"
 
 namespace hal
 {
-    class engine;
+    class window;
 
     class image_loader
     {
@@ -20,7 +20,7 @@ namespace hal
             webp = IMG_INIT_WEBP
         };
 
-        image_loader(engine& engine, int type_flags) noexcept;
+        image_loader(window& wnd, int type_flags) noexcept;
         ~image_loader();
 
         surface load_image(const char* file) const noexcept;

@@ -4,8 +4,6 @@
 
 #include <lyo/bitset.hpp>
 
-#include "internal/subsystem.hpp"
-
 namespace hal
 {
     class engine;

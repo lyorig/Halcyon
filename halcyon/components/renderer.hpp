@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL_render.h>
 
-#include <halcyon/types/types.hpp>
+#include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
 
 #include "sdl_object.hpp"

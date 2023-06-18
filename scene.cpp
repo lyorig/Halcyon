@@ -13,7 +13,7 @@ scene::scene(const hal::window& wnd, hal::input_handler& inp, hal::mixer& mxr) n
 
 void scene::load_level(const char* path) noexcept
 {
-    HAL_DEBUG_PRINT(hal::debug::info, "Loading level ", path);
+    HAL_DEBUG_PRINT(hal::info, "Loading level ", path);
 
     std::ifstream file { path };
 

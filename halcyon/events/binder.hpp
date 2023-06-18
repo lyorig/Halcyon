@@ -2,6 +2,7 @@
 
 #include <halcyon/input_handler.hpp>
 #include <halcyon/internal/config.hpp>
+#include <halcyon/types/other.hpp>
 #include <unordered_map>
 
 namespace hal

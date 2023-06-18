@@ -10,7 +10,7 @@ using namespace hal;
 input_handler::input_handler(engine& engine) noexcept :
     m_engine { engine }
 {
-    HAL_DEBUG_PRINT(debug::info, "Initialized input handler.");
+    HAL_DEBUG_PRINT(success, "Initialized input handler");
 }
 
 void input_handler::update() noexcept
@@ -75,7 +75,7 @@ void input_handler::update() noexcept
                 break;
 
             default:
-                // HAL_DEBUG_PRINT(debug::info, "Unknown event type received: ", event.type);
+                // HAL_DEBUG_PRINT(info, "Unknown event type received: ", event.type);
                 break;
         }
     }

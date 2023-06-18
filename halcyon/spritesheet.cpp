@@ -21,7 +21,7 @@ spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexce
             m_rects[y].emplace_back(frame_size.x * x, frame_size.y * y, frame_size.x, frame_size.y);
     }
 
-    HAL_DEBUG_PRINT(debug::info, "Created new spritesheet (texture size ", tx.size().x, 'x', tx.size().y, ", frame size ", frame_size.x, 'x', frame_size.y, ')');
+    HAL_DEBUG_PRINT(info, "Created new spritesheet (texture size ", tx.size().x, 'x', tx.size().y, ", frame size ", frame_size.x, 'x', frame_size.y, ')');
 }
 
 const std::vector<pixel_area>& spritesheet::operator[](frame_t animation) const noexcept

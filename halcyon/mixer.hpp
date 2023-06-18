@@ -12,7 +12,7 @@ namespace hal
     {
       public:
 
-        static music mus;
+        static music mus;  // Default-constructed, doesn't need prior subsystem initialization
 
         enum chunk_quality : lyo::u16
         {

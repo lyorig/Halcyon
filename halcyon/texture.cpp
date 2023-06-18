@@ -1,7 +1,5 @@
 #include "texture.hpp"
 
-#include <SDL2/SDL_image.h>
-
 #include "debug.hpp"
 #include "internal/config.hpp"
 #include "window.hpp"

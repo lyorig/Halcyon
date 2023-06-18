@@ -1,25 +1,28 @@
 #pragma once
 
 #include <list>
+#include <sstream>
 
-#include "components/surface.hpp"
 #include "internal/config.hpp"
+#include "types/color.hpp"
 
 namespace hal
 {
     class font;
     class window;
 
+    enum severity : color_type
+    {
+        info    = white,
+        success = green,
+        warning = orange,
+        error   = red
+    };
+
     class console
     {
       public:
 
-        enum severity : color_t
-        {
-            info    = white,
-            warning = orange,
-            error   = red
-        };
 #ifndef NDEBUG
         // Log a variadic amount of arguments.
         template <typename... Args>
@@ -57,7 +60,7 @@ namespace hal
 
 #else
 
-    #define CONSOLE_LOG(...)           (static_cast<void>(0))
-    #define CONSOLE_DRAW(font, window) (static_cast<void>(0))
+    #define CONSOLE_LOG(...)  (static_cast<void>(0))
+    #define CONSOLE_DRAW(...) (static_cast<void>(0))
 
 #endif

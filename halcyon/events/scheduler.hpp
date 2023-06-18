@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/types/types.hpp>
+#include <halcyon/types/other.hpp>
 #include <lyo/timer.hpp>
 #include <vector>
 
@@ -59,4 +59,4 @@ namespace hal
             T& m_object;
         };
     }  // namespace events
-}  // namespace halcyon
+}  // namespace hal

@@ -23,6 +23,8 @@ void music::play(const char* path, lyo::u16 loops) noexcept
     HAL_DEBUG_VERIFY(m_object != nullptr, "Tried to play null music");
 
     HAL_DEBUG_VERIFY(::Mix_PlayMusic(m_object, loops) == 0, ::Mix_GetError());
+
+    HAL_DEBUG_PRINT(info, "Playing ", path);
 }
 
 void music::pause() const noexcept

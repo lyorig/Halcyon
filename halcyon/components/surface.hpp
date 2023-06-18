@@ -2,7 +2,8 @@
 
 #include <SDL2/SDL_surface.h>
 
-#include <halcyon/types/types.hpp>
+#include <halcyon/types/color.hpp>
+#include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
 
 #include "font.hpp"
@@ -12,20 +13,6 @@ namespace hal
 {
     class image_loader;
     class font;
-
-    enum color : color_t
-    {
-        black = 0x000000,
-
-        red   = 0xFF0000,
-        green = 0x00FF00,
-        blue  = 0x0000FF,
-
-        orange = 0xFFAC1C,
-
-        white = 0xFFFFFF
-    };
-
     class surface : public sdl_object<SDL_Surface, ::SDL_FreeSurface>
     {
       public:

@@ -1,13 +1,12 @@
 #pragma once
 
-#include <lyo/concepts.hpp>
 #include <lyo/types.hpp>
 
 #include "point.hpp"
 #include "rectangle.hpp"
 
-/* types.hpp:
-   Types used throughout Halcyon. */
+/* render.hpp:
+   Rendering-related types used throughout Halcyon. */
 
 namespace hal
 {
@@ -19,9 +18,4 @@ namespace hal
 
     using pixel_area = rectangle<pixel_t>;
     using world_area = rectangle<position_t>;
-
-    using color_t = lyo::u32;
-
-    template <typename... Params>
-    using callback = lyo::func_ptr<void, Params...>;
 }  // namespace hal

@@ -3,15 +3,19 @@
 #include <lyo/timer.hpp>
 
 #include "components/renderer.hpp"
-#include "input_handler.hpp"
 #include "internal/subsystem.hpp"
 #include "texture.hpp"
 
 namespace hal
 {
     class engine;
+    class input_handler;
 
     constexpr pixel_size fs_size {};
+
+    struct fullscreen_t  // Tag type for a fullscreen window.
+    {
+    } constexpr fullscreen;
 
     class window : public sdl_object<SDL_Window, ::SDL_DestroyWindow>
     {
@@ -29,6 +33,7 @@ namespace hal
         };
 
         window(engine& engine, const char* title, const pixel_size& size, lyo::u32 window_flags, lyo::u32 renderer_flags) noexcept;
+        window(engine& engine, const char* title, fullscreen_t, lyo::u32 renderer_flags) noexcept;
 
         void present() noexcept;
 

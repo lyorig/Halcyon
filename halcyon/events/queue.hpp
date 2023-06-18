@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/types/types.hpp>
+#include <halcyon/types/other.hpp>
 #include <lyo/timer.hpp>
 #include <queue>
 #include <variant>

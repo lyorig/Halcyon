@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/types/types.hpp>
+#include <halcyon/types/render.hpp>
 #include <vector>
 
 namespace hal
@@ -19,6 +19,6 @@ namespace hal
 
       private:
 
-        std::vector<std::vector<pixel_area>> m_rects;
+        std::vector<std::vector<pixel_area>> m_rects;  // Could be replaced with lyo::buffer.
     };
 }  // namespace hal
