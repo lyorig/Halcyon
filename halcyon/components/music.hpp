@@ -17,13 +17,16 @@ namespace hal
 
         music(lyo::pass_key<mixer>) noexcept;
 
-        void play() const noexcept;
         void play(const char* path, lyo::u16 loops = 0) noexcept;
 
-        void pause() const noexcept;
+        void pause() noexcept;
+        void resume() noexcept;
 
-        void fade_in(double time, lyo::u16 loops = 0) const noexcept;
+        void fade_in(const char* path, double time, lyo::u16 loops = 0) noexcept;
+
         void fade_out(double time) const noexcept;
+
+        bool playing() const noexcept;
 
         lyo::u8  volume() const noexcept;
         lyo::f64 position() const noexcept;

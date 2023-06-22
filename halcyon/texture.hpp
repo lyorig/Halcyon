@@ -40,13 +40,12 @@ namespace hal
         void draw(const coordinate& pos, double scale = 1.0, double angle = 0.0, flip flip = none) const noexcept;
         void draw(const coordinate& pos, const pixel_area& src, double scale = 1.0, double angle = 0.0, flip flip = none) const noexcept;
 
+        void operator=(surface image) noexcept;
+
       private:
 
         pixel_size m_size;
 
         const window& m_window;
-
-        void render_copy(const coordinate& pos, double scale, double angle, flip flip) const noexcept;
-        void render_copy(const coordinate& pos, const pixel_area& src, double scale, double angle, flip flip) const noexcept;
     };
 }  // namespace hal

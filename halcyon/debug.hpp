@@ -12,7 +12,6 @@
     #include <iostream>
     #include <lyo/timer.hpp>
     #include <sstream>
-#endif
 
 namespace hal
 {
@@ -20,7 +19,6 @@ namespace hal
     {
       public:
 
-#ifndef NDEBUG
         // Output any amount of arguments to stdout/stderr, the console and an output file.
         template <typename... Args>
         static void print(severity type, Args&&... args) noexcept
@@ -31,20 +29,20 @@ namespace hal
 
             switch (type)
             {
-                case info:
-                    fwd_info << "[info]\t";
+                case severity::info:
+                    fwd_info << "[info]\t\t";
                     break;
 
-                case success:
+                case severity::success:
                     fwd_info << "[success]\t";
                     break;
 
-                case warning:
+                case severity::warning:
                     fwd_info << "[warning]\t";
                     break;
 
-                case error:
-                    fwd_info << "[error]\t";
+                case severity::error:
+                    fwd_info << "[error]\t\t";
                     break;
             }
 
@@ -58,7 +56,7 @@ namespace hal
             const std::string with_info { fwd_info.str() + msg };
 
             m_output << with_info << std::endl;
-            (type == error ? std::cerr : std::cout) << with_info << std::endl;
+            (type == severity::error ? std::cerr : std::cout) << with_info << std::endl;
         }
 
         // Show a message box with an error message.
@@ -71,20 +69,21 @@ namespace hal
 
         static std::ofstream            m_output;
         static const lyo::precise_timer m_timer;
-#endif
     };
 }  // namespace hal
 
-#ifndef NDEBUG
-
-    #define HAL_DEBUG_PRINT                  hal::debug::print
-    #define HAL_DEBUG_PANIC                  hal::debug::panic
-    #define HAL_DEBUG_VERIFY(cond, if_false) hal::debug::verify(cond, #cond " eval'd to false", if_false)
+    #define HAL_PRINT                  hal::debug::print
+    #define HAL_PANIC                  hal::debug::panic
+    #define HAL_ASSERT(cond, if_false) hal::debug::verify(cond, #cond " is false", if_false)
+    #define HAL_CHECK(cond, if_false)  HAL_ASSERT(cond, if_false)
 
 #else
 
-    #define HAL_DEBUG_PRINT(...)             (static_cast<void>(0))
-    #define HAL_DEBUG_PANIC(...)             (static_cast<void>(0))
-    #define HAL_DEBUG_VERIFY(condition, ...) (static_cast<void>(condition))  // Make sure functions with side effects get called.
+    #define HAL_NOOP (void(0))
+
+    #define HAL_DEBUG_PRINT(...)       HAL_NOOP
+    #define HAL_PANIC(...)             HAL_NOOP
+    #define HAL_ASSERT(condition, ...) (void(condition))  // Asserts are vital; preserve the condition.
+    #define HAL_CHECK(...)             HAL_NOOP           // Checks are not vital; remove them entirely.
 
 #endif

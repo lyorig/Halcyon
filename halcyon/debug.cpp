@@ -8,7 +8,7 @@
 
 using namespace hal;
 
-/* Static private variables. */
+// Static private variables.
 std::ofstream            debug::m_output { "Halcyon debug output.txt" };
 const lyo::precise_timer debug::m_timer {};
 
@@ -16,7 +16,7 @@ void debug::panic(const char* title, const char* message) noexcept
 {
     const char* fmt_msg { std::strlen(message) > 0 ? message : "No info recieved." };
 
-    debug::print(severity::error, __func__, ": ", fmt_msg);
+    debug::print(severity::error, __func__, ": ", title, " <- ", fmt_msg);
 
     constexpr SDL_MessageBoxButtonData buttons[] {
         {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT,  0, "Exit"      },

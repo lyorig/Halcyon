@@ -6,7 +6,7 @@ namespace hal
 {
     using color_type = lyo::u32;
 
-    enum color : color_type
+    enum class color : color_type
     {
         black = 0x000000,
 

@@ -19,7 +19,7 @@ texture::texture(const window& wnd) noexcept :
 }
 
 texture::texture(const window& wnd, const pixel_size& size) noexcept :
-    sdl_object { ::SDL_CreateTexture(wnd.renderer.ptr(), ::SDL_GetWindowPixelFormat(wnd.ptr()), SDL_TEXTUREACCESS_STATIC, size.x, size.y) },
+    sdl_object { ::SDL_CreateTexture(wnd.renderer.ptr(), ::SDL_GetWindowPixelFormat(wnd.ptr()), SDL_TEXTUREACCESS_TARGET, size.x, size.y) },
     m_size { 0, 0 },
     m_window { wnd }
 {
@@ -34,7 +34,7 @@ texture::texture(const window& wnd, surface image) noexcept :
 
 void texture::set_opacity(lyo::u8 value) const noexcept
 {
-    HAL_DEBUG_VERIFY(::SDL_SetTextureAlphaMod(m_object, value) == 0, ::SDL_GetError());
+    HAL_ASSERT(::SDL_SetTextureAlphaMod(m_object, value) == 0, ::SDL_GetError());
 }
 
 const pixel_size& texture::size() const noexcept
@@ -46,22 +46,12 @@ lyo::u8 texture::opacity() const noexcept
 {
     Uint8 alpha;
 
-    HAL_DEBUG_VERIFY(::SDL_GetTextureAlphaMod(m_object, &alpha) == 0, ::SDL_GetError());
+    HAL_ASSERT(::SDL_GetTextureAlphaMod(m_object, &alpha) == 0, ::SDL_GetError());
 
     return alpha;
 }
 
 void texture::draw(const coordinate& pos, double scale, double angle, flip flip) const noexcept
-{
-    this->render_copy(pos, scale, angle, flip);
-}
-
-void texture::draw(const coordinate& pos, const pixel_area& src, double scale, double angle, flip flip) const noexcept
-{
-    this->render_copy(pos, src, scale, angle, flip);
-}
-
-void texture::render_copy(const coordinate& pos, double scale, double angle, flip flip) const noexcept
 {
     const world_area dest { (pos + this->size()) * scale };
 
@@ -70,14 +60,14 @@ void texture::render_copy(const coordinate& pos, double scale, double angle, fli
         const dest_rect sdl_dest = dest;
 
         if constexpr (cfg::subpixel_drawing_precision)
-            HAL_DEBUG_VERIFY(::SDL_RenderCopyExF(m_window.renderer.ptr(), m_object, NULL, reinterpret_cast<const SDL_FRect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, ::SDL_GetError());
+            HAL_ASSERT(::SDL_RenderCopyExF(m_window.renderer.ptr(), m_object, NULL, reinterpret_cast<const SDL_FRect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, ::SDL_GetError());
 
         else
-            HAL_DEBUG_VERIFY(::SDL_RenderCopyEx(m_window.renderer.ptr(), m_object, NULL, reinterpret_cast<const SDL_Rect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, ::SDL_GetError());
+            HAL_ASSERT(::SDL_RenderCopyEx(m_window.renderer.ptr(), m_object, NULL, reinterpret_cast<const SDL_Rect*>(&sdl_dest), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, ::SDL_GetError());
     }
 }
 
-void texture::render_copy(const coordinate& pos, const pixel_area& src, double scale, double angle, flip flip) const noexcept
+void texture::draw(const coordinate& pos, const pixel_area& src, double scale, double angle, flip flip) const noexcept
 {
     const world_area dest { (pos + src.size) * scale };
 
@@ -87,9 +77,14 @@ void texture::render_copy(const coordinate& pos, const pixel_area& src, double s
         const SDL_Rect  src_rect = src;
 
         if constexpr (cfg::subpixel_drawing_precision)
-            HAL_DEBUG_VERIFY(::SDL_RenderCopyExF(m_window.renderer.ptr(), m_object, &src_rect, reinterpret_cast<const SDL_FRect*>(&dst_rect), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, ::SDL_GetError());
+            HAL_ASSERT(::SDL_RenderCopyExF(m_window.renderer.ptr(), m_object, &src_rect, reinterpret_cast<const SDL_FRect*>(&dst_rect), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, ::SDL_GetError());
 
         else
-            HAL_DEBUG_VERIFY(::SDL_RenderCopyEx(m_window.renderer.ptr(), m_object, &src_rect, reinterpret_cast<const SDL_Rect*>(&dst_rect), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, ::SDL_GetError());
+            HAL_ASSERT(::SDL_RenderCopyEx(m_window.renderer.ptr(), m_object, &src_rect, reinterpret_cast<const SDL_Rect*>(&dst_rect), angle, NULL, static_cast<SDL_RendererFlip>(flip)) == 0, ::SDL_GetError());
     }
+}
+
+void texture::operator=(surface image) noexcept
+{
+    this->reassign(::SDL_CreateTextureFromSurface(m_window.renderer.ptr(), image.ptr()));
 }

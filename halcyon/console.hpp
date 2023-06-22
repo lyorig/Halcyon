@@ -1,29 +1,29 @@
 #pragma once
 
-#include <list>
+#include <deque>
 #include <sstream>
 
 #include "internal/config.hpp"
-#include "types/color.hpp"
+#include "types/colors.hpp"
 
 namespace hal
 {
+
+    enum class severity : color_type
+    {
+        info    = static_cast<color_type>(color::white),
+        success = static_cast<color_type>(color::green),
+        warning = static_cast<color_type>(color::orange),
+        error   = static_cast<color_type>(color::red),
+    };
+#ifndef NDEBUG
+
     class font;
     class window;
-
-    enum severity : color_type
-    {
-        info    = white,
-        success = green,
-        warning = orange,
-        error   = red
-    };
-
     class console
     {
       public:
 
-#ifndef NDEBUG
         // Log a variadic amount of arguments.
         template <typename... Args>
         static void log(severity type, Args... args) noexcept
@@ -46,14 +46,11 @@ namespace hal
 
       private:
 
-        using queue_type = std::list<std::pair<std::string, severity>>;
+        using queue_type = std::deque<std::pair<std::string, severity>>;
 
         static queue_type m_queue;
-#endif
     };
 }  // namespace hal
-
-#ifndef NDEBUG
 
     #define CONSOLE_LOG  hal::console::log
     #define CONSOLE_DRAW hal::console::draw

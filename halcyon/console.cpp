@@ -2,7 +2,9 @@
 
     #include "console.hpp"
 
+    #include "components/font.hpp"
     #include "texture.hpp"
+    #include "window.hpp"
 
 using namespace hal;
 
@@ -12,16 +14,16 @@ void console::draw(const font& fnt, const window& wnd) noexcept
 {
     int w, h;
 
-    // The resulting surface's height is constant.
     ::TTF_SizeUTF8(fnt.ptr(), "", &w, &h);
 
     pixel_t height { 0 };
 
-    for (const auto& pr : m_queue)
+    for (const auto& entry : m_queue)
     {
         texture {
-            wnd, {fnt, pr.first.c_str(), static_cast<color>(pr.second)}
-        }.draw({ 0.0, static_cast<double>(height) });
+            wnd, fnt.textify(entry.first.c_str(), static_cast<color>(entry.second))
+        }
+            .draw({ 10.0, static_cast<double>(height) });
 
         height += h;
     }

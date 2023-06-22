@@ -6,6 +6,7 @@
 #include <lyo/types.hpp>
 
 #include "sdl_object.hpp"
+#include "surface.hpp"
 
 namespace hal
 {
@@ -16,5 +17,11 @@ namespace hal
       public:
 
         font(const char* path, lyo::u8 size, lyo::pass_key<font_loader>) noexcept;
+
+        surface textify(const char* text, color clr = color::white) const noexcept;
+
+      private:
+
+        static constexpr SDL_Color sdl_color_from(color_type clr) noexcept;
     };
 }  // namespace hal

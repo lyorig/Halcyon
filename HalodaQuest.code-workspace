@@ -63,7 +63,8 @@
 			"optional": "cpp",
 			"typeindex": "cpp",
 			"variant": "cpp",
-			"bitset": "cpp"
+			"bitset": "cpp",
+			"list": "cpp"
 		}
 	}
 }

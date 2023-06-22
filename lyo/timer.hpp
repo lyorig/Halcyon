@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <lyo/types.hpp>
+#include <variant>
 
 /* timer.hpp:
    A lightweight and simple timing system. */
@@ -14,51 +15,80 @@ namespace lyo
     template <lyo::clock Clock>
     class timer
     {
-        using second_type = std::chrono::duration<lyo::f64>;
-
       public:
 
         timer() noexcept :
-            m_epoch { Clock::now() }
+            m_data { Clock::now() }
         {
         }
 
         timer& reset() noexcept
         {
-            m_epoch = Clock::now();
+            m_data = Clock::now();
 
             return *this;
         }
 
+        void pause() noexcept
+        {
+            if (std::holds_alternative<tp>(m_data))
+                m_data = std::chrono::duration<f64> { Clock::now() - std::get<tp>(m_data) }.count();
+        }
+
+        void resume() noexcept
+        {
+            if (std::holds_alternative<double>(m_data))
+                m_data = Clock::now() - second_type { std::get<double>(m_data) };
+        }
+
         f64 operator()() const noexcept
         {
-            return std::chrono::duration<f64> { Clock::now() - m_epoch }.count();
+            if (std::holds_alternative<tp>(m_data))  // Not paused (time-point).
+                return std::chrono::duration<f64> { Clock::now() - std::get<tp>(m_data) }.count();
+
+            else  // Paused (double).
+                return std::get<double>(m_data);
         }
 
         timer& operator=(f64 time) noexcept
         {
-            m_epoch = Clock::now() - second_type { time };
+            if (std::holds_alternative<tp>(m_data))  // Not paused (time-point).
+                m_data = Clock::now() - second_type { time };
+
+            else  // Paused (double).
+                std::get<double>(m_data) = time;
 
             return *this;
         }
 
         timer& operator+=(f64 time) noexcept
         {
-            m_epoch -= second_type { time };
+            if (std::holds_alternative<tp>(m_data))  // Not paused (time-point).
+                m_data -= second_type { time };
+
+            else  // Paused (double).
+                std::get<double>(m_data) += time;
 
             return *this;
         }
 
         timer& operator-=(f64 time) noexcept
         {
-            m_epoch += second_type { time };
+            if (std::holds_alternative<tp>(m_data))  // Not paused (time-point).
+                m_data += second_type { time };
+
+            else  // Paused (double).
+                std::get<double>(m_data) -= time;
 
             return *this;
         }
 
       private:
 
-        std::chrono::time_point<Clock, std::chrono::duration<f64, typename Clock::period>> m_epoch;
+        using second_type = std::chrono::duration<lyo::f64>;
+        using tp          = std::chrono::time_point<Clock, std::chrono::duration<f64, typename Clock::period>>;
+
+        std::variant<tp, double> m_data;
     };
 
     using steady_timer  = timer<std::chrono::steady_clock>;

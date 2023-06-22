@@ -14,8 +14,6 @@ namespace hal
         {
           public:
 
-            using key_type = input_handler::button;
-
             enum event : lyo::u8
             {
                 press,
@@ -64,18 +62,18 @@ namespace hal
 
                     else  // Not exactly eye candy, but should be better than branching.
                     {
-                        if ((((const input_handler::key_storage*)&m_input) + bind.second.first)->operator[](bind.first))
+                        if ((((const input_handler::key_storage*)&m_input) + bind.second.first)->operator[](static_cast<lyo::u64>(bind.first)))
                             bind.second.second(m_hook);
                     }
                 }
             }
 
-            void bind(key_type key, event type, callback<Hook&> func) noexcept
+            void bind(button key, event type, callback<Hook&> func) noexcept
             {
                 m_binds.emplace(std::piecewise_construct, std::forward_as_tuple(key), std::forward_as_tuple(type, func));
             }
 
-            void unbind(key_type key) noexcept
+            void unbind(button key) noexcept
             {
                 m_binds.erase(key);
             }
@@ -83,7 +81,7 @@ namespace hal
           private:
 
             // TODO: Add support for multi-key binds.
-            std::unordered_map<key_type, std::pair<event, callback<Hook&>>> m_binds;
+            std::unordered_map<button, std::pair<event, callback<Hook&>>> m_binds;
 
             const input_handler& m_input;
 

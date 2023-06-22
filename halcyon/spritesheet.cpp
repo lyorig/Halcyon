@@ -6,7 +6,7 @@ using namespace hal;
 
 spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexcept
 {
-    HAL_DEBUG_VERIFY(frame_size.x <= tx.size().x && frame_size.y <= tx.size().y, "Texture size < frame size");
+    HAL_ASSERT(frame_size.x <= tx.size().x && frame_size.y <= tx.size().y, "Texture size < frame size");
 
     const frame_t anims { static_cast<frame_t>(tx.size().y / frame_size.y) };
     const frame_t frames { static_cast<frame_t>(tx.size().x / frame_size.x) };
@@ -21,7 +21,7 @@ spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexce
             m_rects[y].emplace_back(frame_size.x * x, frame_size.y * y, frame_size.x, frame_size.y);
     }
 
-    HAL_DEBUG_PRINT(info, "Created new spritesheet (texture size ", tx.size().x, 'x', tx.size().y, ", frame size ", frame_size.x, 'x', frame_size.y, ')');
+    HAL_PRINT(severity::info, "Created new spritesheet (texture size ", tx.size().x, 'x', tx.size().y, ", frame size ", frame_size.x, 'x', frame_size.y, ')');
 }
 
 const std::vector<pixel_area>& spritesheet::operator[](frame_t animation) const noexcept

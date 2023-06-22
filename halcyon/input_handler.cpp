@@ -10,7 +10,7 @@ using namespace hal;
 input_handler::input_handler(engine& engine) noexcept :
     m_engine { engine }
 {
-    HAL_DEBUG_PRINT(success, "Initialized input handler");
+    HAL_PRINT(severity::success, "Initialized input handler");
 }
 
 void input_handler::update() noexcept
@@ -83,15 +83,15 @@ void input_handler::update() noexcept
 
 bool input_handler::pressed(button btn) const noexcept
 {
-    return m_pressed[btn];
+    return m_pressed[static_cast<lyo::u64>(btn)];
 }
 
 bool input_handler::held(button btn) const noexcept
 {
-    return m_held[btn];
+    return m_held[static_cast<lyo::u64>(btn)];
 }
 
 bool input_handler::released(button btn) const noexcept
 {
-    return m_released[btn];
+    return m_released[static_cast<lyo::u64>(btn)];
 }
