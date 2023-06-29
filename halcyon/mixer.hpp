@@ -1,12 +1,15 @@
 #pragma once
 
-#include "components/chunk.hpp"
 #include "components/music.hpp"
 #include "internal/subsystem.hpp"
 
 namespace hal
 {
+    // Loop music/SFX as many times as possible (~65K times).
+    constexpr lyo::i16 infinite_loop { -1 };
+
     class engine;
+    class chunk;
 
     class mixer
     {

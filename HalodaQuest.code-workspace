@@ -64,7 +64,8 @@
 			"typeindex": "cpp",
 			"variant": "cpp",
 			"bitset": "cpp",
-			"list": "cpp"
+			"list": "cpp",
+			"cfenv": "cpp"
 		}
 	}
 }

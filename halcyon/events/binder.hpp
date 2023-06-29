@@ -62,7 +62,7 @@ namespace hal
 
                     else  // Not exactly eye candy, but should be better than branching.
                     {
-                        if ((((const input_handler::key_storage*)&m_input) + bind.second.first)->operator[](static_cast<lyo::u64>(bind.first)))
+                        if ((*((reinterpret_cast<const input_handler::key_storage*>(&m_input)) + bind.second.first))[static_cast<lyo::u64>(bind.first)])
                             bind.second.second(m_hook);
                     }
                 }

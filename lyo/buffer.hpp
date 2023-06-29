@@ -7,18 +7,33 @@ namespace lyo
     {
       public:
 
-        buffer(lyo::u64 size) noexcept :
-            m_data { new T[size] }
+        using size_type = lyo::u32;
+
+        buffer() noexcept :
+            m_data { nullptr },
+            size { 0 }
         {
         }
 
-        operator T*() noexcept
+        buffer(size_type sz) noexcept :
+            m_data { new T[sz] },
+            size { sz }
         {
-            return m_data;
+        }
+
+        T& operator[](size_type pos) noexcept
+        {
+            assert(pos < size);
+
+            return m_data[pos];
         }
 
       private:
 
         lyo::capsule<T[]> m_data;
+
+      public:
+
+        const size_type size;
     };
 }  // namespace lyo

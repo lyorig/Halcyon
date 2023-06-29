@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_mixer.h>
 
+#include <halcyon/types/music.hpp>
 #include <lyo/pass_key.hpp>
 
 #include "sdl_object.hpp"
@@ -17,6 +18,6 @@ namespace hal
 
         chunk(const char* path, lyo::pass_key<mixer>) noexcept;
 
-        void play() noexcept;
+        void play(loop_type loops = 0) noexcept;
     };
 }  // namespace hal

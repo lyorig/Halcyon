@@ -7,11 +7,11 @@
 #include "console.hpp"
 
 #ifndef NDEBUG
+
     #include <fstream>
-    #include <iomanip>
     #include <iostream>
     #include <lyo/timer.hpp>
-    #include <sstream>
+    #include <lyo/utility.hpp>
 
 namespace hal
 {
@@ -33,10 +33,6 @@ namespace hal
                     fwd_info << "[info]\t\t";
                     break;
 
-                case severity::success:
-                    fwd_info << "[success]\t";
-                    break;
-
                 case severity::warning:
                     fwd_info << "[warning]\t";
                     break;
@@ -44,12 +40,22 @@ namespace hal
                 case severity::error:
                     fwd_info << "[error]\t\t";
                     break;
+
+                case severity::init:
+                    fwd_info << "[init]\t\t";
+                    break;
+
+                case severity::load:
+                    fwd_info << "[load]\t\t";
+                    break;
+
+                default:
+                    fwd_info
+                        << "[ThisTypeIsNotInTheSwitchStatementYouDumbass]\t";
+                    break;
             }
 
-            // Fold expression to properly output every argument.
-            (message << ... << args);
-
-            const std::string msg { message.str() };
+            const std::string msg { lyo::string_from_pack(args...) };
 
             console::log(static_cast<severity>(type), msg);
 
@@ -72,18 +78,16 @@ namespace hal
     };
 }  // namespace hal
 
-    #define HAL_PRINT                  hal::debug::print
-    #define HAL_PANIC                  hal::debug::panic
-    #define HAL_ASSERT(cond, if_false) hal::debug::verify(cond, #cond " is false", if_false)
-    #define HAL_CHECK(cond, if_false)  HAL_ASSERT(cond, if_false)
+    #define HAL_DEBUG_PRINT                  hal::debug::print
+    #define HAL_DEBUG_PANIC                  hal::debug::panic
+    #define HAL_DEBUG_ASSERT(cond, if_false) hal::debug::verify(cond, #cond " is false", if_false)
+    #define HAL_DEBUG_CHECK(cond, if_false)  HAL_DEBUG_ASSERT(cond, if_false)
 
 #else
 
-    #define HAL_NOOP (void(0))
-
-    #define HAL_DEBUG_PRINT(...)       HAL_NOOP
-    #define HAL_PANIC(...)             HAL_NOOP
-    #define HAL_ASSERT(condition, ...) (void(condition))  // Asserts are vital; preserve the condition.
-    #define HAL_CHECK(...)             HAL_NOOP           // Checks are not vital; remove them entirely.
+    #define HAL_DEBUG_PRINT(...)             HAL_NOOP
+    #define HAL_DEBUG_PANIC(...)             HAL_NOOP
+    #define HAL_DEBUG_ASSERT(condition, ...) (void(condition))  // Asserts are vital; preserve the condition.
+    #define HAL_DEBUG_CHECK(...)             HAL_NOOP  // Checks are not vital; remove them entirely.
 
 #endif

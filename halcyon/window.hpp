@@ -10,9 +10,6 @@ namespace hal
 {
     class engine;
     class input_handler;
-
-    constexpr pixel_size fs_size {};
-
     struct fullscreen_t  // Tag type for a fullscreen window.
     {
     } constexpr fullscreen;

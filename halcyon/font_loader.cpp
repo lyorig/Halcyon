@@ -1,12 +1,14 @@
 #include "font_loader.hpp"
 
+#include "components/font.hpp"
+
 using namespace hal;
 
 font_loader::font_loader(window& wnd) noexcept
 {
-    HAL_ASSERT(::TTF_Init() == 0, ::TTF_GetError());
+    HAL_DEBUG_ASSERT(::TTF_Init() == 0, ::TTF_GetError());
 
-    HAL_PRINT(severity::success, "Initialized font loader");
+    HAL_DEBUG_PRINT(severity::init, "Initialized font loader");
 }
 
 font_loader::~font_loader()

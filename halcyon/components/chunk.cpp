@@ -7,9 +7,10 @@ using namespace hal;
 chunk::chunk(const char* path, lyo::pass_key<mixer>) noexcept :
     sdl_object { ::Mix_LoadWAV(path) }
 {
+    HAL_DEBUG_PRINT(severity::load, "Loaded SFX ", path);
 }
 
-void chunk::play() noexcept
+void chunk::play(loop_type loops) noexcept
 {
-    HAL_ASSERT(::Mix_PlayChannel(-1, m_object, 0) != -1, ::Mix_GetError());
+    HAL_DEBUG_ASSERT(::Mix_PlayChannel(-1, m_object, loops) != -1, ::Mix_GetError());
 }

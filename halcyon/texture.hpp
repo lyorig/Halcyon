@@ -37,10 +37,15 @@ namespace hal
 
         void set_opacity(lyo::u8 value) const noexcept;
 
-        void draw(const coordinate& pos, double scale = 1.0, double angle = 0.0, flip flip = none) const noexcept;
-        void draw(const coordinate& pos, const pixel_area& src, double scale = 1.0, double angle = 0.0, flip flip = none) const noexcept;
+        // Scaleable variants.
+        void draw(const coordinate& pos, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0, flip flip = none) const noexcept;
+        void draw(const coordinate& pos, const pixel_area& src, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0, flip flip = none) const noexcept;
 
-        void operator=(surface image) noexcept;
+        // Set size variants. Useful for drawing to textures.
+        void draw(const coordinate& pos, const pixel_size& size, lyo::f64 angle = 0.0, flip flip = none) const noexcept;
+        void draw(const coordinate& pos, const pixel_size& size, const pixel_area& src, lyo::f64 angle = 0.0, flip flip = none) const noexcept;
+
+        texture& operator=(surface image) noexcept;
 
       private:
 

@@ -2,11 +2,12 @@
 
 #include <SDL2/SDL_image.h>
 
-#include "components/surface.hpp"
+#include <lyo/types.hpp>
 
 namespace hal
 {
     class window;
+    class surface;
 
     class image_loader
     {

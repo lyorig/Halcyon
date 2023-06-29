@@ -1,12 +1,14 @@
 #include "image_loader.hpp"
 
+#include "components/surface.hpp"
+
 using namespace hal;
 
 image_loader::image_loader(window& wnd, int type_flags) noexcept
 {
-    HAL_ASSERT(::IMG_Init(type_flags) == type_flags, ::IMG_GetError());
+    HAL_DEBUG_ASSERT(::IMG_Init(type_flags) == type_flags, ::IMG_GetError());
 
-    HAL_PRINT(severity::success, "Initialized image loader with flags ", type_flags);
+    HAL_DEBUG_PRINT(severity::init, "Initialized image loader with flags ", type_flags);
 }
 
 image_loader::~image_loader()
@@ -16,9 +18,7 @@ image_loader::~image_loader()
 
 surface image_loader::load(const char* path) const noexcept
 {
-    SDL_Surface* surf { ::IMG_Load(path) };
+    HAL_DEBUG_PRINT(severity::info, "Loading image ", path);
 
-    HAL_CHECK(surf != nullptr, ::IMG_GetError());
-
-    return surf;
+    return ::IMG_Load(path);
 }

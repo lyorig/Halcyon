@@ -12,6 +12,8 @@ console::queue_type console::m_queue {};
 
 void console::draw(const font& fnt, const window& wnd) noexcept
 {
+    constexpr coordinate offset { 20.0, 20.0 };
+
     int w, h;
 
     ::TTF_SizeUTF8(fnt.ptr(), "", &w, &h);
@@ -21,9 +23,9 @@ void console::draw(const font& fnt, const window& wnd) noexcept
     for (const auto& entry : m_queue)
     {
         texture {
-            wnd, fnt.textify(entry.first.c_str(), static_cast<color>(entry.second))
+            wnd, fnt.render(entry.first, static_cast<color>(entry.second))
         }
-            .draw({ 10.0, static_cast<double>(height) });
+            .draw({ offset.x, offset.y + static_cast<double>(height) });
 
         height += h;
     }

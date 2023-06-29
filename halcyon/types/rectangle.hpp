@@ -2,17 +2,16 @@
 
 #include <SDL2/SDL_rect.h>
 
-#include <lyo/concepts.hpp>
+#include "point.hpp"
 
 namespace hal
 {
     template <lyo::arithmetic T>
-    struct point;
-
-    template <lyo::arithmetic T>
     struct rectangle
     {
-        point<T> pos {}, size {};
+        point<T> pos, size;
+
+        constexpr rectangle() noexcept = default;
 
         constexpr rectangle(T x, T y, T w, T h) noexcept :
             pos { x, y },
@@ -112,4 +111,4 @@ namespace hal
             };
         }
     };
-}  // namespace halcyon
+}  // namespace hal

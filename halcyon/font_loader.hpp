@@ -1,10 +1,11 @@
 #pragma once
 
-#include "components/font.hpp"
+#include <lyo/types.hpp>
 
 namespace hal
 {
     class window;
+    class font;
 
     class font_loader
     {

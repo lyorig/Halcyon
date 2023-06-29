@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <utility>
 
 #include "types.hpp"
@@ -88,11 +89,15 @@ namespace lyo
 
         constexpr base_type* operator->() const noexcept
         {
+            assert(m_pointer != nullptr);
+
             return m_pointer;
         }
 
         constexpr base_type& operator*() const noexcept
         {
+            assert(m_pointer != nullptr);
+
             return *m_pointer;
         }
 

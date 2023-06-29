@@ -1,23 +1,18 @@
 #pragma once
 
-#include <deque>
-#include <sstream>
+#include "enums/severity.hpp"
 
-#include "internal/config.hpp"
-#include "types/colors.hpp"
+#define HAL_NOOP (void(0))
+
+#ifndef NDEBUG
+
+    #include <deque>
+    #include <lyo/utility.hpp>
+
+    #include "internal/config.hpp"
 
 namespace hal
 {
-
-    enum class severity : color_type
-    {
-        info    = static_cast<color_type>(color::white),
-        success = static_cast<color_type>(color::green),
-        warning = static_cast<color_type>(color::orange),
-        error   = static_cast<color_type>(color::red),
-    };
-#ifndef NDEBUG
-
     class font;
     class window;
     class console
@@ -29,17 +24,9 @@ namespace hal
         static void log(severity type, Args... args) noexcept
         {
             if (m_queue.size() == cfg::max_console_entries)
-            {
                 m_queue.pop_front();
-            }
 
-            std::stringstream ss;
-
-            ss << std::fixed;
-
-            (ss << ... << args);
-
-            m_queue.emplace_back(ss.str(), type);
+            m_queue.emplace_back(lyo::string_from_pack(args...), type);
         }
 
         static void draw(const font& fnt, const window& wnd) noexcept;
@@ -52,12 +39,12 @@ namespace hal
     };
 }  // namespace hal
 
-    #define CONSOLE_LOG  hal::console::log
-    #define CONSOLE_DRAW hal::console::draw
+    #define HAL_CONSOLE_LOG  hal::console::log
+    #define HAL_CONSOLE_DRAW hal::console::draw
 
 #else
 
-    #define CONSOLE_LOG(...)  (static_cast<void>(0))
-    #define CONSOLE_DRAW(...) (static_cast<void>(0))
+    #define HAL_CONSOLE_LOG(...)  HAL_NOOP
+    #define HAL_CONSOLE_DRAW(...) HAL_NOOP
 
 #endif

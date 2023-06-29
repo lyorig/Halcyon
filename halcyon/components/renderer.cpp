@@ -16,22 +16,22 @@ void renderer::present(lyo::pass_key<window>) const noexcept
 
 void renderer::clear(lyo::pass_key<window>) const noexcept
 {
-    HAL_ASSERT(::SDL_RenderClear(m_object) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_RenderClear(m_object) == 0, ::SDL_GetError());
 }
 
 pixel_size renderer::output_size() const noexcept
 {
     point<int> size;
-    HAL_ASSERT(::SDL_GetRendererOutputSize(m_object, &size.x, &size.y) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_GetRendererOutputSize(m_object, &size.x, &size.y) == 0, ::SDL_GetError());
     return size;
 }
 
 void renderer::set_target(texture& tx) const noexcept
 {
-    HAL_ASSERT(::SDL_SetRenderTarget(m_object, tx.ptr()) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object, tx.ptr()) == 0, ::SDL_GetError());
 }
 
 void renderer::reset_target() const noexcept
 {
-    HAL_ASSERT(::SDL_SetRenderTarget(m_object, NULL) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object, NULL) == 0, ::SDL_GetError());
 }

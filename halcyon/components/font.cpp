@@ -1,19 +1,18 @@
 #include "font.hpp"
 
+#include "surface.hpp"
+
 using namespace hal;
 
 font::font(const char* path, lyo::u8 size, lyo::pass_key<font_loader>) noexcept :
     sdl_object { ::TTF_OpenFont(path, size) }
 {
+    HAL_DEBUG_PRINT(severity::load, "Loaded font ", path, " with size ", static_cast<lyo::u32>(size));
 }
 
-surface font::textify(const char* text, color clr) const noexcept
+surface font::render(const std::string& text, color clr) const noexcept
 {
-    SDL_Surface* surf { ::TTF_RenderUTF8_Blended_Wrapped(m_object, text, sdl_color_from(static_cast<color_type>(clr)), 0) };
-
-    HAL_CHECK(surf != nullptr, ::TTF_GetError());
-
-    return surf;
+    return ::TTF_RenderUTF8_Blended_Wrapped(m_object, text.c_str(), sdl_color_from(static_cast<color_type>(clr)), 0);
 }
 
 constexpr SDL_Color font::sdl_color_from(color_type clr) noexcept

@@ -1,7 +1,5 @@
 #include "surface.hpp"
 
-#include "font.hpp"
-
 using namespace hal;
 
 surface::surface(SDL_Surface* surf) noexcept :

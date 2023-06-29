@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_mixer.h>
 
+#include "components/chunk.hpp"
 #include "debug.hpp"
 
 using namespace hal;
@@ -12,9 +13,9 @@ mixer::init::init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept
 {
     constexpr int types = MIX_INIT_MP3 | MIX_INIT_OGG;
 
-    HAL_ASSERT(::Mix_Init(types) == types, ::Mix_GetError());
-    HAL_ASSERT(::Mix_OpenAudio(freq, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, static_cast<int>(qual)) == 0, ::Mix_GetError());
-    HAL_ASSERT(::Mix_AllocateChannels(channels) == channels, ::Mix_GetError());
+    HAL_DEBUG_ASSERT(::Mix_Init(types) == types, ::Mix_GetError());
+    HAL_DEBUG_ASSERT(::Mix_OpenAudio(freq, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, static_cast<int>(qual)) == 0, ::Mix_GetError());
+    HAL_DEBUG_ASSERT(::Mix_AllocateChannels(channels) == channels, ::Mix_GetError());
 }
 
 mixer::init::~init() noexcept

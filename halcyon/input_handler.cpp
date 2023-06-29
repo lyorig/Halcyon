@@ -10,7 +10,7 @@ using namespace hal;
 input_handler::input_handler(engine& engine) noexcept :
     m_engine { engine }
 {
-    HAL_PRINT(severity::success, "Initialized input handler");
+    HAL_DEBUG_PRINT(severity::init, "Initialized input handler");
 }
 
 void input_handler::update() noexcept

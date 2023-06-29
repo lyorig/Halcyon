@@ -9,7 +9,7 @@ window::window(engine& engine, const char* title, const pixel_size& size, lyo::u
     renderer { *this, renderer_flags, {} },
     m_size { renderer.output_size() }
 {
-    HAL_PRINT(severity::success, "Initialized window '", title, "' (", m_size.x, 'x', m_size.y, ')');
+    HAL_DEBUG_PRINT(severity::init, "Initialized window '", title, "' (", m_size.x, 'x', m_size.y, ')');
 }
 
 window::window(engine& engine, const char* title, fullscreen_t, lyo::u32 renderer_flags) noexcept :
@@ -17,7 +17,7 @@ window::window(engine& engine, const char* title, fullscreen_t, lyo::u32 rendere
     renderer { *this, renderer_flags, {} },
     m_size { renderer.output_size() }
 {
-    HAL_PRINT(severity::success, "Initialized fullscreen window '", title, "' (", m_size.x, 'x', m_size.y, ')');
+    HAL_DEBUG_PRINT(severity::init, "Initialized fullscreen window '", title, "' (", m_size.x, 'x', m_size.y, ')');
 }
 
 void window::present() noexcept

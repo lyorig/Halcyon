@@ -3,7 +3,7 @@
 #include <lyo/bitset.hpp>
 #include <optional>
 
-#include "types/buttons.hpp"
+#include "enums/buttons.hpp"
 
 namespace hal
 {

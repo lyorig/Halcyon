@@ -14,7 +14,8 @@ namespace hal
         green = 0x00FF00,
         blue  = 0x0000FF,
 
-        orange = 0xFFAC1C,
+        orange = 0xFFB52E,
+        cyan   = 0x00FFFF,
 
         white = 0xFFFFFF
     };
