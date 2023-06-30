@@ -232,9 +232,9 @@ namespace lyo
 
         constexpr void destroy() noexcept
         {
-            /* If m_pointer is a nullptr, m_count is either also
-               a nullptr or shouldn't be decremented. Short circuiting
-               ensures that it won't be accessed if the former check fails. */
+            // If m_pointer is a nullptr, m_count is either also
+            // a nullptr or shouldn't be decremented. Short circuiting
+            // ensures that it won't be accessed if the former check fails.
 
             if (m_pointer && --(*m_count) == 0)
             {

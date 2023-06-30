@@ -1,7 +1,5 @@
 #include "font_loader.hpp"
 
-#include "components/font.hpp"
-
 using namespace hal;
 
 font_loader::font_loader(window& wnd) noexcept

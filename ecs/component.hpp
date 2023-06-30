@@ -3,8 +3,9 @@
 #include <limits>
 #include <lyo/bitset.hpp>
 
-/* A component doesn't have to be initialized, this is only
-   for a unified style throughout the ECS. */
+/* components.hpp:
+   [todo: finish description] A component doesn't have to
+   be initialized, this is only for a unified style throughout the ECS. */
 
 namespace ecs
 {
@@ -13,12 +14,12 @@ namespace ecs
         using ID = lyo::u8;
     }
 
-    constexpr component::ID MAX_COMPONENTS { 32 };
+    constexpr component::ID max_components { 32 };
 
-    static_assert(MAX_COMPONENTS <= std::numeric_limits<component::ID>::max(), "Maximum number of components out of data type range");
+    static_assert(max_components <= std::numeric_limits<component::ID>::max(), "Maximum number of components out of data type range");
 
     namespace component
     {
-        using mask = lyo::bitset<MAX_COMPONENTS>;
+        using mask = lyo::bitset<max_components>;
     }
 }  // namespace ecs

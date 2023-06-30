@@ -24,7 +24,7 @@ namespace lyo
         constexpr bitset(bool initializer) noexcept :
             m_storage {}
         {
-            /* Set all bits to 1 if initializer == true by negating zero. */
+            // Set all bits to 1 if initializer == true by negating zero.
             if (initializer)
                 for (Storage_type& unit : m_storage)
                     unit = ~static_cast<Storage_type>(0);
@@ -63,18 +63,18 @@ namespace lyo
 
       private:
 
-        /* Constexpr functions. */
-        constexpr Storage_type shifted_one(lyo::u64 pos) const noexcept
+        // Convenience functions.
+        static constexpr Storage_type shifted_one(lyo::u64 pos) noexcept
         {
             return static_cast<Storage_type>(1) << (pos % (sizeof(Storage_type) * 8));
         }
 
-        constexpr lyo::u64 storage_index(lyo::u64 pos) const noexcept
+        static constexpr lyo::u64 storage_index(lyo::u64 pos) noexcept
         {
             return static_cast<lyo::u64>(pos / (sizeof(Storage_type) * 8));
         }
 
-        /* You'll need eye bleach for this one. All you need to know is that it works. */
+        // You'll need eye bleach for this one. All you need to know is that it works.
         Storage_type m_storage[(Size + (sizeof(Storage_type) * 8) - 1) / (sizeof(Storage_type) * 8)];
     };
 }  // namespace lyo

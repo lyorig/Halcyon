@@ -12,9 +12,9 @@ namespace lyo
     template <typename T>
     concept clock = std::chrono::is_clock_v<T>;
 
-    /* A simple timer for all your timing needs. It'll keep
-       running no matter what, so if you require pause/resume
-       functionality, use the stopwatch instead. */
+    // A simple timer for all your timing needs. It'll keep
+    // running no matter what, so if you require pause/resume
+    // functionality, use the stopwatch instead.
     template <lyo::clock Clock>
     class timer
     {
@@ -70,9 +70,9 @@ namespace lyo
     using system_timer  = timer<std::chrono::system_clock>;
     using precise_timer = timer<std::chrono::high_resolution_clock>;
 
-    /* A pausable timer, essentially. This incurs a bit of both
-       space and runtime overhead, so if you intend to keep it
-       running all the time, use the regular timer instead. */
+    // A pausable timer, essentially. This incurs a bit of both
+    // space and runtime overhead, so if you intend to keep it
+    // running all the time, use the regular timer instead.
     template <lyo::clock Clock>
     class stopwatch
     {

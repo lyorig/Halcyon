@@ -11,7 +11,7 @@
 
 namespace lyo
 {
-    constexpr bool fast_types { true };  // Use potentially faster types (e.g. int_fastN_t instead of intN_t).
+    constexpr bool fast_types { false };  // Use potentially faster types (e.g. int_fastN_t instead of intN_t).
 
     template <typename Normal_type, typename Fast_type>
     using CFT = std::conditional_t<fast_types, Fast_type, Normal_type>;  // Conditional Fast Type.

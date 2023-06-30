@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lyo/types.hpp>
+#include "components/font.hpp"
 
 namespace hal
 {

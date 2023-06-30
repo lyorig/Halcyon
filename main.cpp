@@ -1,4 +1,3 @@
-#include <halcyon/components/font.hpp>
 #include <halcyon/engine.hpp>
 #include <halcyon/events/binder.hpp>
 #include <halcyon/font_loader.hpp>
