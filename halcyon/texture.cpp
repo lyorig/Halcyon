@@ -19,7 +19,7 @@ texture::texture(const window& wnd) noexcept :
 
 texture::texture(const window& wnd, const pixel_size& size) noexcept :
     sdl_object { ::SDL_CreateTexture(wnd.renderer.ptr(), ::SDL_GetWindowPixelFormat(wnd.ptr()), SDL_TEXTUREACCESS_TARGET, size.x, size.y) },
-    m_size { 0, 0 },
+    m_size { size },
     m_window { wnd }
 {
 }

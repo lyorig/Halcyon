@@ -18,8 +18,8 @@ int main(int argc, char* argv[])
 
     hal::window wnd { eng, "Halcyon", hal::fullscreen, wnd.renderer.accelerated | wnd.renderer.vsync };
 
-    const hal::image_loader imgl { wnd, imgl.jpg | imgl.jpg };
-    const hal::font_loader  fl { wnd };
+    hal::image_loader imgl { wnd, imgl.jpg | imgl.jpg };
+    hal::font_loader  fl { wnd };
 
     const hal::font   m5x7 { fl.load("assets/fonts/m5x7.ttf", 42) };
     const std::string pos { "Music position: " };
@@ -29,6 +29,13 @@ int main(int argc, char* argv[])
     mxr.mus.play("assets/ost/magic_spear.mp3", hal::infinite_loop);
 
     hal::texture text { wnd };
+    hal::texture empty {
+        wnd, {100, 100}
+    };
+
+    const hal::spritesheet spr {
+        empty, {5, 5}
+    };
 
     while (!inp.pressed(hal::button::esc))
     {

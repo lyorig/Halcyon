@@ -7,7 +7,7 @@ namespace hal
     // Keep this signed, as SDL_mixer uses a -1 value as an infinite loop.
     using loop_type = lyo::i16;
 
-    // Loop music/SFX as many times as possible (~65K times).
+    // Loop music/SFX as long as possible (~65K times).
     constexpr loop_type infinite_loop { -1 };
 
 }  // namespace hal

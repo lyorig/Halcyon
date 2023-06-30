@@ -50,8 +50,8 @@ void debug::verify(bool condition, const char* if_false, const char* info) noexc
 
 const char* debug::sdl_error() noexcept
 {
-    const char* err{ ::SDL_GetError() };
+    const char* err { ::SDL_GetError() };
 
-    return lyo::is_cstring_empty(err) ? "No SDL error registered" : err;
+    return lyo::is_c_string_empty(err) ? "No SDL error registered" : err;
 }
 #endif

@@ -24,7 +24,7 @@ namespace hal
         mixer(engine& eng);
         mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
 
-        chunk load_sfx(const char* path) const noexcept &;
+        chunk load_sfx(const char* path) & noexcept;
 
       private:
 

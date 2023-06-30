@@ -1,7 +1,7 @@
 #pragma once
 
 #include <halcyon/types/render.hpp>
-#include <vector>
+#include <lyo/buffer.hpp>
 
 namespace hal
 {
@@ -15,10 +15,11 @@ namespace hal
 
         spritesheet(const texture& tx, const pixel_size& frame_size) noexcept;
 
-        const std::vector<pixel_area>& operator[](frame_t animation) const noexcept;
+        // Drop-in replacement for a multidimensional subscript operator.
+        const pixel_area& operator()(frame_t row, frame_t column) const noexcept;
 
       private:
 
-        std::vector<std::vector<pixel_area>> m_rects;  // Could be replaced with lyo::buffer.
+        lyo::buffer<pixel_area> m_frames;
     };
 }  // namespace hal

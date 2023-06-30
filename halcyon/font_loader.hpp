@@ -14,6 +14,6 @@ namespace hal
         font_loader(window& wnd) noexcept;
         ~font_loader();
 
-        font load(const char* path, lyo::u8 size) const noexcept &;
+        font load(const char* path, lyo::u8 size) & noexcept;
     };
 }  // namespace hal

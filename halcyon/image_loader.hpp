@@ -24,6 +24,6 @@ namespace hal
         image_loader(window& wnd, int type_flags) noexcept;
         ~image_loader();
 
-        surface load(const char* file) const noexcept &;
+        surface load(const char* file) & noexcept;
     };
 }  // namespace hal
