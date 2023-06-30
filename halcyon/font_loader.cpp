@@ -14,7 +14,7 @@ font_loader::~font_loader()
     ::TTF_Quit();
 }
 
-font font_loader::load(const char* path, lyo::u8 size) const noexcept
+font font_loader::load(const char* path, lyo::u8 size) const noexcept &
 {
     return { path, size, {} };
 }

@@ -34,7 +34,7 @@ mixer::mixer(engine& engine, lyo::u32 freq, lyo::u8 channels, chunk_quality qual
 {
 }
 
-chunk mixer::load_sfx(const char* path) noexcept
+chunk mixer::load_sfx(const char* path) const noexcept &
 {
     return { path, {} };
 }

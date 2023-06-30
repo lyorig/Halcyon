@@ -15,12 +15,12 @@ namespace hal
         sdl_object(Type* object) noexcept :
             m_object { object }
         {
-            HAL_DEBUG_CHECK(m_object != nullptr, ::SDL_GetError());
+            HAL_DEBUG_CHECK(m_object != nullptr, debug::sdl_error());
         }
 
         void reassign(Type* object) noexcept
         {
-            HAL_DEBUG_ASSERT((m_object = object) != nullptr, ::SDL_GetError());
+            HAL_DEBUG_ASSERT((m_object = object) != nullptr, debug::sdl_error());
         }
 
         Type* ptr() const noexcept
