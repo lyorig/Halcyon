@@ -16,7 +16,7 @@ image_loader::~image_loader()
     ::IMG_Quit();
 }
 
-surface image_loader::load(const char* path) const noexcept
+surface image_loader::load(const char* path) const noexcept &
 {
     HAL_DEBUG_PRINT(severity::info, "Loading image ", path);
 

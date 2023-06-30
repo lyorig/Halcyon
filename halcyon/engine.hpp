@@ -14,10 +14,10 @@ namespace hal
         engine() noexcept;
         ~engine();
 
-        void exit() noexcept;
+        void exit() const noexcept &;
 
       private:
 
-        void deinitialize() noexcept;
+        void deinitialize() const noexcept;
     };
 }  // namespace halcyon

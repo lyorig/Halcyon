@@ -18,14 +18,14 @@ engine::~engine()
     this->deinitialize();
 }
 
-void engine::exit() noexcept
+void engine::exit() const noexcept &
 {
     this->deinitialize();
     std::exit(EXIT_SUCCESS);
 }
 
-void engine::deinitialize() noexcept
+void engine::deinitialize() const noexcept
 {
-    HAL_DEBUG_PRINT(severity::info, "Exiting. Last SDL error: ", std::strlen(::SDL_GetError()) > 0 ? ::SDL_GetError() : "none");
+    HAL_DEBUG_PRINT(severity::info, "Exiting. Last SDL error: ", debug::sdl_error() : "none");
     ::SDL_Quit();
 }
