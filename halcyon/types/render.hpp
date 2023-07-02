@@ -15,9 +15,11 @@ namespace hal
 
     using pixel_size = point<pixel_t>;
 
-    using pixel_coord = point<pixel_t>;
-    using coordinate  = point<position_t>;
+    using pixel_pos  = point<pixel_t>;
+    using coordinate = point<position_t>;
 
     using pixel_area = rectangle<pixel_t>;
     using world_area = rectangle<position_t>;
 }  // namespace hal
+
+static_assert(std::is_signed_v<hal::pixel_t>, "Pixel type must be signed");

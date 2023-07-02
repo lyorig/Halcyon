@@ -11,27 +11,27 @@ renderer::renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>) noexcept 
 
 void renderer::present(lyo::pass_key<window>) const noexcept
 {
-    ::SDL_RenderPresent(m_object);
+    ::SDL_RenderPresent(m_object.get());
 }
 
 void renderer::clear(lyo::pass_key<window>) const noexcept
 {
-    HAL_DEBUG_ASSERT(::SDL_RenderClear(m_object) == 0, debug::sdl_error());
+    HAL_DEBUG_ASSERT(::SDL_RenderClear(m_object.get()) == 0, ::SDL_GetError());
 }
 
 pixel_size renderer::output_size() const noexcept
 {
     point<int> size;
-    HAL_DEBUG_ASSERT(::SDL_GetRendererOutputSize(m_object, &size.x, &size.y) == 0, debug::sdl_error());
-    return size;
+    HAL_DEBUG_ASSERT(::SDL_GetRendererOutputSize(m_object.get(), &size.x, &size.y) == 0, ::SDL_GetError());
+    return static_cast<pixel_size>(size);
 }
 
 void renderer::set_target(texture& tx) const noexcept
 {
-    HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object, tx.ptr()) == 0, debug::sdl_error());
+    HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object.get(), tx.ptr()) == 0, ::SDL_GetError());
 }
 
 void renderer::reset_target() const noexcept
 {
-    HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object, NULL) == 0, debug::sdl_error());
+    HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object.get(), NULL) == 0, ::SDL_GetError());
 }

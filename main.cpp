@@ -29,17 +29,24 @@ int main(int argc, char* argv[])
     mxr.mus.play("assets/ost/magic_spear.mp3", hal::infinite_loop);
 
     hal::texture text { wnd };
-    hal::texture empty {
-        wnd, {100, 100}
+    hal::texture sus {
+        wnd, imgl.load("assets/sprites/mogus.png")
     };
 
     const hal::spritesheet spr {
-        empty, {5, 5}
+        sus, {50, 50}
     };
+
+    lyo::steady_timer tmr;
 
     while (!inp.pressed(hal::button::esc))
     {
         (text = m5x7.render(pos + std::to_string(mxr.mus.position()), hal::color::orange)).draw({ 1000, 10 });
+
+        for (const auto& frame : spr.frames())
+        {
+            sus.draw(static_cast<hal::coordinate>(frame.pos * 2), frame);
+        }
 
         HAL_CONSOLE_DRAW(m5x7, wnd);
         wnd.present();

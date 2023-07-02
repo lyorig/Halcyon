@@ -60,7 +60,7 @@ namespace hal
         }
 
         template <lyo::arithmetic Convert>
-        constexpr operator point<Convert>() const noexcept
+        constexpr explicit operator point<Convert>() const noexcept
         {
             return point<Convert> {
                 static_cast<Convert>(x),

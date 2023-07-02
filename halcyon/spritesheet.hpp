@@ -5,7 +5,8 @@
 
 namespace hal
 {
-    using frame_t = lyo::u8;
+    using frame_t    = lyo::u8;
+    using frame_size = point<frame_t>;
 
     class texture;
 
@@ -18,7 +19,14 @@ namespace hal
         // Drop-in replacement for a multidimensional subscript operator.
         const pixel_area& operator()(frame_t row, frame_t column) const noexcept;
 
+        frame_size size() const noexcept;
+
+        // Raw frame access - mostly for debugging.
+        const lyo::buffer<pixel_area>& frames() const noexcept;
+
       private:
+
+        frame_size m_size;
 
         lyo::buffer<pixel_area> m_frames;
     };

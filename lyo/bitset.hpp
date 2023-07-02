@@ -10,7 +10,7 @@
 
 namespace lyo
 {
-    template <lyo::u64 Size, std::unsigned_integral Storage_type = unsigned char>
+    template <lyo::usize Size, std::unsigned_integral Storage_type = unsigned char>
         requires(Size > 0)
     class bitset
     {
@@ -30,17 +30,17 @@ namespace lyo
                     unit = ~static_cast<Storage_type>(0);
         }
 
-        constexpr void set(lyo::u64 pos) noexcept
+        constexpr void set(lyo::usize pos) noexcept
         {
             m_storage[storage_index(pos)] |= shifted_one(pos);
         }
 
-        constexpr void reset(lyo::u64 pos) noexcept
+        constexpr void reset(lyo::usize pos) noexcept
         {
             m_storage[storage_index(pos)] &= ~shifted_one(pos);
         }
 
-        constexpr void flip(lyo::u64 pos) noexcept
+        constexpr void flip(lyo::usize pos) noexcept
         {
             m_storage[storage_index(pos)] ^= shifted_one(pos);
         }
@@ -50,12 +50,12 @@ namespace lyo
             for (Storage_type& unit : m_storage) unit = static_cast<Storage_type>(0);
         }
 
-        constexpr lyo::u64 size() const noexcept
+        constexpr lyo::usize size() const noexcept
         {
             return Size;
         }
 
-        constexpr bool operator[](lyo::u64 pos) const noexcept
+        constexpr bool operator[](lyo::usize pos) const noexcept
         {
             assert(pos < Size);
             return static_cast<bool>((m_storage[storage_index(pos)] >> (pos % (sizeof(Storage_type) * 8))) & static_cast<Storage_type>(1));
@@ -64,14 +64,14 @@ namespace lyo
       private:
 
         // Convenience functions.
-        static constexpr Storage_type shifted_one(lyo::u64 pos) noexcept
+        static constexpr Storage_type shifted_one(lyo::usize pos) noexcept
         {
             return static_cast<Storage_type>(1) << (pos % (sizeof(Storage_type) * 8));
         }
 
-        static constexpr lyo::u64 storage_index(lyo::u64 pos) noexcept
+        static constexpr lyo::usize storage_index(lyo::usize pos) noexcept
         {
-            return static_cast<lyo::u64>(pos / (sizeof(Storage_type) * 8));
+            return static_cast<lyo::usize>(pos / (sizeof(Storage_type) * 8));
         }
 
         // You'll need eye bleach for this one. All you need to know is that it works.

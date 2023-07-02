@@ -12,7 +12,7 @@ font::font(const char* path, lyo::u8 size, lyo::pass_key<font_loader>) noexcept 
 
 surface font::render(const std::string& text, color clr) const noexcept
 {
-    return ::TTF_RenderUTF8_Blended_Wrapped(m_object, text.c_str(), sdl_color_from(static_cast<color_type>(clr)), 0);
+    return ::TTF_RenderUTF8_Blended_Wrapped(m_object.get(), text.c_str(), sdl_color_from(static_cast<color_type>(clr)), 0);
 }
 
 constexpr SDL_Color font::sdl_color_from(color_type clr) noexcept

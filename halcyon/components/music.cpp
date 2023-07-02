@@ -13,7 +13,7 @@ void music::play(const char* path, loop_type loops) noexcept
 {
     this->reassign(::Mix_LoadMUS(path));
 
-    HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object, loops) == 0, ::Mix_GetError());
+    HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
 
     HAL_DEBUG_PRINT(severity::load, "Loaded music ", path);
 
@@ -22,7 +22,7 @@ void music::play(const char* path, loop_type loops) noexcept
 
 void music::pause() noexcept
 {
-    HAL_DEBUG_CHECK(m_object != nullptr, "Tried to pause null music");
+    HAL_DEBUG_CHECK(m_object, "Tried to pause null music");
 
     ::Mix_PauseMusic();
 
@@ -31,7 +31,7 @@ void music::pause() noexcept
 
 void music::resume() noexcept
 {
-    HAL_DEBUG_CHECK(m_object != nullptr, "Tried to resume null music");
+    HAL_DEBUG_CHECK(m_object, "Tried to resume null music");
 
     ::Mix_ResumeMusic();
 
@@ -55,7 +55,7 @@ lyo::f64 music::position() const noexcept
 
 void music::set_volume(lyo::u8 volume) const noexcept
 {
-    HAL_DEBUG_CHECK(m_object != nullptr, "Tried to set volume of null music");
+    HAL_DEBUG_CHECK(m_object, "Tried to set volume of null music");
 
     ::Mix_VolumeMusic(volume);
 }

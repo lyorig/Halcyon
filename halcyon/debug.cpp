@@ -15,14 +15,16 @@ const lyo::precise_timer debug::m_timer {};
 
 void debug::panic(const char* title, const char* message) noexcept
 {
-    debug::print(severity::error, __func__, ": ", title, " <- ", message);
+    const char* fmt_msg { lyo::is_c_string_empty(message) ? "No message provided" : message };
+
+    debug::print(severity::error, __func__, ": ", title, " <- ", fmt_msg);
 
     constexpr SDL_MessageBoxButtonData buttons[] {
         {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT,  0, "Exit"      },
         { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Run anyway"}
     };
 
-    const SDL_MessageBoxData msgbox { SDL_MESSAGEBOX_ERROR, NULL, title, message, SDL_arraysize(buttons), buttons, NULL };
+    const SDL_MessageBoxData msgbox { SDL_MESSAGEBOX_ERROR, NULL, title, fmt_msg, SDL_arraysize(buttons), buttons, NULL };
 
     int response { 0 };
 
@@ -46,12 +48,5 @@ void debug::verify(bool condition, const char* if_false, const char* info) noexc
 {
     if (!condition)
         debug::panic(if_false, info);
-}
-
-const char* debug::sdl_error() noexcept
-{
-    const char* err { ::SDL_GetError() };
-
-    return lyo::is_c_string_empty(err) ? "No SDL error registered" : err;
 }
 #endif

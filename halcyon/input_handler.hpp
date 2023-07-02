@@ -1,7 +1,6 @@
 #pragma once
 
 #include <lyo/bitset.hpp>
-#include <optional>
 
 #include "enums/buttons.hpp"
 
@@ -25,6 +24,8 @@ namespace hal
         bool released(button btn) const noexcept;
 
       private:
+
+        // HALFIX: Add a mouse event.
 
         // If the layout is ever modified, make sure the binder's "performance mode" is aware of it.
         key_storage m_pressed, m_held, m_released;

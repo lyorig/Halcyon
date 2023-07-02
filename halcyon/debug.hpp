@@ -71,8 +71,6 @@ namespace hal
         // Check a condition, and panic if it's false.
         static void verify(bool condition, const char* if_false, const char* info) noexcept;
 
-        static const char* sdl_error() noexcept;
-
       private:
 
         static std::ofstream            m_output;

@@ -82,9 +82,21 @@ namespace lyo
             return *this;
         }
 
-        constexpr operator base_type*() const noexcept
+        constexpr base_type* get() const noexcept
         {
             return m_pointer;
+        }
+
+        constexpr base_type& operator[](lyo::usize idx) noexcept
+            requires std::is_array_v<Type>
+        {
+            return m_pointer[idx];
+        }
+
+        constexpr const base_type& operator[](lyo::usize idx) const noexcept
+            requires std::is_array_v<Type>
+        {
+            return m_pointer[idx];
         }
 
         constexpr base_type* operator->() const noexcept
@@ -99,6 +111,11 @@ namespace lyo
             assert(m_pointer != nullptr);
 
             return *m_pointer;
+        }
+
+        constexpr operator bool() const noexcept
+        {
+            return m_pointer != nullptr;
         }
 
         constexpr ~capsule()

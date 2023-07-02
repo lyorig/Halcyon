@@ -8,7 +8,7 @@ using namespace hal;
 
 engine::engine() noexcept
 {
-    HAL_DEBUG_ASSERT(::SDL_Init(0) == 0, debug::sdl_error());
+    HAL_DEBUG_ASSERT(::SDL_Init(0) == 0, ::SDL_GetError());
 
     HAL_DEBUG_PRINT(severity::init, "Initialized engine");
 }
@@ -26,6 +26,6 @@ void engine::exit() const& noexcept
 
 void engine::deinitialize() const noexcept
 {
-    HAL_DEBUG_PRINT(severity::info, "Exiting. Last SDL error: ", debug::sdl_error());
+    HAL_DEBUG_PRINT(severity::info, "Exiting. Last SDL error: ", lyo::is_c_string_empty(::SDL_GetError()) ? "none" : ::SDL_GetError());
     ::SDL_Quit();
 }

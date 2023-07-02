@@ -31,7 +31,7 @@ namespace hal
         }
 
         template <lyo::arithmetic Convert>
-        constexpr operator rectangle<Convert>() const noexcept
+        constexpr explicit operator rectangle<Convert>() const noexcept
         {
             return rectangle<Convert> {
                 pos,
