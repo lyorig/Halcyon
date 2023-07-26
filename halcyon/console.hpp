@@ -2,8 +2,6 @@
 
 #include "enums/severity.hpp"
 
-#define HAL_NOOP (void(0))
-
 #ifndef NDEBUG
 
     #include <deque>
@@ -44,7 +42,7 @@ namespace hal
 
 #else
 
-    #define HAL_CONSOLE_LOG(...)  HAL_NOOP
-    #define HAL_CONSOLE_DRAW(...) HAL_NOOP
+    #define HAL_CONSOLE_LOG(...)
+    #define HAL_CONSOLE_DRAW(...)
 
 #endif

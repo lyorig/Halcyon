@@ -111,4 +111,4 @@ namespace hal
             };
         }
     };
-}  // namespace hal
+}

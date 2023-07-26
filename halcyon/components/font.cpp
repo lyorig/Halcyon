@@ -1,5 +1,7 @@
 #include "font.hpp"
 
+#include <halcyon/internal/config.hpp>
+
 #include "surface.hpp"
 
 using namespace hal;
@@ -17,10 +19,22 @@ surface font::render(const std::string& text, color clr) const noexcept
 
 constexpr SDL_Color font::sdl_color_from(color_type clr) noexcept
 {
-    return SDL_Color {
-        static_cast<Uint8>(clr >> 16 & 0xFF),
-        static_cast<Uint8>(clr >> 8 & 0xFF),
-        static_cast<Uint8>(clr & 0xFF),
-        255
-    };
+    if constexpr (!cfg::performance_mode)
+    {
+        return SDL_Color {
+            static_cast<Uint8>(clr >> 16 & 0xFF),
+            static_cast<Uint8>(clr >> 8 & 0xFF),
+            static_cast<Uint8>(clr & 0xFF),
+            255
+        };
+    }
+    else
+    {
+        return SDL_Color {
+            static_cast<Uint8>(clr >> 16),
+            static_cast<Uint8>(clr >> 8),
+            static_cast<Uint8>(clr),
+            255
+        };
+    }
 }

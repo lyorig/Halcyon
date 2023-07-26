@@ -18,6 +18,7 @@ namespace hal
 
         enum flag : lyo::u8
         {
+            none        = 0,
             software    = SDL_RENDERER_SOFTWARE,
             accelerated = SDL_RENDERER_ACCELERATED,
             vsync       = SDL_RENDERER_PRESENTVSYNC

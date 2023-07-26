@@ -70,7 +70,16 @@ namespace lyo
             return *this;
         }
 
-        constexpr capsule& operator=(base_type* ptr) noexcept
+        constexpr capsule& reset() noexcept
+        {
+            this->destroy();
+
+            m_pointer = nullptr;
+
+            return *this;
+        }
+
+        constexpr capsule& reset(base_type* ptr) noexcept
         {
             if (m_pointer == ptr)
                 return *this;
@@ -207,7 +216,17 @@ namespace lyo
             return *this;
         }
 
-        constexpr shareable& operator=(base_type* ptr) noexcept
+        constexpr shareable& reset() noexcept
+        {
+            this->destroy();
+
+            m_pointer = nullptr;
+            m_count   = nullptr;
+
+            return *this;
+        }
+
+        constexpr shareable& reset(base_type* ptr) noexcept
         {
             if (m_pointer == ptr)
                 return *this;

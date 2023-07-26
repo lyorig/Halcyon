@@ -40,15 +40,15 @@ namespace hal
                         switch (bind.second.first)
                         {
                             case press:
-                                should_trigger = m_input.pressed(bind.first);
+                                should_trigger = m_input.m_pressed(bind.first);
                                 break;
 
                             case hold:
-                                should_trigger = m_input.held(bind.first);
+                                should_trigger = m_input.m_held(bind.first);
                                 break;
 
                             case release:
-                                should_trigger = m_input.released(bind.first);
+                                should_trigger = m_input.m_released(bind.first);
                                 break;
 
                             default:

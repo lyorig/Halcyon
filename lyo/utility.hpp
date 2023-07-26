@@ -17,7 +17,7 @@ namespace lyo
         return *string == static_cast<T>('\0');
     }
 
-    // Input all arguments into a stringstream and return them as a std::string.
+    // Input all arguments into a stringstream and return them as a string.
     template <typename... Args>
     std::string string_from_pack(Args... args) noexcept
     {

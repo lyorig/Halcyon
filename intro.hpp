@@ -8,7 +8,7 @@ namespace hal
     class mixer;
     class input_handler;
 }  // namespace hal
-namespace hq
+namespace game
 {
     void intro(hal::window& wnd, const hal::image_loader& imgl, const hal::font_loader& fl, const hal::mixer& mix, hal::input_handler& input) noexcept;
-}  // namespace hq
+}  // namespace game

@@ -14,17 +14,26 @@ namespace hal
 {
     class window;
 
+    enum class anchor : lyo::u8
+    {
+        center,
+        top_left,
+        top_right,
+        bottom_left,
+        bottom_right
+    };
+
+    enum class flip : lyo::u8
+    {
+        none = SDL_FLIP_NONE,
+        x    = SDL_FLIP_HORIZONTAL,
+        y    = SDL_FLIP_VERTICAL,
+        both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
+    };
+
     class texture : public sdl_object<SDL_Texture, ::SDL_DestroyTexture>
     {
       public:
-
-        enum flip : lyo::u8
-        {
-            none = SDL_FLIP_NONE,
-            x    = SDL_FLIP_HORIZONTAL,
-            y    = SDL_FLIP_VERTICAL,
-            both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
-        };
 
         texture(const window& wnd) noexcept;
 
@@ -38,16 +47,28 @@ namespace hal
         void set_opacity(lyo::u8 value) const noexcept;
 
         // Scaleable variants.
-        void draw(const coordinate& pos, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0, flip flip = none) const noexcept;
-        void draw(const coordinate& pos, const pixel_area& src, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0, flip flip = none) const noexcept;
+        void draw(const coordinate& pos, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
+        void draw(const coordinate& pos, const pixel_area& src, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
 
         // Set size variants. Useful for drawing to textures.
-        void draw(const coordinate& pos, const pixel_size& size, lyo::f64 angle = 0.0, flip flip = none) const noexcept;
-        void draw(const coordinate& pos, const pixel_size& size, const pixel_area& src, lyo::f64 angle = 0.0, flip flip = none) const noexcept;
+        void draw(const coordinate& pos, const pixel_size& size, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
+        void draw(const coordinate& pos, const pixel_size& size, const pixel_area& src, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
+
+        // Anchor variants.
+        void draw(anchor anch, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
+        void draw(anchor anch, const pixel_size& size, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
+
+        // View-width and view-height helpers.
+        pixel_size vw(lyo::f64 percent) const noexcept;
+        pixel_size vh(lyo::f64 percent) const noexcept;
 
         texture& operator=(surface image) noexcept;
 
       private:
+
+        coordinate resolve_anchor(anchor anch, const pixel_size& size) const noexcept;
+
+        pixel_size internal_size() const noexcept;
 
         pixel_size m_size;
 

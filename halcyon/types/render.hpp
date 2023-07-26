@@ -10,16 +10,17 @@
 
 namespace hal
 {
-    using pixel_t    = lyo::i16;
-    using position_t = lyo::f64;
+    using pixel_type = lyo::i16;
 
-    using pixel_size = point<pixel_t>;
+    using pixel_size = point<pixel_type>;
+    using pixel_pos  = point<pixel_type>;
+    using pixel_area = rectangle<pixel_type>;
 
-    using pixel_pos  = point<pixel_t>;
-    using coordinate = point<position_t>;
+    using position_type = lyo::f32;
 
-    using pixel_area = rectangle<pixel_t>;
-    using world_area = rectangle<position_t>;
-}  // namespace hal
+    using coordinate = point<position_type>;
+    using world_area = rectangle<position_type>;
+}
 
-static_assert(std::is_signed_v<hal::pixel_t>, "Pixel type must be signed");
+// Paranoia.
+static_assert(std::is_signed_v<hal::pixel_type>, "Pixel type must be signed");

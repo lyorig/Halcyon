@@ -57,7 +57,7 @@ namespace hal
 
             const std::string msg { lyo::string_from_pack(args...) };
 
-            console::log(static_cast<severity>(type), msg);
+            console::log(type, msg);
 
             const std::string with_info { fwd_info.str() + msg };
 
@@ -85,9 +85,9 @@ namespace hal
 
 #else
 
-    #define HAL_DEBUG_PRINT(...)             HAL_NOOP
-    #define HAL_DEBUG_PANIC(...)             HAL_NOOP
+    #define HAL_DEBUG_PRINT(...)
+    #define HAL_DEBUG_PANIC(...)
     #define HAL_DEBUG_ASSERT(condition, ...) (void(condition))  // Asserts are vital; preserve the condition.
-    #define HAL_DEBUG_CHECK(...)             HAL_NOOP  // Checks are not vital; remove them entirely.
+    #define HAL_DEBUG_CHECK(...)             // Checks are not vital; remove them entirely.
 
 #endif

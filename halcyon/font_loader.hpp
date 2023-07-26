@@ -5,8 +5,9 @@
 namespace hal
 {
     class window;
-    class font;
 
+    // For loading fonts, duh. Make sure it outlives its loaded
+    // fonts, as font destructors require the TTF library to be initialized.
     class font_loader
     {
       public:

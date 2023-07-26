@@ -7,33 +7,23 @@ using namespace hal;
 window::window(engine& engine, const char* title, const pixel_size& size, lyo::u32 window_flags, lyo::u32 renderer_flags) noexcept :
     sdl_object { ::SDL_CreateWindow(title, 0, 0, size.x, size.y, window_flags) },
     renderer { *this, renderer_flags, {} },
-    m_size { renderer.output_size() }
+    m_flags { window_flags }
 {
-    HAL_DEBUG_PRINT(severity::init, "Initialized window '", title, "' (", m_size.x, 'x', m_size.y, ')');
+    HAL_DEBUG_PRINT(severity::init, "Initialized window '", title, "' (", this->size().x, 'x', this->size().y, ')');
 }
 
 window::window(engine& engine, const char* title, fullscreen_t, lyo::u32 renderer_flags) noexcept :
-    sdl_object { ::SDL_CreateWindow(title, 0, 0, 0, 0, static_cast<Uint32>(fullscreen)) },
-    renderer { *this, renderer_flags, {} },
-    m_size { renderer.output_size() }
+    window { engine, title, {}, fullscreen, renderer_flags }
 {
-    HAL_DEBUG_PRINT(severity::init, "Initialized fullscreen window '", title, "' (", m_size.x, 'x', m_size.y, ')');
 }
 
 void window::present() noexcept
 {
-    m_delta.reset();
-
     renderer.present({});
     renderer.clear({});
 }
 
-const pixel_size& window::size() const noexcept
+pixel_size window::size() const noexcept
 {
-    return m_size;
-}
-
-double window::delta_time() const noexcept
-{
-    return m_delta();
+    return renderer.output_size();
 }

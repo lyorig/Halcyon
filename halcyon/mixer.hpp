@@ -8,6 +8,9 @@ namespace hal
     class engine;
     class chunk;
 
+    // A mixer, which can play music and load sound effects.
+    // Make sure it outlives these, as chunk destructors require
+    // the various mixer libraries to be initialized.
     class mixer
     {
       public:

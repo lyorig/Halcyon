@@ -65,7 +65,8 @@
 			"variant": "cpp",
 			"bitset": "cpp",
 			"list": "cpp",
-			"cfenv": "cpp"
+			"cfenv": "cpp",
+			"cassert": "cpp"
 		}
 	}
 }

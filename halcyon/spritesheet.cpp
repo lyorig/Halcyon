@@ -16,7 +16,7 @@ spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexce
 
     for (frame_t y { 0 }; y < m_size.y; ++y)
         for (frame_t x { 0 }; x < m_size.x; ++x)
-            m_frames.emplace(x + y * m_size.x, static_cast<pixel_t>(frame_size.x * x), static_cast<pixel_t>(frame_size.y * y), frame_size.x, frame_size.y);
+            m_frames.emplace(x + y * m_size.x, static_cast<pixel_type>(frame_size.x * x), static_cast<pixel_type>(frame_size.y * y), frame_size.x, frame_size.y);
 }
 
 const pixel_area& spritesheet::operator()(frame_t row, frame_t column) const noexcept

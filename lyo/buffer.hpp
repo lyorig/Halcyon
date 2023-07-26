@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdio>
 
 #include "capsule.hpp"
@@ -119,6 +121,16 @@ namespace lyo
         constexpr const T* end() const noexcept
         {
             return m_data.get() + m_size;
+        }
+
+        constexpr T* data() noexcept
+        {
+            return m_data.get();
+        }
+
+        constexpr const T* data() const noexcept
+        {
+            return m_data.get();
         }
 
       private:

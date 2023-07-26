@@ -20,7 +20,7 @@ namespace hal
 
         void reassign(Type* object) noexcept
         {
-            HAL_DEBUG_ASSERT((m_object = object).get() != nullptr, ::SDL_GetError());
+            HAL_DEBUG_ASSERT((m_object.reset(object)).get() != nullptr, ::SDL_GetError());
         }
 
         Type* ptr() const noexcept

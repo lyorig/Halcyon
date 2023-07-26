@@ -1,8 +1,10 @@
 #pragma once
 
 #include <lyo/bitset.hpp>
+#include <optional>
 
 #include "enums/buttons.hpp"
+#include "types/render.hpp"
 
 namespace hal
 {
@@ -19,17 +21,23 @@ namespace hal
 
         void update() noexcept;
 
-        bool pressed(button btn) const noexcept;
-        bool held(button btn) const noexcept;
-        bool released(button btn) const noexcept;
+        bool pressed(hal::button btn) const noexcept;
+        bool held(hal::button btn) const noexcept;
+        bool released(hal::button btn) const noexcept;
+
+        bool should_quit() const noexcept;
 
       private:
-
-        // HALFIX: Add a mouse event.
 
         // If the layout is ever modified, make sure the binder's "performance mode" is aware of it.
         key_storage m_pressed, m_held, m_released;
 
-        engine& m_engine;
+      public:
+
+        pixel_pos mouse;
+
+      private:
+
+        bool m_shouldQuit;
     };
 }  // namespace hal

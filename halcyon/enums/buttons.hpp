@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_scancode.h>
 
 #include <lyo/types.hpp>
@@ -71,10 +72,20 @@ namespace hal
 
         left_alt  = SDL_SCANCODE_LALT,
         right_alt = SDL_SCANCODE_RALT,
-
-        // Mouse buttons come after SDL's standard keys.
-        lmb = SDL_NUM_SCANCODES,
-        mmb,
-        rmb
     };
-}
+
+    enum class mouse_button : lyo::u8
+    {
+        left   = SDL_BUTTON_LEFT,
+        middle = SDL_BUTTON_MIDDLE,
+        right  = SDL_BUTTON_RIGHT,
+        x1     = SDL_BUTTON_X1,
+        x2     = SDL_BUTTON_X2
+    };
+
+    enum class mouse_event_type : bool
+    {
+        released = false,
+        pressed  = true
+    };
+}  // namespace hal

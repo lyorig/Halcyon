@@ -27,7 +27,7 @@ namespace lyo
     using u32 = std::make_unsigned_t<i32>;
     using u64 = std::make_unsigned_t<i64>;
 
-    using usize = std::uintmax_t;
+    using usize = std::size_t;
 
     // Floating-point types.
     using f32 = CFT<float, std::float_t>;

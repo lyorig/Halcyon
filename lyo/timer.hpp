@@ -60,7 +60,7 @@ namespace lyo
 
       private:
 
-        using second_type = std::chrono::duration<lyo::f64>;
+        using second_type = std::chrono::duration<f64>;
         using tp          = std::chrono::time_point<Clock, second_type>;
 
         tp m_epoch;
@@ -77,6 +77,8 @@ namespace lyo
     class stopwatch
     {
       public:
+
+        // HALOPT: A raw union and a bool could be better.
 
         stopwatch() noexcept :
             m_data { Clock::now() }
@@ -98,8 +100,8 @@ namespace lyo
 
         void resume() noexcept
         {
-            if (std::holds_alternative<double>(m_data))
-                m_data = Clock::now() - second_type { std::get<double>(m_data) };
+            if (std::holds_alternative<f64>(m_data))
+                m_data = Clock::now() - second_type { std::get<f64>(m_data) };
         }
 
         f64 operator()() const noexcept
@@ -108,7 +110,7 @@ namespace lyo
                 return std::chrono::duration<f64> { Clock::now() - std::get<tp>(m_data) }.count();
 
             else  // Paused (double).
-                return std::get<double>(m_data);
+                return std::get<f64>(m_data);
         }
 
         stopwatch& operator=(f64 time) noexcept
@@ -117,7 +119,7 @@ namespace lyo
                 m_data = Clock::now() - second_type { time };
 
             else  // Paused (double).
-                std::get<double>(m_data) = time;
+                std::get<f64>(m_data) = time;
 
             return *this;
         }
@@ -128,7 +130,7 @@ namespace lyo
                 m_data -= second_type { time };
 
             else  // Paused (double).
-                std::get<double>(m_data) += time;
+                std::get<lyo::f64>(m_data) += time;
 
             return *this;
         }
@@ -139,17 +141,17 @@ namespace lyo
                 m_data += second_type { time };
 
             else  // Paused (double).
-                std::get<double>(m_data) -= time;
+                std::get<f64>(m_data) -= time;
 
             return *this;
         }
 
       private:
 
-        using second_type = std::chrono::duration<lyo::f64>;
+        using second_type = std::chrono::duration<f64>;
         using tp          = std::chrono::time_point<Clock, second_type>;
 
-        std::variant<tp, double> m_data;
+        std::variant<tp, f64> m_data;
     };
 
     using steady_stopwatch  = stopwatch<std::chrono::steady_clock>;

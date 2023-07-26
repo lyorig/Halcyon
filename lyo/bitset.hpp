@@ -64,12 +64,12 @@ namespace lyo
       private:
 
         // Convenience functions.
-        static constexpr Storage_type shifted_one(lyo::usize pos) noexcept
+        constexpr static Storage_type shifted_one(lyo::usize pos) noexcept
         {
             return static_cast<Storage_type>(1) << (pos % (sizeof(Storage_type) * 8));
         }
 
-        static constexpr lyo::usize storage_index(lyo::usize pos) noexcept
+        constexpr static lyo::usize storage_index(lyo::usize pos) noexcept
         {
             return static_cast<lyo::usize>(pos / (sizeof(Storage_type) * 8));
         }

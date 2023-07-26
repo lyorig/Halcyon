@@ -68,4 +68,4 @@ namespace hal
             };
         }
     };
-}  // namespace hal
+}

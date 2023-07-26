@@ -8,7 +8,7 @@
 using namespace hal;
 
 input_handler::input_handler(engine& engine) noexcept :
-    m_engine { engine }
+    m_shouldQuit { false }
 {
     HAL_DEBUG_PRINT(severity::init, "Initialized input handler");
 }
@@ -71,27 +71,37 @@ void input_handler::update() noexcept
             }
 
             case SDL_QUIT:
-                m_engine.exit();
+                m_shouldQuit = true;
                 break;
 
             default:
-                // HAL_DEBUG_PRINT(info, "Unknown event type received: ", event.type);
+
                 break;
         }
     }
+
+    // Lastly, get the mouse's position.
+    int x, y;
+    ::SDL_GetMouseState(&x, &y);
+    mouse.x = x, mouse.y = y;
 }
 
 bool input_handler::pressed(button btn) const noexcept
 {
-    return m_pressed[static_cast<lyo::u64>(btn)];
+    return m_pressed[static_cast<lyo::usize>(btn)];
 }
 
 bool input_handler::held(button btn) const noexcept
 {
-    return m_held[static_cast<lyo::u64>(btn)];
+    return m_held[static_cast<lyo::usize>(btn)];
 }
 
 bool input_handler::released(button btn) const noexcept
 {
-    return m_released[static_cast<lyo::u64>(btn)];
+    return m_released[static_cast<lyo::usize>(btn)];
+}
+
+bool input_handler::should_quit() const noexcept
+{
+    return m_shouldQuit;
 }

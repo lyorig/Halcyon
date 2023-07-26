@@ -18,6 +18,6 @@ namespace hal
 
         chunk(const char* path, lyo::pass_key<mixer>) noexcept;
 
-        void play(loop_type loops = 0) noexcept;
+        void play(loop_type loops = 0) & noexcept;
     };
 }  // namespace hal

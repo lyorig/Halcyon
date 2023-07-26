@@ -4,22 +4,36 @@
 
 namespace ecs
 {
-    constexpr lyo::u8 COMPONENT_SPACE { 128 };
+    // How many of one component there can be.
+    constexpr lyo::u8 component_space { 128 };
 
     class pool
     {
+        using element_size = lyo::u8;
+
       public:
 
-        using size_type = lyo::u64;
+        constexpr pool(lyo::usize elem_size) noexcept :
+            m_buffer { elem_size * component_space },
+            m_elementSize { static_cast<element_size>(elem_size) }
+        {
+            assert(elem_size <= std::numeric_limits<element_size>::max());
+        }
 
-        pool(lyo::u16 elem_size) noexcept;
+        constexpr std::byte* operator[](lyo::usize idx) noexcept
+        {
+            return m_buffer.begin() + idx * m_elementSize;
+        }
 
-        void* operator[](size_type idx);
+        constexpr operator bool() const noexcept
+        {
+            return m_buffer.data() != nullptr;
+        }
 
       private:
 
         lyo::buffer<std::byte> m_buffer;
 
-        lyo::u16 m_elementSize;
+        const element_size m_elementSize;
     };
 }  // namespace ecs

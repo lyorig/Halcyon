@@ -23,6 +23,6 @@ namespace hal
 
       private:
 
-        static constexpr SDL_Color sdl_color_from(color_type clr) noexcept;
+        constexpr static SDL_Color sdl_color_from(color_type clr) noexcept;
     };
 }  // namespace hal

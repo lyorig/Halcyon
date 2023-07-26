@@ -8,7 +8,7 @@
 #include <halcyon/texture.hpp>
 #include <halcyon/window.hpp>
 
-void hq::intro(hal::window& wnd, const hal::image_loader& imgl, const hal::font_loader& fl, const hal::mixer& mxr, hal::input_handler& input) noexcept
+void game::intro(hal::window& wnd, const hal::image_loader& imgl, const hal::font_loader& fl, const hal::mixer& mxr, hal::input_handler& input) noexcept
 {
-    // TODO: Fix rendering to texture, then work on this.
+    // HALFIX: Fix rendering to texture, then work on this.
 }

@@ -9,5 +9,5 @@ surface::surface(SDL_Surface* surf) noexcept :
 
 pixel_size surface::size() const noexcept
 {
-    return { static_cast<pixel_t>(m_object->w), static_cast<pixel_t>(m_object->h) };
+    return { static_cast<pixel_type>(m_object->w), static_cast<pixel_type>(m_object->h) };
 }

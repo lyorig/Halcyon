@@ -9,6 +9,8 @@ namespace hal
     class window;
     class surface;
 
+    // For loading images, obviously. This class isn't required to outlive
+    // its loaded surfaces, as they are "supported" by SDL itself.
     class image_loader
     {
       public:
@@ -24,6 +26,6 @@ namespace hal
         image_loader(window& wnd, int type_flags) noexcept;
         ~image_loader();
 
-        surface load(const char* file) & noexcept;
+        surface load(const char* file) const noexcept;
     };
 }  // namespace hal

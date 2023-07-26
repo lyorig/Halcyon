@@ -9,8 +9,7 @@ namespace hal
 
     // Loop music/SFX as long as possible (~65K times).
     constexpr loop_type infinite_loop { -1 };
+}
 
-}  // namespace hal
-
-// I'm paranoid.
+// More paranoia!
 static_assert(std::is_signed_v<hal::loop_type>, "Loop type must be signed");

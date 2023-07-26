@@ -22,6 +22,7 @@ namespace hal
 
         enum flag : lyo::u16
         {
+            none       = 0,
             fullscreen = SDL_WINDOW_FULLSCREEN_DESKTOP,
             hidden     = SDL_WINDOW_HIDDEN,
             resizable  = SDL_WINDOW_RESIZABLE,
@@ -34,13 +35,12 @@ namespace hal
 
         void present() noexcept;
 
-        const pixel_size& size() const noexcept;
-        double            delta_time() const noexcept;
+        pixel_size size() const noexcept;
 
       private:
 
-        const pixel_size m_size;
+        pixel_size internal_size() const noexcept;
 
-        lyo::precise_timer m_delta;
+        lyo::u32 m_flags;
     };
 }  // namespace hal
