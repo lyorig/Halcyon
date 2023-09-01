@@ -29,7 +29,7 @@ namespace hal
             maximized  = SDL_WINDOW_MAXIMIZED
         };
 
-        window(engine& engine, const char* title, const pixel_size& size, lyo::u32 window_flags, lyo::u32 renderer_flags) noexcept;
+        window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, lyo::u32 window_flags, lyo::u32 renderer_flags) noexcept;
         window(engine& engine, const char* title, fullscreen_t, lyo::u32 renderer_flags) noexcept;
 
         void present() noexcept;

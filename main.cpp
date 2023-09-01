@@ -1,59 +1,31 @@
+#include <halcyon/debug.hpp>
+#include <halcyon/engine.hpp>
+#include <halcyon/input_handler.hpp>
+#include <halcyon/mixer.hpp>
+#include <halcyon/ttf_engine.hpp>
+#include <halcyon/window.hpp>
 #include <iostream>
-
-#include "factorizer.hpp"
-
-#include "lyo/argparse.hpp"
-
-#define PROGRAM_NAME "x-factorizer"
 
 int main(int argc, char* argv[])
 {
-	// No argument given.
-	if (argc == 1)
-	{
-		std::cout << "\nUsage: " PROGRAM_NAME " -num=[input number]\n";
-		return EXIT_FAILURE;
-	}
+    hal::engine eng;
 
-	const lyo::parser p{ argc, argv };
+    hal::window wnd { eng, "Interloper v1.1", hal::fullscreen, hal::renderer::accelerated | hal::renderer::vsync };
 
-	const auto input{ p.parse<x::arith_type>("-num=") };
+    hal::mixer mxr { eng };
 
-	// Parsing the number failed.
-	if (!input)
-	{
-		std::cout << "\nInvalid number entered. Exiting.\n";
-		return EXIT_FAILURE;
-	}
+    mxr.mus.play("assets/ost/The Way Home.mp3");
 
-	// Good to go! Let's initialize the factorizer and get this
-	// show on the road.
+    wnd.renderer.set_fill(hal::color::white);
 
-	x::factorizer fact{ *input };
+    const hal::texture tex { wnd, hal::ttf_engine { wnd }.load_font(hal::rvalue_font, "assets/fonts/m5x7.ttf", 72).render("Made with Halcyon", hal::color::black) };
 
-	// An unordered map of divisors.
-	const auto& divs{ fact.divisors() };
+    for (hal::input_handler inp { eng }; !inp.pressed(hal::button::esc) && !inp.should_quit(); inp.update())
+    {
+        tex.draw(hal::anchor::center, tex.vw(50.0));
 
-	std::size_t idx{ 0 };
+        wnd.present();
+    }
 
-	std::cout << *input << " = ";
-
-	for (const auto& pair : divs)
-	{
-		std::cout << pair.first << '^' << int(pair.second);
-
-		// Prevent a trailing "x".
-		if (idx != divs.size() - 1)
-		{
-			std::cout << " x ";
-			++idx;
-		}
-
-		else
-		{
-			std::cout << '\n';
-		}
-	}
-
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

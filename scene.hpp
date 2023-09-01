@@ -1,9 +1,9 @@
 #pragma once
 
-#include <halcyon/font_loader.hpp>
 #include <halcyon/image_loader.hpp>
 #include <halcyon/input_handler.hpp>
 #include <halcyon/mixer.hpp>
+#include <halcyon/ttf_engine.hpp>
 #include <halcyon/window.hpp>
 
 #include "level.hpp"
@@ -47,7 +47,7 @@ namespace game
         hal::window m_window;
 
         MAYBE_EMPTY hal::image_loader m_iLoader;
-        MAYBE_EMPTY hal::font_loader m_fLoader;
+        MAYBE_EMPTY hal::ttf_engine m_ttfEngine;
 
         const hal::font m_font;
 

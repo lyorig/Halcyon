@@ -35,3 +35,8 @@ void renderer::reset_target() const noexcept
 {
     HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object.get(), NULL) == 0, ::SDL_GetError());
 }
+
+void renderer::set_fill(rgba color) const noexcept
+{
+    HAL_DEBUG_ASSERT(::SDL_SetRenderDrawColor(m_object.get(), color.r, color.g, color.b, color.a) == 0, ::SDL_GetError());
+}

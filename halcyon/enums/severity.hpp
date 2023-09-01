@@ -1,16 +1,16 @@
 #pragma once
 
-#include "colors.hpp"
+#include <halcyon/types/color.hpp>
 
 namespace hal
 {
-    enum class severity : color_type
+    enum class severity : rgb::hex_type
     {
-        info    = static_cast<color_type>(color::white),
-        warning = static_cast<color_type>(color::orange),
-        error   = static_cast<color_type>(color::red),
+        info    = static_cast<rgb::hex_type>(color::white),
+        warning = static_cast<rgb::hex_type>(color::orange),
+        error   = static_cast<rgb::hex_type>(color::red),
 
-        init = static_cast<color_type>(color::green),
-        load = static_cast<color_type>(color::cyan)
+        init = static_cast<rgb::hex_type>(color::green),
+        load = static_cast<rgb::hex_type>(color::cyan)
     };
 }

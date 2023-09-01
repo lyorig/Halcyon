@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL_mixer.h>
 
-#include <halcyon/types/music.hpp>
+#include <halcyon/types/tags.hpp>
 #include <lyo/pass_key.hpp>
 
 #include "sdl_object.hpp"

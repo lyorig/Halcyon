@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_render.h>
 
+#include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
 
@@ -31,6 +32,8 @@ namespace hal
 
         void set_target(texture& tx) const noexcept;
         void reset_target() const noexcept;
+
+        void set_fill(rgba color) const noexcept;
 
         pixel_size output_size() const noexcept;
     };
