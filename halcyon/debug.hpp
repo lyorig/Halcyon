@@ -8,6 +8,11 @@
 
 #ifndef NDEBUG
 
+    // MSVC has its own version, because of course it does.
+    #if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
+        #define __PRETTY_FUNCTION__ __FUNCSIG__
+    #endif
+
     #include <fstream>
     #include <iostream>
     #include <lyo/timer.hpp>
@@ -66,10 +71,10 @@ namespace hal
         }
 
         // Show a message box with an error message.
-        static void panic(const char* title, const char* message) noexcept;
+        static void panic(const char* why, const char* where, const char* message = nullptr) noexcept;
 
         // Check a condition, and panic if it's false.
-        static void verify(bool condition, const char* if_false, const char* info) noexcept;
+        static void verify(bool condition, const char* cond_string, const char* func, const char* extra_info) noexcept;
 
       private:
 
@@ -80,7 +85,7 @@ namespace hal
 
     #define HAL_DEBUG_PRINT                  hal::debug::print
     #define HAL_DEBUG_PANIC                  hal::debug::panic
-    #define HAL_DEBUG_ASSERT(cond, if_false) hal::debug::verify(cond, #cond " is false", if_false)
+    #define HAL_DEBUG_ASSERT(cond, if_false) hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
     #define HAL_DEBUG_CHECK(cond, if_false)  HAL_DEBUG_ASSERT(cond, if_false)
 
 #else

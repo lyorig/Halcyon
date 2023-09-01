@@ -6,6 +6,11 @@
 
 #define MAYBE_EMPTY [[no_unique_address]]
 
+#define TAG_TYPE(name) \
+    struct name##_t    \
+    {                  \
+    } constexpr name
+
 /* types.hpp:
    Various type aliases and related stuff. */
 

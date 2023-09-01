@@ -9,15 +9,14 @@ music::music(lyo::pass_key<mixer>) noexcept
     // TODO: Mix_HookMusicFinished to reset the timer when the music finishes.
 }
 
-void music::play(const char* path, loop_type loops) noexcept
+void music::play(const char* path, lyo::u16 loops) noexcept
 {
-    this->reassign(::Mix_LoadMUS(path));
+    this->internal_play(path, loops);
+}
 
-    HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
-
-    HAL_DEBUG_PRINT(severity::load, "Loaded music ", path);
-
-    m_timer.reset();
+void music::play(const char* path, infinite_loop_t) noexcept
+{
+    this->internal_play(path, -1);
 }
 
 void music::pause() noexcept
@@ -67,4 +66,15 @@ void music::jump(double time) noexcept
     HAL_DEBUG_ASSERT(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
 
     m_timer = time;
+}
+
+void music::internal_play(const char* path, int loops) noexcept
+{
+    this->reassign(::Mix_LoadMUS(path));
+
+    HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
+
+    HAL_DEBUG_PRINT(severity::load, "Loaded music ", path);
+
+    m_timer.reset();
 }

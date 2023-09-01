@@ -18,7 +18,7 @@ engine::~engine()
     this->deinitialize();
 }
 
-void engine::exit() const& noexcept
+void engine::exit() & noexcept
 {
     this->deinitialize();
     std::exit(EXIT_SUCCESS);

@@ -19,7 +19,7 @@ namespace hal
     class image_loader;
     class font;
 
-    class surface : public sdl_object<SDL_Surface, ::SDL_FreeSurface>
+    class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface>
     {
         friend class image_loader;
         friend class font;

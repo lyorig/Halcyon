@@ -9,7 +9,7 @@
 
 namespace hal
 {
-    enum subsystem_type : lyo::u16
+    enum class subsys : lyo::u16
     {
         video      = SDL_INIT_VIDEO,
         audio      = SDL_INIT_AUDIO,
@@ -19,7 +19,7 @@ namespace hal
         all        = SDL_INIT_EVERYTHING
     };
 
-    template <subsystem_type System>
+    template <subsys System>
     class subsystem
     {
       public:

@@ -24,32 +24,4 @@ namespace game
 
         hal::coordinate m_pos;
     };
-
-    class d1 : public entity
-    {
-      public:
-
-        using entity::entity;
-
-        virtual bool can_remove() const noexcept;
-        virtual void update(lyo::f64 time) noexcept;
-
-        ~d1();
-    };
-
-    class d2 : public entity
-    {
-      public:
-
-        using entity::entity;
-
-        virtual bool can_remove() const noexcept;
-        virtual void update(lyo::f64 time) noexcept;
-
-        ~d2();
-
-      private:
-
-        lyo::precise_timer m_timer;
-    };
 }  // namespace game

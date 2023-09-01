@@ -12,8 +12,8 @@ console::queue_type console::m_queue {};
 
 void console::draw(const font& fnt, const window& wnd) noexcept
 {
-    constexpr coordinate offset { 20.0, 20.0 };
-    constexpr lyo::f64   view_height_percentage { 4.0 };
+    constexpr coordinate offset { 20.0, 10.0 };
+    constexpr lyo::f64   view_height_percentage { 3.5 };
 
     texture tex { wnd };
 
@@ -25,7 +25,7 @@ void console::draw(const font& fnt, const window& wnd) noexcept
 
         const pixel_size view { tex.vh(view_height_percentage) };
 
-        tex.draw({ offset.x, offset.y + current_height }, view);
+        tex.draw({ offset.x, offset.y + current_height, position_type(view.x), position_type(view.y) });
 
         current_height += view.y;
     }

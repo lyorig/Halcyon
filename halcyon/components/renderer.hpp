@@ -12,7 +12,7 @@ namespace hal
     class window;
     class texture;
 
-    class renderer : public sdl_object<SDL_Renderer, ::SDL_DestroyRenderer>
+    class renderer : public sdl_object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
       public:
 

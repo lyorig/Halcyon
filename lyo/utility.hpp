@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstring>
 #include <iomanip>
 #include <sstream>
 
@@ -10,11 +11,22 @@
 
 namespace lyo
 {
-    // Checks if the first character of the string is a null terminator.
+    template <character T>
+        requires(lyo::is_any_of<T, char, wchar_t>())
+    bool streq(const T* first, const T* second) noexcept
+    {
+        if (std::is_same_v<T, char>)
+            return std::strcmp(first, second) == 0;
+
+        else if (std::is_same_v<T, char*>)
+            return std::wcscmp(first, second) == 0;
+    }
+
+    // Checks if the string is null or if the first character is a null terminator.
     template <character T>
     bool is_c_string_empty(const T* string) noexcept
     {
-        return *string == static_cast<T>('\0');
+        return !string || *string == static_cast<T>('\0');
     }
 
     // Input all arguments into a stringstream and return them as a string.

@@ -2,6 +2,8 @@
 
 #include <lyo/concepts.hpp>
 
+#include "tags.hpp"
+
 namespace hal
 {
     template <lyo::arithmetic T>
@@ -12,15 +14,15 @@ namespace hal
     {
         T x {}, y {};
 
-        constexpr rectangle<T> operator+(const point& pt) const noexcept
+        constexpr point<T> operator+(const point& pt) const noexcept
         {
-            return rectangle<T> {
-                *this,
-                pt
+            return point<T> {
+                x + pt.x,
+                y + pt.y
             };
         }
 
-        constexpr point operator*(double mul) const noexcept
+        constexpr point operator*(lyo::f64 mul) const noexcept
         {
             return point {
                 static_cast<T>(x * mul),
@@ -28,15 +30,15 @@ namespace hal
             };
         }
 
-        constexpr point operator/(double div) const noexcept
+        constexpr point operator/(lyo::f64 div) const noexcept
         {
             return point {
-                x / div,
-                y / div
+                static_cast<T>(x / div),
+                static_cast<T>(y / div)
             };
         }
 
-        constexpr point& operator*=(double mul) const noexcept
+        constexpr point& operator*=(lyo::f64 mul) const noexcept
         {
             x *= mul;
             y *= mul;
@@ -44,7 +46,7 @@ namespace hal
             return *this;
         }
 
-        constexpr point& operator/=(double div) const noexcept
+        constexpr point& operator/=(lyo::f64 div) const noexcept
         {
             x /= div;
             y /= div;
@@ -52,10 +54,21 @@ namespace hal
             return *this;
         }
 
+        // Create a new rectangle with this point acting as the size.
         constexpr rectangle<T> rect() const noexcept
         {
             return rectangle<T> {
+                as_size,
                 *this
+            };
+        }
+
+        // Join two points into a rectangle.
+        constexpr rectangle<T> rect(const point<T>& pt) const noexcept
+        {
+            return rectangle<T> {
+                *this,
+                pt
             };
         }
 

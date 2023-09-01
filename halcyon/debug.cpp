@@ -13,18 +13,18 @@ using namespace hal;
 std::ofstream            debug::m_output { "Halcyon debug output.txt" };
 const lyo::precise_timer debug::m_timer {};
 
-void debug::panic(const char* title, const char* message) noexcept
+void debug::panic(const char* why, const char* where, const char* message) noexcept
 {
-    const char* fmt_msg { lyo::is_c_string_empty(message) ? "No message provided" : message };
-
-    debug::print(severity::error, __func__, ": ", title, " <- ", fmt_msg);
+    debug::print(severity::error, __func__, ": ", why, " in ", where, ": ", message);
 
     constexpr SDL_MessageBoxButtonData buttons[] {
         {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT,  0, "Exit"      },
         { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Run anyway"}
     };
 
-    const SDL_MessageBoxData msgbox { SDL_MESSAGEBOX_ERROR, NULL, title, fmt_msg, SDL_arraysize(buttons), buttons, NULL };
+    const std::string msgbox_info { lyo::string_from_pack("Function: ", where, "\nInfo: ", message) };
+
+    const SDL_MessageBoxData msgbox { SDL_MESSAGEBOX_ERROR, NULL, why, msgbox_info.c_str(), SDL_arraysize(buttons), buttons, NULL };
 
     int response { 0 };
 
@@ -44,9 +44,9 @@ void debug::panic(const char* title, const char* message) noexcept
     }
 }
 
-void debug::verify(bool condition, const char* if_false, const char* info) noexcept
+void debug::verify(bool condition, const char* cond_string, const char* func, const char* extra_info) noexcept
 {
     if (!condition)
-        debug::panic(if_false, info);
+        debug::panic(cond_string, func, extra_info);
 }
 #endif

@@ -3,6 +3,7 @@
 #include <halcyon/font_loader.hpp>
 #include <halcyon/image_loader.hpp>
 #include <halcyon/input_handler.hpp>
+#include <halcyon/mixer.hpp>
 #include <halcyon/window.hpp>
 
 #include "level.hpp"
@@ -23,26 +24,33 @@ namespace game
     {
       public:
 
-        scene(hal::engine& eng, const char* game_title);
+        scene(hal::engine& eng, lyo::u32 freq);
+
+        // @brief A predefined loop, so that you have less to worry about.
+        void main_loop() noexcept;
 
         // @brief Update the scene and all its components.
-        // @returns Whether the game should quit. This way, you can
-        // wrap this function in a while (scene.update()) block.
+        // @returns Whether to quit. Enables neat wrapping inside of a
+        // while (scene.update()) {...} block.
         bool update() noexcept;
-
-        void load_level(const char* path) noexcept;
 
       private:
 
-        hal::input_handler m_input;
+        void intro() noexcept;
 
-        hal::window m_window;
+        hal::input_handler m_input;
 
         level m_level;
 
-        lyo::precise_timer m_delta;
+        hal::mixer m_mixer;
+
+        hal::window m_window;
 
         MAYBE_EMPTY hal::image_loader m_iLoader;
         MAYBE_EMPTY hal::font_loader m_fLoader;
+
+        const hal::font m_font;
+
+        lyo::precise_timer m_delta;
     };
 }  // namespace game

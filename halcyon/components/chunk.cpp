@@ -10,7 +10,17 @@ chunk::chunk(const char* path, lyo::pass_key<mixer>) noexcept :
     HAL_DEBUG_PRINT(severity::load, "Loaded SFX ", path);
 }
 
-void chunk::play(loop_type loops) & noexcept
+void chunk::play(lyo::u16 loops) & noexcept
+{
+    this->internal_play(loops);
+}
+
+void chunk::play(infinite_loop_t) & noexcept
+{
+    this->internal_play(-1);
+}
+
+void chunk::internal_play(int loops) noexcept
 {
     HAL_DEBUG_ASSERT(::Mix_PlayChannel(-1, m_object.get(), loops) != -1, ::Mix_GetError());
 }

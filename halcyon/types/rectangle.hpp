@@ -3,6 +3,7 @@
 #include <SDL2/SDL_rect.h>
 
 #include "point.hpp"
+#include "tags.hpp"
 
 namespace hal
 {
@@ -19,7 +20,7 @@ namespace hal
         {
         }
 
-        constexpr rectangle(const point<T>& size) noexcept :
+        constexpr rectangle(as_size_t, const point<T>& size) noexcept :
             size { size }
         {
         }
@@ -34,12 +35,12 @@ namespace hal
         constexpr explicit operator rectangle<Convert>() const noexcept
         {
             return rectangle<Convert> {
-                pos,
-                size
+                static_cast<point<Convert>>(pos),
+                static_cast<point<Convert>>(size)
             };
         }
 
-        constexpr rectangle operator*(double mul) const noexcept
+        constexpr rectangle operator*(lyo::f64 mul) const noexcept
         {
             return rectangle {
                 pos,
@@ -47,7 +48,7 @@ namespace hal
             };
         }
 
-        constexpr rectangle operator/(double div) const noexcept
+        constexpr rectangle operator/(lyo::f64 div) const noexcept
         {
             return rectangle {
                 pos,
@@ -55,14 +56,14 @@ namespace hal
             };
         }
 
-        constexpr rectangle& operator*=(double mul) noexcept
+        constexpr rectangle& operator*=(lyo::f64 mul) noexcept
         {
             size *= mul;
 
             return *this;
         }
 
-        constexpr rectangle& operator/=(double div) noexcept
+        constexpr rectangle& operator/=(lyo::f64 div) noexcept
         {
             size /= div;
 

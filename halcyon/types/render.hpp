@@ -20,6 +20,8 @@ namespace hal
 
     using coordinate = point<position_type>;
     using world_area = rectangle<position_type>;
+
+    using opacity_type = lyo::f32;
 }
 
 // Paranoia.

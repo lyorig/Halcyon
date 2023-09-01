@@ -10,11 +10,10 @@ namespace hal
 {
     class engine;
     class input_handler;
-    struct fullscreen_t  // Tag type for a fullscreen window.
-    {
-    } constexpr fullscreen;
 
-    class window : public sdl_object<SDL_Window, ::SDL_DestroyWindow>
+    TAG_TYPE(fullscreen);
+
+    class window : public sdl_object<SDL_Window, &::SDL_DestroyWindow>
     {
       public:
 

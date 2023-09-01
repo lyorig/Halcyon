@@ -7,10 +7,10 @@
 
 namespace lyo
 {
-    template <typename T, typename... Pack>
+    template <typename Needle, typename... Haystack>
     constexpr bool is_any_of()
     {
-        return (std::is_same_v<T, Pack> || ...);
+        return (std::is_same_v<Needle, Haystack> || ...);
     }
 
     template <typename T>

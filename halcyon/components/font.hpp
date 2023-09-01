@@ -13,7 +13,7 @@ namespace hal
     class font_loader;
     class surface;
 
-    class font : public sdl_object<TTF_Font, ::TTF_CloseFont>
+    class font : public sdl_object<TTF_Font, &::TTF_CloseFont>
     {
       public:
 

@@ -6,9 +6,8 @@
 
 namespace lyo
 {
-    struct zero_out_t
-    {
-    } constexpr zero_out;
+    TAG_TYPE(zero_out);
+
     template <typename T>
     class buffer
     {

@@ -14,7 +14,7 @@ namespace hal
         engine() noexcept;
         ~engine();
 
-        void exit() const & noexcept;
+        void exit() & noexcept;
 
       private:
 

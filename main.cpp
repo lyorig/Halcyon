@@ -1,22 +1,59 @@
-#include <halcyon/engine.hpp>
-#include <halcyon/font_loader.hpp>
-#include <halcyon/input_handler.hpp>
-#include <halcyon/window.hpp>
-#include <lyo/utility.hpp>
+#include <iostream>
 
-#include "scene.hpp"
+#include "factorizer.hpp"
+
+#include "lyo/argparse.hpp"
+
+#define PROGRAM_NAME "x-factorizer"
 
 int main(int argc, char* argv[])
 {
-    (void)argc;  // Suppress warnings.
-    (void)argv;
+	// No argument given.
+	if (argc == 1)
+	{
+		std::cout << "\nUsage: " PROGRAM_NAME " -num=[input number]\n";
+		return EXIT_FAILURE;
+	}
 
-    hal::engine eng;
+	const lyo::parser p{ argc, argv };
 
-    game::scene scn { eng, "Halcyon Testing Suite" };
+	const auto input{ p.parse<x::arith_type>("-num=") };
 
-    while (scn.update())
-        ;
+	// Parsing the number failed.
+	if (!input)
+	{
+		std::cout << "\nInvalid number entered. Exiting.\n";
+		return EXIT_FAILURE;
+	}
 
-    return EXIT_SUCCESS;
+	// Good to go! Let's initialize the factorizer and get this
+	// show on the road.
+
+	x::factorizer fact{ *input };
+
+	// An unordered map of divisors.
+	const auto& divs{ fact.divisors() };
+
+	std::size_t idx{ 0 };
+
+	std::cout << *input << " = ";
+
+	for (const auto& pair : divs)
+	{
+		std::cout << pair.first << '^' << int(pair.second);
+
+		// Prevent a trailing "x".
+		if (idx != divs.size() - 1)
+		{
+			std::cout << " x ";
+			++idx;
+		}
+
+		else
+		{
+			std::cout << '\n';
+		}
+	}
+
+	return EXIT_SUCCESS;
 }
