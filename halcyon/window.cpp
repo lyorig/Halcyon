@@ -23,6 +23,11 @@ void window::present() noexcept
     renderer.clear({});
 }
 
+void window::set_as_target() noexcept
+{
+    renderer.reset_target();
+}
+
 pixel_size window::size() const noexcept
 {
     return renderer.output_size();

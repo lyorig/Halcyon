@@ -37,9 +37,7 @@ namespace hal
       public:
 
         texture(const window& wnd) noexcept;
-
         texture(const window& wnd, const pixel_size& size) noexcept;
-
         texture(const window& wnd, surface image) noexcept;
 
         const pixel_size& size() const noexcept;
@@ -60,6 +58,8 @@ namespace hal
         void draw(anchor anch, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
         void draw(anchor anch, const pixel_size& size, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
         void draw(const coordinate& pos, anchor anch, lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
+
+        void set_as_target() noexcept;
 
         // View-width and view-height helpers.
         pixel_size vw(lyo::f64 percent) const noexcept;

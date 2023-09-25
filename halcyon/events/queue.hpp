@@ -14,123 +14,120 @@
 
 namespace hal
 {
-    namespace events
+    template <typename T, typename Query = void>
+    class queue;
+
+    template <typename T>  // Specialization for the default timer-only queue.
+    class queue<T, void>
     {
-        template <typename T, typename Query = void>
-        class queue;
+      public:
 
-        template <typename T>  // Specialization for the default timer-only queue.
-        class queue<T, void>
+        queue(T& object) noexcept :
+            m_object { object }
         {
-          public:
+        }
 
-            queue(T& object) noexcept :
-                m_object { object }
+        void update() noexcept
+        {
+            if (!m_queue.empty())
             {
-            }
+                const double time { m_queue.front().second };
 
-            void update() noexcept
-            {
-                if (!m_queue.empty())
+                while (m_timer() >= time)
                 {
-                    const double time { m_queue.front().second };
+                    m_queue.front().first(m_object);
+                    m_queue.pop();
+                    m_timer -= time;
+                }
+            }
+        }
 
-                    while (m_timer() >= time)
+        void add(hal::callback<T&> func, double time) noexcept
+        {
+            m_queue.emplace(func, time);
+        }
+
+        bool done() const noexcept
+        {
+            return m_queue.empty();
+        }
+
+      private:
+
+        std::queue<std::pair<hal::callback<T&>, const double>> m_queue;
+
+        lyo::precise_timer m_timer;
+
+        T& m_object;
+    };
+
+    template <typename T, typename Query>  // Specialization for a conditional queue.
+    class queue
+    {
+        using cond_func = lyo::func_ptr<bool, const Query&>;
+        using holder    = std::variant<double, cond_func>;
+
+      public:
+
+        queue(T& object, const Query& query_obj) noexcept :
+            m_object { object },
+            m_cond { query_obj }
+        {
+        }
+
+        void update() noexcept
+        {
+            if (!m_queue.empty())
+            {
+                const auto& pair { m_queue.front() };
+
+                if (std::holds_alternative<double>(pair.second))  // Timer conditional.
+                {
+                    const double time { std::get<double>(pair.second) };
+
+                    if (m_timer() >= time)
                     {
-                        m_queue.front().first(m_object);
+                        pair.first(m_object);
                         m_queue.pop();
                         m_timer -= time;
                     }
                 }
-            }
 
-            void add(hal::callback<T&> func, double time) noexcept
-            {
-                m_queue.emplace(func, time);
-            }
-
-            bool done() const noexcept
-            {
-                return m_queue.empty();
-            }
-
-          private:
-
-            std::queue<std::pair<hal::callback<T&>, const double>> m_queue;
-
-            lyo::precise_timer m_timer;
-
-            T& m_object;
-        };
-
-        template <typename T, typename Query>  // Specialization for a conditional queue.
-        class queue
-        {
-            using cond_func = lyo::func_ptr<bool, const Query&>;
-            using holder    = std::variant<double, cond_func>;
-
-          public:
-
-            queue(T& object, const Query& query_obj) noexcept :
-                m_object { object },
-                m_cond { query_obj }
-            {
-            }
-
-            void update() noexcept
-            {
-                if (!m_queue.empty())
+                else  // Function conditional.
                 {
-                    const auto& pair { m_queue.front() };
-
-                    if (std::holds_alternative<double>(pair.second))  // Timer conditional.
+                    if (std::get<cond_func>(pair.second)(m_cond))
                     {
-                        const double time { std::get<double>(pair.second) };
-
-                        if (m_timer() >= time)
-                        {
-                            pair.first(m_object);
-                            m_queue.pop();
-                            m_timer -= time;
-                        }
-                    }
-
-                    else  // Function conditional.
-                    {
-                        if (std::get<cond_func>(pair.second)(m_cond))
-                        {
-                            pair.first(m_object);
-                            m_queue.pop();
-                            m_timer.reset();
-                        }
+                        pair.first(m_object);
+                        m_queue.pop();
+                        m_timer.reset();
                     }
                 }
             }
+        }
 
-            void add(hal::callback<T&> func, double time) noexcept
-            {
-                m_queue.emplace(func, time);
-            }
+        void add(hal::callback<T&> func, double time) noexcept
+        {
+            m_queue.emplace(func, time);
+        }
 
-            void add(hal::callback<T&> func, cond_func conditional) noexcept
-            {
-                m_queue.emplace(func, conditional);
-            }
+        void add(hal::callback<T&> func, cond_func conditional) noexcept
+        {
+            m_queue.emplace(func, conditional);
+        }
 
-            bool done() const noexcept
-            {
-                return m_queue.empty();
-            }
+        bool done() const noexcept
+        {
+            return m_queue.empty();
+        }
 
-          private:
+      private:
 
-            std::queue<std::pair<hal::callback<T&>, holder>> m_queue;
+        std::queue<std::pair<hal::callback<T&>, holder>> m_queue;
 
-            lyo::precise_timer m_timer;
+        lyo::precise_timer m_timer;
 
-            T& m_object;
+        T& m_object;
 
-            const Query& m_cond;
-        };
-    }  // namespace events
+        const Query& m_cond;
+    };
 }  // namespace hal

@@ -17,7 +17,7 @@ namespace hal
     {
       public:
 
-        enum flag : lyo::u8
+        enum flags : lyo::u8
         {
             none        = 0,
             software    = SDL_RENDERER_SOFTWARE,
@@ -33,7 +33,7 @@ namespace hal
         void set_target(texture& tx) const noexcept;
         void reset_target() const noexcept;
 
-        void set_fill(rgba color) const noexcept;
+        void set_fill(color clr) const noexcept;
 
         pixel_size output_size() const noexcept;
     };

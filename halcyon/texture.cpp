@@ -92,6 +92,11 @@ void texture::draw(const coordinate& pos, anchor anch, lyo::f64 angle, flip f) c
     this->draw(this->resolve_anchor(anch, pos, m_size), m_size, angle, f);
 }
 
+void texture::set_as_target() noexcept
+{
+    m_window.renderer.set_target(*this);
+}
+
 pixel_size texture::vw(lyo::f64 percent) const noexcept
 {
     const pixel_type width { static_cast<pixel_type>(m_window.renderer.output_size().x * (percent / 100.0)) };

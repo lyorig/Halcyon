@@ -21,7 +21,7 @@ void console::draw(const font& fnt, const window& wnd) noexcept
 
     for (const auto& entry : m_queue)
     {
-        tex = fnt.render(entry.first, static_cast<rgb::hex_type>(entry.second));
+        tex = fnt.render(entry.first, static_cast<color::hex_type>(entry.second));
 
         const pixel_size view { tex.vh(view_height_percentage) };
 

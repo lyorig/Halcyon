@@ -20,6 +20,6 @@ namespace hal
 
         font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>) noexcept;
 
-        surface render(const std::string& text, rgb color = color::white) const noexcept;
+        surface render(const std::string& text, color color = color::white) const noexcept;
     };
 }  // namespace hal

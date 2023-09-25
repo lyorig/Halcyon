@@ -19,12 +19,12 @@ namespace hal
 
         hal::renderer renderer;
 
-        enum flag : lyo::u16
+        enum flags : lyo::u16
         {
             none       = 0,
             fullscreen = SDL_WINDOW_FULLSCREEN_DESKTOP,
             hidden     = SDL_WINDOW_HIDDEN,
-            resizable  = SDL_WINDOW_RESIZABLE,
+            resizeable = SDL_WINDOW_RESIZABLE,
             minimized  = SDL_WINDOW_MINIMIZED,
             maximized  = SDL_WINDOW_MAXIMIZED
         };
@@ -33,6 +33,8 @@ namespace hal
         window(engine& engine, const char* title, fullscreen_t, lyo::u32 renderer_flags) noexcept;
 
         void present() noexcept;
+
+        void set_as_target() noexcept;
 
         pixel_size size() const noexcept;
 

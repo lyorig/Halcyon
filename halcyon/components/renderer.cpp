@@ -7,6 +7,7 @@ using namespace hal;
 renderer::renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>) noexcept :
     sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, flags) }
 {
+    HAL_DEBUG_ASSERT(::SDL_SetRenderDrawBlendMode(m_object.get(), SDL_BLENDMODE_BLEND) == 0, ::SDL_GetError());
 }
 
 void renderer::present(lyo::pass_key<window>) const noexcept
@@ -36,7 +37,7 @@ void renderer::reset_target() const noexcept
     HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object.get(), NULL) == 0, ::SDL_GetError());
 }
 
-void renderer::set_fill(rgba color) const noexcept
+void renderer::set_fill(color clr) const noexcept
 {
-    HAL_DEBUG_ASSERT(::SDL_SetRenderDrawColor(m_object.get(), color.r, color.g, color.b, color.a) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_SetRenderDrawColor(m_object.get(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
 }

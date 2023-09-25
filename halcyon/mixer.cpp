@@ -15,7 +15,7 @@ mixer::init::init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept
     HAL_DEBUG_ASSERT(::Mix_OpenAudio(freq, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, static_cast<int>(qual)) == 0, ::Mix_GetError());
     HAL_DEBUG_ASSERT(::Mix_AllocateChannels(channels) == channels, ::Mix_GetError());
 
-    HAL_DEBUG_PRINT(severity::init, "Initialized mixer (", freq, " Hz, ", static_cast<lyo::u32>(channels), " ch., ", static_cast<lyo::u32>(qual), " qual.)");
+    HAL_DEBUG_PRINT(severity::init, "Initialized mixer with ", freq, " Hz, ", static_cast<lyo::u32>(channels), " channels and ", static_cast<lyo::u32>(qual), " quality");
 }
 
 mixer::init::~init() noexcept
