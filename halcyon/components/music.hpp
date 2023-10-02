@@ -19,7 +19,7 @@ namespace hal
         music(lyo::pass_key<mixer>) noexcept;
 
         void play(const char* path, lyo::u16 loops = 0) noexcept;
-        void play(const char* path, infinite_loop_t) noexcept;
+        void play(const char* path, infinite_loop_tag) noexcept;
 
         void pause() noexcept;
         void resume() noexcept;

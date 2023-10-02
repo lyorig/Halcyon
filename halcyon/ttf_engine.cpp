@@ -19,7 +19,7 @@ font ttf_engine::load_font(const char* path, lyo::u8 size) & noexcept
     return { path, size, {} };
 }
 
-font ttf_engine::load_font(rvalue_font_t, const char* path, lyo::u8 size) && noexcept
+font ttf_engine::load_font(rvalue_font_tag, const char* path, lyo::u8 size) && noexcept
 {
     return { path, size, {} };
 }

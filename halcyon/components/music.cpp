@@ -14,7 +14,7 @@ void music::play(const char* path, lyo::u16 loops) noexcept
     this->internal_play(path, loops);
 }
 
-void music::play(const char* path, infinite_loop_t) noexcept
+void music::play(const char* path, infinite_loop_tag) noexcept
 {
     this->internal_play(path, -1);
 }

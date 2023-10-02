@@ -25,6 +25,7 @@ namespace hal
             vsync       = SDL_RENDERER_PRESENTVSYNC
         };
 
+        // Might as well leave the pure bitmask parameter here.
         renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>) noexcept;
 
         void present(lyo::pass_key<window>) const noexcept;

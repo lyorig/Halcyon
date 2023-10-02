@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL_image.h>
 
-#include <lyo/types.hpp>
+#include <halcyon/types/other.hpp>
 
 namespace hal
 {
@@ -23,7 +23,7 @@ namespace hal
             webp = IMG_INIT_WEBP
         };
 
-        image_loader(window& wnd, int type_flags) noexcept;
+        image_loader(window& wnd, il<image_type> types) noexcept;
         ~image_loader();
 
         surface load(const char* file) const noexcept;

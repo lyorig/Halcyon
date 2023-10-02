@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdio>
+#include <algorithm>
 
 #include "capsule.hpp"
 
@@ -25,7 +26,7 @@ namespace lyo
         {
         }
 
-        constexpr buffer(usize sz, zero_out_t) noexcept :
+        constexpr buffer(usize sz, zero_out_tag) noexcept :
             m_data { new T[sz] {} },
             m_size { sz }
         {
@@ -55,7 +56,7 @@ namespace lyo
             m_size = sz;
         }
 
-        constexpr void resize(usize sz, zero_out_t) noexcept
+        constexpr void resize(usize sz, zero_out_tag) noexcept
         {
             m_data = new T[sz] {};
             m_size = sz;
@@ -74,7 +75,7 @@ namespace lyo
             m_size = sz;
         }
 
-        constexpr void resize_move(usize sz, zero_out_t) noexcept
+        constexpr void resize_move(usize sz, zero_out_tag) noexcept
         {
             const usize new_size { std::min(sz, m_size) };
 

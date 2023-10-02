@@ -31,6 +31,6 @@ namespace hal
         // Give a pinky promise to this library's creator that you'll only
         // use the returned font as an rvalue and have absolutely no plans
         // to do something utterly stupid like assign it to a variable.
-        font load_font(rvalue_font_t, const char* path, lyo::u8 size) && noexcept;
+        font load_font(rvalue_font_tag, const char* path, lyo::u8 size) && noexcept;
     };
 }  // namespace hal

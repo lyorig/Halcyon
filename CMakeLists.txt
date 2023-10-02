@@ -6,6 +6,11 @@ else()
   add_compile_options(-Wall -Wpedantic)
 endif()
 
+if (APPLE)
+  include_directories(/opt/homebrew/include)
+  link_directories(/opt/homebrew/lib)
+endif()
+
 # add_compile_options(-fsanitize=address)
 # add_link_options(-fsanitize=address)
 
@@ -13,7 +18,7 @@ project(HalodaQuest VERSION 0.1 LANGUAGES CXX)
 
 find_package(SDL2 REQUIRED)
 
-add_executable(HalodaQuest main.cpp halcyon/engine.cpp halcyon/image_loader.cpp halcyon/ttf_engine.cpp halcyon/mixer.cpp halcyon/input_handler.cpp halcyon/debug.cpp halcyon/console.cpp halcyon/texture.cpp halcyon/spritesheet.cpp halcyon/components/music.cpp halcyon/components/chunk.cpp halcyon/window.cpp halcyon/components/surface.cpp halcyon/components/font.cpp halcyon/components/renderer.cpp scene.cpp level.cpp camera.cpp ents/entity.cpp)
+add_executable(HalodaQuest main.cpp halcyon/halcyon.cpp halcyon/engine.cpp halcyon/image_loader.cpp halcyon/ttf_engine.cpp halcyon/mixer.cpp halcyon/input_handler.cpp halcyon/debug.cpp halcyon/console.cpp halcyon/texture.cpp halcyon/spritesheet.cpp halcyon/components/music.cpp halcyon/components/chunk.cpp halcyon/window.cpp halcyon/components/surface.cpp halcyon/components/font.cpp halcyon/components/renderer.cpp)
 
 target_compile_features(HalodaQuest PUBLIC cxx_std_20)
 
