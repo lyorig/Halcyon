@@ -1,0 +1,8 @@
+//
+// Created by Petr Šácha on 06.10.2023.
+//
+
+#ifndef HALODAQUEST_WINDOW_MANAGER_HPP
+#define HALODAQUEST_WINDOW_MANAGER_HPP
+
+#endif //HALODAQUEST_WINDOW_MANAGER_HPP
