@@ -1,5 +1,6 @@
-.vscode/
 .cache/
+cmake-*/
 build/
+assets/
 *.code-workspace
 .DS_Store

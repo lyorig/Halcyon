@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    class window;
+    class engine;
 
     TAG_TYPE(rvalue_font);
 
@@ -16,7 +16,7 @@ namespace hal
     {
       public:
 
-        ttf_engine(window& wnd) noexcept;
+        ttf_engine(engine& eng) noexcept;
         ~ttf_engine();
 
         // Beware: a big foot-gun here is creating an lvalue font from an rvalue TTF engine.

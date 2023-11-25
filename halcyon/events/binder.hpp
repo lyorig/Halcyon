@@ -31,38 +31,28 @@ namespace hal
         {
             for (const auto& bind : m_binds)
             {
-                if constexpr (!cfg::performance_mode)
-                {
-                    bool should_trigger;
+                bool should_trigger;
 
-                    switch (bind.second.first)
-                    {
-                        case press:
-                            should_trigger = m_input.m_pressed(bind.first);
-                            break;
+                switch (bind.second.first) // Why is the formatting like this?!?!
+                {
+                    case press:
+                        should_trigger = m_input.pressed(bind.first);
+                        break;
 
                         case hold:
-                            should_trigger = m_input.m_held(bind.first);
+                            should_trigger = m_input.held(bind.first);
                             break;
 
-                        case release:
-                            should_trigger = m_input.m_released(bind.first);
-                            break;
+                            case release:
+                                should_trigger = m_input.released(bind.first);
+                                break;
 
-                        default:
-                            should_trigger = false;
-                            break;
+                                default:
+                                    return;
                     }
 
                     if (should_trigger)
                         bind.second.second(m_hook);
-                }
-
-                else  // Not exactly eye candy, but should be better than branching.
-                {
-                    if ((*((reinterpret_cast<const input_handler::key_storage*>(&m_input)) + bind.second.first))[static_cast<lyo::u64>(bind.first)])
-                        bind.second.second(m_hook);
-                }
             }
         }
 

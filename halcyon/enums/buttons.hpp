@@ -72,20 +72,11 @@ namespace hal
 
         left_alt  = SDL_SCANCODE_LALT,
         right_alt = SDL_SCANCODE_RALT,
-    };
 
-    enum class mouse_button : lyo::u8
-    {
-        left   = SDL_BUTTON_LEFT,
-        middle = SDL_BUTTON_MIDDLE,
-        right  = SDL_BUTTON_RIGHT,
-        x1     = SDL_BUTTON_X1,
-        x2     = SDL_BUTTON_X2
-    };
-
-    enum class mouse_event_type : bool
-    {
-        released = false,
-        pressed  = true
+        lmb = SDL_NUM_SCANCODES + SDL_BUTTON_LEFT,
+        mmb = SDL_NUM_SCANCODES + SDL_BUTTON_MIDDLE,
+        rmb = SDL_NUM_SCANCODES + SDL_BUTTON_RIGHT,
+        mx1 = SDL_NUM_SCANCODES + SDL_BUTTON_X1,
+        mx2 = SDL_NUM_SCANCODES + SDL_BUTTON_X2
     };
 }  // namespace hal

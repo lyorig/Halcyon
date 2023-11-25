@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.22.1)
 
 if(MSVC)
-  add_compile_options(/Wall /WX)
+  add_compile_options(/Wall)
 else()
-  add_compile_options(-Wall -Wpedantic)
+  add_compile_options(-Wall)
 endif()
 
 if (APPLE)
@@ -18,9 +18,11 @@ project(HalodaQuest VERSION 0.1 LANGUAGES CXX)
 
 find_package(SDL2 REQUIRED)
 
-add_executable(HalodaQuest main.cpp halcyon/halcyon.cpp halcyon/engine.cpp halcyon/image_loader.cpp halcyon/ttf_engine.cpp halcyon/mixer.cpp halcyon/input_handler.cpp halcyon/debug.cpp halcyon/console.cpp halcyon/texture.cpp halcyon/spritesheet.cpp halcyon/components/music.cpp halcyon/components/chunk.cpp halcyon/window.cpp halcyon/components/surface.cpp halcyon/components/font.cpp halcyon/components/renderer.cpp)
+add_executable(HalodaQuest main.cpp halcyon/mono_app.cpp halcyon/engine.cpp halcyon/image_loader.cpp halcyon/ttf_engine.cpp halcyon/mixer.cpp halcyon/input_handler.cpp halcyon/debug.cpp halcyon/console.cpp halcyon/texture.cpp halcyon/spritesheet.cpp halcyon/components/music.cpp halcyon/components/chunk.cpp halcyon/window.cpp halcyon/components/surface.cpp halcyon/components/font.cpp halcyon/components/renderer.cpp
+        halcyon/window_manager.cpp
+        halcyon/window_manager.hpp)
 
-target_compile_features(HalodaQuest PUBLIC cxx_std_20)
+set_property(TARGET HalodaQuest PROPERTY CXX_STANDARD 23)
 
 target_include_directories(HalodaQuest PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(HalodaQuest SDL2 SDL2_image SDL2_ttf SDL2_mixer)

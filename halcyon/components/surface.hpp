@@ -14,20 +14,26 @@
    a valid SDL_Surface pointer. On top of staying true to the SDL object
    structure, another upside comes in the form of early error handling. */
 
-namespace hal
-{
-    class image_loader;
-    class font;
+namespace hal {
+class image_loader;
+class font;
 
-    class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface>
-    {
-        friend class image_loader;
-        friend class font;
+class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface> {
+    friend class image_loader;
+    friend class font;
 
-        surface(SDL_Surface* surf) noexcept;
+    surface(SDL_Surface* surf) noexcept;
 
-      public:
+    Uint32 get_pixel(pixel_type x, pixel_type y) const noexcept;
 
-        pixel_size size() const noexcept;
-    };
-}  // namespace hal
+  public:
+    surface(window& wnd, pixel_size sz) noexcept;
+
+    pixel_size size() const noexcept;
+
+    // Get pixel at position.
+    // This functionality is exclusive to surfaces, as textures
+    // are extremely slow to retrieve pixel information.
+    color operator[](pixel_pos coord) const noexcept;
+};
+} // namespace hal

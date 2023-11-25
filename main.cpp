@@ -1,33 +1,30 @@
 #include <halcyon/events/animation.hpp>
-#include <halcyon/halcyon.hpp>
+#include <halcyon/mono_app.hpp>
 
-int main(int argc, char *argv[]) {
-  hal::cyon game{"Interloper v1.1"};
+int main(int argc, char* argv[]) {
 
-  game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
+    hal::mono_app game{"Interloper 1.1"};
 
-  const hal::font m5x7{game.ttf.load_font("assets/fonts/m5x7.ttf", 72)};
-  const hal::texture tex{game.window,
-                         m5x7.render("Made with Halcyon", hal::color::black)};
+    game.mixer.mus.play("../assets/ost/The Way Home.mp3", hal::infinite_loop);
 
-  hal::color color{hal::color::white};
+    const hal::font m5x7{game.ttf.load_font("../assets/fonts/m5x7.ttf", 72)};
+    const hal::surface surf{game.window, game.window.size()};
 
-  hal::animation anim{color, [&](hal::color &c, lyo::f64 t) {
-                        using vt = hal::color::value_type;
+    ::SDL_BlitScaled(game.image.load("test.jpg").ptr(), nullptr, surf.ptr(),
+                     nullptr);
 
-                        c.r = static_cast<vt>(std::abs(std::sin(t)) *
-                                              lyo::f64(0x80));
+    while (game.update() && !game.input().pressed(hal::button::esc)) {
 
-                        game.window.renderer.set_fill(color);
-                      }};
+        if (game.input().held(hal::button::backspace))
+            HAL_CONSOLE_LOG(hal::severity::warning, "Backspace held");
 
-  const auto size{tex.vw(50.0)};
+        if (game.input().held(hal::button::lmb))
+            HAL_CONSOLE_LOG(hal::severity::warning, "LMB held");
 
-  while (game.update() && !game.input().pressed(hal::button::esc)) {
-    tex.draw(hal::anchor::center, size);
+        game.window.renderer.set_fill(surf[game.input().mouse()]);
 
-    anim.update();
-  }
+        HAL_CONSOLE_DRAW(m5x7, game.window);
+    }
 
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

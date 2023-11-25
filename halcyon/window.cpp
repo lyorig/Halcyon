@@ -10,18 +10,18 @@ window::window(engine& engine, const char* title, const pixel_size& pos, const p
     HAL_DEBUG_PRINT(severity::init, "Initialized window '", title, "' (", this->size().x, 'x', this->size().y, ')');
 }
 
-window::window(engine &engine, const char *title, fullscreen_tag,
+window::window(engine &engine, const char *title, fullscreen_mode_tag,
                il<renderer::flags> r_flags) noexcept
     : window{engine, title, {}, {}, {fullscreen}, r_flags} {
 }
 
-void window::present() noexcept
+void window::present() const noexcept
 {
     renderer.present({});
     renderer.clear({});
 }
 
-void window::set_as_target() noexcept
+void window::set_as_target() const noexcept
 {
     renderer.reset_target();
 }
@@ -29,4 +29,21 @@ void window::set_as_target() noexcept
 pixel_size window::size() const noexcept
 {
     return renderer.output_size();
+}
+
+window::id_type window::id() const noexcept
+{
+    const id_type id{::SDL_GetWindowID(m_object.get())};
+
+    HAL_DEBUG_CHECK(id != 0, ::SDL_GetError());
+
+    return id;
+}
+
+pixel_size window::internal_size() const noexcept {
+    point<int> sz;
+
+    ::SDL_GetWindowSize(m_object.get(), &sz.x, &sz.y);
+
+    return static_cast<pixel_size>(sz);
 }

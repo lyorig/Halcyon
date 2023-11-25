@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    class window;
+    class engine;
     class surface;
 
     // For loading images, obviously. This class isn't required to outlive
@@ -23,7 +23,7 @@ namespace hal
             webp = IMG_INIT_WEBP
         };
 
-        image_loader(window& wnd, il<image_type> types) noexcept;
+        image_loader(engine& eng, il<image_type> types) noexcept;
         ~image_loader();
 
         surface load(const char* file) const noexcept;

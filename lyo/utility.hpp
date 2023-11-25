@@ -13,7 +13,7 @@ namespace lyo
 {
     template <character T>
         requires(lyo::is_any_of<T, char, wchar_t>())
-    bool streq(const T* first, const T* second) noexcept
+    constexpr bool streq(const T* first, const T* second) noexcept
     {
         if (std::is_same_v<T, char>)
             return std::strcmp(first, second) == 0;
@@ -24,7 +24,7 @@ namespace lyo
 
     // Checks if the string is null or if the first character is a null terminator.
     template <character T>
-    bool is_c_string_empty(const T* string) noexcept
+    constexpr bool is_c_string_empty(const T* string) noexcept
     {
         return !string || *string == static_cast<T>('\0');
     }
@@ -40,5 +40,11 @@ namespace lyo
         (stream << ... << args);
 
         return stream.str();
+    }
+
+    template <typename T> requires std::is_enum_v<T>
+    std::underlying_type_t<T> to_underlying(T value) noexcept
+    {
+        return static_cast<std::underlying_type_t<T>>(value);
     }
 }  // namespace lyo
