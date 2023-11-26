@@ -3,10 +3,40 @@
 
 using namespace hal;
 
+surface::surface(window& wnd, pixel_size sz) noexcept : surface{sz} {}
+
+surface::surface(pixel_size sz) noexcept
+    : surface{::SDL_CreateRGBSurface(0, sz.x, sz.y, 32, 0, 0, 0, 0)} {}
+
 surface::surface(SDL_Surface* surf) noexcept : sdl_object{surf} {}
 
-surface::surface(window& wnd, pixel_size sz) noexcept
-    : sdl_object{::SDL_CreateRGBSurface(0, sz.x, sz.y, 32, 0, 0, 0, 0)} {}
+surface& surface::resize(pixel_size sz) noexcept {
+    surface temp{sz};
+
+    HAL_DEBUG_ASSERT(
+        ::SDL_BlitScaled(this->ptr(), nullptr, temp.ptr(), nullptr) == 0,
+        ::SDL_GetError());
+
+    return (*this = std::move(temp));
+}
+
+pixel_size surface::size() const noexcept {
+    return {static_cast<pixel_type>(m_object->w),
+            static_cast<pixel_type>(m_object->h)};
+}
+
+color surface::operator[](pixel_pos coord) const noexcept {
+    HAL_DEBUG_CHECK(coord.x < ptr()->w, "Out-of-range width");
+    HAL_DEBUG_CHECK(coord.y < ptr()->h, "Out-of-range height");
+
+    color ret;
+
+    // I couldn't find any mention of this function having a fail state.
+    ::SDL_GetRGBA(this->get_pixel(coord.x, coord.y), ptr()->format, &ret.r,
+                  &ret.g, &ret.b, &ret.a);
+
+    return ret;
+}
 
 Uint32 surface::get_pixel(pixel_type x, pixel_type y) const noexcept {
     const auto bpp{ptr()->format->BytesPerPixel};
@@ -37,22 +67,4 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const noexcept {
 
         return 0;
     }
-}
-
-pixel_size surface::size() const noexcept {
-    return {static_cast<pixel_type>(m_object->w),
-            static_cast<pixel_type>(m_object->h)};
-}
-
-color surface::operator[](pixel_pos coord) const noexcept {
-    HAL_DEBUG_CHECK(coord.x < ptr()->w, "Out-of-range width");
-    HAL_DEBUG_CHECK(coord.y < ptr()->h, "Out-of-range height");
-
-    color ret;
-
-    // I couldn't find any mention of this function having a fail state.
-    ::SDL_GetRGBA(this->get_pixel(coord.x, coord.y), ptr()->format, &ret.r,
-                  &ret.g, &ret.b, &ret.a);
-
-    return ret;
 }

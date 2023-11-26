@@ -1,6 +1,7 @@
 #include "texture.hpp"
 
 #include "debug.hpp"
+#include "halcyon/types/render.hpp"
 #include "internal/config.hpp"
 #include "window.hpp"
 
@@ -14,7 +15,7 @@ texture::texture(const window& wnd, const pixel_size& size) noexcept
                                      SDL_TEXTUREACCESS_TARGET, size.x, size.y)},
       m_size{size}, m_window{wnd} {}
 
-texture::texture(const window& wnd, surface image) noexcept
+texture::texture(const window& wnd, const surface& image) noexcept
     : sdl_object{::SDL_CreateTextureFromSurface(wnd.renderer.ptr(),
                                                 image.ptr())},
       m_size{image.size()}, m_window{wnd} {}
@@ -76,7 +77,7 @@ void texture::draw(anchor anch, lyo::f64 scale, lyo::f64 angle,
                scale, angle, f);
 }
 
-// Draw the entire texture
+// Draw the entire texture to a specific anchor point.
 void texture::draw(anchor anch, const pixel_size& size, lyo::f64 angle,
                    flip f) const noexcept {
     this->draw(this->resolve_anchor(anch,
@@ -175,10 +176,12 @@ void texture::render_copy(const world_area& dst, const pixel_area& src,
 constexpr coordinate
 texture::resolve_anchor(anchor anch, const coordinate& pos,
                         const pixel_size& size) const noexcept {
+    using p = position_type;
+
     switch (anch) {
     case anchor::center:
-        return {position_type(pos.x - size.x / 2),
-                position_type(pos.y - size.y / 2)};
+        return {position_type(pos.x - size.x / p{2}),
+                position_type(pos.y - size.y / p{2})};
 
     case anchor::top_left:
         return pos;
@@ -195,17 +198,19 @@ texture::resolve_anchor(anchor anch, const coordinate& pos,
     default:
         HAL_DEBUG_PANIC("Anchor couldn't be resolved!",
                         "Is this value in the switch statement?");
-        return {0.0, 0.0};
+        return {};
     }
 }
 
 constexpr coordinate
 texture::resolve_anchor(anchor anch, const world_area& dest,
                         const pixel_size& size) const noexcept {
+    using p = position_type;
+
     switch (anch) {
     case anchor::center:
-        return {position_type(dest.pos.x + dest.size.x / 2 - size.x / 2),
-                position_type(dest.pos.y + dest.size.y / 2 - size.y / 2)};
+        return {position_type(dest.pos.x + dest.size.x / p{2} - size.x / p{2}),
+                position_type(dest.pos.y + dest.size.y / p{2} - size.y / p{2})};
 
     case anchor::top_left:
         return dest.pos;
@@ -223,7 +228,7 @@ texture::resolve_anchor(anchor anch, const world_area& dest,
     default:
         HAL_DEBUG_PANIC("Anchor couldn't be resolved!",
                         "Is this value in the switch statement?");
-        return {0.0, 0.0};
+        return {};
     }
 }
 

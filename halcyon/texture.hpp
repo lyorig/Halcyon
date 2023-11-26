@@ -33,7 +33,8 @@ class texture : public sdl_object<SDL_Texture, &::SDL_DestroyTexture> {
   public:
     texture(const window& wnd) noexcept;
     texture(const window& wnd, const pixel_size& size) noexcept;
-    texture(const window& wnd, surface image) noexcept;
+
+    texture(const window& wnd, const surface& image) noexcept;
 
     const pixel_size& size() const noexcept;
     lyo::u8 opacity() const noexcept;

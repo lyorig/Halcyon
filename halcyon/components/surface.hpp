@@ -19,15 +19,11 @@ class image_loader;
 class font;
 
 class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface> {
-    friend class image_loader;
-    friend class font;
-
-    surface(SDL_Surface* surf) noexcept;
-
-    Uint32 get_pixel(pixel_type x, pixel_type y) const noexcept;
-
   public:
+    // Create a sized surface.
     surface(window& wnd, pixel_size sz) noexcept;
+
+    surface& resize(pixel_size sz) noexcept;
 
     pixel_size size() const noexcept;
 
@@ -35,5 +31,17 @@ class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface> {
     // This functionality is exclusive to surfaces, as textures
     // are extremely slow to retrieve pixel information.
     color operator[](pixel_pos coord) const noexcept;
+
+  private:
+    friend class image_loader;
+    friend class font;
+
+    // Special c-tor for factory classes
+    surface(SDL_Surface* surf) noexcept;
+
+    // Special c-tor for resizing
+    surface(pixel_size sz) noexcept;
+
+    Uint32 get_pixel(pixel_type x, pixel_type y) const noexcept;
 };
 } // namespace hal

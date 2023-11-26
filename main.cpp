@@ -1,3 +1,4 @@
+#include "halcyon/types/render.hpp"
 #include <halcyon/events/animation.hpp>
 #include <halcyon/mono_app.hpp>
 
@@ -5,13 +6,13 @@ int main(int argc, char* argv[]) {
 
     hal::mono_app game{"Interloper 1.1"};
 
-    game.mixer.mus.play("../assets/ost/The Way Home.mp3", hal::infinite_loop);
+    game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
-    const hal::font m5x7{game.ttf.load_font("../assets/fonts/m5x7.ttf", 72)};
-    const hal::surface surf{game.window, game.window.size()};
+    const hal::font m5x7{game.ttf.load_font("assets/fonts/m5x7.ttf", 72)};
 
-    ::SDL_BlitScaled(game.image.load("test.jpg").ptr(), nullptr, surf.ptr(),
-                     nullptr);
+    const hal::texture tex{
+        game.window,
+        game.image.load("test.jpg").resize(game.window.size() / 2)};
 
     while (game.update() && !game.input().pressed(hal::button::esc)) {
 
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]) {
         if (game.input().held(hal::button::lmb))
             HAL_CONSOLE_LOG(hal::severity::warning, "LMB held");
 
-        game.window.renderer.set_fill(surf[game.input().mouse()]);
+        tex.draw(hal::anchor::center);
 
         HAL_CONSOLE_DRAW(m5x7, game.window);
     }
