@@ -3,13 +3,14 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/opt/homebrew/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c23",
             "cppStandard": "c++20",
-            "intelliSenseMode": "linux-gcc-x64",
+            "intelliSenseMode": "${default}",
             "configurationProvider": "ms-vscode.cpptools"
         }
     ],
