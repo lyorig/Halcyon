@@ -7,6 +7,7 @@ namespace hal
 {
     using frame_t    = lyo::u8;
     using frame_size = point<frame_t>;
+    using frame_pos = frame_size;
 
     class texture;
 
@@ -17,7 +18,7 @@ namespace hal
         spritesheet(const texture& tx, const pixel_size& frame_size) noexcept;
 
         // Drop-in replacement for a multidimensional subscript operator.
-        const pixel_area& operator()(frame_t row, frame_t column) const noexcept;
+        const pixel_area& operator[](frame_pos pos) const noexcept;
 
         frame_size size() const noexcept;
 

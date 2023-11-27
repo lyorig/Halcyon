@@ -12,8 +12,7 @@
 namespace lyo
 {
     template <character T>
-        requires(lyo::is_any_of<T, char, wchar_t>())
-    constexpr bool streq(const T* first, const T* second) noexcept
+    requires(lyo::is_any_of<T, char, wchar_t>()) constexpr bool streq(const T* first, const T* second) noexcept
     {
         if (std::is_same_v<T, char>)
             return std::strcmp(first, second) == 0;
@@ -42,8 +41,10 @@ namespace lyo
         return stream.str();
     }
 
-    template <typename T> requires std::is_enum_v<T>
-    std::underlying_type_t<T> to_underlying(T value) noexcept
+    template <typename T>
+    requires std::is_enum_v<T>
+        std::underlying_type_t<T> to_underlying(T value)
+    noexcept
     {
         return static_cast<std::underlying_type_t<T>>(value);
     }

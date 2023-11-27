@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdio>
 #include <algorithm>
+#include <cstdio>
 
 #include "capsule.hpp"
 

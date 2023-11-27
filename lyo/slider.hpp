@@ -92,8 +92,7 @@ namespace lyo
     };
 
     template <lyo::arithmetic T, T Min, T Max>
-        requires(Min < Max)
-    class static_slider
+    requires(Min < Max) class static_slider
     {
       public:
 

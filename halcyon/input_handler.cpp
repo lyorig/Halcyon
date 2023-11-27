@@ -2,9 +2,9 @@
 
 #include <SDL2/SDL_events.h>
 
-#include "debug.hpp"
-
 #include <lyo/utility.hpp>
+
+#include "debug.hpp"
 
 using namespace hal;
 
@@ -17,7 +17,7 @@ bool input_base::update() noexcept
 {
     SDL_Event evt;
 
-    while(this->poll(evt))
+    while (this->poll(evt))
         if (!this->process(evt))
             return false;
 
@@ -26,10 +26,10 @@ bool input_base::update() noexcept
 
 bool input_base::held(button btn) const noexcept
 {
-    if (lyo::to_underlying(btn) <= SDL_NUM_SCANCODES) // Key.
+    if (lyo::to_underlying(btn) <= SDL_NUM_SCANCODES)  // Key.
         return ::SDL_GetKeyboardState(nullptr)[static_cast<lyo::usize>(btn)];
 
-    else // Mouse button.
+    else  // Mouse button.
         return SDL_BUTTON(lyo::to_underlying(btn) - SDL_NUM_SCANCODES) & ::SDL_GetMouseState(nullptr, nullptr);
 }
 
@@ -42,12 +42,10 @@ pixel_pos input_base::mouse() const noexcept
     return static_cast<pixel_pos>(pos);
 }
 
-bool input_base::poll(SDL_Event &event) const noexcept
+bool input_base::poll(SDL_Event& event) const noexcept
 {
     return ::SDL_PollEvent(&event);
 }
-
-
 
 bool input_handler::update() noexcept
 {
@@ -69,16 +67,19 @@ bool input_handler::released(button btn) const noexcept
 
 bool input_handler::process(const SDL_Event& event) noexcept
 {
-    switch (event.type) {
+    switch (event.type)
+    {
         case SDL_KEYDOWN:
-            if (event.key.repeat == 0) {
+            if (event.key.repeat == 0)
+            {
                 m_pressed.set(event.key.keysym.scancode);
             }
 
             break;
 
         case SDL_KEYUP:
-            if (event.key.repeat == 0) {
+            if (event.key.repeat == 0)
+            {
                 m_released.set(event.key.keysym.scancode);
             }
 

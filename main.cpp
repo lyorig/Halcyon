@@ -1,28 +1,27 @@
-#include "halcyon/types/render.hpp"
-#include <halcyon/events/animation.hpp>
 #include <halcyon/mono_app.hpp>
 
-int main(int argc, char* argv[]) {
-
-    hal::mono_app game{"Interloper 1.1"};
+int main(int argc, char* argv[])
+{
+    hal::mono_app game { "Interloper 1.1" };
 
     game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
-    const hal::font m5x7{game.ttf.load_font("assets/fonts/m5x7.ttf", 72)};
+    const hal::font m5x7 { game.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
+    const hal::texture tex { game.window, m5x7.render("Made with Halcyon") };
 
-    const hal::texture tex{
-        game.window,
-        game.image.load("test.jpg").resize(game.window.size() / 2)};
+    game.window.renderer.set_fill(hal::color::blue);
 
-    while (game.update() && !game.input().pressed(hal::button::esc)) {
+    lyo::precise_timer tmr;
+    hal::color bg { hal::color::blue };
 
-        if (game.input().held(hal::button::backspace))
-            HAL_CONSOLE_LOG(hal::severity::warning, "Backspace held");
+    while (game.update() && !game.input().pressed(hal::button::esc))
+    {
+        const auto sine { std::sin(tmr()) };
 
-        if (game.input().held(hal::button::lmb))
-            HAL_CONSOLE_LOG(hal::severity::warning, "LMB held");
+        tex.draw(hal::anchor::center, (sine + 2.0) * 0.5, sine * 15.0);
 
-        tex.draw(hal::anchor::center);
+        bg.r = lyo::round_cast<lyo::u8>((sine + 1.0) * 64.0);
+        game.window.renderer.set_fill(bg);
 
         HAL_CONSOLE_DRAW(m5x7, game.window);
     }

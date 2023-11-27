@@ -4,7 +4,7 @@
 
 /* tags.hpp:
    For internal use only. This file is required to fix
-   a circular dependency in point.hpp and rectangle.hpp. */
+   some circular dependencies. */
 
 namespace hal
 {

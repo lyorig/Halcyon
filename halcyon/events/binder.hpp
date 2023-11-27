@@ -33,26 +33,26 @@ namespace hal
             {
                 bool should_trigger;
 
-                switch (bind.second.first) // Why is the formatting like this?!?!
+                switch (bind.second.first)  // Why is the formatting like this?!?!
                 {
                     case press:
                         should_trigger = m_input.pressed(bind.first);
                         break;
 
-                        case hold:
-                            should_trigger = m_input.held(bind.first);
-                            break;
+                    case hold:
+                        should_trigger = m_input.held(bind.first);
+                        break;
 
-                            case release:
-                                should_trigger = m_input.released(bind.first);
-                                break;
+                    case release:
+                        should_trigger = m_input.released(bind.first);
+                        break;
 
-                                default:
-                                    return;
-                    }
+                    default:
+                        return;
+                }
 
-                    if (should_trigger)
-                        bind.second.second(m_hook);
+                if (should_trigger)
+                    bind.second.second(m_hook);
             }
         }
 

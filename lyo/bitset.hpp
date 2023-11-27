@@ -11,8 +11,7 @@
 namespace lyo
 {
     template <lyo::usize Size, std::unsigned_integral Storage_type = unsigned char>
-        requires(Size > 0)
-    class bitset
+    requires(Size > 0) class bitset
     {
       public:
 

@@ -19,9 +19,9 @@ spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexce
             m_frames.emplace(x + y * m_size.x, static_cast<pixel_type>(frame_size.x * x), static_cast<pixel_type>(frame_size.y * y), frame_size.x, frame_size.y);
 }
 
-const pixel_area& spritesheet::operator()(frame_t row, frame_t column) const noexcept
+const pixel_area& spritesheet::operator[](frame_pos pos) const noexcept
 {
-    const auto idx { row + column * m_size.x };
+    const auto idx { pos.x + pos.y * m_size.x };
 
     HAL_DEBUG_CHECK(idx < m_size.x * m_size.y, "Out-of-bounds spritesheet access");
 

@@ -27,8 +27,7 @@ namespace lyo
     }
 
     template <typename Type, auto Deleter = default_delete<Type>>
-        requires(requires(capsule_base_type<Type>* ptr) { static_cast<void>(Deleter(ptr)); })
-    class capsule
+    requires(requires(capsule_base_type<Type>* ptr) { static_cast<void>(Deleter(ptr)); }) class capsule
     {
       public:
 
@@ -144,8 +143,7 @@ namespace lyo
     };
 
     template <typename Type, auto Deleter = default_delete<Type>>
-        requires(requires(capsule_base_type<Type>* ptr) { static_cast<void>(Deleter(ptr)); })
-    class shareable
+    requires(requires(capsule_base_type<Type>* ptr) { static_cast<void>(Deleter(ptr)); }) class shareable
     {
       public:
 
