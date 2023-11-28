@@ -14,3 +14,12 @@ surface font::render(const std::string& text, color color) const noexcept
 {
     return ::TTF_RenderUTF8_Blended_Wrapped(m_object.get(), text.c_str(), color.to_sdl_color(), 0);
 }
+
+pixel_size font::size_text(const char* text) const noexcept
+{
+    point<int> size;
+
+    ::TTF_SizeText(this->ptr(), text, &size.x, &size.y);
+
+    return static_cast<pixel_size>(size);
+}

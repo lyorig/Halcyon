@@ -4,7 +4,9 @@
 
 #ifndef NDEBUG
 
-    #include <deque>
+    #include <algorithm>
+    #include <array>
+    #include <halcyon/types/render.hpp>
     #include <lyo/utility.hpp>
 
     #include "internal/config.hpp"
@@ -21,19 +23,27 @@ namespace hal
         template <typename... Args>
         static void log(severity type, Args... args) noexcept
         {
-            if (m_queue.size() == cfg::max_console_entries)
-                m_queue.pop_front();
+            if (m_entries == cfg::max_console_entries)
+            {
+                std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
+                m_queue.back() = { lyo::string_from_pack(args...), type };
+            }
 
-            m_queue.emplace_back(lyo::string_from_pack(args...), type);
+            else
+                m_queue[m_entries++] = { lyo::string_from_pack(args...), type };
         }
 
         static void draw(const font& fnt, const window& wnd) noexcept;
 
       private:
 
-        using queue_type = std::deque<std::pair<std::string, severity>>;
+        using value_pair = std::pair<std::string, severity>;
+        using queue_type = std::array<value_pair, cfg::max_console_entries>;
+        using count_type = std::remove_cv_t<decltype(cfg::max_console_entries)>;
 
         static queue_type m_queue;
+
+        static count_type m_entries;
     };
 }  // namespace hal
 

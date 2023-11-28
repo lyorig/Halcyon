@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 
     // game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
-    const hal::font cnf { game.ttf.load_font("assets/fonts/JetBrains Mono.ttf", 144) },
+    const hal::font cnf { game.ttf.load_font("assets/fonts/JetBrains Mono.ttf", 72) },
         txf { game.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
     const hal::texture tex { game.window, txf.render(argc == 1 ? "Made with Halcyon" : argv[1]) };
 
@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
         const std::string dt = std::to_string((0.01666666 / delta()) * 60.0);
 
         (dlt = txf.render(dt)).draw(hal::anchor::bottom_left);
-        HAL_DEBUG_PRINT(hal::severity::info, dt, " FPS");  // <-- 40FPS without, 300 with?!
+        // HAL_DEBUG_PRINT(hal::severity::info, dt, " FPS");  // <-- 40FPS without, 300 with?!
 
         delta.reset();
 

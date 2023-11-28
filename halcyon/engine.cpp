@@ -12,10 +12,6 @@ engine::engine() noexcept
     HAL_DEBUG_ASSERT(::SDL_Init(0) == 0, ::SDL_GetError());
 
     HAL_DEBUG_PRINT(severity::init, "Initialized SDL engine");
-
-#ifndef NDEBUG
-    std::ios_base::sync_with_stdio(false);
-#endif
 }
 
 engine::~engine() { this->deinitialize(); }

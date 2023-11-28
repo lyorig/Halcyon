@@ -10,23 +10,25 @@ using namespace hal;
 
 console::queue_type console::m_queue {};
 
+console::count_type console::m_entries { 0 };
+
 void console::draw(const font &fnt, const window &wnd) noexcept
 {
-    constexpr pixel_pos offset { 20, 10 };
-    constexpr lyo::f64  view_height_percentage { 3.5 };
+    constexpr coordinate offset { 20.0, 10.0 };
+    constexpr lyo::f64   view_height_percentage { 3.5 };
 
-    texture    tex { wnd };
-    pixel_type current_height { 0 };
+    texture tex { wnd };
 
-    for (const auto &entry : m_queue)
+    // Could be static, but you never know if someone has the bright idea
+    // of rendering the console with multiple fonts.
+    const lyo::f64 scale { (wnd.size().y * (view_height_percentage / 100.0)) / fnt.size_text("").y };
+
+    for (count_type i { 0 }; i < m_entries; ++i)
     {
-        tex = fnt.render(entry.first, static_cast<color::hex_type>(entry.second));
+        const value_pair &entry { m_queue[i] };
 
-        const pixel_size view { tex.vh(view_height_percentage) };
-
-        tex.draw({ offset.x, position_type(offset.y + current_height), position_type(view.x), position_type(view.y) });
-
-        current_height += view.y;
+        tex = fnt.render(entry.first, static_cast<color::hex_type>(entry.second)).resize(scale);
+        tex.draw({ offset.x, offset.y + tex.size().y * i });
     }
 }
 
