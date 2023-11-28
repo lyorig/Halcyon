@@ -8,34 +8,30 @@
 
 #include "sdl_object.hpp"
 
-namespace hal
-{
-    class mixer;
+namespace hal {
+class mixer;
 
-    class music : public sdl_object<Mix_Music, &::Mix_FreeMusic>
-    {
-      public:
+class music : public sdl_object<Mix_Music, &::Mix_FreeMusic> {
+public:
+    music(lyo::pass_key<mixer>) noexcept;
 
-        music(lyo::pass_key<mixer>) noexcept;
+    void play(const char* path, lyo::u16 loops = 0) noexcept;
+    void play(const char* path, infinite_loop_tag) noexcept;
 
-        void play(const char* path, lyo::u16 loops = 0) noexcept;
-        void play(const char* path, infinite_loop_tag) noexcept;
+    void pause() noexcept;
+    void resume() noexcept;
 
-        void pause() noexcept;
-        void resume() noexcept;
+    bool playing() const noexcept;
 
-        bool playing() const noexcept;
+    lyo::u8 volume() const noexcept;
+    lyo::f64 position() const noexcept;
 
-        lyo::u8  volume() const noexcept;
-        lyo::f64 position() const noexcept;
+    void set_volume(lyo::u8 volume) const noexcept;
+    void jump(double time) noexcept;
 
-        void set_volume(lyo::u8 volume) const noexcept;
-        void jump(double time) noexcept;
+private:
+    void internal_play(const char* path, int loops) noexcept;
 
-      private:
-
-        void internal_play(const char* path, int loops) noexcept;
-
-        lyo::precise_stopwatch m_timer;
-    };
-}  // namespace hal
+    lyo::precise_stopwatch m_timer;
+};
+} // namespace hal

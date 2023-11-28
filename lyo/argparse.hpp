@@ -7,74 +7,67 @@
 /* argparse.hpp:
    Argument-parsing functions. */
 
-namespace lyo
-{
-    class parser
+namespace lyo {
+class parser {
+public:
+    parser(const int& argc, const char* const* const& argv) noexcept
+        : m_argv { argv }
+        , m_argc { argc }
     {
-      public:
+    }
 
-        parser(const int& argc, const char* const* const& argv) noexcept :
-            m_argv { argv },
-            m_argc { argc }
-        {
+    bool has(const char* name) const noexcept
+    {
+        for (int i { 0 }; i < m_argc; ++i) {
+            if (std::strcmp(m_argv[i], name) == 0)
+                return true;
         }
 
-        bool has(const char* name) const noexcept
-        {
-            for (int i { 0 }; i < m_argc; ++i)
-            {
-                if (std::strcmp(m_argv[i], name) == 0)
-                    return true;
-            }
+        return false;
+    }
 
-            return false;
+    template <typename T>
+    std::optional<T> parse(const char* prefix) const noexcept
+    {
+        const char* tok { nullptr };
+
+        for (int i { 0 }; i < m_argc; ++i) {
+            if ((tok = strstr(m_argv[i], prefix)) != NULL)
+                break;
         }
 
-        template <typename T>
-        std::optional<T> parse(const char* prefix) const noexcept
-        {
-            const char* tok { nullptr };
+        if (!tok) // Nothing found, GTFO.
+            return std::nullopt;
 
-            for (int i { 0 }; i < m_argc; ++i)
-            {
-                if ((tok = strstr(m_argv[i], prefix)) != NULL)
-                    break;
-            }
+        T ret;
 
-            if (!tok)  // Nothing found, GTFO.
-                return std::nullopt;
+        std::istringstream s { tok + std::strlen(prefix) };
 
-            T ret;
+        return (s >> ret) ? ret : std::nullopt;
+    }
 
-            std::istringstream s { tok + std::strlen(prefix) };
+    template <typename T>
+    T parse(const char* prefix, T default_value) const noexcept
+    {
+        const char* tok { nullptr };
 
-            return (s >> ret) ? ret : std::nullopt;
+        for (int i { 0 }; i < m_argc; ++i) {
+            if ((tok = strstr(m_argv[i], prefix)) != NULL)
+                break;
         }
 
-        template <typename T>
-        T parse(const char* prefix, T default_value) const noexcept
-        {
-            const char* tok { nullptr };
+        if (!tok) // Nothing found, GTFO.
+            return default_value;
 
-            for (int i { 0 }; i < m_argc; ++i)
-            {
-                if ((tok = strstr(m_argv[i], prefix)) != NULL)
-                    break;
-            }
+        T ret;
 
-            if (!tok)  // Nothing found, GTFO.
-                return default_value;
+        std::istringstream s { tok + std::strlen(prefix) };
 
-            T ret;
+        return (s >> ret) ? ret : default_value;
+    }
 
-            std::istringstream s { tok + std::strlen(prefix) };
-
-            return (s >> ret) ? ret : default_value;
-        }
-
-      private:
-
-        const char* const* const& m_argv;  // "How many consts would you like?" "Yes."
-        const int&                m_argc;
-    };
+private:
+    const char* const* const& m_argv; // "How many consts would you like?" "Yes."
+    const int& m_argc;
+};
 }

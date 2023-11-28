@@ -4,9 +4,9 @@
 
 using namespace hal;
 
-spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexcept :
-    m_size { static_cast<frame_t>(tx.size().x / frame_size.x), static_cast<frame_t>(tx.size().y / frame_size.y) },
-    m_frames { static_cast<lyo::usize>(m_size.x * m_size.y) }
+spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexcept
+    : m_size { static_cast<frame_t>(tx.size().x / frame_size.x), static_cast<frame_t>(tx.size().y / frame_size.y) }
+    , m_frames { static_cast<lyo::usize>(m_size.x * m_size.y) }
 {
     HAL_DEBUG_CHECK(tx.size().x % frame_size.x == 0 && tx.size().y % frame_size.y == 0, "Uneven spritesheet");
 

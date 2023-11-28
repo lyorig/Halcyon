@@ -4,19 +4,18 @@
 
 using namespace hal;
 
-surface::surface(window& wnd, pixel_size sz) noexcept :
-    surface { sz }
+surface::surface(window& wnd, pixel_size sz) noexcept
+    : surface { sz }
 {
 }
 
 surface::surface(pixel_size sz) noexcept
-    :
-    surface { ::SDL_CreateRGBSurface(0, sz.x, sz.y, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF) }
+    : surface { ::SDL_CreateRGBSurface(0, sz.x, sz.y, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF) }
 {
 }
 
-surface::surface(SDL_Surface* surf) noexcept :
-    sdl_object { surf }
+surface::surface(SDL_Surface* surf) noexcept
+    : sdl_object { surf }
 {
 }
 
@@ -67,33 +66,31 @@ void surface::set_blend(SDL_BlendMode bm) const noexcept
 
 Uint32 surface::get_pixel(pixel_type x, pixel_type y) const noexcept
 {
-    const auto   bpp { ptr()->format->BytesPerPixel };
-    const Uint8* p { static_cast<Uint8*>(ptr()->pixels) + y * ptr()->pitch +
-                     x * bpp };
+    const auto bpp { ptr()->format->BytesPerPixel };
+    const Uint8* p { static_cast<Uint8*>(ptr()->pixels) + y * ptr()->pitch + x * bpp };
 
-    switch (bpp)
-    {
-        case 1:
-            return *p;
+    switch (bpp) {
+    case 1:
+        return *p;
 
-        case 2:
-            return *reinterpret_cast<const Uint16*>(p);
+    case 2:
+        return *reinterpret_cast<const Uint16*>(p);
 
-        case 3:
-            if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-                return p[0] << 16 | p[1] << 8 | p[2];
+    case 3:
+        if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            return p[0] << 16 | p[1] << 8 | p[2];
 
-            else
-                return p[0] | p[1] << 8 | p[2] << 16;
+        else
+            return p[0] | p[1] << 8 | p[2] << 16;
 
-        case 4:
-            return *reinterpret_cast<const Uint32*>(p);
+    case 4:
+        return *reinterpret_cast<const Uint32*>(p);
 
-        default:  // Intentionally panic.
-            HAL_DEBUG_CHECK(
-                false,
-                "Unknown bytes-per-pixel value while getting pixel from surface");
+    default: // Intentionally panic.
+        HAL_DEBUG_CHECK(
+            false,
+            "Unknown bytes-per-pixel value while getting pixel from surface");
 
-            return 0;
+        return 0;
     }
 }

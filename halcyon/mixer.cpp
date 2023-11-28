@@ -24,15 +24,14 @@ mixer::init::~init()
     ::Mix_Quit();
 }
 
-mixer::mixer(engine& eng) :
-    mixer { eng, 48000, 8, chunk_quality::medium }
+mixer::mixer(engine& eng)
+    : mixer { eng, 48000, 8, chunk_quality::medium }
 {
 }
 
 mixer::mixer(engine& engine, lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept
-    :
-    m_init { freq, channels, qual },
-    mus { {} }
+    : m_init { freq, channels, qual }
+    , mus { {} }
 
 {
 }

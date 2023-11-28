@@ -6,8 +6,7 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc == 1)
-    {
+    if (argc == 1) {
         HAL_DEBUG_PRINT(hal::severity::error, "Missing argument. Exiting.");
         return EXIT_FAILURE;
     }
@@ -16,21 +15,23 @@ int main(int argc, char* argv[])
 
     game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
-    const hal::font    txf { game.ttf.load_font("assets/fonts/m5x7.ttf", 72) };
-    const hal::texture tex { game.window, txf.render(argv[1]).resize(game.window.size().x * 0.5 / txf.size_text(argv[1]).x) };
+    const hal::font txf { game.ttf.load_font("assets/fonts/m5x7.ttf", 72) };
+    const hal::texture tex {
+        game.window, txf.render(argv[1]).resize(game.window.size().x * 0.5 / txf.size_text(argv[1]).x)
+    };
 
-    hal::texture       dlt { game.window };
-    hal::color         bg { hal::color::blue };
+    hal::texture dlt { game.window };
+    hal::color bg { hal::color::blue };
     lyo::precise_timer tmr, delta;
 
     game.window.renderer.set_fill(bg);
 
-    while (game.update() && !game.input().pressed(hal::button::esc))
-    {
+    while (game.update() && !game.input().pressed(hal::button::esc)) {
         const std::string dt = std::to_string((0.01666666 / delta()) * 60.0);
 
         (dlt = txf.render(dt)).draw(hal::anchor::bottom_left);
-        // HAL_DEBUG_PRINT(hal::severity::info, dt, " FPS");  // Why the fuck does this line double the FPS?
+        // HAL_DEBUG_PRINT(hal::severity::info, dt, " FPS");  // Why the fuck
+        // does this line double the FPS?
 
         delta.reset();
 

@@ -9,19 +9,16 @@
 
 #include "sdl_object.hpp"
 
-namespace hal
-{
-    class ttf_engine;
-    class surface;
+namespace hal {
+class ttf_engine;
+class surface;
 
-    class font : public sdl_object<TTF_Font, &::TTF_CloseFont>
-    {
-      public:
+class font : public sdl_object<TTF_Font, &::TTF_CloseFont> {
+public:
+    font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>) noexcept;
 
-        font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>) noexcept;
+    surface render(const std::string& text, color color = color::white) const noexcept;
 
-        surface render(const std::string& text, color color = color::white) const noexcept;
-
-        pixel_size size_text(const char* text) const noexcept;
-    };
-}  // namespace hal
+    pixel_size size_text(const char* text) const noexcept;
+};
+} // namespace hal

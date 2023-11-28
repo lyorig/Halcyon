@@ -4,8 +4,8 @@
 
 using namespace hal;
 
-font::font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>) noexcept :
-    sdl_object { ::TTF_OpenFont(path, size) }
+font::font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>) noexcept
+    : sdl_object { ::TTF_OpenFont(path, size) }
 {
     HAL_DEBUG_PRINT(severity::load, "Loaded font ", path, " with size ", static_cast<lyo::u32>(size));
 }

@@ -3,44 +3,36 @@
 #include "components/music.hpp"
 #include "internal/subsystem.hpp"
 
-namespace hal
-{
-    class engine;
-    class chunk;
+namespace hal {
+class engine;
+class chunk;
 
-    enum class chunk_quality : lyo::u16
-    {
-        low    = 1024,
-        medium = 2048,
-        high   = 4096
-    };
+enum class chunk_quality : lyo::u16 {
+    low = 1024,
+    medium = 2048,
+    high = 4096
+};
 
-    // A mixer, which can play music and load sound effects.
-    // Make sure it outlives these, as chunk destructors require
-    // the various mixer libraries to be initialized.
-    class mixer
-    {
-      public:
+// A mixer, which can play music and load sound effects.
+// Make sure it outlives these, as chunk destructors require
+// the various mixer libraries to be initialized.
+class mixer {
+public:
+    mixer(engine& eng);
+    mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
 
-        mixer(engine& eng);
-        mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
+    chunk load_sfx(const char* path) & noexcept;
 
-        chunk load_sfx(const char* path) & noexcept;
+private:
+    MAYBE_EMPTY subsystem<subsys::audio> m_subsys;
 
-      private:
+    MAYBE_EMPTY class init {
+    public:
+        init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
+        ~init();
+    } m_init;
 
-        MAYBE_EMPTY subsystem<subsys::audio> m_subsys;
-
-        MAYBE_EMPTY class init
-        {
-          public:
-
-            init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
-            ~init();
-        } m_init;
-
-      public:
-
-        music mus;
-    };
-}  // namespace hal
+public:
+    music mus;
+};
+} // namespace hal

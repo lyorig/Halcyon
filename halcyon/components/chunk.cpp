@@ -4,16 +4,15 @@
 
 using namespace hal;
 
-chunk::chunk(const char *path, lyo::pass_key<mixer>) noexcept
-    :
-    sdl_object { ::Mix_LoadWAV(path) }
+chunk::chunk(const char* path, lyo::pass_key<mixer>) noexcept
+    : sdl_object { ::Mix_LoadWAV(path) }
 {
     HAL_DEBUG_PRINT(severity::load, "Loaded SFX ", path);
 }
 
-void chunk::play(lyo::u16 loops) &noexcept { this->internal_play(loops); }
+void chunk::play(lyo::u16 loops) & noexcept { this->internal_play(loops); }
 
-void chunk::play(infinite_loop_tag) &noexcept { this->internal_play(-1); }
+void chunk::play(infinite_loop_tag) & noexcept { this->internal_play(-1); }
 
 void chunk::internal_play(int loops) noexcept
 {

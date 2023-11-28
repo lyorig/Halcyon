@@ -26,10 +26,10 @@ bool input_base::update() noexcept
 
 bool input_base::held(button btn) const noexcept
 {
-    if (lyo::to_underlying(btn) <= SDL_NUM_SCANCODES)  // Key.
+    if (lyo::to_underlying(btn) <= SDL_NUM_SCANCODES) // Key.
         return ::SDL_GetKeyboardState(nullptr)[static_cast<lyo::usize>(btn)];
 
-    else  // Mouse button.
+    else // Mouse button.
         return SDL_BUTTON(lyo::to_underlying(btn) - SDL_NUM_SCANCODES) & ::SDL_GetMouseState(nullptr, nullptr);
 }
 
@@ -67,38 +67,35 @@ bool input_handler::released(button btn) const noexcept
 
 bool input_handler::process(const SDL_Event& event) noexcept
 {
-    switch (event.type)
-    {
-        case SDL_KEYDOWN:
-            if (event.key.repeat == 0)
-            {
-                m_pressed.set(event.key.keysym.scancode);
-            }
+    switch (event.type) {
+    case SDL_KEYDOWN:
+        if (event.key.repeat == 0) {
+            m_pressed.set(event.key.keysym.scancode);
+        }
 
-            break;
+        break;
 
-        case SDL_KEYUP:
-            if (event.key.repeat == 0)
-            {
-                m_released.set(event.key.keysym.scancode);
-            }
+    case SDL_KEYUP:
+        if (event.key.repeat == 0) {
+            m_released.set(event.key.keysym.scancode);
+        }
 
-            break;
+        break;
 
-        case SDL_MOUSEBUTTONDOWN:
-            m_pressed.set(SDL_NUM_SCANCODES - 1 + event.button.button);
-            break;
+    case SDL_MOUSEBUTTONDOWN:
+        m_pressed.set(SDL_NUM_SCANCODES - 1 + event.button.button);
+        break;
 
-        case SDL_MOUSEBUTTONUP:
-            m_released.set(SDL_NUM_SCANCODES - 1 + event.button.button);
-            break;
+    case SDL_MOUSEBUTTONUP:
+        m_released.set(SDL_NUM_SCANCODES - 1 + event.button.button);
+        break;
 
-        case SDL_QUIT:
-            return false;
-            break;
+    case SDL_QUIT:
+        return false;
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     return true;

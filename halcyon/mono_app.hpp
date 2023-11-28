@@ -8,30 +8,27 @@
 #include "ttf_engine.hpp"
 #include "window.hpp"
 
-namespace hal
-{
+namespace hal {
 
-    // An example template for a single-window application.
-    class mono_app
-    {
-        MAYBE_EMPTY engine m_eng;
+// An example template for a single-window application.
+class mono_app {
+    MAYBE_EMPTY engine m_eng;
 
-        input_handler m_input;
+    input_handler m_input;
 
-      public:
+public:
+    class mixer mixer;
 
-        class mixer mixer;
+    class window window;
 
-        class window window;
+    MAYBE_EMPTY image_loader image;
+    MAYBE_EMPTY ttf_engine ttf;
 
-        MAYBE_EMPTY image_loader image;
-        MAYBE_EMPTY ttf_engine   ttf;
+    // TODO: Add more constructor options in a... humane way.
+    mono_app(const char* window_name) noexcept;
 
-        // TODO: Add more constructor options in a... humane way.
-        mono_app(const char* window_name) noexcept;
+    bool update() noexcept;
 
-        bool update() noexcept;
-
-        const input_handler& input() const noexcept;
-    };
-}  // namespace hal
+    const input_handler& input() const noexcept;
+};
+} // namespace hal

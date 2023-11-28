@@ -5,8 +5,7 @@
 using namespace hal;
 
 renderer::renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>) noexcept
-    :
-    sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, flags) }
+    : sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, flags) }
 {
     HAL_DEBUG_ASSERT(::SDL_SetRenderDrawBlendMode(m_object.get(), SDL_BLENDMODE_BLEND) == 0, ::SDL_GetError());
 }
