@@ -13,9 +13,9 @@ console::queue_type console::m_queue {};
 void console::draw(const font &fnt, const window &wnd) noexcept
 {
     constexpr pixel_pos offset { 20, 10 };
-    constexpr lyo::f64 view_height_percentage { 3.5 };
+    constexpr lyo::f64  view_height_percentage { 3.5 };
 
-    texture tex { wnd };
+    texture    tex { wnd };
     pixel_type current_height { 0 };
 
     for (const auto &entry : m_queue)

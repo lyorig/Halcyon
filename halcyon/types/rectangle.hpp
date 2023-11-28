@@ -68,9 +68,9 @@ namespace hal
         constexpr bool operator|(const rectangle& other) const noexcept
         {
             return pos.x + size.x >= other.pos.x &&
-            pos.x <= other.pos.x + other.size.x &&
-            pos.y <= other.pos.y + other.size.y &&
-            pos.y + size.y >= other.pos.y;
+                   pos.x <= other.pos.x + other.size.x &&
+                   pos.y <= other.pos.y + other.size.y &&
+                   pos.y + size.y >= other.pos.y;
         }
 
         constexpr operator SDL_Rect() const noexcept

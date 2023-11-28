@@ -3,7 +3,6 @@
 #include <SDL2/SDL_render.h>
 
 #include "components/surface.hpp"
-#include "draw.hpp"
 #include "internal/config.hpp"
 
 /* texture.cpp:
@@ -14,8 +13,6 @@
 
 namespace hal
 {
-    class window;
-
     enum class anchor : lyo::u8
     {
         none,
@@ -34,6 +31,8 @@ namespace hal
         both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
     };
 
+    class window;
+
     class texture : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
     {
       public:
@@ -43,7 +42,32 @@ namespace hal
 
         texture(const window& wnd, const surface& image) noexcept;
 
-        drawer draw() const noexcept;
+        // Regarding drawing operations, I really didn't want it to
+        // end like this, but having a million overloads really is
+        // faster than anything else I've tried. Please forgive me.
+
+        // Position (+ source).
+        void draw(const coordinate& pos, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
+            flip f = flip::none) const noexcept;
+        void draw(const coordinate& pos, const pixel_size& size,
+            lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
+        void draw(const coordinate& pos, const pixel_area& src,
+            lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
+            flip f = flip::none) const noexcept;
+
+        // Destination (+ source).
+        void draw(const world_area& dest, lyo::f64 angle = 0.0,
+            flip f = flip::none) const noexcept;
+        void draw(const world_area& dest, const pixel_area& src,
+            lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
+
+        // Anchor variants.
+        void draw(anchor anch, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
+            flip f = flip::none) const noexcept;
+        void draw(anchor anch, const pixel_size& size, lyo::f64 angle = 0.0,
+            flip f = flip::none) const noexcept;
+        void draw(const coordinate& pos, anchor anch, lyo::f64 angle = 0.0,
+            flip f = flip::none) const noexcept;
 
         const pixel_size& size() const noexcept;
         lyo::u8           opacity() const noexcept;
@@ -60,13 +84,13 @@ namespace hal
 
       private:
 
-        using dest_rect = std::conditional_t<cfg::subpixel_drawing_precision,
-            SDL_FRect, SDL_Rect>;
+        using dest_rect = std::conditional_t<cfg::subpixel_drawing_precision, SDL_FRect, SDL_Rect>;
 
-        void render_copy(const world_area& dst, lyo::f64 angle,
-            flip f) const noexcept;
-        void render_copy(const world_area& dst, const pixel_area& src,
-            lyo::f64 angle, flip f) const noexcept;
+        void render_copy(const world_area& dst, lyo::f64 angle, flip f) const noexcept;
+        void render_copy(const world_area& dst, const pixel_area& src, lyo::f64 angle, flip f) const noexcept;
+
+        constexpr coordinate resolve_anchor(anchor anch, const coordinate& pos, const pixel_size& size) const noexcept;
+        constexpr coordinate resolve_anchor(anchor anch, const world_area& dest, const pixel_size& size) const noexcept;
 
         pixel_size internal_size() const noexcept;
 
@@ -74,6 +98,6 @@ namespace hal
 
       public:
 
-        const window& window;
+        const class window& window;
     };
 }  // namespace hal

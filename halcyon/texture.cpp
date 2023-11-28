@@ -30,9 +30,69 @@ texture::texture(const class window& wnd, const surface& image) noexcept
 {
 }
 
-drawer texture::draw() const noexcept
+// Draw the entire texture to a position.
+void texture::draw(const coordinate& pos, lyo::f64 scale, lyo::f64 angle,
+    flip f) const noexcept
 {
-    return {{}, *this};
+    this->render_copy(pos.rect(static_cast<coordinate>(m_size) * scale), angle,
+        f);
+}
+
+void texture::draw(const coordinate& pos, const pixel_size& size,
+    lyo::f64 angle, flip f) const noexcept
+{
+    this->render_copy(pos.rect(static_cast<coordinate>(size)), angle, f);
+}
+
+// Draw a part of a texture to a position.
+void texture::draw(const coordinate& pos, const pixel_area& src, lyo::f64 scale,
+    lyo::f64 angle, flip f) const noexcept
+{
+    this->render_copy(pos.rect(static_cast<coordinate>(src.size) * scale), src,
+        angle, f);
+}
+
+// Draw the entire texture to a destination rectangle.
+void texture::draw(const world_area& dest, lyo::f64 angle,
+    flip f) const noexcept
+{
+    this->render_copy(dest, angle, f);
+}
+
+// Draw a part of a texture to a destination rectangle.
+void texture::draw(const world_area& dest, const pixel_area& src,
+    lyo::f64 angle, flip f) const noexcept
+{
+    this->render_copy(dest, src, angle, f);
+}
+
+// Draw the entire texture and anchor it to the current renderer output.
+void texture::draw(anchor anch, lyo::f64 scale, lyo::f64 angle,
+    flip f) const noexcept
+{
+    this->draw(this->resolve_anchor(anch,
+                   static_cast<world_area>(
+                       window.renderer.output_size().rect()),
+                   m_size * scale),
+        scale, angle, f);
+}
+
+// Draw the entire texture to a specific anchor point.
+void texture::draw(anchor anch, const pixel_size& size, lyo::f64 angle,
+    flip f) const noexcept
+{
+    this->draw(this->resolve_anchor(anch,
+                   static_cast<world_area>(
+                       window.renderer.output_size().rect()),
+                   size),
+        size, angle, f);
+}
+
+// Draw the entire texture to an anchored position.
+void texture::draw(const coordinate& pos, anchor anch, lyo::f64 angle,
+    flip f) const noexcept
+{
+    this->draw(this->resolve_anchor(anch, pos, m_size), m_size, angle, f);
 }
 
 void texture::set_opacity(lyo::u8 value) const noexcept
@@ -57,8 +117,7 @@ void texture::set_as_target() noexcept { window.renderer.set_target(*this); }
 
 pixel_size texture::vw(lyo::f64 percent) const noexcept
 {
-    const pixel_type width { static_cast<pixel_type>(
-        window.renderer.output_size().x * (percent / 100.0)) };
+    const pixel_type width { static_cast<pixel_type>(window.renderer.output_size().x * (percent / 100.0)) };
     const lyo::f64   scale { width / static_cast<lyo::f64>(m_size.x) };
 
     return { width, static_cast<pixel_type>(m_size.y * scale) };
@@ -87,10 +146,7 @@ texture& texture::operator=(const surface& image) noexcept
 void texture::render_copy(const world_area& dst, lyo::f64 angle,
     flip f) const noexcept
 {
-    HAL_DEBUG_CHECK(m_object, "Drawing null texture");
-
-    if (this->opacity() > 0 &&
-        dst | static_cast<coordinate>(window.size()).rect())
+    if (this->opacity() > 0 && dst | static_cast<coordinate>(window.size()).rect())
     {
         const dest_rect dst_rect = dst;
 
@@ -115,10 +171,7 @@ void texture::render_copy(const world_area& dst, lyo::f64 angle,
 void texture::render_copy(const world_area& dst, const pixel_area& src,
     lyo::f64 angle, flip f) const noexcept
 {
-    HAL_DEBUG_CHECK(m_object, "Drawing null texture");
-
-    if (this->opacity() > 0 &&
-        dst | static_cast<coordinate>(window.size()).rect())
+    if (this->opacity() > 0 && dst | static_cast<coordinate>(window.size()).rect())
     {
         const dest_rect dst_rect = dst;
         const SDL_Rect  src_rect = src;
@@ -141,8 +194,7 @@ void texture::render_copy(const world_area& dst, const pixel_area& src,
     }
 }
 
-constexpr coordinate
-texture::resolve_anchor(anchor anch, const coordinate& pos,
+constexpr coordinate texture::resolve_anchor(anchor anch, const coordinate& pos,
     const pixel_size& size) const noexcept
 {
     using p = position_type;
@@ -153,7 +205,6 @@ texture::resolve_anchor(anchor anch, const coordinate& pos,
             return { position_type(pos.x - size.x / p { 2 }),
                 position_type(pos.y - size.y / p { 2 }) };
 
-        case anchor::none:
         case anchor::top_left:
             return pos;
 
@@ -173,8 +224,7 @@ texture::resolve_anchor(anchor anch, const coordinate& pos,
     }
 }
 
-constexpr coordinate
-texture::resolve_anchor(anchor anch, const world_area& dest,
+constexpr coordinate texture::resolve_anchor(anchor anch, const world_area& dest,
     const pixel_size& size) const noexcept
 {
     using p = position_type;
@@ -185,7 +235,6 @@ texture::resolve_anchor(anchor anch, const world_area& dest,
             return { position_type(dest.pos.x + dest.size.x / p { 2 } - size.x / p { 2 }),
                 position_type(dest.pos.y + dest.size.y / p { 2 } - size.y / p { 2 }) };
 
-        case anchor::none:
         case anchor::top_left:
             return dest.pos;
 
