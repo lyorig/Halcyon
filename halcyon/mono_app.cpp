@@ -13,8 +13,7 @@ mono_app::mono_app(const char *window_name) noexcept :
     window { m_eng,
         window_name,
         fullscreen_mode,
-        { renderer::accelerated,
-            renderer::vsync } },
+        { renderer::accelerated } },
     image { m_eng, { image_loader::jpg, image_loader::png } },
     ttf { m_eng }
 {

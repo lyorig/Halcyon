@@ -17,6 +17,7 @@
 namespace hal
 {
     class image_loader;
+    class window;
     class font;
 
     class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface>
@@ -52,7 +53,7 @@ namespace hal
         // Special c-tor for resizing
         surface(pixel_size sz) noexcept;
 
-        void set_blend(SDL_BlendMode bm) noexcept;
+        void set_blend(SDL_BlendMode bm) const noexcept;
 
         Uint32 get_pixel(pixel_type x, pixel_type y) const noexcept;
     };

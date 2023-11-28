@@ -3,6 +3,8 @@
 #include <lyo/cast.hpp>
 #include <lyo/concepts.hpp>
 
+#include <SDL2/SDL_rect.h>
+
 #include "tags.hpp"
 
 namespace hal
@@ -63,6 +65,26 @@ namespace hal
         {
             return point<Convert> { lyo::round_cast<Convert>(x),
                 lyo::round_cast<Convert>(y) };
+        }
+
+        constexpr operator SDL_Point() const noexcept
+        {
+            using t = decltype(SDL_Point::x);
+
+            return SDL_Point {
+                lyo::round_cast<t>(x),
+                lyo::round_cast<t>(y)
+            };
+        }
+
+        constexpr operator SDL_FPoint() const noexcept
+        {
+            using t = decltype(SDL_FPoint::x);
+
+            return SDL_FPoint {
+                lyo::round_cast<t>(x),
+                lyo::round_cast<t>(y)
+            };
         }
     };
 }  // namespace hal

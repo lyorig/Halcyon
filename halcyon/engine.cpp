@@ -11,7 +11,7 @@ engine::engine() noexcept
 {
     HAL_DEBUG_ASSERT(::SDL_Init(0) == 0, ::SDL_GetError());
 
-    HAL_DEBUG_PRINT(severity::init, "Initialized engine");
+    HAL_DEBUG_PRINT(severity::init, "Initialized SDL engine");
 }
 
 engine::~engine() { this->deinitialize(); }

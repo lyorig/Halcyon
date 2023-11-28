@@ -18,16 +18,19 @@ surface::surface(pixel_size sz) noexcept
 surface::surface(SDL_Surface* surf) noexcept :
     sdl_object { surf }
 {
-    this->set_blend(SDL_BLENDMODE_BLEND);
 }
 
 surface surface::resize(pixel_size sz) const noexcept
 {
     surface ret { sz };
 
+    this->set_blend(SDL_BLENDMODE_NONE);
+
     HAL_DEBUG_ASSERT(
         ::SDL_BlitScaled(this->ptr(), nullptr, ret.ptr(), nullptr) == 0,
         ::SDL_GetError());
+
+    this->set_blend(SDL_BLENDMODE_BLEND);
 
     return ret;
 }
@@ -57,7 +60,7 @@ color surface::operator[](pixel_pos coord) const noexcept
     return ret;
 }
 
-void surface::set_blend(SDL_BlendMode bm) noexcept
+void surface::set_blend(SDL_BlendMode bm) const noexcept
 {
     HAL_DEBUG_ASSERT(::SDL_SetSurfaceBlendMode(this->ptr(), bm) == 0, ::SDL_GetError());
 }

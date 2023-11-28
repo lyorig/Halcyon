@@ -3,6 +3,7 @@
 #include <SDL2/SDL_render.h>
 
 #include "components/surface.hpp"
+#include "draw.hpp"
 #include "internal/config.hpp"
 
 /* texture.cpp:
@@ -17,6 +18,7 @@ namespace hal
 
     enum class anchor : lyo::u8
     {
+        none,
         center,
         top_left,
         top_right,
@@ -41,33 +43,12 @@ namespace hal
 
         texture(const window& wnd, const surface& image) noexcept;
 
+        drawer draw() const noexcept;
+
         const pixel_size& size() const noexcept;
         lyo::u8           opacity() const noexcept;
 
         void set_opacity(lyo::u8 value) const noexcept;
-
-        // Position (+ source).
-        void draw(const coordinate& pos, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
-            flip f = flip::none) const noexcept;
-        void draw(const coordinate& pos, const pixel_size& size,
-            lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
-        void draw(const coordinate& pos, const pixel_area& src,
-            lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
-            flip f = flip::none) const noexcept;
-
-        // Destination (+ source).
-        void draw(const world_area& dest, lyo::f64 angle = 0.0,
-            flip f = flip::none) const noexcept;
-        void draw(const world_area& dest, const pixel_area& src,
-            lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
-
-        // Anchor variants.
-        void draw(anchor anch, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
-            flip f = flip::none) const noexcept;
-        void draw(anchor anch, const pixel_size& size, lyo::f64 angle = 0.0,
-            flip f = flip::none) const noexcept;
-        void draw(const coordinate& pos, anchor anch, lyo::f64 angle = 0.0,
-            flip f = flip::none) const noexcept;
 
         void set_as_target() noexcept;
 
@@ -87,15 +68,12 @@ namespace hal
         void render_copy(const world_area& dst, const pixel_area& src,
             lyo::f64 angle, flip f) const noexcept;
 
-        constexpr coordinate resolve_anchor(anchor anch, const coordinate& pos,
-            const pixel_size& size) const noexcept;
-        constexpr coordinate resolve_anchor(anchor anch, const world_area& dest,
-            const pixel_size& size) const noexcept;
-
         pixel_size internal_size() const noexcept;
 
         pixel_size m_size;
 
-        const window& m_window;
+      public:
+
+        const window& window;
     };
 }  // namespace hal
