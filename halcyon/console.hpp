@@ -30,8 +30,8 @@ public:
             m_queue[m_entries++] = { lyo::string_from_pack(args...), type };
     }
 
-    // Draw the console to the top left corner of the screen. I wholly
-    // recommend
+    // Draw the console to the top left corner of the screen. Using
+    // the smallest possible font size for performance is recommended.
     static void draw(const font& fnt, const window& wnd) noexcept;
 
 private:
