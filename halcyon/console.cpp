@@ -28,10 +28,9 @@ void console::draw(const font& fnt, const window& wnd) noexcept
         const value_pair& entry { m_queue[i] };
 
         tex = fnt.render(entry.first, static_cast<color::hex_type>(entry.second)).resize(scale);
-        tex.draw({ offset.x, offset.y + tex.size().y * i });
-    }
 
-    hal::texture::drawer({ wnd, canvas }).to(offset)();
+        hal::texture::drawer(tex).to({ offset.x, offset.y + tex.size().y * i })();
+    }
 }
 
 #endif
