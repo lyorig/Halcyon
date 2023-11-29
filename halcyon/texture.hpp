@@ -5,6 +5,8 @@
 #include "components/surface.hpp"
 #include "internal/config.hpp"
 
+#include <optional>
+
 /* texture.cpp:
    A proper texture that can be drawn to a window.
    As SDL disallows texture sharing between different renderers,
@@ -34,35 +36,7 @@ class texture : public sdl_object<SDL_Texture, &::SDL_DestroyTexture> {
 public:
     texture(const window& wnd) noexcept;
     texture(const window& wnd, const pixel_size& size) noexcept;
-
     texture(const window& wnd, const surface& image) noexcept;
-
-    // Regarding drawing operations, I really didn't want it to
-    // end like this, but having a million overloads really is
-    // faster than anything else I've tried. Please forgive me.
-
-    // Position (+ source).
-    void draw(const coordinate& pos, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
-        flip f = flip::none) const noexcept;
-    void draw(const coordinate& pos, const pixel_size& size,
-        lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
-    void draw(const coordinate& pos, const pixel_area& src,
-        lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
-        flip f = flip::none) const noexcept;
-
-    // Destination (+ source).
-    void draw(const world_area& dest, lyo::f64 angle = 0.0,
-        flip f = flip::none) const noexcept;
-    void draw(const world_area& dest, const pixel_area& src,
-        lyo::f64 angle = 0.0, flip f = flip::none) const noexcept;
-
-    // Anchor variants.
-    void draw(anchor anch, lyo::f64 scale = 1.0, lyo::f64 angle = 0.0,
-        flip f = flip::none) const noexcept;
-    void draw(anchor anch, const pixel_size& size, lyo::f64 angle = 0.0,
-        flip f = flip::none) const noexcept;
-    void draw(const coordinate& pos, anchor anch, lyo::f64 angle = 0.0,
-        flip f = flip::none) const noexcept;
 
     const pixel_size& size() const noexcept;
     lyo::u8 opacity() const noexcept;
@@ -77,16 +51,35 @@ public:
 
     texture& operator=(const surface& image) noexcept;
 
+    class drawer {
+    public:
+        drawer(const hal::texture& src) noexcept;
+
+        drawer& to(const coordinate& pos) noexcept;
+        drawer& to(const world_area& area) noexcept;
+
+        drawer& from(const pixel_area& src) noexcept;
+
+        drawer& scale(lyo::f64 mul) noexcept;
+
+        drawer& rotate(lyo::f64 angle) noexcept;
+
+        void operator()() const noexcept;
+
+    private:
+        std::optional<SDL_Rect> m_src;
+
+        hal::world_area m_dst;
+
+        lyo::f64 m_scale { 1.0 };
+        lyo::f64 m_angle { 0.0 };
+
+        const texture& m_this;
+    };
+
 private:
-    using dest_rect = std::conditional_t<cfg::subpixel_drawing_precision, SDL_FRect, SDL_Rect>;
-
-    void render_copy(const world_area& dst, lyo::f64 angle, flip f) const noexcept;
-    void render_copy(const world_area& dst, const pixel_area& src, lyo::f64 angle, flip f) const noexcept;
-
-    constexpr coordinate resolve_anchor(anchor anch, const coordinate& pos, const pixel_size& size) const noexcept;
-    constexpr coordinate resolve_anchor(anchor anch, const world_area& dest, const pixel_size& size) const noexcept;
-
-    pixel_size internal_size() const noexcept;
+    pixel_size
+    internal_size() const noexcept;
 
     pixel_size m_size;
 

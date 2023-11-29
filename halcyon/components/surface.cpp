@@ -94,3 +94,16 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const noexcept
         return 0;
     }
 }
+
+// Drawer code.
+using d = surface::drawer;
+
+// TODO
+d::drawer(const surface& src) noexcept
+    : m_this { src }
+{
+}
+
+void d::operator()(const surface& dst) const noexcept
+{
+}

@@ -30,6 +30,8 @@ void console::draw(const font& fnt, const window& wnd) noexcept
         tex = fnt.render(entry.first, static_cast<color::hex_type>(entry.second)).resize(scale);
         tex.draw({ offset.x, offset.y + tex.size().y * i });
     }
+
+    hal::texture::drawer({ wnd, canvas }).to(offset)();
 }
 
 #endif

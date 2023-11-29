@@ -25,3 +25,4 @@ using opacity_type = lyo::f32;
 
 // Paranoia.
 static_assert(std::is_signed_v<hal::pixel_type>, "Pixel type must be signed");
+static_assert(std::is_floating_point_v<hal::position_type>, "Position type must be floating point");

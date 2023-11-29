@@ -41,6 +41,16 @@ public:
     // are extremely slow to retrieve pixel information.
     color operator[](pixel_pos coord) const noexcept;
 
+    class drawer {
+    public:
+        drawer(const surface& src) noexcept;
+
+        void operator()(const surface& dst) const noexcept;
+
+    private:
+        const surface& m_this;
+    };
+
 private:
     friend class image_loader;
     friend class font;
