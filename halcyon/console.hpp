@@ -14,6 +14,7 @@
 namespace hal {
 class font;
 class window;
+
 class console {
 public:
     // Log a variadic amount of arguments.
@@ -29,6 +30,8 @@ public:
             m_queue[m_entries++] = { lyo::string_from_pack(args...), type };
     }
 
+    // Draw the console to the top left corner of the screen. I wholly
+    // recommend
     static void draw(const font& fnt, const window& wnd) noexcept;
 
 private:

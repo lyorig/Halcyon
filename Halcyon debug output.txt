@@ -1,0 +1,9 @@
+[0.000s]	[init]		Initialized SDL engine
+[0.000s]	[init]		Initialized input handler
+[0.100s]	[init]		Initialized mixer with 48000 Hz, 8 channels and 2048 quality
+[1.370s]	[init]		Initialized window 'Interloper 1.1' (1920x1201)
+[1.370s]	[init]		Initialized image loader with flags 3
+[1.370s]	[init]		Initialized TTF engine
+[1.371s]	[load]		Loaded music assets/ost/The Way Home.mp3
+[1.371s]	[load]		Loaded font assets/fonts/m5x7.ttf with size 72
+[4.345s]	[info]		Exiting. Last SDL error: none

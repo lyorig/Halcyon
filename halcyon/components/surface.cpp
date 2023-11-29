@@ -4,7 +4,7 @@
 
 using namespace hal;
 
-surface::surface(window& wnd, pixel_size sz) noexcept
+surface::surface(const window& wnd, pixel_size sz) noexcept
     : surface { sz }
 {
 }

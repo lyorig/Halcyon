@@ -22,7 +22,7 @@ class font;
 class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface> {
 public:
     // Create a sized surface.
-    surface(window& wnd, pixel_size sz) noexcept;
+    surface(const window& wnd, pixel_size sz) noexcept;
 
     // Get a resized copy of the surface. Useful for saving
     // memory after converting to a texture.
@@ -31,6 +31,8 @@ public:
     // Get a scaled copy of the surface. Useful for saving
     // memory after converting to a texture.
     surface resize(lyo::f64 scale) const noexcept;
+
+    void set_blend(SDL_BlendMode bm) const noexcept;
 
     pixel_size size() const noexcept;
 
@@ -48,8 +50,6 @@ private:
 
     // Special c-tor for resizing
     surface(pixel_size sz) noexcept;
-
-    void set_blend(SDL_BlendMode bm) const noexcept;
 
     Uint32 get_pixel(pixel_type x, pixel_type y) const noexcept;
 };
