@@ -13,21 +13,21 @@ class input_base {
 public:
     using key_storage = lyo::bitset<SDL_NUM_SCANCODES + 5, lyo::u64>;
 
-    explicit input_base(engine& eng) noexcept;
+    explicit input_base(engine& eng);
 
     // Automatic polling. If you want finer control (or use
     // functions not yet implemented), use the poll() function.
-    virtual bool update() noexcept;
+    virtual bool update();
 
     // This function doesn't require any storage, so it's
     // included as part of the base.
-    bool held(hal::button btn) const noexcept;
+    bool held(hal::button btn) const;
 
-    pixel_pos mouse() const noexcept;
+    pixel_pos mouse() const;
 
 protected:
-    bool poll(SDL_Event& event) const noexcept;
-    virtual bool process(const SDL_Event& event) noexcept = 0;
+    bool poll(SDL_Event& event) const;
+    virtual bool process(const SDL_Event& event) = 0;
 };
 
 // A basic enough input handler. Suitable for a single-window
@@ -36,15 +36,15 @@ class input_handler : public input_base {
 public:
     using input_base::input_base;
 
-    bool update() noexcept;
+    bool update();
 
-    bool pressed(hal::button btn) const noexcept;
+    bool pressed(hal::button btn) const;
 
-    bool released(hal::button btn) const noexcept;
+    bool released(hal::button btn) const;
 
 protected:
     key_storage m_pressed, m_released;
 
-    virtual bool process(const SDL_Event& event) noexcept;
+    virtual bool process(const SDL_Event& event);
 };
 } // namespace hal

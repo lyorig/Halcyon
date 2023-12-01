@@ -4,7 +4,7 @@
 
 using namespace hal;
 
-window::window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags) noexcept
+window::window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags)
     : sdl_object { ::SDL_CreateWindow(title, pos.x, pos.y, size.x, size.y, il2bm<Uint32>(w_flags)) }
     , renderer { *this, il2bm<lyo::u32>(r_flags), {} }
 {
@@ -12,28 +12,28 @@ window::window(engine& engine, const char* title, const pixel_size& pos, const p
 }
 
 window::window(engine& engine, const char* title, fullscreen_mode_tag,
-    il<renderer::flags> r_flags) noexcept
+    il<renderer::flags> r_flags)
     : window { engine, title, {}, {}, { fullscreen }, r_flags }
 {
 }
 
-void window::present() const noexcept
+void window::present() const
 {
     renderer.present({});
     renderer.clear({});
 }
 
-void window::set_as_target() const noexcept
+void window::set_as_target() const
 {
     renderer.reset_target();
 }
 
-pixel_size window::size() const noexcept
+pixel_size window::size() const
 {
     return renderer.output_size();
 }
 
-window::id_type window::id() const noexcept
+window::id_type window::id() const
 {
     const id_type id { ::SDL_GetWindowID(m_object.get()) };
 
@@ -42,7 +42,7 @@ window::id_type window::id() const noexcept
     return id;
 }
 
-pixel_size window::internal_size() const noexcept
+pixel_size window::internal_size() const
 {
     point<int> sz;
 

@@ -20,7 +20,7 @@ enum class subsys : lyo::u16 {
 template <subsys System>
 class subsystem {
 public:
-    subsystem() noexcept
+    subsystem()
     {
         ::SDL_InitSubSystem(static_cast<Uint32>(System));
     }

@@ -14,7 +14,7 @@ std::ofstream debug::m_output { "Halcyon debug output.txt" };
 const lyo::precise_timer debug::m_timer {};
 
 void debug::panic(const char* why, const char* where,
-    const char* message) noexcept
+    const char* message)
 {
     debug::print(severity::error, __func__, ": ", why, " in ", where, ": ",
         message);
@@ -52,7 +52,7 @@ void debug::panic(const char* why, const char* where,
 }
 
 void debug::verify(bool condition, const char* cond_string, const char* func,
-    const char* extra_info) noexcept
+    const char* extra_info)
 {
     if (!condition)
         debug::panic(cond_string, func, extra_info);

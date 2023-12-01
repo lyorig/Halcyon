@@ -4,7 +4,7 @@
 
 using namespace hal;
 
-spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexcept
+spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size)
     : m_size { static_cast<frame_t>(tx.size().x / frame_size.x), static_cast<frame_t>(tx.size().y / frame_size.y) }
     , m_frames { static_cast<lyo::usize>(m_size.x * m_size.y) }
 {
@@ -19,7 +19,7 @@ spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size) noexce
             m_frames.emplace(x + y * m_size.x, static_cast<pixel_type>(frame_size.x * x), static_cast<pixel_type>(frame_size.y * y), frame_size.x, frame_size.y);
 }
 
-const pixel_area& spritesheet::operator[](frame_pos pos) const noexcept
+const pixel_area& spritesheet::operator[](frame_pos pos) const
 {
     const auto idx { pos.x + pos.y * m_size.x };
 
@@ -28,12 +28,12 @@ const pixel_area& spritesheet::operator[](frame_pos pos) const noexcept
     return m_frames[idx];
 }
 
-frame_size spritesheet::size() const noexcept
+frame_size spritesheet::size() const
 {
     return m_size;
 }
 
-const lyo::buffer<pixel_area>& spritesheet::frames() const noexcept
+const lyo::buffer<pixel_area>& spritesheet::frames() const
 {
     return m_frames;
 }

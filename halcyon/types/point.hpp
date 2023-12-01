@@ -15,22 +15,22 @@ template <lyo::arithmetic T>
 struct point {
     T x {}, y {};
 
-    constexpr point<T> operator+(const point& pt) const noexcept
+    constexpr point<T> operator+(const point& pt) const
     {
         return point<T> { x + pt.x, y + pt.y };
     }
 
-    constexpr point operator*(lyo::f64 mul) const noexcept
+    constexpr point operator*(lyo::f64 mul) const
     {
         return point { lyo::round_cast<T>(x * mul), lyo::round_cast<T>(y * mul) };
     }
 
-    constexpr point operator/(lyo::f64 div) const noexcept
+    constexpr point operator/(lyo::f64 div) const
     {
         return point { lyo::round_cast<T>(x / div), lyo::round_cast<T>(y / div) };
     }
 
-    constexpr point& operator*=(lyo::f64 mul) const noexcept
+    constexpr point& operator*=(lyo::f64 mul) const
     {
         x *= mul;
         y *= mul;
@@ -38,7 +38,7 @@ struct point {
         return *this;
     }
 
-    constexpr point& operator/=(lyo::f64 div) const noexcept
+    constexpr point& operator/=(lyo::f64 div) const
     {
         x /= div;
         y /= div;
@@ -47,25 +47,25 @@ struct point {
     }
 
     // Create a new rectangle with this point acting as the size.
-    constexpr rectangle<T> rect() const noexcept
+    constexpr rectangle<T> rect() const
     {
         return rectangle<T> { as_size, *this };
     }
 
     // Join two points into a rectangle.
-    constexpr rectangle<T> rect(const point<T>& pt) const noexcept
+    constexpr rectangle<T> rect(const point<T>& pt) const
     {
         return rectangle<T> { *this, pt };
     }
 
     template <lyo::arithmetic Convert>
-    constexpr explicit operator point<Convert>() const noexcept
+    constexpr explicit operator point<Convert>() const
     {
         return point<Convert> { lyo::round_cast<Convert>(x),
             lyo::round_cast<Convert>(y) };
     }
 
-    constexpr operator SDL_Point() const noexcept
+    constexpr operator SDL_Point() const
     {
         using t = decltype(SDL_Point::x);
 
@@ -75,7 +75,7 @@ struct point {
         };
     }
 
-    constexpr operator SDL_FPoint() const noexcept
+    constexpr operator SDL_FPoint() const
     {
         using t = decltype(SDL_FPoint::x);
 

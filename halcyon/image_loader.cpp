@@ -5,7 +5,7 @@
 
 using namespace hal;
 
-image_loader::image_loader(engine& eng, il<image_type> types) noexcept
+image_loader::image_loader(engine& eng, il<image_type> types)
 {
     HAL_DEBUG_ASSERT(::IMG_Init(il2bm<int>(types)) == il2bm<int>(types),
         ::IMG_GetError());
@@ -16,7 +16,7 @@ image_loader::image_loader(engine& eng, il<image_type> types) noexcept
 
 image_loader::~image_loader() { ::IMG_Quit(); }
 
-surface image_loader::load(const char* path) const noexcept
+surface image_loader::load(const char* path) const
 {
     HAL_DEBUG_PRINT(severity::info, "Loading image ", path);
 

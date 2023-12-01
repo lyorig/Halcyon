@@ -28,18 +28,18 @@ public:
 
     hal::renderer renderer;
 
-    window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags) noexcept;
-    window(engine& engine, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags) noexcept;
+    window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
+    window(engine& engine, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
 
-    void present() const noexcept;
+    void present() const;
 
-    void set_as_target() const noexcept;
+    void set_as_target() const;
 
-    [[nodiscard]] pixel_size size() const noexcept;
+    [[nodiscard]] pixel_size size() const;
 
-    [[nodiscard]] id_type id() const noexcept;
+    [[nodiscard]] id_type id() const;
 
 private:
-    pixel_size internal_size() const noexcept;
+    pixel_size internal_size() const;
 };
 } // namespace hal

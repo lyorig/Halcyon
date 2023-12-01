@@ -8,12 +8,12 @@
 namespace hal {
 class engine {
 public:
-    engine() noexcept;
+    engine();
     ~engine();
 
-    void exit() & noexcept;
+    void exit() &;
 
 private:
-    void deinitialize() const noexcept;
+    void deinitialize() const;
 };
 } // namespace halcyon

@@ -20,9 +20,9 @@ public:
         webp = IMG_INIT_WEBP
     };
 
-    image_loader(engine& eng, il<image_type> types) noexcept;
+    image_loader(engine& eng, il<image_type> types);
     ~image_loader();
 
-    surface load(const char* file) const noexcept;
+    surface load(const char* file) const;
 };
 } // namespace hal

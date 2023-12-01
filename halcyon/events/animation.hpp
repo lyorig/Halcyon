@@ -10,23 +10,23 @@ template <typename Animated, typename Functor> // Add a "requires" clause later?
 class animation // CTAD enabled.
 {
 public:
-    constexpr animation(Animated& object, Functor animator) noexcept
+    constexpr animation(Animated& object, Functor animator)
         : m_animated { object }
         , m_animator { animator }
     {
     }
 
-    constexpr void update() noexcept
+    constexpr void update()
     {
         m_animator(m_animated, m_timer());
     }
 
-    constexpr void set_animation(Functor animator) noexcept
+    constexpr void set_animation(Functor animator)
     {
         m_animator = animator;
     }
 
-    constexpr void reset() noexcept
+    constexpr void reset()
     {
         m_timer.reset();
     }

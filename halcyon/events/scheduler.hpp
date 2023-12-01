@@ -11,7 +11,7 @@ namespace hal {
 template <typename T>
 class scheduler {
     struct callback_info {
-        callback_info(callback<T&> func, double interval) noexcept
+        callback_info(callback<T&> func, double interval)
             : function { func }
             , interval { interval }
         {
@@ -24,17 +24,17 @@ class scheduler {
     };
 
 public:
-    scheduler(T& object) noexcept
+    scheduler(T& object)
         : m_object { object }
     {
     }
 
-    void add(callback<T&> func, double interval) noexcept
+    void add(callback<T&> func, double interval)
     {
         m_callbacks.emplace_back(func, interval);
     }
 
-    void update() noexcept
+    void update()
     {
         for (auto& cbk : m_callbacks) {
             if (cbk.timer() >= cbk.interval) {

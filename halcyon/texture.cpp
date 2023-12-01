@@ -5,13 +5,13 @@
 
 using namespace hal;
 
-texture::texture(const class window& wnd) noexcept
+texture::texture(const class window& wnd)
     : m_size { 0, 0 }
     , window { wnd }
 {
 }
 
-texture::texture(const class window& wnd, const pixel_size& size) noexcept
+texture::texture(const class window& wnd, const pixel_size& size)
     : sdl_object { ::SDL_CreateTexture(wnd.renderer.ptr(),
         ::SDL_GetWindowPixelFormat(wnd.ptr()),
         SDL_TEXTUREACCESS_TARGET, size.x, size.y) }
@@ -20,7 +20,7 @@ texture::texture(const class window& wnd, const pixel_size& size) noexcept
 {
 }
 
-texture::texture(const class window& wnd, const surface& image) noexcept
+texture::texture(const class window& wnd, const surface& image)
     : sdl_object { ::SDL_CreateTextureFromSurface(wnd.renderer.ptr(),
         image.ptr()) }
     , m_size { image.size() }
@@ -28,9 +28,9 @@ texture::texture(const class window& wnd, const surface& image) noexcept
 {
 }
 
-const pixel_size& texture::size() const noexcept { return m_size; }
+const pixel_size& texture::size() const { return m_size; }
 
-lyo::u8 texture::opacity() const noexcept
+lyo::u8 texture::opacity() const
 {
     Uint8 alpha;
 
@@ -40,9 +40,9 @@ lyo::u8 texture::opacity() const noexcept
     return static_cast<lyo::u8>(alpha);
 }
 
-void texture::set_as_target() noexcept { window.renderer.set_target(*this); }
+void texture::set_as_target() { window.renderer.set_target(*this); }
 
-pixel_size texture::vw(lyo::f64 percent) const noexcept
+pixel_size texture::vw(lyo::f64 percent) const
 {
     const pixel_type width { static_cast<pixel_type>(window.renderer.output_size().x * (percent / 100.0)) };
     const lyo::f64 scale { width / static_cast<lyo::f64>(m_size.x) };
@@ -50,7 +50,7 @@ pixel_size texture::vw(lyo::f64 percent) const noexcept
     return { width, static_cast<pixel_type>(m_size.y * scale) };
 }
 
-pixel_size texture::vh(lyo::f64 percent) const noexcept
+pixel_size texture::vh(lyo::f64 percent) const
 {
     const pixel_type height {
         static_cast<pixel_type>(window.size().y * (percent / 100.0))
@@ -60,7 +60,7 @@ pixel_size texture::vh(lyo::f64 percent) const noexcept
     return { static_cast<pixel_type>(m_size.x * scale), height };
 }
 
-texture& texture::operator=(const surface& image) noexcept
+texture& texture::operator=(const surface& image)
 {
     this->reassign(
         ::SDL_CreateTextureFromSurface(window.renderer.ptr(), image.ptr()));
@@ -70,7 +70,7 @@ texture& texture::operator=(const surface& image) noexcept
     return *this;
 }
 
-pixel_size texture::internal_size() const noexcept
+pixel_size texture::internal_size() const
 {
     int w, h;
 
@@ -82,42 +82,42 @@ pixel_size texture::internal_size() const noexcept
 // Drawer code.
 using d = texture::drawer;
 
-d::drawer(const texture& src) noexcept
+d::drawer(const texture& src)
     : m_dst { as_size, static_cast<coordinate>(src.size()) }
     , m_this { src }
 {
 }
 
-d& d::to(const coordinate& pos) noexcept
+d& d::to(const coordinate& pos)
 {
     m_dst.pos = pos;
     return *this;
 }
 
-d& d::to(const world_area& area) noexcept
+d& d::to(const world_area& area)
 {
     m_dst = area;
     return *this;
 }
 
-d& d::from(const pixel_area& src) noexcept
+d& d::from(const pixel_area& src)
 {
     m_src = src;
     return *this;
 }
 
-d& d::scale(lyo::f64 mul) noexcept
+d& d::scale(lyo::f64 mul)
 {
     m_scale = mul;
     return *this;
 }
 
-d& d::rotate(lyo::f64 angle) noexcept
+d& d::rotate(lyo::f64 angle)
 {
     m_angle = angle;
     return *this;
 }
 
-void d::operator()() const noexcept
+void d::operator()() const
 {
 }

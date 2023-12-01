@@ -23,12 +23,12 @@ struct color : public SDL_Color {
         white = 0xFFFFFF
     };
 
-    constexpr color() noexcept
+    constexpr color()
         : color { black }
     {
     }
 
-    constexpr color(hex_type rgb, value_type alpha = SDL_ALPHA_OPAQUE) noexcept
+    constexpr color(hex_type rgb, value_type alpha = SDL_ALPHA_OPAQUE)
         : SDL_Color { static_cast<value_type>((rgb >> 16) & 0xFF),
             static_cast<value_type>((rgb >> 8) & 0xFF),
             static_cast<value_type>(rgb & 0xFF),
@@ -37,12 +37,12 @@ struct color : public SDL_Color {
     }
 
     constexpr color(value_type red, value_type green, value_type blue,
-        value_type alpha = SDL_ALPHA_OPAQUE) noexcept
+        value_type alpha = SDL_ALPHA_OPAQUE)
         : SDL_Color { red, green, blue, alpha }
     {
     }
 
-    constexpr SDL_Color to_sdl_color() const noexcept
+    constexpr SDL_Color to_sdl_color() const
     {
         return static_cast<SDL_Color>(*this);
     }

@@ -24,7 +24,7 @@ public:
     // Output any amount of arguments to stdout/stderr, the console and an output
     // file.
     template <typename... Args>
-    static void print(severity type, Args&&... args) noexcept
+    static void print(severity type, Args&&... args)
     {
         std::stringstream fwd_info, message;
 
@@ -69,11 +69,11 @@ public:
 
     // Show a message box with an error message.
     static void panic(const char* why, const char* where,
-        const char* message = nullptr) noexcept;
+        const char* message = nullptr);
 
     // Check a condition, and panic if it's false.
     static void verify(bool condition, const char* cond_string, const char* func,
-        const char* extra_info) noexcept;
+        const char* extra_info);
 
 private:
     static std::ofstream m_output;

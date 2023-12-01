@@ -25,10 +25,10 @@ public:
     MAYBE_EMPTY ttf_engine ttf;
 
     // TODO: Add more constructor options in a... humane way.
-    mono_app(const char* window_name) noexcept;
+    mono_app(const char* window_name);
 
-    bool update() noexcept;
+    bool update();
 
-    const input_handler& input() const noexcept;
+    const input_handler& input() const;
 };
 } // namespace hal

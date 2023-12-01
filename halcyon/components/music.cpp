@@ -4,22 +4,22 @@
 
 using namespace hal;
 
-music::music(lyo::pass_key<mixer>) noexcept
+music::music(lyo::pass_key<mixer>)
 {
     // TODO: Mix_HookMusicFinished to reset the timer when the music finishes.
 }
 
-void music::play(const char* path, lyo::u16 loops) noexcept
+void music::play(const char* path, lyo::u16 loops)
 {
     this->internal_play(path, loops);
 }
 
-void music::play(const char* path, infinite_loop_tag) noexcept
+void music::play(const char* path, infinite_loop_tag)
 {
     this->internal_play(path, -1);
 }
 
-void music::pause() noexcept
+void music::pause()
 {
     HAL_DEBUG_CHECK(m_object, "Tried to pause null music");
 
@@ -28,7 +28,7 @@ void music::pause() noexcept
     m_timer.pause();
 }
 
-void music::resume() noexcept
+void music::resume()
 {
     HAL_DEBUG_CHECK(m_object, "Tried to resume null music");
 
@@ -37,29 +37,29 @@ void music::resume() noexcept
     m_timer.resume();
 }
 
-bool music::playing() const noexcept
+bool music::playing() const
 {
     return static_cast<bool>(::Mix_PlayingMusic());
 }
 
-lyo::u8 music::volume() const noexcept
+lyo::u8 music::volume() const
 {
     return static_cast<lyo::u8>(::Mix_VolumeMusic(-1));
 }
 
-lyo::f64 music::position() const noexcept
+lyo::f64 music::position() const
 {
     return this->playing() ? m_timer() : 0.0;
 }
 
-void music::set_volume(lyo::u8 volume) const noexcept
+void music::set_volume(lyo::u8 volume) const
 {
     HAL_DEBUG_CHECK(m_object, "Tried to set volume of null music");
 
     ::Mix_VolumeMusic(volume);
 }
 
-void music::jump(double time) noexcept
+void music::jump(double time)
 {
     ::Mix_RewindMusic();
 
@@ -68,7 +68,7 @@ void music::jump(double time) noexcept
     m_timer = time;
 }
 
-void music::internal_play(const char* path, int loops) noexcept
+void music::internal_play(const char* path, int loops)
 {
     this->reassign(::Mix_LoadMUS(path));
 

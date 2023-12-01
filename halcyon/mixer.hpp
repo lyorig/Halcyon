@@ -19,16 +19,16 @@ enum class chunk_quality : lyo::u16 {
 class mixer {
 public:
     mixer(engine& eng);
-    mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
+    mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk_quality qual);
 
-    chunk load_sfx(const char* path) & noexcept;
+    chunk load_sfx(const char* path) &;
 
 private:
     MAYBE_EMPTY subsystem<subsys::audio> m_subsys;
 
     MAYBE_EMPTY class init {
     public:
-        init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept;
+        init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual);
         ~init();
     } m_init;
 

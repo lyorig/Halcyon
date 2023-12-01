@@ -15,7 +15,7 @@ public:
         release
     };
 
-    binder(const input_handler& input, Hook& hook) noexcept
+    binder(const input_handler& input, Hook& hook)
         : m_input { input }
         , m_hook { hook }
     {
@@ -23,7 +23,7 @@ public:
 
     // Check all binds. This doesn't call update() on the underlying
     // input handler, you need to do that yourself!
-    void update() const noexcept
+    void update() const
     {
         for (const auto& bind : m_binds) {
             bool should_trigger;
@@ -51,12 +51,12 @@ public:
         }
     }
 
-    void bind(button key, event type, callback<Hook&> func) noexcept
+    void bind(button key, event type, callback<Hook&> func)
     {
         m_binds.emplace(std::piecewise_construct, std::forward_as_tuple(key), std::forward_as_tuple(type, func));
     }
 
-    void unbind(button key) noexcept
+    void unbind(button key)
     {
         m_binds.erase(key);
     }

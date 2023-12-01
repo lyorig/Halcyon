@@ -34,37 +34,37 @@ class window;
 
 class texture : public sdl_object<SDL_Texture, &::SDL_DestroyTexture> {
 public:
-    texture(const window& wnd) noexcept;
-    texture(const window& wnd, const pixel_size& size) noexcept;
-    texture(const window& wnd, const surface& image) noexcept;
+    texture(const window& wnd);
+    texture(const window& wnd, const pixel_size& size);
+    texture(const window& wnd, const surface& image);
 
-    const pixel_size& size() const noexcept;
-    lyo::u8 opacity() const noexcept;
+    const pixel_size& size() const;
+    lyo::u8 opacity() const;
 
-    void set_opacity(lyo::u8 value) const noexcept;
+    void set_opacity(lyo::u8 value) const;
 
-    void set_as_target() noexcept;
+    void set_as_target();
 
     // View-width and view-height helpers.
-    pixel_size vw(lyo::f64 percent) const noexcept;
-    pixel_size vh(lyo::f64 percent) const noexcept;
+    pixel_size vw(lyo::f64 percent) const;
+    pixel_size vh(lyo::f64 percent) const;
 
-    texture& operator=(const surface& image) noexcept;
+    texture& operator=(const surface& image);
 
     class drawer {
     public:
-        drawer(const hal::texture& src) noexcept;
+        drawer(const hal::texture& src);
 
-        drawer& to(const coordinate& pos) noexcept;
-        drawer& to(const world_area& area) noexcept;
+        drawer& to(const coordinate& pos);
+        drawer& to(const world_area& area);
 
-        drawer& from(const pixel_area& src) noexcept;
+        drawer& from(const pixel_area& src);
 
-        drawer& scale(lyo::f64 mul) noexcept;
+        drawer& scale(lyo::f64 mul);
 
-        drawer& rotate(lyo::f64 angle) noexcept;
+        drawer& rotate(lyo::f64 angle);
 
-        void operator()() const noexcept;
+        void operator()() const;
 
     private:
         std::optional<SDL_Rect> m_src;
@@ -79,7 +79,7 @@ public:
 
 private:
     pixel_size
-    internal_size() const noexcept;
+    internal_size() const;
 
     pixel_size m_size;
 

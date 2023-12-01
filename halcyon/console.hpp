@@ -19,7 +19,7 @@ class console {
 public:
     // Log a variadic amount of arguments.
     template <typename... Args>
-    static void log(severity type, Args... args) noexcept
+    static void log(severity type, Args... args)
     {
         if (m_entries == cfg::max_console_entries) {
             std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
@@ -32,7 +32,7 @@ public:
 
     // Draw the console to the top left corner of the screen. Using
     // the smallest possible font size for performance is recommended.
-    static void draw(const font& fnt, const window& wnd) noexcept;
+    static void draw(const font& fnt, const window& wnd);
 
 private:
     using value_pair = std::pair<std::string, severity>;

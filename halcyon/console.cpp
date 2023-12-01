@@ -12,7 +12,7 @@ using namespace hal;
 console::queue_type console::m_queue {};
 console::count_type console::m_entries { 0 };
 
-void console::draw(const font& fnt, const window& wnd) noexcept
+void console::draw(const font& fnt, const window& wnd)
 {
     // Render settings.
     constexpr coordinate offset { 20.0, 10.0 };

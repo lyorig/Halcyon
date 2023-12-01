@@ -12,15 +12,15 @@ class texture;
 
 class spritesheet {
 public:
-    spritesheet(const texture& tx, const pixel_size& frame_size) noexcept;
+    spritesheet(const texture& tx, const pixel_size& frame_size);
 
     // Drop-in replacement for a multidimensional subscript operator.
-    const pixel_area& operator[](frame_pos pos) const noexcept;
+    const pixel_area& operator[](frame_pos pos) const;
 
-    frame_size size() const noexcept;
+    frame_size size() const;
 
     // Raw frame access - mostly for debugging.
-    const lyo::buffer<pixel_area>& frames() const noexcept;
+    const lyo::buffer<pixel_area>& frames() const;
 
 private:
     frame_size m_size;

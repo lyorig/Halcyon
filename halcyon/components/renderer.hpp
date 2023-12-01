@@ -22,16 +22,16 @@ public:
     };
 
     // Might as well leave the pure bitmask parameter here.
-    renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>) noexcept;
+    renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>);
 
-    void present(lyo::pass_key<window>) const noexcept;
-    void clear(lyo::pass_key<window>) const noexcept;
+    void present(lyo::pass_key<window>) const;
+    void clear(lyo::pass_key<window>) const;
 
-    void set_target(texture& tx) const noexcept;
-    void reset_target() const noexcept;
+    void set_target(texture& tx) const;
+    void reset_target() const;
 
-    void set_fill(color clr) const noexcept;
+    void set_fill(color clr) const;
 
-    pixel_size output_size() const noexcept;
+    pixel_size output_size() const;
 };
 } // namespace hal

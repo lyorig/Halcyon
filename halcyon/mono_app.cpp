@@ -5,7 +5,7 @@
 
 using namespace hal;
 
-mono_app::mono_app(const char* window_name) noexcept
+mono_app::mono_app(const char* window_name)
     : m_input {
         m_eng
     }
@@ -16,11 +16,11 @@ mono_app::mono_app(const char* window_name) noexcept
 {
 }
 
-bool mono_app::update() noexcept
+bool mono_app::update()
 {
     window.present();
 
     return m_input.update();
 }
 
-const input_handler& mono_app::input() const noexcept { return m_input; }
+const input_handler& mono_app::input() const { return m_input; }

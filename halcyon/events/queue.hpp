@@ -19,12 +19,12 @@ class queue;
 template <typename T> // Specialization for the default timer-only queue.
 class queue<T, void> {
 public:
-    queue(T& object) noexcept
+    queue(T& object)
         : m_object { object }
     {
     }
 
-    void update() noexcept
+    void update()
     {
         if (!m_queue.empty()) {
             const double time { m_queue.front().second };
@@ -37,12 +37,12 @@ public:
         }
     }
 
-    void add(hal::callback<T&> func, double time) noexcept
+    void add(hal::callback<T&> func, double time)
     {
         m_queue.emplace(func, time);
     }
 
-    bool done() const noexcept
+    bool done() const
     {
         return m_queue.empty();
     }
@@ -61,13 +61,13 @@ class queue {
     using holder = std::variant<double, cond_func>;
 
 public:
-    queue(T& object, const Query& query_obj) noexcept
+    queue(T& object, const Query& query_obj)
         : m_object { object }
         , m_cond { query_obj }
     {
     }
 
-    void update() noexcept
+    void update()
     {
         if (!m_queue.empty()) {
             const auto& pair { m_queue.front() };
@@ -94,17 +94,17 @@ public:
         }
     }
 
-    void add(hal::callback<T&> func, double time) noexcept
+    void add(hal::callback<T&> func, double time)
     {
         m_queue.emplace(func, time);
     }
 
-    void add(hal::callback<T&> func, cond_func conditional) noexcept
+    void add(hal::callback<T&> func, cond_func conditional)
     {
         m_queue.emplace(func, conditional);
     }
 
-    bool done() const noexcept
+    bool done() const
     {
         return m_queue.empty();
     }

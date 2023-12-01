@@ -7,7 +7,7 @@
 
 using namespace hal;
 
-mixer::init::init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept
+mixer::init::init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual)
 {
     constexpr int types = MIX_INIT_MP3 | MIX_INIT_OGG;
 
@@ -29,14 +29,14 @@ mixer::mixer(engine& eng)
 {
 }
 
-mixer::mixer(engine& engine, lyo::u32 freq, lyo::u8 channels, chunk_quality qual) noexcept
+mixer::mixer(engine& engine, lyo::u32 freq, lyo::u8 channels, chunk_quality qual)
     : m_init { freq, channels, qual }
     , mus { {} }
 
 {
 }
 
-chunk mixer::load_sfx(const char* path) & noexcept
+chunk mixer::load_sfx(const char* path) &
 {
     return { path, {} };
 }

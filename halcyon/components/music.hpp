@@ -13,24 +13,24 @@ class mixer;
 
 class music : public sdl_object<Mix_Music, &::Mix_FreeMusic> {
 public:
-    music(lyo::pass_key<mixer>) noexcept;
+    music(lyo::pass_key<mixer>);
 
-    void play(const char* path, lyo::u16 loops = 0) noexcept;
-    void play(const char* path, infinite_loop_tag) noexcept;
+    void play(const char* path, lyo::u16 loops = 0);
+    void play(const char* path, infinite_loop_tag);
 
-    void pause() noexcept;
-    void resume() noexcept;
+    void pause();
+    void resume();
 
-    bool playing() const noexcept;
+    bool playing() const;
 
-    lyo::u8 volume() const noexcept;
-    lyo::f64 position() const noexcept;
+    lyo::u8 volume() const;
+    lyo::f64 position() const;
 
-    void set_volume(lyo::u8 volume) const noexcept;
-    void jump(double time) noexcept;
+    void set_volume(lyo::u8 volume) const;
+    void jump(double time);
 
 private:
-    void internal_play(const char* path, int loops) noexcept;
+    void internal_play(const char* path, int loops);
 
     lyo::precise_stopwatch m_timer;
 };

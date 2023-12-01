@@ -4,6 +4,7 @@
 
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
+#include <optional>
 
 #include "sdl_object.hpp"
 
@@ -22,32 +23,41 @@ class font;
 class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface> {
 public:
     // Create a sized surface.
-    surface(const window& wnd, pixel_size sz) noexcept;
+    surface(const window& wnd, pixel_size sz);
 
     // Get a resized copy of the surface. Useful for saving
     // memory after converting to a texture.
-    surface resize(pixel_size sz) const noexcept;
+    surface resize(pixel_size sz) const;
 
     // Get a scaled copy of the surface. Useful for saving
     // memory after converting to a texture.
-    surface resize(lyo::f64 scale) const noexcept;
+    surface resize(lyo::f64 scale) const;
 
-    void set_blend(SDL_BlendMode bm) const noexcept;
+    void set_blend(SDL_BlendMode bm) const;
 
-    pixel_size size() const noexcept;
+    pixel_size size() const;
 
     // Get pixel at position.
     // This functionality is exclusive to surfaces, as textures
     // are extremely slow to retrieve pixel information.
-    color operator[](pixel_pos coord) const noexcept;
+    color operator[](pixel_pos coord) const;
 
     class drawer {
     public:
-        drawer(const surface& src) noexcept;
+        drawer(const surface& src);
 
-        void operator()(const surface& dst) const noexcept;
+        void to(const pixel_pos& pos);
+
+        void operator()(const surface& dst) const;
 
     private:
+        std::optional<SDL_Rect> m_src;
+
+        // SDL wants to output the drawn size in the destination
+        // rectangle. We don't care about this, but the function
+        // should be const. Thus, mutable.
+        mutable std::optional<SDL_Rect> m_dst;
+
         const surface& m_this;
     };
 
@@ -56,11 +66,11 @@ private:
     friend class font;
 
     // Special c-tor for factory classes
-    surface(SDL_Surface* surf) noexcept;
+    surface(SDL_Surface* surf);
 
     // Special c-tor for resizing
-    surface(pixel_size sz) noexcept;
+    surface(pixel_size sz);
 
-    Uint32 get_pixel(pixel_type x, pixel_type y) const noexcept;
+    Uint32 get_pixel(pixel_type x, pixel_type y) const;
 };
 } // namespace hal

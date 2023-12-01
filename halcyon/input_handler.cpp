@@ -8,12 +8,12 @@
 
 using namespace hal;
 
-input_base::input_base(engine& eng) noexcept
+input_base::input_base(engine& eng)
 {
     HAL_DEBUG_PRINT(severity::init, "Initialized input handler");
 }
 
-bool input_base::update() noexcept
+bool input_base::update()
 {
     SDL_Event evt;
 
@@ -24,7 +24,7 @@ bool input_base::update() noexcept
     return true;
 }
 
-bool input_base::held(button btn) const noexcept
+bool input_base::held(button btn) const
 {
     if (lyo::to_underlying(btn) <= SDL_NUM_SCANCODES) // Key.
         return ::SDL_GetKeyboardState(nullptr)[static_cast<lyo::usize>(btn)];
@@ -33,7 +33,7 @@ bool input_base::held(button btn) const noexcept
         return SDL_BUTTON(lyo::to_underlying(btn) - SDL_NUM_SCANCODES) & ::SDL_GetMouseState(nullptr, nullptr);
 }
 
-pixel_pos input_base::mouse() const noexcept
+pixel_pos input_base::mouse() const
 {
     point<int> pos;
 
@@ -42,12 +42,12 @@ pixel_pos input_base::mouse() const noexcept
     return static_cast<pixel_pos>(pos);
 }
 
-bool input_base::poll(SDL_Event& event) const noexcept
+bool input_base::poll(SDL_Event& event) const
 {
     return ::SDL_PollEvent(&event);
 }
 
-bool input_handler::update() noexcept
+bool input_handler::update()
 {
     m_pressed.clear();
     m_released.clear();
@@ -55,17 +55,17 @@ bool input_handler::update() noexcept
     return input_base::update();
 }
 
-bool input_handler::pressed(button btn) const noexcept
+bool input_handler::pressed(button btn) const
 {
     return m_pressed[static_cast<lyo::usize>(btn)];
 }
 
-bool input_handler::released(button btn) const noexcept
+bool input_handler::released(button btn) const
 {
     return m_released[static_cast<lyo::usize>(btn)];
 }
 
-bool input_handler::process(const SDL_Event& event) noexcept
+bool input_handler::process(const SDL_Event& event)
 {
     switch (event.type) {
     case SDL_KEYDOWN:
