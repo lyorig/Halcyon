@@ -46,7 +46,10 @@ public:
     public:
         drawer(const surface& src);
 
-        void to(const pixel_pos& pos);
+        drawer& to(const pixel_pos& pos);
+        drawer& to(const pixel_area& area);
+
+        drawer& from(const pixel_area& area);
 
         void operator()(const surface& dst) const;
 

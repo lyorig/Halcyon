@@ -20,5 +20,6 @@ public:
     surface render(const std::string& text, color color = color::white) const;
 
     pixel_size size_text(const char* text) const;
+    pixel_size size_text(const std::string& text) const;
 };
 } // namespace hal

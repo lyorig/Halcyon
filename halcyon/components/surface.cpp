@@ -104,6 +104,27 @@ d::drawer(const surface& src)
 {
 }
 
+d& d::to(const pixel_pos& pos)
+{
+    m_dst->x = pos.x;
+    m_dst->y = pos.y;
+    m_dst->w = m_this.size().x;
+    m_dst->h = m_this.size().y;
+    return *this;
+}
+
+d& d::to(const pixel_area& area)
+{
+    m_dst = area;
+    return *this;
+}
+
+d& d::from(const pixel_area& area)
+{
+    m_src = area;
+    return *this;
+}
+
 void d::operator()(const surface& dst) const
 {
     HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src ? &*m_src : nullptr, dst.ptr(), m_dst ? &*m_dst : nullptr) == 0, ::SDL_GetError());

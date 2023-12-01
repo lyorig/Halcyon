@@ -9,18 +9,17 @@
    Rendering-related types used throughout Halcyon. */
 
 namespace hal {
+
 using pixel_type = lyo::i16;
 
 using pixel_size = point<pixel_type>;
 using pixel_pos = point<pixel_type>;
 using pixel_area = rectangle<pixel_type>;
 
-using position_type = lyo::f32;
+using position_type = SDL_position_type;
 
 using coordinate = point<position_type>;
 using world_area = rectangle<position_type>;
-
-using opacity_type = lyo::f32;
 }
 
 // Paranoia.

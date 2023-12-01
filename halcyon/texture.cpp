@@ -1,6 +1,7 @@
 #include "texture.hpp"
 
 #include "debug.hpp"
+#include "halcyon/internal/SDL_types.hpp"
 #include "window.hpp"
 
 using namespace hal;
@@ -37,27 +38,27 @@ lyo::u8 texture::opacity() const
     HAL_DEBUG_ASSERT(::SDL_GetTextureAlphaMod(m_object.get(), &alpha) == 0,
         ::SDL_GetError());
 
-    return static_cast<lyo::u8>(alpha);
+    return lyo::u8(alpha);
 }
 
 void texture::set_as_target() { window.renderer.set_target(*this); }
 
 pixel_size texture::vw(lyo::f64 percent) const
 {
-    const pixel_type width { static_cast<pixel_type>(window.renderer.output_size().x * (percent / 100.0)) };
+    const pixel_type width { pixel_type(window.renderer.output_size().x * (percent / 100.0)) };
     const lyo::f64 scale { width / static_cast<lyo::f64>(m_size.x) };
 
-    return { width, static_cast<pixel_type>(m_size.y * scale) };
+    return { width, pixel_type(m_size.y * scale) };
 }
 
 pixel_size texture::vh(lyo::f64 percent) const
 {
     const pixel_type height {
-        static_cast<pixel_type>(window.size().y * (percent / 100.0))
+        pixel_type(window.size().y * (percent / 100.0))
     };
     const lyo::f64 scale { height / static_cast<lyo::f64>(m_size.y) };
 
-    return { static_cast<pixel_type>(m_size.x * scale), height };
+    return { pixel_type(m_size.x * scale), height };
 }
 
 texture& texture::operator=(const surface& image)
@@ -76,14 +77,16 @@ pixel_size texture::internal_size() const
 
     ::SDL_QueryTexture(m_object.get(), NULL, NULL, &w, &h);
 
-    return { static_cast<pixel_type>(w), static_cast<pixel_type>(h) };
+    return { pixel_type(w), pixel_type(h) };
 }
 
 // Drawer code.
 using d = texture::drawer;
 
+constexpr SDL_pixel_type no_size { std::numeric_limits<SDL_pixel_type>::max() };
+
 d::drawer(const texture& src)
-    : m_dst { as_size, static_cast<coordinate>(src.size()) }
+    : m_src { .x = no_size }
     , m_this { src }
 {
 }
@@ -91,6 +94,7 @@ d::drawer(const texture& src)
 d& d::to(const coordinate& pos)
 {
     m_dst.pos = pos;
+    m_dst.size = coordinate(m_this.size());
     return *this;
 }
 
@@ -108,7 +112,7 @@ d& d::from(const pixel_area& src)
 
 d& d::scale(lyo::f64 mul)
 {
-    m_scale = mul;
+    m_dst *= mul;
     return *this;
 }
 
@@ -118,6 +122,13 @@ d& d::rotate(lyo::f64 angle)
     return *this;
 }
 
+d& d::flip(enum flip f)
+{
+    m_flip = f;
+    return *this;
+}
+
 void d::operator()() const
 {
+    HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.x == no_size ? nullptr : &m_src, m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip)) == 0, ::SDL_GetError());
 }

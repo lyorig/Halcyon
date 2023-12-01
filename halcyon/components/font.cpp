@@ -23,3 +23,8 @@ pixel_size font::size_text(const char* text) const
 
     return static_cast<pixel_size>(size);
 }
+
+pixel_size font::size_text(const std::string& text) const
+{
+    return this->size_text(text.c_str());
+}

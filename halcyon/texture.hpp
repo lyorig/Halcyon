@@ -51,6 +51,7 @@ public:
 
     texture& operator=(const surface& image);
 
+    // TODO: Anchor functionality...?
     class drawer {
     public:
         drawer(const hal::texture& src);
@@ -64,17 +65,19 @@ public:
 
         drawer& rotate(lyo::f64 angle);
 
+        drawer& flip(enum flip f);
+
         void operator()() const;
 
     private:
-        std::optional<SDL_Rect> m_src;
+        SDL_Rect m_src; // Special value used to determine whether it's valid.
+        world_area m_dst; // Initialized in c-tor.
 
-        hal::world_area m_dst;
-
-        lyo::f64 m_scale { 1.0 };
         lyo::f64 m_angle { 0.0 };
 
         const texture& m_this;
+
+        enum flip m_flip { flip::none };
     };
 
 private:

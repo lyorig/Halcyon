@@ -1,9 +1,7 @@
 #pragma once
 
+#include <halcyon/internal/SDL_types.hpp>
 #include <lyo/cast.hpp>
-#include <lyo/concepts.hpp>
-
-#include <SDL2/SDL_rect.h>
 
 #include "tags.hpp"
 
@@ -30,7 +28,7 @@ struct point {
         return point { lyo::round_cast<T>(x / div), lyo::round_cast<T>(y / div) };
     }
 
-    constexpr point& operator*=(lyo::f64 mul) const
+    constexpr point& operator*=(lyo::f64 mul)
     {
         x *= mul;
         y *= mul;
@@ -38,7 +36,7 @@ struct point {
         return *this;
     }
 
-    constexpr point& operator/=(lyo::f64 div) const
+    constexpr point& operator/=(lyo::f64 div)
     {
         x /= div;
         y /= div;
@@ -83,6 +81,16 @@ struct point {
             lyo::round_cast<t>(x),
             lyo::round_cast<t>(y)
         };
+    }
+
+    constexpr SDL_point_type<T>* addr() requires(lyo::is_any_of<T, SDL_pixel_type, SDL_position_type>())
+    {
+        return reinterpret_cast<SDL_point_type<T>*>(this);
+    }
+
+    constexpr const SDL_point_type<T>* addr() const requires(lyo::is_any_of<T, SDL_pixel_type, SDL_position_type>())
+    {
+        return reinterpret_cast<const SDL_point_type<T>*>(this);
     }
 };
 } // namespace hal

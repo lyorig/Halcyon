@@ -1,9 +1,8 @@
 #pragma once
 
-#include <SDL2/SDL_rect.h>
+#include <halcyon/internal/SDL_types.hpp>
 
 #include "point.hpp"
-#include "tags.hpp"
 
 namespace hal {
 template <lyo::arithmetic T>
@@ -88,6 +87,16 @@ struct rectangle {
             lyo::round_cast<type>(size.x),
             lyo::round_cast<type>(size.y),
         };
+    }
+
+    constexpr SDL_rect_type<T>* addr() requires(lyo::is_any_of<T, SDL_pixel_type, SDL_position_type>())
+    {
+        return reinterpret_cast<SDL_rect_type<T>*>(this);
+    }
+
+    constexpr const SDL_rect_type<T>* addr() const requires(lyo::is_any_of<T, SDL_pixel_type, SDL_position_type>())
+    {
+        return reinterpret_cast<const SDL_rect_type<T>*>(this);
     }
 };
 } // namespace hal
