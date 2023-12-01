@@ -75,7 +75,7 @@ pixel_size texture::internal_size() const
 {
     int w, h;
 
-    ::SDL_QueryTexture(m_object.get(), NULL, NULL, &w, &h);
+    ::SDL_QueryTexture(m_object.get(), nullptr, nullptr, &w, &h);
 
     return { pixel_type(w), pixel_type(h) };
 }
@@ -83,7 +83,7 @@ pixel_size texture::internal_size() const
 // Drawer code.
 using d = texture::drawer;
 
-constexpr SDL_pixel_type no_size { std::numeric_limits<SDL_pixel_type>::max() };
+constexpr SDL_pixel_type no_size { std::numeric_limits<decltype(no_size)>::max() };
 
 d::drawer(const texture& src)
     : m_src { .x = no_size }
@@ -93,14 +93,14 @@ d::drawer(const texture& src)
 
 d& d::to(const coordinate& pos)
 {
-    m_dst.pos = pos;
-    m_dst.size = coordinate(m_this.size());
+    m_dst.pos = fpoint_wrap(pos);
+    m_dst.size = fpoint_wrap(m_this.size());
     return *this;
 }
 
 d& d::to(const world_area& area)
 {
-    m_dst = area;
+    m_dst = frect_wrap(area);
     return *this;
 }
 

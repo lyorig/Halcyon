@@ -61,6 +61,7 @@ public:
 
         drawer& from(const pixel_area& src);
 
+        // Call this after setting the destination!
         drawer& scale(lyo::f64 mul);
 
         drawer& rotate(lyo::f64 angle);
@@ -70,8 +71,8 @@ public:
         void operator()() const;
 
     private:
-        SDL_Rect m_src; // Special value used to determine whether it's valid.
-        world_area m_dst; // Initialized in c-tor.
+        SDL_Rect m_src; // The "x" field has a special value to signalize an unused rect.
+        frect_wrap m_dst; // Initialized in c-tor.
 
         lyo::f64 m_angle { 0.0 };
 

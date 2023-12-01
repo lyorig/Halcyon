@@ -54,12 +54,12 @@ public:
         void operator()(const surface& dst) const;
 
     private:
-        std::optional<SDL_Rect> m_src;
+        rect_wrap m_src;
 
         // SDL wants to output the drawn size in the destination
         // rectangle. We don't care about this, but the function
         // should be const. Thus, mutable.
-        mutable std::optional<SDL_Rect> m_dst;
+        mutable rect_wrap m_dst;
 
         const surface& m_this;
     };

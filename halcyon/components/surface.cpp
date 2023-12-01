@@ -98,34 +98,36 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
 // Drawer code.
 using d = surface::drawer;
 
+constexpr SDL_pixel_type no_size { std::numeric_limits<decltype(no_size)>::max() };
+
 // TODO
 d::drawer(const surface& src)
     : m_this { src }
 {
+    m_src.pos.x = no_size;
+    m_dst.pos.x = no_size;
 }
 
 d& d::to(const pixel_pos& pos)
 {
-    m_dst->x = pos.x;
-    m_dst->y = pos.y;
-    m_dst->w = m_this.size().x;
-    m_dst->h = m_this.size().y;
+    m_dst.pos = point_wrap(pos);
+    m_dst.size = point_wrap(m_this.size());
     return *this;
 }
 
 d& d::to(const pixel_area& area)
 {
-    m_dst = area;
+    m_dst = rect_wrap(area);
     return *this;
 }
 
 d& d::from(const pixel_area& area)
 {
-    m_src = area;
+    m_src = rect_wrap(area);
     return *this;
 }
 
 void d::operator()(const surface& dst) const
 {
-    HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src ? &*m_src : nullptr, dst.ptr(), m_dst ? &*m_dst : nullptr) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == no_size ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == no_size ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
 }

@@ -2,6 +2,7 @@
 
 #include <lyo/types.hpp>
 
+#include "halcyon/internal/SDL_types.hpp"
 #include "point.hpp"
 #include "rectangle.hpp"
 
@@ -16,7 +17,7 @@ using pixel_size = point<pixel_type>;
 using pixel_pos = point<pixel_type>;
 using pixel_area = rectangle<pixel_type>;
 
-using position_type = SDL_position_type;
+using position_type = lyo::f64;
 
 using coordinate = point<position_type>;
 using world_area = rectangle<position_type>;

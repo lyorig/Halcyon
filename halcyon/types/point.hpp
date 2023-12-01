@@ -93,4 +93,7 @@ struct point {
         return reinterpret_cast<const SDL_point_type<T>*>(this);
     }
 };
+
+using point_wrap = point<SDL_pixel_type>;
+using fpoint_wrap = point<SDL_position_type>;
 } // namespace hal

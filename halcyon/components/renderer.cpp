@@ -34,7 +34,7 @@ void renderer::set_target(texture& tx) const
 
 void renderer::reset_target() const
 {
-    HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object.get(), NULL) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_SetRenderTarget(m_object.get(), nullptr) == 0, ::SDL_GetError());
 }
 
 void renderer::set_fill(color clr) const

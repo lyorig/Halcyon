@@ -32,7 +32,7 @@ public:
         const char* tok { nullptr };
 
         for (int i { 0 }; i < m_argc; ++i) {
-            if ((tok = strstr(m_argv[i], prefix)) != NULL)
+            if ((tok = strstr(m_argv[i], prefix)) != nullptr)
                 break;
         }
 
@@ -52,7 +52,7 @@ public:
         const char* tok { nullptr };
 
         for (int i { 0 }; i < m_argc; ++i) {
-            if ((tok = strstr(m_argv[i], prefix)) != NULL)
+            if ((tok = strstr(m_argv[i], prefix)) != nullptr)
                 break;
         }
 

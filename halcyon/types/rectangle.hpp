@@ -99,4 +99,7 @@ struct rectangle {
         return reinterpret_cast<const SDL_rect_type<T>*>(this);
     }
 };
+
+using rect_wrap = rectangle<SDL_pixel_type>;
+using frect_wrap = rectangle<SDL_position_type>;
 } // namespace hal
