@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
         }
 
         if (game.input().pressed(hal::button::backspace))
-            HAL_CONSOLE_LOG(hal::severity::info, "");
+            HAL_CONSOLE_LOG(hal::severity::info, "test");
 
         const auto sine { std::sin(tmr()) };
 

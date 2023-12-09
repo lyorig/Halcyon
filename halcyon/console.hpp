@@ -28,6 +28,8 @@ public:
 
         else
             m_queue[m_entries++] = { lyo::string_from_pack(args...), type };
+
+        m_repaint = true;
     }
 
     // Draw the console to the top left corner of the screen. Using
@@ -42,6 +44,8 @@ private:
 
     static queue_type m_queue;
     static count_type m_entries;
+
+    static bool m_repaint; // Whether to recreate the texture.
 };
 } // namespace hal
 
