@@ -2,9 +2,11 @@
 
 #include <halcyon/internal/SDL_types.hpp>
 
+#include "SDL2/SDL_rect.h"
 #include "point.hpp"
 
 namespace hal {
+
 template <lyo::arithmetic T>
 struct rectangle {
     point<T> pos, size;
@@ -89,17 +91,19 @@ struct rectangle {
         };
     }
 
-    constexpr SDL_rect_type<T>* addr() requires(lyo::is_any_of<T, SDL_pixel_type, SDL_position_type>())
+    constexpr SDL::rect_type<T>* addr()
+        requires(lyo::is_any_of<T, SDL::pixel_type, SDL::position_type>())
     {
-        return reinterpret_cast<SDL_rect_type<T>*>(this);
+        return reinterpret_cast<SDL::rect_type<T>*>(this);
     }
 
-    constexpr const SDL_rect_type<T>* addr() const requires(lyo::is_any_of<T, SDL_pixel_type, SDL_position_type>())
+    constexpr const SDL::rect_type<T>* addr() const
+        requires(lyo::is_any_of<T, SDL::pixel_type, SDL::position_type>())
     {
-        return reinterpret_cast<const SDL_rect_type<T>*>(this);
+        return reinterpret_cast<const SDL::rect_type<T>*>(this);
     }
 };
 
-using rect_wrap = rectangle<SDL_pixel_type>;
-using frect_wrap = rectangle<SDL_position_type>;
+using rect_wrap = rectangle<SDL::pixel_type>;
+using frect_wrap = rectangle<SDL::position_type>;
 } // namespace hal

@@ -44,12 +44,12 @@ public:
 
     class drawer {
     public:
-        drawer(const surface& src);
+        [[nodiscard]] drawer(const surface& src);
 
-        drawer& to(const pixel_pos& pos);
-        drawer& to(const pixel_area& area);
+        [[nodiscard]] drawer& to(const pixel_pos& pos);
+        [[nodiscard]] drawer& to(const pixel_area& area);
 
-        drawer& from(const pixel_area& area);
+        [[nodiscard]] drawer& from(const pixel_area& area);
 
         void operator()(const surface& dst) const;
 

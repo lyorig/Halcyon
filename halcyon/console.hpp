@@ -35,12 +35,12 @@ public:
     static void draw(const font& fnt, const window& wnd);
 
 private:
-    using value_pair = std::pair<std::string, severity>;
-    using queue_type = std::array<value_pair, cfg::max_console_entries>;
     using count_type = std::remove_cv_t<decltype(cfg::max_console_entries)>;
 
-    static queue_type m_queue;
+    using value_pair = std::pair<std::string, severity>;
+    using queue_type = std::array<value_pair, cfg::max_console_entries>;
 
+    static queue_type m_queue;
     static count_type m_entries;
 };
 } // namespace hal

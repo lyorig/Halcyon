@@ -15,7 +15,18 @@ struct point {
 
     constexpr point<T> operator+(const point& pt) const
     {
-        return point<T> { x + pt.x, y + pt.y };
+        return point<T> {
+            lyo::round_cast<T>(x + pt.x),
+            lyo::round_cast<T>(y + pt.y)
+        };
+    }
+
+    constexpr point<T> operator-(const point& pt) const
+    {
+        return point<T> {
+            lyo::round_cast<T>(x - pt.x),
+            lyo::round_cast<T>(y - pt.y)
+        };
     }
 
     constexpr point operator*(lyo::f64 mul) const
@@ -83,17 +94,19 @@ struct point {
         };
     }
 
-    constexpr SDL_point_type<T>* addr() requires(lyo::is_any_of<T, SDL_pixel_type, SDL_position_type>())
+    constexpr SDL::point_type<T>* addr()
+        requires(lyo::is_any_of<T, SDL::pixel_type, SDL::position_type>())
     {
-        return reinterpret_cast<SDL_point_type<T>*>(this);
+        return reinterpret_cast<SDL::point_type<T>*>(this);
     }
 
-    constexpr const SDL_point_type<T>* addr() const requires(lyo::is_any_of<T, SDL_pixel_type, SDL_position_type>())
+    constexpr const SDL::point_type<T>* addr() const
+        requires(lyo::is_any_of<T, SDL::pixel_type, SDL::position_type>())
     {
-        return reinterpret_cast<const SDL_point_type<T>*>(this);
+        return reinterpret_cast<const SDL::point_type<T>*>(this);
     }
 };
 
-using point_wrap = point<SDL_pixel_type>;
-using fpoint_wrap = point<SDL_position_type>;
+using point_wrap = point<SDL::pixel_type>;
+using fpoint_wrap = point<SDL::position_type>;
 } // namespace hal

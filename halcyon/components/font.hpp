@@ -3,6 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <halcyon/types/color.hpp>
+#include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
 #include <lyo/types.hpp>
 #include <string>

@@ -1,14 +1,8 @@
-#include <cstdlib>
 #include <halcyon/mono_app.hpp>
-#include <iostream>
-
-#include "halcyon/texture.hpp"
 
 int main(int argc, char* argv[])
 {
     hal::mono_app game { "Interloper 1.1" };
-
-    game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
     const char* logo_text { argc == 1 ? "Sample text" : argv[1] };
 
@@ -21,24 +15,36 @@ int main(int argc, char* argv[])
     hal::color bg { hal::color::blue };
     lyo::precise_timer tmr, delta;
 
+    delta += 1.0;
+
+    std::size_t frames { 0 };
+
     game.window.renderer.set_fill(bg);
+    game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
+
+    constexpr lyo::f64 FPS_update_interval { 1.0 };
 
     while (game.update() && !game.input().pressed(hal::button::esc)) {
-        const std::string dt = std::to_string((0.01666666 / delta()) * 60.0);
+        ++frames;
 
-        (dlt = txf.render(dt));
-        hal::texture::drawer(dlt = txf.render(dt))();
-        // HAL_DEBUG_PRINT(hal::severity::info, dt, " FPS");  // Why the fuck
-        // does this line double the FPS?
+        if (delta() >= FPS_update_interval) {
+            const auto d = lyo::u32(std::round(frames / delta()));
+
+            dlt = txf.render(std::to_string(d));
+
+            frames = 0;
+            delta.reset();
+        }
 
         if (game.input().pressed(hal::button::backspace))
-            HAL_CONSOLE_LOG(hal::severity::info, "Backspace pressed.");
-
-        delta.reset();
+            HAL_CONSOLE_LOG(hal::severity::info, "");
 
         const auto sine { std::sin(tmr()) };
 
-        hal::texture::drawer(tex).scale((sine + 2.0) * 0.5).rotate(sine * 20.0)();
+        hal::texture::drawer(dlt).to({ 50, 500 })();
+        hal::texture::drawer(tex).to(hal::coordinate(game.window.size() / 2 - tex.size() / 2)).scale((sine + 2.0) * 0.5).rotate(sine * 20.0)();
+
+        HAL_CONSOLE_DRAW(txf, game.window);
 
         bg.r = lyo::round_cast<lyo::u8>((sine + 1.0) * 64.0);
         game.window.renderer.set_fill(bg);

@@ -83,18 +83,18 @@ pixel_size texture::internal_size() const
 // Drawer code.
 using d = texture::drawer;
 
-constexpr SDL_pixel_type no_size { std::numeric_limits<decltype(no_size)>::max() };
+constexpr SDL::pixel_type unset { std::numeric_limits<decltype(unset)>::max() };
 
 d::drawer(const texture& src)
-    : m_src { .x = no_size }
-    , m_this { src }
+    : m_this { src }
+    , m_dst { as_size, static_cast<fpoint_wrap>(m_this.size()) }
 {
+    m_src.pos.x = unset;
 }
 
 d& d::to(const coordinate& pos)
 {
     m_dst.pos = fpoint_wrap(pos);
-    m_dst.size = fpoint_wrap(m_this.size());
     return *this;
 }
 
@@ -106,7 +106,7 @@ d& d::to(const world_area& area)
 
 d& d::from(const pixel_area& src)
 {
-    m_src = src;
+    m_src = rect_wrap(src);
     return *this;
 }
 
@@ -130,5 +130,5 @@ d& d::flip(enum flip f)
 
 void d::operator()() const
 {
-    HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.x == no_size ? nullptr : &m_src, m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip)) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip)) == 0, ::SDL_GetError());
 }

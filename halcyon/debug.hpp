@@ -19,6 +19,7 @@
 #include <lyo/utility.hpp>
 
 namespace hal {
+class texture;
 class debug {
 public:
     // Output any amount of arguments to stdout/stderr, the console and an output
@@ -82,7 +83,7 @@ private:
 } // namespace hal
 
 #define HAL_DEBUG_PRINT hal::debug::print
-#define HAL_DEBUG_PANIC hal::debug::panic
+#define HAL_DEBUG_PANIC(why) hal::debug::panic(wby, __PRETTY_FUNCTION__)
 #define HAL_DEBUG_ASSERT(cond, if_false) \
     hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
 #define HAL_DEBUG_CHECK(cond, if_false) HAL_DEBUG_ASSERT(cond, if_false)

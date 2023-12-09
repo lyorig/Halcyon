@@ -1,7 +1,5 @@
 #include "surface.hpp"
 
-#include "SDL2/SDL_surface.h"
-
 using namespace hal;
 
 surface::surface(const window& wnd, pixel_size sz)
@@ -98,14 +96,14 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
 // Drawer code.
 using d = surface::drawer;
 
-constexpr SDL_pixel_type no_size { std::numeric_limits<decltype(no_size)>::max() };
+constexpr SDL::pixel_type unset { std::numeric_limits<decltype(unset)>::max() };
 
 // TODO
 d::drawer(const surface& src)
     : m_this { src }
 {
-    m_src.pos.x = no_size;
-    m_dst.pos.x = no_size;
+    m_src.pos.x = unset;
+    m_dst.pos.x = unset;
 }
 
 d& d::to(const pixel_pos& pos)
@@ -129,5 +127,5 @@ d& d::from(const pixel_area& area)
 
 void d::operator()(const surface& dst) const
 {
-    HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == no_size ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == no_size ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
 }

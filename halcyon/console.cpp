@@ -1,4 +1,6 @@
+#include "SDL2/SDL_stdinc.h"
 #include "halcyon/debug.hpp"
+#include "halcyon/internal/config.hpp"
 #ifndef NDEBUG
 
 #include "console.hpp"
@@ -16,9 +18,9 @@ void console::draw(const font& fnt, const window& wnd)
 {
     // Render settings.
     constexpr coordinate offset { 20.0, 10.0 };
-    constexpr lyo::f64 vhm { 3.5 / 100.0 }; // View-height multiplier (only edit the lhs).
+    constexpr lyo::f64 vhm { 4.0 / 100.0 }; // View-height multiplier (only edit the lhs).
 
-    pixel_type y_size { fnt.size_text("").y };
+    pixel_type y_size { fnt.render(".").size().y };
     pixel_size csz { .y = pixel_type(y_size * m_entries) }; // Canvas size.
 
     // "Calculate" canvas size.
@@ -28,17 +30,31 @@ void console::draw(const font& fnt, const window& wnd)
             csz.x = x_size;
     }
 
-    // Compose the texture.
-    surface canvas { wnd, csz };
+    if (csz.x != 0) {
+        // Compose the texture.
+        const lyo::f64 scale { wnd.size().y * vhm / y_size };
+        const pixel_type y_scaled { pixel_type(y_size * scale) };
+        surface canvas { wnd, csz * scale };
 
-    for (count_type i { 0 }; i < m_entries; ++i) {
-        const value_pair& entry { m_queue[i] };
-        const surface text { fnt.render(entry.first, static_cast<color::hex_type>(entry.second)) };
+        for (count_type i { 0 }; i < m_entries; ++i) {
+            const value_pair& entry { m_queue[i] };
+            if (!entry.first.empty()) {
+                const surface text { fnt.render(entry.first, color::hex_type(entry.second)) };
 
-        hal::surface::drawer(text).to({ 0, pixel_type(text.size().y * i) })(canvas);
+                const pixel_type xsz { text.size().x };
+                const pixel_area dest {
+                    0,
+                    pixel_type(y_scaled * i),
+                    pixel_type(xsz * scale),
+                    pixel_type(y_scaled)
+                };
+
+                hal::surface::drawer(text).to(dest)(canvas);
+            }
+        }
+
+        hal::texture::drawer({ wnd, canvas }).to(offset)();
     }
-
-    hal::texture::drawer({ wnd, canvas }).to(offset).scale((wnd.size().y * vhm) / y_size)();
 }
 
 #endif

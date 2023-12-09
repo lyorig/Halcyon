@@ -54,36 +54,35 @@ public:
     // TODO: Anchor functionality...?
     class drawer {
     public:
-        drawer(const hal::texture& src);
+        [[nodiscard]] drawer(const hal::texture& src);
 
-        drawer& to(const coordinate& pos);
-        drawer& to(const world_area& area);
+        [[nodiscard]] drawer& to(const coordinate& pos);
+        [[nodiscard]] drawer& to(const world_area& area);
 
-        drawer& from(const pixel_area& src);
+        [[nodiscard]] drawer& from(const pixel_area& src);
 
         // Call this after setting the destination!
-        drawer& scale(lyo::f64 mul);
+        [[nodiscard]] drawer& scale(lyo::f64 mul);
 
-        drawer& rotate(lyo::f64 angle);
+        [[nodiscard]] drawer& rotate(lyo::f64 angle);
 
-        drawer& flip(enum flip f);
+        [[nodiscard]] drawer& flip(enum flip f);
 
         void operator()() const;
 
     private:
-        SDL_Rect m_src; // The "x" field has a special value to signalize an unused rect.
+        const texture& m_this;
+
+        rect_wrap m_src; // The "x" field has a special value to signalize an unused rect.
         frect_wrap m_dst; // Initialized in c-tor.
 
         lyo::f64 m_angle { 0.0 };
-
-        const texture& m_this;
 
         enum flip m_flip { flip::none };
     };
 
 private:
-    pixel_size
-    internal_size() const;
+    pixel_size internal_size() const;
 
     pixel_size m_size;
 
