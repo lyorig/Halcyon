@@ -23,9 +23,7 @@ surface surface::resize(pixel_size sz) const
 
     this->set_blend(SDL_BLENDMODE_NONE);
 
-    HAL_DEBUG_ASSERT(
-        ::SDL_BlitScaled(this->ptr(), nullptr, ret.ptr(), nullptr) == 0,
-        ::SDL_GetError());
+    drawer { *this }(ret);
 
     this->set_blend(SDL_BLENDMODE_BLEND);
 
@@ -85,9 +83,7 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
         return *reinterpret_cast<const Uint32*>(p);
 
     default: // Intentionally panic.
-        HAL_DEBUG_CHECK(
-            false,
-            "Unknown bytes-per-pixel value while getting pixel from surface");
+        HAL_DEBUG_PANIC("Unknown bytes-per-pixel value while getting pixel from surface");
 
         return 0;
     }
@@ -127,5 +123,6 @@ d& d::from(const pixel_area& area)
 
 void d::operator()(const surface& dst) const
 {
-    HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
+    if (m_this.ptr() != nullptr)
+        HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
 }

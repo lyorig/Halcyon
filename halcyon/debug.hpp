@@ -83,7 +83,7 @@ private:
 } // namespace hal
 
 #define HAL_DEBUG_PRINT hal::debug::print
-#define HAL_DEBUG_PANIC(why) hal::debug::panic(wby, __PRETTY_FUNCTION__)
+#define HAL_DEBUG_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
 #define HAL_DEBUG_ASSERT(cond, if_false) \
     hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
 #define HAL_DEBUG_CHECK(cond, if_false) HAL_DEBUG_ASSERT(cond, if_false)

@@ -29,6 +29,22 @@ struct point {
         };
     }
 
+    constexpr point& operator+=(const point& pt)
+    {
+        x += pt.x;
+        y += pt.y;
+
+        return *this;
+    }
+
+    constexpr point& operator-=(const point& pt)
+    {
+        x -= pt.x;
+        y -= pt.y;
+
+        return *this;
+    }
+
     constexpr point operator*(lyo::f64 mul) const
     {
         return point { lyo::round_cast<T>(x * mul), lyo::round_cast<T>(y * mul) };

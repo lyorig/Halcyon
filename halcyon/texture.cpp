@@ -2,6 +2,7 @@
 
 #include "debug.hpp"
 #include "halcyon/internal/SDL_types.hpp"
+#include "halcyon/types/point.hpp"
 #include "window.hpp"
 
 using namespace hal;
@@ -128,7 +129,35 @@ d& d::flip(enum flip f)
     return *this;
 }
 
+d& d::anchor(enum anchor anch)
+{
+    switch (anch) {
+    case anchor::none:
+    case anchor::top_left:
+        return *this;
+
+    case anchor::top_right:
+        m_dst.pos.x -= m_dst.size.x;
+        break;
+
+    case anchor::bottom_left:
+        m_dst.pos.y -= m_dst.size.y;
+        break;
+
+    case anchor::bottom_right:
+        m_dst.pos -= fpoint_wrap(m_dst.size);
+        break;
+
+    case anchor::center:
+        m_dst.pos -= fpoint_wrap(m_dst.size / 2);
+        break;
+    }
+
+    return *this;
+}
+
 void d::operator()() const
 {
-    HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip)) == 0, ::SDL_GetError());
+    if (m_this.ptr() != nullptr)
+        HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip)) == 0, ::SDL_GetError());
 }

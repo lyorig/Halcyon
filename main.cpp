@@ -1,3 +1,6 @@
+#include "halcyon/internal/config.hpp"
+#include "halcyon/types/render.hpp"
+#include "lyo/timer.hpp"
 #include <halcyon/mono_app.hpp>
 
 int main(int argc, char* argv[])
@@ -6,14 +9,16 @@ int main(int argc, char* argv[])
 
     const char* logo_text { argc == 1 ? "Sample text" : argv[1] };
 
-    const hal::font txf { game.ttf.load_font("assets/fonts/m5x7.ttf", 72) };
+    const hal::font txf { game.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
     const hal::texture tex {
         game.window, txf.render(logo_text).resize(game.window.size().x * 0.5 / txf.size_text(logo_text).x)
     };
 
     hal::texture dlt { game.window };
     hal::color bg { hal::color::blue };
-    lyo::precise_timer tmr, delta;
+    
+    const lyo::precise_timer tmr;
+    lyo::precise_timer delta;
 
     delta += 1.0;
 
@@ -29,20 +34,19 @@ int main(int argc, char* argv[])
 
         if (delta() >= FPS_update_interval) {
             const auto d = lyo::u32(std::round(frames / delta()));
-
-            dlt = txf.render(std::to_string(d));
+            dlt = txf.render(std::to_string(d) + " FPS");
 
             frames = 0;
             delta.reset();
         }
 
-        if (game.input().pressed(hal::button::backspace))
-            HAL_CONSOLE_LOG(hal::severity::info, "test");
+        if (game.input().pressed(hal::button::enter))
+            HAL_CONSOLE_LOG(hal::severity::init, "Made with Halcyon.");
 
         const auto sine { std::sin(tmr()) };
 
-        hal::texture::drawer(dlt).to({ 50, 500 })();
-        hal::texture::drawer(tex).to(hal::coordinate(game.window.size() / 2 - tex.size() / 2)).scale((sine + 2.0) * 0.5).rotate(sine * 20.0)();
+        hal::texture::drawer(dlt).to({ 10, hal::position_type(game.window.size().y) }).anchor(hal::anchor::bottom_left)();
+        hal::texture::drawer(tex).to(hal::coordinate(game.window.size() / 2)).scale((sine + 2.0) * 0.5).rotate(sine * 10.0).anchor(hal::anchor::center)();
 
         HAL_CONSOLE_DRAW(txf, game.window);
 

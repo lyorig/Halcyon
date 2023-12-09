@@ -68,6 +68,8 @@ public:
 
         [[nodiscard]] drawer& flip(enum flip f);
 
+        [[nodiscard]] drawer& anchor(enum anchor anch);
+
         void operator()() const;
 
     private:
