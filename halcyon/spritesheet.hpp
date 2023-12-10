@@ -14,7 +14,6 @@ class spritesheet {
 public:
     spritesheet(const texture& tx, const pixel_size& frame_size);
 
-    // Drop-in replacement for a multidimensional subscript operator.
     const pixel_area& operator[](frame_pos pos) const;
 
     frame_size size() const;

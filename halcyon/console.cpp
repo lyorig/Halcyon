@@ -1,6 +1,5 @@
 #include "SDL2/SDL_stdinc.h"
 #include "halcyon/debug.hpp"
-#include "halcyon/internal/config.hpp"
 #ifndef NDEBUG
 
 #include "console.hpp"

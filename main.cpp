@@ -1,4 +1,5 @@
 #include "mono_app.hpp"
+#include <lyo/utility.hpp>
 
 int main(int argc, char* argv[])
 {
@@ -6,7 +7,7 @@ int main(int argc, char* argv[])
 
     const char* logo_text { argc == 1 ? "Sample text" : argv[1] };
 
-    const hal::font txf { game.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
+    const hal::font txf { game.ttf.load_font("assets/fonts/m5x7.ttf", 48) };
     const hal::texture tex {
         game.window, txf.render(logo_text).resize(game.window.size().x * 0.5 / txf.size_text(logo_text).x)
     };
@@ -30,8 +31,9 @@ int main(int argc, char* argv[])
         ++frames;
 
         if (game.input().pressed(hal::button::enter)) {
-            const auto d = lyo::u32(std::round(frames / delta()));
-            dlt = txf.render(std::to_string(d) + " FPS");
+            const auto t = delta();
+            const auto d = lyo::u32(std::round(frames / t));
+            dlt = txf.render(lyo::string_from_pack(d, " FPS / ", t / frames, 's'));
 
             frames = 0;
             delta.reset();

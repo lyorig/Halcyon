@@ -9,19 +9,21 @@
 #include <halcyon/types/render.hpp>
 #include <lyo/utility.hpp>
 
-#include "internal/config.hpp"
-
 namespace hal {
 class font;
 class window;
 
 class console {
 public:
+    enum {
+        max_entries = 10
+    };
+
     // Log a variadic amount of arguments.
     template <typename... Args>
     static void log(severity type, Args... args)
     {
-        if (m_entries == cfg::max_console_entries) {
+        if (m_entries == max_entries) {
             std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
             m_queue.back() = { lyo::string_from_pack(args...), type };
         }
@@ -37,10 +39,10 @@ public:
     static void draw(const font& fnt, const window& wnd);
 
 private:
-    using count_type = std::remove_cv_t<decltype(cfg::max_console_entries)>;
+    using count_type = lyo::u8;
 
     using value_pair = std::pair<std::string, severity>;
-    using queue_type = std::array<value_pair, cfg::max_console_entries>;
+    using queue_type = std::array<value_pair, max_entries>;
 
     static queue_type m_queue;
     static count_type m_entries;

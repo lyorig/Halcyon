@@ -3,7 +3,6 @@
 #include <SDL2/SDL_render.h>
 
 #include "components/surface.hpp"
-#include "internal/config.hpp"
 
 #include <optional>
 
