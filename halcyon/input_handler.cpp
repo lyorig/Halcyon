@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL_events.h>
 
-#include <lyo/utility.hpp>
+#include <utility>
 
 #include "debug.hpp"
 
@@ -26,11 +26,11 @@ bool input_base::update()
 
 bool input_base::held(button btn) const
 {
-    if (lyo::to_underlying(btn) <= SDL_NUM_SCANCODES) // Key.
+    if (std::to_underlying(btn) <= SDL_NUM_SCANCODES) // Key.
         return ::SDL_GetKeyboardState(nullptr)[static_cast<lyo::usize>(btn)];
 
     else // Mouse button.
-        return SDL_BUTTON(lyo::to_underlying(btn) - SDL_NUM_SCANCODES) & ::SDL_GetMouseState(nullptr, nullptr);
+        return SDL_BUTTON(std::to_underlying(btn) - SDL_NUM_SCANCODES) & ::SDL_GetMouseState(nullptr, nullptr);
 }
 
 pixel_pos input_base::mouse() const

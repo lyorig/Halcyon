@@ -10,7 +10,7 @@ mono_app::mono_app(const char* window_name)
         m_eng
     }
     , mixer { m_eng }
-    , window { m_eng, window_name, hal::fullscreen_mode, { hal::renderer::accelerated } }
+    , window { m_eng, window_name, hal::fullscreen_mode, { hal::renderer::accelerated, hal::renderer::vsync } }
     , image { m_eng, { hal::image_loader::jpg, hal::image_loader::png } }
     , ttf { m_eng }
 {
