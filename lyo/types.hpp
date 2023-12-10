@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <cstdint>
 #include <type_traits>
 
 #define MAYBE_EMPTY [[no_unique_address]]
