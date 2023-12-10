@@ -15,7 +15,7 @@ class window;
 
 class console {
 public:
-    enum {
+    enum config : lyo::u8 {
         max_entries = 10
     };
 
@@ -39,7 +39,7 @@ public:
     static void draw(const font& fnt, const window& wnd);
 
 private:
-    using count_type = lyo::u8;
+    using count_type = std::underlying_type_t<config>;
 
     using value_pair = std::pair<std::string, severity>;
     using queue_type = std::array<value_pair, max_entries>;

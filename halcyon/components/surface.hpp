@@ -46,9 +46,13 @@ public:
     public:
         [[nodiscard]] draw(const surface& src);
 
+        // Set where to draw the surface.
         [[nodiscard]] draw& to(const pixel_pos& pos);
+
+        // Set the surface's destination rectangle.
         [[nodiscard]] draw& to(const pixel_area& area);
 
+        // Set the surface's source rectangle.
         [[nodiscard]] draw& from(const pixel_area& area);
 
         void operator()(const surface& dst) const;

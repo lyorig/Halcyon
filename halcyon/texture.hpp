@@ -91,11 +91,11 @@ public:
         // Call before scaling and anchoring.
         [[nodiscard]] draw& to(const world_area& area);
 
-        // Set the part of the texture to be drawn.
+        // Set the texture's source rectangle.
         // Can be called at any time.
         [[nodiscard]] draw& from(const pixel_area& src);
 
-        // Scale the texture.
+        // Set the texture's scale.
         // Call after setting the destination and before anchoring.
         [[nodiscard]] draw& scale(lyo::f64 mul);
 
