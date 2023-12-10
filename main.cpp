@@ -15,19 +15,19 @@ int main(int argc, char* argv[])
     };
 
     hal::texture dlt { game.window };
-    hal::color bg { hal::color::blue };
+    hal::color bg { hal::color::weezer_blue };
 
-    const lyo::precise_timer tmr;
-    lyo::precise_timer delta;
-
-    std::size_t frames { 0 };
+    lyo::usize frames { 0 };
 
     game.window.renderer.set_fill(bg);
-    game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
+    // game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
     const hal::pixel_area from { { 10, game.window.size().y }, txf.render("A").size() };
     const hal::coordinate fps_pos { hal::anchor::resolve(hal::anchor::bottom_left, hal::world_area(from)) },
         tex_pos { hal::coordinate(game.window.size() / 2) };
+
+    const lyo::precise_timer tmr;
+    lyo::precise_timer delta;
 
     while (game.update() && !game.input().pressed(hal::button::esc)) {
         ++frames;

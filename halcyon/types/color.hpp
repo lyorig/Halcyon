@@ -20,6 +20,8 @@ struct color : public SDL_Color {
         orange = 0xFFFF00,
         cyan = 0x00FFFF,
 
+        weezer_blue = 0x0099D3,
+
         white = 0xFFFFFF
     };
 
