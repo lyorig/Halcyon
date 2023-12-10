@@ -1,18 +1,18 @@
 #pragma once
 
-#include <type_traits>
+#include "concepts.hpp"
+#include <cmath>
 
 /* cast.hpp:
-   Templated casting, correctly rounds floats as well. */
+   Modular casting. */
 
 namespace lyo {
-template <typename Cast_to, typename T>
+
+// For now, this does nothing. Float rounding will be
+// implemented when I consider it important.
+template <arithmetic Cast_to, arithmetic T>
 constexpr Cast_to round_cast(T value) noexcept
 {
-    if constexpr (std::is_floating_point_v<T> && std::is_integral_v<Cast_to>)
-        return static_cast<Cast_to>(value + static_cast<T>(0.5));
-
-    else
-        return static_cast<Cast_to>(value);
+    return static_cast<Cast_to>(std::round(value));
 }
 } // namespace lyo

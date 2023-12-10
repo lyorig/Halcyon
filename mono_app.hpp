@@ -6,7 +6,6 @@
 #include <halcyon/mixer.hpp>
 #include <halcyon/ttf_engine.hpp>
 #include <halcyon/window.hpp>
-#include <lyo/types.hpp>
 
 namespace hq {
 
