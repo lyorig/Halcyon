@@ -14,13 +14,42 @@
    the window it's being rendered to. */
 
 namespace hal {
-enum class anchor : lyo::u8 {
-    none,
-    center,
-    top_left,
-    top_right,
-    bottom_left,
-    bottom_right
+struct anchor {
+    enum pos : lyo::u8 {
+        none,
+        center,
+        top_left,
+        top_right,
+        bottom_left,
+        bottom_right
+    };
+
+    static coordinate resolve(pos anch, world_area from)
+    {
+        switch (anch) {
+        case anchor::none:
+        case anchor::top_left:
+            return from.pos;
+
+        case anchor::top_right:
+            from.pos.x -= from.size.x;
+            break;
+
+        case anchor::bottom_left:
+            from.pos.y -= from.size.y;
+            break;
+
+        case anchor::bottom_right:
+            from.pos -= from.size;
+            break;
+
+        case anchor::center:
+            from.pos -= from.size / 2;
+            break;
+        }
+
+        return from.pos;
+    }
 };
 
 enum class flip : lyo::u8 {
@@ -51,24 +80,23 @@ public:
 
     texture& operator=(const surface& image);
 
-    // TODO: Anchor functionality...?
-    class drawer {
+    class draw {
     public:
-        [[nodiscard]] drawer(const hal::texture& src);
+        [[nodiscard]] draw(const hal::texture& src);
 
-        [[nodiscard]] drawer& to(const coordinate& pos);
-        [[nodiscard]] drawer& to(const world_area& area);
+        [[nodiscard]] draw& to(const coordinate& pos);
+        [[nodiscard]] draw& to(const world_area& area);
 
-        [[nodiscard]] drawer& from(const pixel_area& src);
+        [[nodiscard]] draw& from(const pixel_area& src);
 
         // Call this after setting the destination!
-        [[nodiscard]] drawer& scale(lyo::f64 mul);
+        [[nodiscard]] draw& scale(lyo::f64 mul);
 
-        [[nodiscard]] drawer& rotate(lyo::f64 angle);
+        [[nodiscard]] draw& rotate(lyo::f64 angle);
 
-        [[nodiscard]] drawer& flip(enum flip f);
+        [[nodiscard]] draw& flip(enum flip f);
 
-        [[nodiscard]] drawer& anchor(enum anchor anch);
+        [[nodiscard]] draw& anchor(anchor::pos anch);
 
         void operator()() const;
 

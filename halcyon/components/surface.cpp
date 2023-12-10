@@ -23,7 +23,7 @@ surface surface::resize(pixel_size sz) const
 
     this->set_blend(SDL_BLENDMODE_NONE);
 
-    drawer { *this }(ret);
+    draw { *this }(ret);
 
     this->set_blend(SDL_BLENDMODE_BLEND);
 
@@ -90,12 +90,12 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
 }
 
 // Drawer code.
-using d = surface::drawer;
+using d = surface::draw;
 
 constexpr SDL::pixel_type unset { std::numeric_limits<decltype(unset)>::max() };
 
 // TODO
-d::drawer(const surface& src)
+d::draw(const surface& src)
     : m_this { src }
 {
     m_src.pos.x = unset;

@@ -82,11 +82,11 @@ pixel_size texture::internal_size() const
 }
 
 // Drawer code.
-using d = texture::drawer;
+using d = texture::draw;
 
 constexpr SDL::pixel_type unset { std::numeric_limits<decltype(unset)>::max() };
 
-d::drawer(const texture& src)
+d::draw(const texture& src)
     : m_this { src }
     , m_dst { as_size, static_cast<fpoint_wrap>(m_this.size()) }
 {
@@ -129,29 +129,9 @@ d& d::flip(enum flip f)
     return *this;
 }
 
-d& d::anchor(enum anchor anch)
+d& d::anchor(anchor::pos anch)
 {
-    switch (anch) {
-    case anchor::none:
-    case anchor::top_left:
-        return *this;
-
-    case anchor::top_right:
-        m_dst.pos.x -= m_dst.size.x;
-        break;
-
-    case anchor::bottom_left:
-        m_dst.pos.y -= m_dst.size.y;
-        break;
-
-    case anchor::bottom_right:
-        m_dst.pos -= fpoint_wrap(m_dst.size);
-        break;
-
-    case anchor::center:
-        m_dst.pos -= fpoint_wrap(m_dst.size / 2);
-        break;
-    }
+    m_dst.pos = fpoint_wrap(anchor::resolve(anch, world_area(m_dst)));
 
     return *this;
 }

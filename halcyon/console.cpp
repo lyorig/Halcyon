@@ -58,7 +58,7 @@ void console::draw(const font& fnt, const window& wnd)
                         pixel_type(y_scaled)
                     };
 
-                    hal::surface::drawer(text).to(dest)(canvas);
+                    hal::surface::draw(text).to(dest)(canvas);
                 }
             }
 
@@ -68,7 +68,7 @@ void console::draw(const font& fnt, const window& wnd)
         m_repaint = false;
     }
 
-    hal::texture::drawer(tx).to(offset)();
+    hal::texture::draw(tx).to(offset)();
 }
 
 #endif

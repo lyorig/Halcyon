@@ -1,11 +1,8 @@
-#include "halcyon/internal/config.hpp"
-#include "halcyon/types/render.hpp"
-#include "lyo/timer.hpp"
-#include <halcyon/mono_app.hpp>
+#include "mono_app.hpp"
 
 int main(int argc, char* argv[])
 {
-    hal::mono_app game { "Interloper 1.1" };
+    hq::mono_app game { "Interloper 1.1" };
 
     const char* logo_text { argc == 1 ? "Sample text" : argv[1] };
 
@@ -20,19 +17,19 @@ int main(int argc, char* argv[])
     const lyo::precise_timer tmr;
     lyo::precise_timer delta;
 
-    delta += 1.0;
-
     std::size_t frames { 0 };
 
     game.window.renderer.set_fill(bg);
     game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
-    constexpr lyo::f64 FPS_update_interval { 1.0 };
+    const hal::pixel_area from { { 10, game.window.size().y }, txf.render("A").size() };
+    const hal::coordinate fps_pos { hal::anchor::resolve(hal::anchor::bottom_left, hal::world_area(from)) },
+        tex_pos { hal::coordinate(game.window.size() / 2) };
 
     while (game.update() && !game.input().pressed(hal::button::esc)) {
         ++frames;
 
-        if (delta() >= FPS_update_interval) {
+        if (game.input().pressed(hal::button::enter)) {
             const auto d = lyo::u32(std::round(frames / delta()));
             dlt = txf.render(std::to_string(d) + " FPS");
 
@@ -40,13 +37,10 @@ int main(int argc, char* argv[])
             delta.reset();
         }
 
-        if (game.input().pressed(hal::button::enter))
-            HAL_CONSOLE_LOG(hal::severity::init, "Made with Halcyon.");
-
         const auto sine { std::sin(tmr()) };
 
-        hal::texture::drawer(dlt).to({ 10, hal::position_type(game.window.size().y) }).anchor(hal::anchor::bottom_left)();
-        hal::texture::drawer(tex).to(hal::coordinate(game.window.size() / 2)).scale((sine + 2.0) * 0.5).rotate(sine * 10.0).anchor(hal::anchor::center)();
+        hal::texture::draw(dlt).to(fps_pos)();
+        hal::texture::draw(tex).to(tex_pos).scale((sine + 2.0) * 0.5).rotate(sine * 10.0).anchor(hal::anchor::center)();
 
         HAL_CONSOLE_DRAW(txf, game.window);
 

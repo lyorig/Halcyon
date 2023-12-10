@@ -42,14 +42,14 @@ public:
     // are extremely slow to retrieve pixel information.
     color operator[](pixel_pos coord) const;
 
-    class drawer {
+    class draw {
     public:
-        [[nodiscard]] drawer(const surface& src);
+        [[nodiscard]] draw(const surface& src);
 
-        [[nodiscard]] drawer& to(const pixel_pos& pos);
-        [[nodiscard]] drawer& to(const pixel_area& area);
+        [[nodiscard]] draw& to(const pixel_pos& pos);
+        [[nodiscard]] draw& to(const pixel_area& area);
 
-        [[nodiscard]] drawer& from(const pixel_area& area);
+        [[nodiscard]] draw& from(const pixel_area& area);
 
         void operator()(const surface& dst) const;
 
