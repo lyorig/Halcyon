@@ -83,18 +83,32 @@ public:
     public:
         [[nodiscard]] draw(const hal::texture& src);
 
+        // Set where to draw the texture.
+        // Call before scaling and anchoring.
         [[nodiscard]] draw& to(const coordinate& pos);
+
+        // Set the destination rectangle for the texture.
+        // Call before scaling and anchoring.
         [[nodiscard]] draw& to(const world_area& area);
 
+        // Set the part of the texture to be drawn.
+        // Can be called at any time.
         [[nodiscard]] draw& from(const pixel_area& src);
 
-        // Call this after setting the destination!
+        // Scale the texture.
+        // Call after setting the destination and before anchoring.
         [[nodiscard]] draw& scale(lyo::f64 mul);
 
+        // Set the texture's rotation.
+        // Can be called at any time.
         [[nodiscard]] draw& rotate(lyo::f64 angle);
 
+        // Set the texture's flip.
+        // Can be called at any time.
         [[nodiscard]] draw& flip(enum flip f);
 
+        // Anchor the texture from the destination position.
+        // Call after setting the destination and scaling.
         [[nodiscard]] draw& anchor(anchor::pos anch);
 
         void operator()() const;
