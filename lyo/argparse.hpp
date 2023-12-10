@@ -39,11 +39,16 @@ public:
         if (!tok) // Nothing found, GTFO.
             return std::nullopt;
 
-        T ret;
+        if constexpr (std::is_same_v<T, const char*>)
+            return tok ? std::optional<T>(tok + std::strlen(prefix)) : std::nullopt;
 
-        std::istringstream s { tok + std::strlen(prefix) };
+        else {
+            T ret;
 
-        return (s >> ret) ? ret : std::nullopt;
+            std::istringstream s { tok + std::strlen(prefix) };
+
+            return (s >> ret) ? ret : std::nullopt;
+        };
     }
 
     template <typename T>
@@ -59,11 +64,16 @@ public:
         if (!tok) // Nothing found, GTFO.
             return default_value;
 
-        T ret;
+        if constexpr (std::is_same_v<T, const char*>)
+            return tok + std::strlen(prefix);
 
-        std::istringstream s { tok + std::strlen(prefix) };
+        else {
+            T ret;
 
-        return (s >> ret) ? ret : default_value;
+            std::istringstream s { tok + std::strlen(prefix) };
+
+            return (s >> ret) ? ret : default_value;
+        };
     }
 
 private:

@@ -5,12 +5,12 @@
 
 using namespace hq;
 
-mono_app::mono_app(const char* window_name)
+mono_app::mono_app(const lyo::parser& args, const char* window_name)
     : m_input {
         m_eng
     }
     , mixer { m_eng }
-    , window { m_eng, window_name, hal::fullscreen_mode, { hal::renderer::accelerated } }
+    , window { m_eng, window_name, hal::fullscreen_mode, { hal::renderer::accelerated, args.has("-vsync") ? hal::renderer::vsync : hal::renderer::none } }
     , image { m_eng, { hal::image_loader::jpg, hal::image_loader::png } }
     , ttf { m_eng }
 {

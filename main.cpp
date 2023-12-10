@@ -3,9 +3,11 @@
 
 int main(int argc, char* argv[])
 {
-    hq::mono_app game { "Interloper 1.1" };
+    const lyo::parser p { argc, argv };
 
-    const char* logo_text { argc == 1 ? "Sample text" : argv[1] };
+    hq::mono_app game { p, "Interloper 1.1" };
+
+    const auto logo_text = p.parse<const char*>("-text=", "Made with Halcyon");
 
     const hal::font txf { game.ttf.load_font("assets/fonts/m5x7.ttf", 48) };
     const hal::texture tex {
