@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
     hal::texture dlt { game.window };
     hal::color bg { hal::color::blue };
-    
+
     const lyo::precise_timer tmr;
     lyo::precise_timer delta;
 
