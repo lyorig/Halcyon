@@ -84,7 +84,7 @@ struct point {
     }
 
     template <lyo::arithmetic Convert>
-    constexpr explicit operator point<Convert>() const
+    constexpr operator point<Convert>() const
     {
         return point<Convert> { lyo::round_cast<Convert>(x),
             lyo::round_cast<Convert>(y) };

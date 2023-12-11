@@ -31,7 +31,7 @@ struct rectangle {
     }
 
     template <lyo::arithmetic Convert>
-    constexpr explicit operator rectangle<Convert>() const
+    constexpr operator rectangle<Convert>() const
     {
         return rectangle<Convert> { static_cast<point<Convert>>(pos),
             static_cast<point<Convert>>(size) };

@@ -41,7 +41,7 @@ void console::draw(const font& fnt, const window& wnd)
         if (csz.x != 0) {
             // Compose the texture.
             const lyo::f64 scale { wnd.size().y * vhm / y_size };
-            const pixel_type y_scaled { pixel_type(y_size * scale) };
+            const pixel_type y_scaled = std::round(y_size * scale);
             surface canvas { wnd, csz * scale };
 
             for (count_type i { 0 }; i < m_entries; ++i) {

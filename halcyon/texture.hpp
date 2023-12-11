@@ -23,7 +23,8 @@ struct anchor {
         bottom_right
     };
 
-    static coordinate resolve(pos anch, world_area from)
+    template <lyo::arithmetic T>
+    static point<T> resolve(pos anch, rectangle<T> from)
     {
         switch (anch) {
         case anchor::none:
