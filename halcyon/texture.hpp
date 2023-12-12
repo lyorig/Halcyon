@@ -24,31 +24,31 @@ struct anchor {
     };
 
     template <lyo::arithmetic T>
-    static point<T> resolve(pos anch, rectangle<T> from)
+    static point<T> resolve(pos anch, point<T> pos, point<T> size)
     {
         switch (anch) {
         case anchor::none:
         case anchor::top_left:
-            return from.pos;
+            return pos;
 
         case anchor::top_right:
-            from.pos.x -= from.size.x;
+            pos.x -= size.x;
             break;
 
         case anchor::bottom_left:
-            from.pos.y -= from.size.y;
+            pos.y -= size.y;
             break;
 
         case anchor::bottom_right:
-            from.pos -= from.size;
+            pos -= size;
             break;
 
         case anchor::center:
-            from.pos -= from.size / 2;
+            pos -= size / 2;
             break;
         }
 
-        return from.pos;
+        return pos;
     }
 };
 

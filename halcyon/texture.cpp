@@ -131,7 +131,7 @@ d& d::flip(enum flip f)
 
 d& d::anchor(anchor::pos anch)
 {
-    m_dst.pos = fpoint_wrap(anchor::resolve(anch, world_area(m_dst)));
+    m_dst.pos = fpoint_wrap(anchor::resolve(anch, m_dst.pos, m_dst.size));
 
     return *this;
 }

@@ -15,15 +15,15 @@ int main(int argc, char* argv[])
     };
 
     hal::texture dlt { game.window };
-    hal::color bg { hal::color::weezer_blue };
+    hal::color bg { hal::color::blue };
 
     lyo::usize frames { 0 };
 
     game.window.renderer.set_fill(bg);
     // game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
-    const hal::pixel_area from { { 10, game.window.size().y }, txf.render("A").size() };
-    const hal::coordinate fps_pos = hal::anchor::resolve(hal::anchor::bottom_left, from),
+    const hal::pixel_pos from { 10, game.window.size().y };
+    const hal::coordinate fps_pos = hal::anchor::resolve(hal::anchor::bottom_left, from, txf.render("A").size()),
                           tex_pos = game.window.size() / 2;
 
     const lyo::precise_timer tmr;
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
         const auto sine { std::sin(tmr()) };
 
         hal::texture::draw(dlt).to(fps_pos)();
-        hal::texture::draw(tex).to(tex_pos).scale((sine + 2.0) * 0.5).rotate(sine * 10.0).anchor(hal::anchor::center)();
+        hal::texture::draw(tex).to(tex_pos).scale((sine + 2.0) * 0.5).anchor(hal::anchor::center)();
 
         HAL_CONSOLE_DRAW(txf, game.window);
 
