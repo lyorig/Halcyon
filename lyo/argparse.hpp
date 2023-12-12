@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstring>
 #include <optional>
 #include <sstream>
 
@@ -10,7 +9,9 @@
 namespace lyo {
 class parser {
 public:
-    parser(const int& argc, const char* const* const& argv) noexcept
+    using constified_argv = const char* const* const;
+
+    parser(int argc, constified_argv argv) noexcept
         : m_argv { argv }
         , m_argc { argc }
     {
@@ -77,7 +78,7 @@ public:
     }
 
 private:
-    const char* const* const& m_argv; // "How many consts would you like?" "Yes."
-    const int& m_argc;
+    constified_argv m_argv;
+    const int m_argc;
 };
 }
