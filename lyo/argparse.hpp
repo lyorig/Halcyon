@@ -26,7 +26,7 @@ public:
         return false;
     }
 
-    template <typename T>
+    template <typename T = const char*>
     std::optional<T> parse(const char* prefix) const noexcept
     {
         const char* tok { nullptr };
@@ -51,7 +51,7 @@ public:
         };
     }
 
-    template <typename T>
+    template <typename T = const char*>
     T parse(const char* prefix, T default_value) const noexcept
     {
         const char* tok { nullptr };
