@@ -3,27 +3,29 @@
 #include <halcyon/types/render.hpp>
 #include <lyo/buffer.hpp>
 
-namespace hal {
-using frame_t = lyo::u8;
-using frame_size = point<frame_t>;
-using frame_pos = frame_size;
+namespace hal
+{
+    using frame_t = lyo::u8;
+    using frame_size = point<frame_t>;
+    using frame_pos = frame_size;
 
-class texture;
+    class texture;
 
-class spritesheet {
-public:
-    spritesheet(const texture& tx, const pixel_size& frame_size);
+    class spritesheet
+    {
+    public:
+        spritesheet(const texture& tx, const pixel_size& frame_size);
 
-    const pixel_area& operator[](frame_pos pos) const;
+        const pixel_area& operator[](frame_pos pos) const;
 
-    frame_size size() const;
+        frame_size size() const;
 
-    // Raw frame access - mostly for debugging.
-    const lyo::buffer<pixel_area>& frames() const;
+        // Raw frame access - mostly for debugging.
+        const lyo::buffer<pixel_area>& frames() const;
 
-private:
-    frame_size m_size;
+    private:
+        frame_size m_size;
 
-    lyo::buffer<pixel_area> m_frames;
-};
+        lyo::buffer<pixel_area> m_frames;
+    };
 } // namespace hal

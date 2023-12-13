@@ -5,15 +5,17 @@
 /* core.hpp:
    The core of Halcyon, without which nothing can be initialized. */
 
-namespace hal {
-class engine {
-public:
-    engine();
-    ~engine();
+namespace hal
+{
+    class engine
+    {
+    public:
+        engine();
+        ~engine();
 
-    void exit() &;
+        void exit() &;
 
-private:
-    void deinitialize() const;
-};
+    private:
+        void deinitialize() const;
+    };
 } // namespace halcyon

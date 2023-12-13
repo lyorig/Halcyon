@@ -6,79 +6,86 @@
 /* argparse.hpp:
    Argument-parsing functions. */
 
-namespace lyo {
-class parser {
-public:
-    using constified_argv = const char* const* const;
-
-    parser(int argc, constified_argv argv) noexcept
-        : m_argv { argv }
-        , m_argc { argc }
+namespace lyo
+{
+    class parser
     {
-    }
+    public:
+        using constified_argv = const char* const* const;
 
-    bool has(const char* name) const noexcept
-    {
-        for (int i { 0 }; i < m_argc; ++i) {
-            if (std::strcmp(m_argv[i], name) == 0)
-                return true;
+        parser(int argc, constified_argv argv) noexcept
+            : m_argv { argv }
+            , m_argc { argc }
+        {
         }
 
-        return false;
-    }
+        bool has(const char* name) const noexcept
+        {
+            for (int i { 0 }; i < m_argc; ++i)
+            {
+                if (std::strcmp(m_argv[i], name) == 0)
+                    return true;
+            }
 
-    template <typename T = const char*>
-    std::optional<T> parse(const char* prefix) const noexcept
-    {
-        const char* tok { nullptr };
-
-        for (int i { 0 }; i < m_argc; ++i) {
-            if ((tok = strstr(m_argv[i], prefix)) != nullptr)
-                break;
+            return false;
         }
 
-        if (!tok) // Nothing found, GTFO.
-            return std::nullopt;
+        template <typename T = const char*>
+        std::optional<T> parse(const char* prefix) const noexcept
+        {
+            const char* tok { nullptr };
 
-        if constexpr (std::is_same_v<T, const char*>)
-            return tok ? std::optional<T>(tok + std::strlen(prefix)) : std::nullopt;
+            for (int i { 0 }; i < m_argc; ++i)
+            {
+                if ((tok = strstr(m_argv[i], prefix)) != nullptr)
+                    break;
+            }
 
-        else {
-            T ret;
+            if (!tok) // Nothing found, GTFO.
+                return std::nullopt;
 
-            std::istringstream s { tok + std::strlen(prefix) };
+            if constexpr (std::is_same_v<T, const char*>)
+                return tok ? std::optional<T>(tok + std::strlen(prefix)) : std::nullopt;
 
-            return (s >> ret) ? ret : std::nullopt;
-        };
-    }
+            else
+            {
+                T ret;
 
-    template <typename T = const char*>
-    T parse(const char* prefix, T default_value) const noexcept
-    {
-        const char* tok { nullptr };
+                std::istringstream s { tok + std::strlen(prefix) };
 
-        for (int i { 0 }; i < m_argc; ++i) {
-            if ((tok = strstr(m_argv[i], prefix)) != nullptr)
-                break;
+                return (s >> ret) ? ret : std::nullopt;
+            };
         }
 
-        if (!tok) // Nothing found, GTFO.
-            return default_value;
+        template <typename T = const char*>
+        T parse(const char* prefix, T default_value) const noexcept
+        {
+            const char* tok { nullptr };
 
-        if constexpr (std::is_same_v<T, const char*>)
-            return tok + std::strlen(prefix);
+            for (int i { 0 }; i < m_argc; ++i)
+            {
+                if ((tok = strstr(m_argv[i], prefix)) != nullptr)
+                    break;
+            }
 
-        else {
-            T ret;
+            if (!tok) // Nothing found, GTFO.
+                return default_value;
 
-            std::istringstream s { tok + std::strlen(prefix) };
+            if constexpr (std::is_same_v<T, const char*>)
+                return tok + std::strlen(prefix);
 
-            return (s >> ret) ? ret : default_value;
-        };
-    }
+            else
+            {
+                T ret;
 
-private:
-    constified_argv m_argv;
-    const int m_argc;
-};
+                std::istringstream s { tok + std::strlen(prefix) };
+
+                return (s >> ret) ? ret : default_value;
+            };
+        }
+
+    private:
+        constified_argv m_argv;
+        const int       m_argc;
+    };
 }

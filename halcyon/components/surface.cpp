@@ -62,10 +62,11 @@ void surface::set_blend(SDL_BlendMode bm) const
 
 Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
 {
-    const auto bpp { ptr()->format->BytesPerPixel };
+    const auto   bpp { ptr()->format->BytesPerPixel };
     const Uint8* p { static_cast<Uint8*>(ptr()->pixels) + y * ptr()->pitch + x * bpp };
 
-    switch (bpp) {
+    switch (bpp)
+    {
     case 1:
         return *p;
 

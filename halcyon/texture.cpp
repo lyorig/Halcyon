@@ -47,7 +47,7 @@ void texture::set_as_target() { window.renderer.set_target(*this); }
 pixel_size texture::vw(lyo::f64 percent) const
 {
     const pixel_type width { pixel_type(window.renderer.output_size().x * (percent / 100.0)) };
-    const lyo::f64 scale { width / static_cast<lyo::f64>(m_size.x) };
+    const lyo::f64   scale { width / static_cast<lyo::f64>(m_size.x) };
 
     return { width, pixel_type(m_size.y * scale) };
 }

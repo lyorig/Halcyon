@@ -67,16 +67,19 @@ bool input_handler::released(button btn) const
 
 bool input_handler::process(const SDL_Event& event)
 {
-    switch (event.type) {
+    switch (event.type)
+    {
     case SDL_KEYDOWN:
-        if (event.key.repeat == 0) {
+        if (event.key.repeat == 0)
+        {
             m_pressed.set(event.key.keysym.scancode);
         }
 
         break;
 
     case SDL_KEYUP:
-        if (event.key.repeat == 0) {
+        if (event.key.repeat == 0)
+        {
             m_released.set(event.key.keysym.scancode);
         }
 

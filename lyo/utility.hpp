@@ -9,35 +9,36 @@
 /* utility.hpp:
    Various uncategorized helper functions. */
 
-namespace lyo {
-template <character T>
-    requires(lyo::is_any_of<T, char, wchar_t>())
-constexpr bool streq(const T* first, const T* second) noexcept
+namespace lyo
 {
-    if (std::is_same_v<T, char>)
-        return std::strcmp(first, second) == 0;
+    template <character T>
+        requires(lyo::is_any_of<T, char, wchar_t>())
+    constexpr bool streq(const T* first, const T* second) noexcept
+    {
+        if (std::is_same_v<T, char>)
+            return std::strcmp(first, second) == 0;
 
-    else if (std::is_same_v<T, char*>)
-        return std::wcscmp(first, second) == 0;
-}
+        else if (std::is_same_v<T, char*>)
+            return std::wcscmp(first, second) == 0;
+    }
 
-// Checks if the string is null or if the first character is a null terminator.
-template <character T>
-constexpr bool is_c_string_empty(const T* string) noexcept
-{
-    return !string || *string == static_cast<T>('\0');
-}
+    // Checks if the string is null or if the first character is a null terminator.
+    template <character T>
+    constexpr bool is_c_string_empty(const T* string) noexcept
+    {
+        return !string || *string == static_cast<T>('\0');
+    }
 
-// Input all arguments into a stringstream and return them as a string.
-template <typename... Args>
-std::string string_from_pack(Args... args) noexcept
-{
-    std::stringstream stream;
+    // Input all arguments into a stringstream and return them as a string.
+    template <typename... Args>
+    std::string string_from_pack(Args... args) noexcept
+    {
+        std::stringstream stream;
 
-    stream << std::fixed;
+        stream << std::fixed;
 
-    (stream << ... << args);
+        (stream << ... << args);
 
-    return stream.str();
-}
+        return stream.str();
+    }
 } // namespace lyo

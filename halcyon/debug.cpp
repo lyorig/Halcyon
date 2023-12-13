@@ -9,7 +9,7 @@
 using namespace hal;
 
 // Static private variables.
-std::ofstream debug::m_output { "Halcyon debug output.txt" };
+std::ofstream            debug::m_output { "Halcyon debug output.txt" };
 const lyo::precise_timer debug::m_timer {};
 
 void debug::panic(const char* why, const char* where,
@@ -34,7 +34,8 @@ void debug::panic(const char* why, const char* where,
 
     int response { 0 };
 
-    if (::SDL_ShowMessageBox(&msgbox, &response) < 0) {
+    if (::SDL_ShowMessageBox(&msgbox, &response) < 0)
+    {
         debug::print(severity::error, __func__,
             ": Message box creation failed, exiting");
         goto Exit;
@@ -44,7 +45,8 @@ void debug::panic(const char* why, const char* where,
         debug::print(severity::info, __func__, ": User chose to ",
             response == 0 ? "exit" : "continue execution");
 
-    if (response == 0) {
+    if (response == 0)
+    {
     Exit:
         std::exit(EXIT_FAILURE);
     }

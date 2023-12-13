@@ -6,12 +6,13 @@
 /* cast.hpp:
    Modular casting. */
 
-namespace lyo {
-
-// Cast to a type with proper rounding.
-template <arithmetic Cast_to, arithmetic T>
-constexpr Cast_to cast(T value) noexcept
+namespace lyo
 {
-    return static_cast<Cast_to>(std::round(value));
-}
+
+    // Cast to a type with proper rounding.
+    template <arithmetic Cast_to, arithmetic T>
+    constexpr Cast_to cast(T value) noexcept
+    {
+        return static_cast<Cast_to>(std::round(value));
+    }
 } // namespace lyo

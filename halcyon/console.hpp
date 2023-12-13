@@ -14,44 +14,47 @@
 // #define HALDEBUG
 
 #ifdef HALDEBUG
-namespace hal {
-class font;
-class window;
+namespace hal
+{
+    class font;
+    class window;
 
-class console {
-public:
-    // Log a variadic amount of arguments.
-    template <typename... Args>
-    static void log(severity type, Args... args)
+    class console
     {
-        if (m_entries == m_queue.size()) {
-            std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
-            m_queue.back() = { lyo::string_from_pack(args...), type };
+    public:
+        // Log a variadic amount of arguments.
+        template <typename... Args>
+        static void log(severity type, Args... args)
+        {
+            if (m_entries == m_queue.size())
+            {
+                std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
+                m_queue.back() = { lyo::string_from_pack(args...), type };
+            }
+
+            else
+                m_queue[m_entries++] = { lyo::string_from_pack(args...), type };
+
+            m_repaint = true;
         }
 
-        else
-            m_queue[m_entries++] = { lyo::string_from_pack(args...), type };
+        // Draw the console to the top left corner of the screen.
+        static void draw(const font& fnt, const window& wnd);
 
-        m_repaint = true;
-    }
+    private:
+        using count_type = lyo::u8;
 
-    // Draw the console to the top left corner of the screen.
-    static void draw(const font& fnt, const window& wnd);
+        using value_pair = std::pair<std::string, severity>;
+        using queue_type = std::array<value_pair, 10>; // The size acts as the maximum amount of entries.
 
-private:
-    using count_type = lyo::u8;
+        static queue_type m_queue;
+        static count_type m_entries;
 
-    using value_pair = std::pair<std::string, severity>;
-    using queue_type = std::array<value_pair, 10>; // The size acts as the maximum amount of entries.
-
-    static queue_type m_queue;
-    static count_type m_entries;
-
-    static bool m_repaint; // Whether to recreate the texture.
-};
+        static bool m_repaint; // Whether to recreate the texture.
+    };
 } // namespace hal
 
-#define HAL_CONSOLE_LOG hal::console::log
+#define HAL_CONSOLE_LOG  hal::console::log
 #define HAL_CONSOLE_DRAW hal::console::draw
 
 #else

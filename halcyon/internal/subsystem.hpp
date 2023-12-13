@@ -7,27 +7,30 @@
 /* subsystem.hpp:
    A "smart pointer way" to initialize SDL subsystems. */
 
-namespace hal {
-enum class subsys : lyo::u16 {
-    video = SDL_INIT_VIDEO,
-    audio = SDL_INIT_AUDIO,
-    controller = SDL_INIT_GAMECONTROLLER,
-    haptic = SDL_INIT_HAPTIC,
-    sensor = SDL_INIT_SENSOR,
-    all = SDL_INIT_EVERYTHING
-};
-
-template <subsys System>
-class subsystem {
-public:
-    subsystem()
+namespace hal
+{
+    enum class subsys : lyo::u16
     {
-        ::SDL_InitSubSystem(static_cast<Uint32>(System));
-    }
+        video = SDL_INIT_VIDEO,
+        audio = SDL_INIT_AUDIO,
+        controller = SDL_INIT_GAMECONTROLLER,
+        haptic = SDL_INIT_HAPTIC,
+        sensor = SDL_INIT_SENSOR,
+        all = SDL_INIT_EVERYTHING
+    };
 
-    ~subsystem()
+    template <subsys System>
+    class subsystem
     {
-        ::SDL_QuitSubSystem(static_cast<Uint32>(System));
-    }
-};
+    public:
+        subsystem()
+        {
+            ::SDL_InitSubSystem(static_cast<Uint32>(System));
+        }
+
+        ~subsystem()
+        {
+            ::SDL_QuitSubSystem(static_cast<Uint32>(System));
+        }
+    };
 } // namespace hal
