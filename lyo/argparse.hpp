@@ -84,6 +84,16 @@ namespace lyo
             };
         }
 
+        constified_argv begin() const noexcept
+        {
+            return m_argv;
+        }
+
+        constified_argv end() const noexcept
+        {
+            return m_argv + m_argc;
+        }
+
     private:
         constified_argv m_argv;
         const int       m_argc;
