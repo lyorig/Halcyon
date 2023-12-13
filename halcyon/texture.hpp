@@ -2,9 +2,8 @@
 
 #include <SDL2/SDL_render.h>
 
-#include "components/surface.hpp"
-
-#include <optional>
+#include <halcyon/components/surface.hpp>
+#include <halcyon/enums/anchor.hpp>
 
 /* texture.cpp:
    A proper texture that can be drawn to a window.
@@ -13,44 +12,6 @@
    the window it's being rendered to. */
 
 namespace hal {
-struct anchor {
-    enum pos : lyo::u8 {
-        none,
-        center,
-        top_left,
-        top_right,
-        bottom_left,
-        bottom_right
-    };
-
-    template <lyo::arithmetic T>
-    static point<T> resolve(pos anch, point<T> pos, point<T> size)
-    {
-        switch (anch) {
-        case anchor::none:
-        case anchor::top_left:
-            return pos;
-
-        case anchor::top_right:
-            pos.x -= size.x;
-            break;
-
-        case anchor::bottom_left:
-            pos.y -= size.y;
-            break;
-
-        case anchor::bottom_right:
-            pos -= size;
-            break;
-
-        case anchor::center:
-            pos -= size / 2;
-            break;
-        }
-
-        return pos;
-    }
-};
 
 enum class flip : lyo::u8 {
     none = SDL_FLIP_NONE,
@@ -91,6 +52,10 @@ public:
         // Set the destination rectangle for the texture.
         // Call before scaling and anchoring.
         [[nodiscard]] draw& to(const world_area& area);
+
+        // Stretch the texture across the board.
+        // Do not use with scaling and anchoring.
+        [[nodiscard]] draw& to(fill_tag);
 
         // Set the texture's source rectangle.
         // Can be called at any time.

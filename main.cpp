@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 
     const hal::font txf { game.ttf.load_font("assets/fonts/m5x7.ttf", p.parse<lyo::u32>("-fontsize=", 48)) };
     const hal::texture tex {
-        game.window, txf.render(logo_text).resize(game.window.size().x * 0.5 / txf.size_text(logo_text).x)
+        game.window, txf.render(logo_text)
     };
 
     hal::texture dlt { game.window };
@@ -43,6 +43,10 @@ int main(int argc, char* argv[])
             delta.reset();
         }
 
+        if (game.input().pressed(hal::button::T)) {
+            HAL_CONSOLE_LOG(hal::severity::info, "T pressed");
+        }
+
         const auto sine { std::sin(tmr()) };
 
         hal::texture::draw(dlt).to(fps_pos)();
@@ -50,7 +54,7 @@ int main(int argc, char* argv[])
 
         HAL_CONSOLE_DRAW(txf, game.window);
 
-        bg.r = lyo::round_cast<lyo::u8>((sine + 1.0) * 64.0);
+        bg.r = lyo::round_cast<hal::color::value_type>((sine + 1.0) * 64.0);
         game.window.renderer.set_fill(bg);
     }
 

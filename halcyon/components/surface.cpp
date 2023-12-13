@@ -97,27 +97,47 @@ constexpr SDL::pixel_type unset { std::numeric_limits<decltype(unset)>::max() };
 // TODO
 d::draw(const surface& src)
     : m_this { src }
+    , m_dst { as_size, src.size() }
+
 {
     m_src.pos.x = unset;
-    m_dst.pos.x = unset;
 }
 
 d& d::to(const pixel_pos& pos)
 {
-    m_dst.pos = point_wrap(pos);
-    m_dst.size = point_wrap(m_this.size());
+    m_dst.pos = pos;
+    m_dst.size = m_this.size();
     return *this;
 }
 
 d& d::to(const pixel_area& area)
 {
-    m_dst = rect_wrap(area);
+    m_dst = area;
+    return *this;
+}
+
+d& d::to(fill_tag)
+{
+    m_dst.pos.x = unset;
     return *this;
 }
 
 d& d::from(const pixel_area& area)
 {
-    m_src = rect_wrap(area);
+    m_src = area;
+    return *this;
+}
+
+d& d::scale(lyo::f64 mul)
+{
+    if (m_dst.pos.x != unset)
+        m_dst.size *= mul;
+    return *this;
+}
+
+d& d::anchor(anchor::pos anch)
+{
+    m_dst.pos = anchor::resolve(anch, m_dst.pos, m_dst.size);
     return *this;
 }
 

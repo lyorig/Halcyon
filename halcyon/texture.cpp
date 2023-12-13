@@ -95,13 +95,20 @@ d::draw(const texture& src)
 
 d& d::to(const coordinate& pos)
 {
-    m_dst.pos = fpoint_wrap(pos);
+    m_dst.pos = pos;
     return *this;
 }
 
 d& d::to(const world_area& area)
 {
-    m_dst = frect_wrap(area);
+    m_dst = area;
+    return *this;
+}
+
+d& d::to(fill_tag)
+{
+    m_dst.pos = { 0, 0 };
+    m_dst.size = m_this.window.renderer.output_size();
     return *this;
 }
 
@@ -131,13 +138,14 @@ d& d::flip(enum flip f)
 
 d& d::anchor(anchor::pos anch)
 {
-    m_dst.pos = fpoint_wrap(anchor::resolve(anch, m_dst.pos, m_dst.size));
-
+    m_dst.pos = anchor::resolve(anch, m_dst.pos, m_dst.size);
     return *this;
 }
 
 void d::operator()() const
 {
     if (m_this.ptr() != nullptr)
-        HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip)) == 0, ::SDL_GetError());
+        HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip))
+                == 0,
+            ::SDL_GetError());
 }
