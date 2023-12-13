@@ -1,11 +1,18 @@
 #include "mono_app.hpp"
 #include <lyo/utility.hpp>
 
+// Command-line arguments:
+// -windowname  - The name of the window.
+// -text        - The text to render.
+// -fontsize    - The font size used to render everything.
+// -novsync     - Disable VSync.
+// -music       - Play some music.
+
 int main(int argc, char* argv[])
 {
     const lyo::parser p { argc, argv };
 
-    hq::mono_app game { p, p.parse("-windowname=", "Interloper 1.1") };
+    hq::mono_app game { p, p.parse("-windowname=", "Halcyon") };
 
     const auto logo_text = p.parse("-text=", "Made with Halcyon");
 

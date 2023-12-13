@@ -35,15 +35,14 @@ public:
         m_repaint = true;
     }
 
-    // Draw the console to the top left corner of the screen. Using
-    // the smallest possible font size for performance is recommended.
+    // Draw the console to the top left corner of the screen.
     static void draw(const font& fnt, const window& wnd);
 
 private:
     using count_type = lyo::u8;
 
     using value_pair = std::pair<std::string, severity>;
-    using queue_type = std::array<value_pair, 10>;
+    using queue_type = std::array<value_pair, 10>; // The size acts as the maximum amount of entries.
 
     static queue_type m_queue;
     static count_type m_entries;
