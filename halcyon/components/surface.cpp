@@ -23,7 +23,7 @@ surface surface::resize(pixel_size sz) const
 
     this->set_blend(SDL_BLENDMODE_NONE);
 
-    draw { *this }(ret);
+    draw { *this }.to(hal::fill)(ret);
 
     this->set_blend(SDL_BLENDMODE_BLEND);
 

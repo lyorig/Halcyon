@@ -19,8 +19,6 @@ namespace hal
     class texture : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
     {
     public:
-        using dest_type = SDL::position_type;
-
         texture(const window& wnd);
         texture(const window& wnd, const pixel_size& size);
         texture(const window& wnd, const surface& image);
@@ -38,7 +36,7 @@ namespace hal
 
         texture& operator=(const surface& image);
 
-        class draw final : public drawer<texture, draw>
+        class draw final : public drawer<texture, SDL::position_type, draw>
         {
         public:
             using drawer::drawer;

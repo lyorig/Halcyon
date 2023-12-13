@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
     const hal::font    txf { game.ttf.load_font("assets/fonts/m5x7.ttf",
            p.parse<lyo::u32>("-fontsize=", 48)) };
-    const hal::texture tex { game.window, txf.render(logo_text) };
+    const hal::texture tex { game.window, txf.render(logo_text).resize(4.0) };
 
     hal::texture dlt { game.window };
     hal::color   bg { hal::color::blue };
@@ -63,6 +63,7 @@ int main(int argc, char* argv[])
         hal::texture::draw(tex)
             .to(tex_pos)
             .scale((sine + 2.0) * 0.5)
+            .rotate(sine * 30.0)
             .anchor(hal::anchor::center)();
 
         HAL_CONSOLE_DRAW(txf, game.window);

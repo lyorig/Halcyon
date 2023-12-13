@@ -23,8 +23,6 @@ namespace hal
     class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface>
     {
     public:
-        using dest_type = SDL::pixel_type;
-
         // Create a sized surface.
         surface(const window& wnd, pixel_size sz);
 
@@ -45,7 +43,7 @@ namespace hal
         // are extremely slow to retrieve pixel information.
         color operator[](pixel_pos coord) const;
 
-        class draw : public drawer<surface, draw>
+        class draw : public drawer<surface, SDL::pixel_type, draw>
         {
         public:
             using drawer::drawer;

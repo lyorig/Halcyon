@@ -4,16 +4,19 @@
 
 namespace hal
 {
-
     template <lyo::arithmetic T>
     constexpr T unset { std::numeric_limits<T>::max() };
 
-    template <typename T, typename This = void>
-    class drawer
+    template <typename T, typename Dest_type, typename This = void>
+    requires(lyo::is_any_of<Dest_type, SDL::pixel_type, SDL::position_type>()) class drawer
     {
     protected:
         using st = SDL::pixel_type;
-        using dt = T::dest_type;
+        using dt = Dest_type;
+
+        using spoint = point<st>;
+        using srect = rectangle<st>;
+
         using dpoint = point<dt>;
         using drect = rectangle<dt>;
 
@@ -29,7 +32,7 @@ namespace hal
         }
 
         // Set where to draw.
-        // Call before scaling and anchoring.
+        // Discards any previous scaling and anchoring.
         [[nodiscard]] this_ref to(const dpoint& pos)
         {
             m_dst.pos = pos;
@@ -37,7 +40,7 @@ namespace hal
         }
 
         // Set the destination rectangle.
-        // Call before scaling and anchoring.
+        // Discards any previous scaling and anchoring.
         [[nodiscard]] this_ref to(const drect& area)
         {
             m_dst = area;
@@ -60,7 +63,7 @@ namespace hal
             return get_this();
         }
 
-        // Set the scale.
+        // Set the destination's scale.
         // Call after setting the destination and before anchoring.
         [[nodiscard]] this_ref scale(lyo::f64 mul)
         {
