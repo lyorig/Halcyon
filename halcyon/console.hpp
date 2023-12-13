@@ -11,7 +11,7 @@
 #endif
 
 // Manual switch to enable debugging in any mode.
-#define HALDEBUG
+// #define HALDEBUG
 
 #ifdef HALDEBUG
 namespace hal {

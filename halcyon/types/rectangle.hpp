@@ -104,6 +104,9 @@ struct rectangle {
     }
 };
 
-using rect_wrap = rectangle<SDL::pixel_type>;
-using frect_wrap = rectangle<SDL::position_type>;
+namespace SDL {
+    using rect_wrap = rectangle<SDL::pixel_type>;
+    using frect_wrap = rectangle<SDL::position_type>;
+}
+
 } // namespace hal

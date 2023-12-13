@@ -89,60 +89,8 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
     }
 }
 
-// Drawer code.
-using d = surface::draw;
-
-constexpr SDL::pixel_type unset { std::numeric_limits<decltype(unset)>::max() };
-
-// TODO
-d::draw(const surface& src)
-    : m_this { src }
-    , m_dst { as_size, src.size() }
-
-{
-    m_src.pos.x = unset;
-}
-
-d& d::to(const pixel_pos& pos)
-{
-    m_dst.pos = pos;
-    m_dst.size = m_this.size();
-    return *this;
-}
-
-d& d::to(const pixel_area& area)
-{
-    m_dst = area;
-    return *this;
-}
-
-d& d::to(fill_tag)
-{
-    m_dst.pos.x = unset;
-    return *this;
-}
-
-d& d::from(const pixel_area& area)
-{
-    m_src = area;
-    return *this;
-}
-
-d& d::scale(lyo::f64 mul)
-{
-    if (m_dst.pos.x != unset)
-        m_dst.size *= mul;
-    return *this;
-}
-
-d& d::anchor(anchor::pos anch)
-{
-    m_dst.pos = anchor::resolve(anch, m_dst.pos, m_dst.size);
-    return *this;
-}
-
-void d::operator()(const surface& dst) const
+void surface::draw::operator()(const surface& dst) const
 {
     if (m_this.ptr() != nullptr)
-        HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
+        HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
 }

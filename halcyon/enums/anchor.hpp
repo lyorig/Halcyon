@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL2/SDL_render.h>
 #include <halcyon/types/point.hpp>
 
 namespace hal {
@@ -40,5 +41,12 @@ struct anchor {
 
         return pos;
     }
+};
+
+enum class flip : lyo::u8 {
+    none = SDL_FLIP_NONE,
+    x = SDL_FLIP_HORIZONTAL,
+    y = SDL_FLIP_VERTICAL,
+    both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
 };
 }

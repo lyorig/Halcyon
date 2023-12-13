@@ -81,48 +81,7 @@ pixel_size texture::internal_size() const
     return { pixel_type(w), pixel_type(h) };
 }
 
-// Drawer code.
 using d = texture::draw;
-
-constexpr SDL::pixel_type unset { std::numeric_limits<decltype(unset)>::max() };
-
-d::draw(const texture& src)
-    : m_this { src }
-    , m_dst { as_size, static_cast<fpoint_wrap>(m_this.size()) }
-{
-    m_src.pos.x = unset;
-}
-
-d& d::to(const coordinate& pos)
-{
-    m_dst.pos = pos;
-    return *this;
-}
-
-d& d::to(const world_area& area)
-{
-    m_dst = area;
-    return *this;
-}
-
-d& d::to(fill_tag)
-{
-    m_dst.pos = { 0, 0 };
-    m_dst.size = m_this.window.renderer.output_size();
-    return *this;
-}
-
-d& d::from(const pixel_area& src)
-{
-    m_src = rect_wrap(src);
-    return *this;
-}
-
-d& d::scale(lyo::f64 mul)
-{
-    m_dst *= mul;
-    return *this;
-}
 
 d& d::rotate(lyo::f64 angle)
 {
@@ -136,16 +95,10 @@ d& d::flip(enum flip f)
     return *this;
 }
 
-d& d::anchor(anchor::pos anch)
-{
-    m_dst.pos = anchor::resolve(anch, m_dst.pos, m_dst.size);
-    return *this;
-}
-
 void d::operator()() const
 {
     if (m_this.ptr() != nullptr)
-        HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip))
+        HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip))
                 == 0,
             ::SDL_GetError());
 }

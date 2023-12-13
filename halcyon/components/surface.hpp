@@ -2,8 +2,7 @@
 
 #include <SDL2/SDL_surface.h>
 
-#include <halcyon/enums/anchor.hpp>
-#include <halcyon/types/render.hpp>
+#include <halcyon/internal/drawer.hpp>
 #include <lyo/pass_key.hpp>
 
 #include "sdl_object.hpp"
@@ -22,6 +21,8 @@ class font;
 
 class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface> {
 public:
+    using dest_type = SDL::pixel_type;
+
     // Create a sized surface.
     surface(const window& wnd, pixel_size sz);
 
@@ -42,39 +43,10 @@ public:
     // are extremely slow to retrieve pixel information.
     color operator[](pixel_pos coord) const;
 
-    class draw {
+    class draw : public drawer<surface, draw> {
     public:
-        [[nodiscard]] draw(const surface& src);
-
-        // Set where to draw the surface.
-        [[nodiscard]] draw& to(const pixel_pos& pos);
-
-        // Set the surface's destination rectangle.
-        [[nodiscard]] draw& to(const pixel_area& area);
-
-        // Stretch the surface across the destination surface.
-        [[nodiscard]] draw& to(fill_tag);
-
-        // Set the surface's source rectangle.
-        [[nodiscard]] draw& from(const pixel_area& area);
-
-        // Scale the surface's destination size.
-        [[nodiscard]] draw& scale(lyo::f64 mul);
-
-        // Scale the surface's destination size.
-        [[nodiscard]] draw& anchor(anchor::pos anch);
-
+        using drawer::drawer;
         void operator()(const surface& dst) const;
-
-    private:
-        const surface& m_this;
-
-        rect_wrap m_src;
-
-        // SDL wants to output the drawn size in the destination
-        // rectangle. We don't care about this, but the function
-        // should be const. Thus, mutable.
-        mutable rect_wrap m_dst;
     };
 
 private:
