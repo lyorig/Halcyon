@@ -18,7 +18,7 @@ project(Halcyon VERSION 0.1 LANGUAGES CXX)
 
 find_package(SDL2 REQUIRED)
 
-add_executable(Halcyon main.cpp mono_app.cpp halcyon/engine.cpp halcyon/image_loader.cpp halcyon/ttf_engine.cpp halcyon/mixer.cpp halcyon/input_handler.cpp halcyon/debug.cpp halcyon/console.cpp halcyon/texture.cpp halcyon/spritesheet.cpp halcyon/components/music.cpp halcyon/components/chunk.cpp halcyon/window.cpp halcyon/components/surface.cpp halcyon/components/font.cpp halcyon/components/renderer.cpp)
+add_executable(Halcyon main.cpp app.cpp halcyon/engine.cpp halcyon/image_loader.cpp halcyon/ttf_engine.cpp halcyon/mixer.cpp halcyon/input_handler.cpp halcyon/debug.cpp halcyon/console.cpp halcyon/texture.cpp halcyon/spritesheet.cpp halcyon/components/music.cpp halcyon/components/chunk.cpp halcyon/window.cpp halcyon/components/surface.cpp halcyon/components/font.cpp halcyon/components/renderer.cpp)
 
 set_property(TARGET Halcyon PROPERTY CXX_STANDARD 23)
 

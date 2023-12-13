@@ -1,4 +1,4 @@
-#include "mono_app.hpp"
+#include "app.hpp"
 #include <lyo/utility.hpp>
 
 // Command-line arguments:
@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 {
     const lyo::parser p { argc, argv };
 
-    hq::mono_app game { p, p.parse("-windowname=", "Halcyon") };
+    hq::app game { p, p.parse("-windowname=", "Halcyon") };
 
     const auto logo_text = p.parse("-text=", "Made with Halcyon");
 

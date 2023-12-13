@@ -10,8 +10,7 @@
 
 namespace hq
 {
-    // An example template for a single-window application.
-    class mono_app
+    class app
     {
         MAYBE_EMPTY hal::engine m_eng;
 
@@ -25,7 +24,7 @@ namespace hq
         MAYBE_EMPTY hal::image_loader image;
         MAYBE_EMPTY hal::ttf_engine ttf;
 
-        mono_app(const lyo::parser& args, const char* window_name);
+        app(const lyo::parser& args, const char* window_name);
 
         bool update();
 
