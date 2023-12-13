@@ -20,15 +20,11 @@ class window;
 
 class console {
 public:
-    enum config : lyo::u8 {
-        max_entries = 10
-    };
-
     // Log a variadic amount of arguments.
     template <typename... Args>
     static void log(severity type, Args... args)
     {
-        if (m_entries == max_entries) {
+        if (m_entries == m_queue.size()) {
             std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
             m_queue.back() = { lyo::string_from_pack(args...), type };
         }
@@ -44,10 +40,10 @@ public:
     static void draw(const font& fnt, const window& wnd);
 
 private:
-    using count_type = std::underlying_type_t<config>;
+    using count_type = lyo::u8;
 
     using value_pair = std::pair<std::string, severity>;
-    using queue_type = std::array<value_pair, max_entries>;
+    using queue_type = std::array<value_pair, 10>;
 
     static queue_type m_queue;
     static count_type m_entries;

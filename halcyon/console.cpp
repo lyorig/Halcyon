@@ -37,25 +37,21 @@ void console::draw(const font& fnt, const window& wnd)
         }
 
         if (csz.x != 0) {
-            // Compose the texture.
+
             const lyo::f64 scale { wnd.size().y * vhm / y_size };
             const pixel_type y_scaled = std::round(y_size * scale);
+
             surface canvas { wnd, csz * scale };
 
+            // Compose the texture.
             for (count_type i { 0 }; i < m_entries; ++i) {
                 const value_pair& entry { m_queue[i] };
+
                 if (!entry.first.empty()) {
                     const surface text { fnt.render(entry.first, color::hex_type(entry.second)) };
+                    const pixel_pos pos { 0, pixel_type(i * y_scaled) };
 
-                    const pixel_type xsz { text.size().x };
-                    const pixel_area dest {
-                        0,
-                        pixel_type(y_scaled * i),
-                        pixel_type(xsz * scale),
-                        pixel_type(y_scaled)
-                    };
-
-                    hal::surface::draw(text).to(dest)(canvas);
+                    hal::surface::draw(text).to(pos).scale(scale)(canvas);
                 }
             }
 

@@ -72,10 +72,10 @@ struct rectangle {
         using type = decltype(SDL_Rect::x);
 
         return SDL_Rect {
-            lyo::round_cast<type>(pos.x),
-            lyo::round_cast<type>(pos.y),
-            lyo::round_cast<type>(size.x),
-            lyo::round_cast<type>(size.y),
+            lyo::cast<type>(pos.x),
+            lyo::cast<type>(pos.y),
+            lyo::cast<type>(size.x),
+            lyo::cast<type>(size.y),
         };
     }
 
@@ -84,10 +84,10 @@ struct rectangle {
         using type = decltype(SDL_FRect::x);
 
         return SDL_FRect {
-            lyo::round_cast<type>(pos.x),
-            lyo::round_cast<type>(pos.y),
-            lyo::round_cast<type>(size.x),
-            lyo::round_cast<type>(size.y),
+            lyo::cast<type>(pos.x),
+            lyo::cast<type>(pos.y),
+            lyo::cast<type>(size.x),
+            lyo::cast<type>(size.y),
         };
     }
 

@@ -16,16 +16,16 @@ struct point {
     constexpr point<T> operator+(const point& pt) const
     {
         return point<T> {
-            lyo::round_cast<T>(x + pt.x),
-            lyo::round_cast<T>(y + pt.y)
+            lyo::cast<T>(x + pt.x),
+            lyo::cast<T>(y + pt.y)
         };
     }
 
     constexpr point<T> operator-(const point& pt) const
     {
         return point<T> {
-            lyo::round_cast<T>(x - pt.x),
-            lyo::round_cast<T>(y - pt.y)
+            lyo::cast<T>(x - pt.x),
+            lyo::cast<T>(y - pt.y)
         };
     }
 
@@ -47,12 +47,12 @@ struct point {
 
     constexpr point operator*(lyo::f64 mul) const
     {
-        return point { lyo::round_cast<T>(x * mul), lyo::round_cast<T>(y * mul) };
+        return point { lyo::cast<T>(x * mul), lyo::cast<T>(y * mul) };
     }
 
     constexpr point operator/(lyo::f64 div) const
     {
-        return point { lyo::round_cast<T>(x / div), lyo::round_cast<T>(y / div) };
+        return point { lyo::cast<T>(x / div), lyo::cast<T>(y / div) };
     }
 
     constexpr point& operator*=(lyo::f64 mul)
@@ -86,8 +86,8 @@ struct point {
     template <lyo::arithmetic Convert>
     constexpr operator point<Convert>() const
     {
-        return point<Convert> { lyo::round_cast<Convert>(x),
-            lyo::round_cast<Convert>(y) };
+        return point<Convert> { lyo::cast<Convert>(x),
+            lyo::cast<Convert>(y) };
     }
 
     constexpr operator SDL_Point() const
@@ -95,8 +95,8 @@ struct point {
         using t = decltype(SDL_Point::x);
 
         return SDL_Point {
-            lyo::round_cast<t>(x),
-            lyo::round_cast<t>(y)
+            lyo::cast<t>(x),
+            lyo::cast<t>(y)
         };
     }
 
@@ -105,8 +105,8 @@ struct point {
         using t = decltype(SDL_FPoint::x);
 
         return SDL_FPoint {
-            lyo::round_cast<t>(x),
-            lyo::round_cast<t>(y)
+            lyo::cast<t>(x),
+            lyo::cast<t>(y)
         };
     }
 

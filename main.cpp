@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 
         HAL_CONSOLE_DRAW(txf, game.window);
 
-        bg.r = lyo::round_cast<hal::color::value_type>((sine + 1.0) * 64.0);
+        bg.r = lyo::cast<hal::color::value_type>((sine + 1.0) * 64.0);
         game.window.renderer.set_fill(bg);
     }
 
