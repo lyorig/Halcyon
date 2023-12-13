@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     game.window.renderer.set_fill(bg);
 
     if (p.has("-music"))
-        game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
+        game.mixer.music.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
     const hal::pixel_pos  from { 10, game.window.size().y };
     const hal::coordinate fps_pos = hal::anchor::resolve(hal::anchor::bottom_left, from,

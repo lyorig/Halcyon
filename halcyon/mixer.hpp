@@ -37,6 +37,6 @@ namespace hal
         } m_init;
 
     public:
-        music mus;
+        class music music;
     };
 } // namespace hal

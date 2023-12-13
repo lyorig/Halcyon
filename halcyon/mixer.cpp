@@ -31,7 +31,7 @@ mixer::mixer(engine& eng)
 
 mixer::mixer(engine& engine, lyo::u32 freq, lyo::u8 channels, chunk_quality qual)
     : m_init { freq, channels, qual }
-    , mus { {} }
+    , music { {} }
 
 {
 }
