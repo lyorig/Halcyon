@@ -1,9 +1,7 @@
-#include "SDL2/SDL_stdinc.h"
-#include "halcyon/debug.hpp"
-#ifndef NDEBUG
 
 #include "console.hpp"
 
+#ifdef HALDEBUG
 #include "components/font.hpp"
 #include "texture.hpp"
 #include "window.hpp"

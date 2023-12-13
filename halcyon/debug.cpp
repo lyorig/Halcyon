@@ -1,7 +1,6 @@
-#ifndef NDEBUG
-
 #include "debug.hpp"
 
+#ifdef HALDEBUG
 #include <SDL2/SDL_messagebox.h>
 
 #include <cstring>
@@ -12,7 +11,6 @@ using namespace hal;
 // Static private variables.
 std::ofstream debug::m_output { "Halcyon debug output.txt" };
 const lyo::precise_timer debug::m_timer {};
-console* m_cptr { nullptr };
 
 void debug::panic(const char* why, const char* where,
     const char* message)

@@ -5,9 +5,9 @@ int main(int argc, char* argv[])
 {
     const lyo::parser p { argc, argv };
 
-    hq::mono_app game { p, p.parse<const char*>("-windowname=", "Interloper 1.1") };
+    hq::mono_app game { p, p.parse("-windowname=", "Interloper 1.1") };
 
-    const auto logo_text = p.parse<const char*>("-text=", "Made with Halcyon");
+    const auto logo_text = p.parse("-text=", "Made with Halcyon");
 
     const hal::font txf { game.ttf.load_font("assets/fonts/m5x7.ttf", p.parse<lyo::u32>("-fontsize=", 48)) };
     const hal::texture tex {
@@ -20,7 +20,9 @@ int main(int argc, char* argv[])
     lyo::usize frames { 0 };
 
     game.window.renderer.set_fill(bg);
-    // game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
+
+    if (p.has("-music"))
+        game.mixer.mus.play("assets/ost/The Way Home.mp3", hal::infinite_loop);
 
     const hal::pixel_pos from { 10, game.window.size().y };
     const hal::coordinate fps_pos = hal::anchor::resolve(hal::anchor::bottom_left, from, txf.render("A").size()),

@@ -1,14 +1,19 @@
 #pragma once
 
 #include "enums/severity.hpp"
-
-#ifndef NDEBUG
-
 #include <algorithm>
 #include <array>
 #include <halcyon/types/render.hpp>
 #include <lyo/utility.hpp>
 
+#ifndef NDEBUG
+#define HALDEBUG
+#endif
+
+// Manual switch to enable debugging in any mode.
+#define HALDEBUG
+
+#ifdef HALDEBUG
 namespace hal {
 class font;
 class window;

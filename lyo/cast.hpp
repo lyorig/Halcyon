@@ -8,8 +8,7 @@
 
 namespace lyo {
 
-// For now, this does nothing. Float rounding will be
-// implemented when I consider it important.
+// Cast to a type with proper rounding.
 template <arithmetic Cast_to, arithmetic T>
 constexpr Cast_to round_cast(T value) noexcept
 {

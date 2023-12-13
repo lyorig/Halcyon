@@ -6,17 +6,17 @@
 
 #include "console.hpp"
 
-#ifndef NDEBUG
+#ifdef HALDEBUG
 
 // MSVC has its own version, because of course it does.
 #if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
+#include <lyo/timer.hpp>
+
 #include <fstream>
 #include <iostream>
-#include <lyo/timer.hpp>
-#include <lyo/utility.hpp>
 
 namespace hal {
 class texture;
