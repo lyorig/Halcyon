@@ -17,16 +17,17 @@ void game::intro()
         down
     };
 
-    const hal::font    fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
-    const hal::texture logo { app.window, fnt.render("[logo text here]") };
+    const hal::font fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
 
-    const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size());
+    hal::texture    logo { app.window, fnt.render("Made with Halcyon") };
+    hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size());
 
     lyo::slider<lyo::f64> alpha { 0.0, 255.0, 1.0 };
     lyo::precise_timer    tmr { lyo::no_init };
     lyo::f64              incr { 100.0 };
 
     state s { up };
+    bool  d { false };
 
     app.mixer.music.play("assets/ost/The Way Home.mp3");
 
@@ -47,7 +48,7 @@ void game::intro()
             goto SkipCheck;
 
         case middle:
-            if (!app.mixer.music.playing())
+            if (tmr() >= 4.0)
             {
                 s = down;
                 incr *= -2.0;
@@ -66,7 +67,20 @@ void game::intro()
             logo.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
 
             if (alpha.value() == alpha.min())
-                return;
+            {
+                if (d)
+                    return;
+
+                logo = fnt.render("by lyorig");
+                logo.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
+                pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size());
+
+                s = up;
+                d = true;
+
+                incr /= -2.0;
+            }
+
             break;
         }
 
