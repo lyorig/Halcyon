@@ -30,7 +30,7 @@ namespace lyo
             assert(min < max);
         }
 
-        constexpr explicit operator T() const noexcept
+        constexpr T value() const noexcept
         {
             return m_value;
         }
@@ -104,7 +104,7 @@ namespace lyo
         {
         }
 
-        constexpr operator T() const noexcept
+        constexpr T value() const noexcept
         {
             return m_value;
         }

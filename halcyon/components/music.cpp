@@ -70,10 +70,9 @@ void music::jump(double time)
 
 void music::internal_play(const char* path, int loops)
 {
-    this->reassign(::Mix_LoadMUS(path));
+    sdl_object::operator=(::Mix_LoadMUS(path));
 
     HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
-
     HAL_DEBUG_PRINT(severity::load, "Loaded music ", path);
 
     m_timer.reset();

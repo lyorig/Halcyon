@@ -8,7 +8,8 @@ namespace hal
     constexpr T unset { std::numeric_limits<T>::max() };
 
     template <typename T, typename Dest_type, typename This = void>
-    requires(lyo::is_any_of<Dest_type, SDL::pixel_type, SDL::position_type>()) class drawer
+        requires(lyo::is_any_of<Dest_type, SDL::pixel_type, SDL::position_type>() && std::is_same_v<std::decay_t<std::invoke_result_t<decltype(&T::size), T>>, pixel_size>)
+    class drawer
     {
     protected:
         using st = SDL::pixel_type;

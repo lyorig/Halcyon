@@ -26,7 +26,7 @@ namespace hal
         }
 
     protected:
-        void reassign(Type* object)
+        void operator=(Type* object)
         {
             HAL_DEBUG_ASSERT((m_object.reset(object)).get() != nullptr, ::SDL_GetError());
         }

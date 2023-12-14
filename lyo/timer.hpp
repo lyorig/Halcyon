@@ -9,6 +9,7 @@
 
 namespace lyo
 {
+    TAG_TYPE(no_init);
 
     // A simple timer for all your timing needs. It'll keep
     // running no matter what, so if you require pause/resume
@@ -17,8 +18,14 @@ namespace lyo
     class timer
     {
     public:
+        // Create a timer that begins at the time of construction.
         timer() noexcept
             : m_epoch { Clock::now() }
+        {
+        }
+
+        // Create an uninitialized timer.
+        timer(no_init_tag) noexcept
         {
         }
 

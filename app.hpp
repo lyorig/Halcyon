@@ -21,6 +21,8 @@ namespace hq
 
         class hal::window window;
 
+        const lyo::parser args;
+
         MAYBE_EMPTY hal::image_loader image;
         MAYBE_EMPTY hal::ttf_engine ttf;
 
@@ -29,5 +31,10 @@ namespace hq
         bool update();
 
         const hal::input_handler& input() const;
+
+        lyo::f64 delta() const;
+
+    private:
+        lyo::precise_timer m_delta;
     };
 } // namespace hal

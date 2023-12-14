@@ -32,6 +32,11 @@ texture::texture(const class window& wnd, const surface& image)
 
 const pixel_size& texture::size() const { return m_size; }
 
+void texture::set_opacity(lyo::u8 value) const
+{
+    HAL_DEBUG_ASSERT(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
+}
+
 lyo::u8 texture::opacity() const
 {
     Uint8 alpha;
@@ -64,8 +69,7 @@ pixel_size texture::vh(lyo::f64 percent) const
 
 texture& texture::operator=(const surface& image)
 {
-    this->reassign(
-        ::SDL_CreateTextureFromSurface(window.renderer.ptr(), image.ptr()));
+    sdl_object::operator=(::SDL_CreateTextureFromSurface(window.renderer.ptr(), image.ptr()));
 
     m_size = image.size();
 
