@@ -52,6 +52,15 @@ lyo::f64 music::position() const
     return this->playing() ? m_timer() : 0.0;
 }
 
+lyo::f64 music::duration() const
+{
+    const auto ret = ::Mix_MusicDuration(this->ptr());
+
+    HAL_DEBUG_CHECK(ret != -1.0, ::Mix_GetError());
+
+    return ret;
+}
+
 void music::set_volume(lyo::u8 volume) const
 {
     HAL_DEBUG_CHECK(m_object, "Tried to set volume of null music");

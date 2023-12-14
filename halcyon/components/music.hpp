@@ -27,6 +27,7 @@ namespace hal
 
         lyo::u8  volume() const;
         lyo::f64 position() const;
+        lyo::f64 duration() const;
 
         void set_volume(lyo::u8 volume) const;
         void jump(double time);
