@@ -1,5 +1,6 @@
 #pragma once
 
+#include <lyo/slider.hpp>
 #include <lyo/types.hpp>
 
 #include "point.hpp"
@@ -11,7 +12,6 @@
 
 namespace hal
 {
-
     using pixel_type = lyo::i16;
 
     using pixel_size = point<pixel_type>;
