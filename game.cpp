@@ -72,8 +72,6 @@ void game::intro()
                 s = down;
             }
 
-            std::unreachable();
-
             break;
 
         case down:
