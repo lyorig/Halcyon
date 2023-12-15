@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cassert>
 
-#include "concepts.hpp"
+#include "cast.hpp"
 
 /* slider.hpp:
    An arithmetic value with a minimum and maximum value. */
@@ -95,7 +95,7 @@ namespace lyo
     {
     public:
         constexpr static_slider() noexcept
-            : m_value { static_cast<T>((Min + Max) / 2.0) }
+            : m_value { lyo::cast<T>((Min + Max) / 2.0) }
         {
         }
 

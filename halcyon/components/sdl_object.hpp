@@ -25,6 +25,12 @@ namespace hal
             return m_object.get();
         }
 
+        // Release the object.
+        void release()
+        {
+            m_object.reset();
+        }
+
     protected:
         void operator=(Type* object)
         {
