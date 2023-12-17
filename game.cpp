@@ -35,26 +35,20 @@ void game::intro()
     hal::texture    logo { app.window, fnt.render(texts.front().text, texts.front().color) };
     hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size() * texts.front().scale);
 
-    lyo::slider<lyo::f64> alpha { SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE, 0.0 },
-        volume { 0.0, MIX_MAX_VOLUME, 0.0 };
-    lyo::precise_timer tmr { lyo::no_init };
+    lyo::slider<lyo::f64> alpha { SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE, 0.0 };
+    lyo::precise_timer    tmr { lyo::no_init };
 
     logo.set_opacity(alpha.value());
 
-    app.mixer.music.load("assets/ost/intro.mp3").play();
-    app.mixer.music.set_volume(volume.value());
+    app.mixer.music.load("assets/ost/intro.mp3").fade_in(texts.front().fade_in);
 
-    constexpr lyo::f64 music_fade_time { 1.5 };
-
-    lyo::f64 hold_time { texts.front().hold },
-        music_fade_increment { 128 / music_fade_time };
+    lyo::f64 hold_time { texts.front().hold };
 
     state   s { up };
     lyo::u8 idx { 0 };
 
     while (app.update())
     {
-        app.mixer.music.set_volume((volume += music_fade_increment * app.delta()).value());
         const info& i { texts[idx] };
 
         HAL_CONSOLE_DRAW(fnt, app.window);
@@ -87,7 +81,7 @@ void game::intro()
             {
                 if (idx == texts.size() - 1)
                 {
-                    music_fade_increment = -128 / i.fade_out;
+                    app.mixer.music.fade_out(i.fade_out);
                 }
 
                 s = down;
@@ -98,7 +92,7 @@ void game::intro()
             {
                 if (idx == texts.size() - 1)
                 {
-                    music_fade_increment = -128 / i.fade_out;
+                    app.mixer.music.fade_out(i.fade_out);
                 }
 
                 s = down;
@@ -113,7 +107,7 @@ void game::intro()
             {
                 if (idx == texts.size() - 1)
                 {
-                    if (volume.value() == volume.min())
+                    if (!app.mixer.music.playing())
                         return;
                 }
 

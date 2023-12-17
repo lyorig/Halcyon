@@ -34,7 +34,9 @@ void music::fade_in(lyo::f64 time, infinite_loop_tag)
 
 void music::fade_out(lyo::f64 time)
 {
-    HAL_DEBUG_ASSERT(::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
+    // There is apparently no fail state here. It only returns
+    // a non-zero value if it's already fading, but that's allowed.
+    ::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0));
 }
 
 void music::pause()
@@ -92,12 +94,12 @@ void music::jump(lyo::f64 time)
 void music::internal_load(const char* path)
 {
     sdl_object::operator=(::Mix_LoadMUS(path));
+    HAL_DEBUG_PRINT(severity::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
 }
 
 void music::internal_play(int loops)
 {
     HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
-    HAL_DEBUG_PRINT(severity::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
 }
 
 void music::internal_fade(lyo::f64 time, int loops)
