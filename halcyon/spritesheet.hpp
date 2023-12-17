@@ -5,8 +5,8 @@
 
 namespace hal
 {
-    using frame_t = lyo::u8;
-    using frame_size = point<frame_t>;
+    using frame_type = lyo::u8;
+    using frame_size = point<frame_type>;
     using frame_pos = frame_size;
 
     class texture;
