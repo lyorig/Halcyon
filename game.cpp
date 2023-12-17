@@ -41,7 +41,7 @@ void game::intro()
 
     logo.set_opacity(alpha.value());
 
-    app.mixer.music.play("assets/ost/intro.mp3");
+    app.mixer.music.load("assets/ost/intro.mp3").play();
     app.mixer.music.set_volume(volume.value());
 
     constexpr lyo::f64 music_fade_time { 1.5 };

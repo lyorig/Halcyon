@@ -17,8 +17,15 @@ namespace hal
     public:
         music(lyo::pass_key<mixer>);
 
-        void play(const char* path, lyo::u16 loops = 0);
-        void play(const char* path, infinite_loop_tag);
+        music& load(const char* path);
+
+        void play(lyo::u16 loops = 0);
+        void play(infinite_loop_tag);
+
+        void fade_in(lyo::f64 time, lyo::u16 loops = 0);
+        void fade_in(lyo::f64 time, infinite_loop_tag);
+
+        void fade_out(lyo::f64 time);
 
         void pause();
         void resume();
@@ -33,6 +40,8 @@ namespace hal
         void jump(lyo::f64 time);
 
     private:
-        void internal_play(const char* path, int loops);
+        void internal_load(const char* path);
+        void internal_play(int loops);
+        void internal_fade(lyo::f64 time, int loops);
     };
 } // namespace hal

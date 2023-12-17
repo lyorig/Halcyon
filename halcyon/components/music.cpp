@@ -6,14 +6,35 @@ music::music(lyo::pass_key<mixer>)
 {
 }
 
-void music::play(const char* path, lyo::u16 loops)
+music& music::load(const char* path)
 {
-    this->internal_play(path, loops);
+    this->internal_load(path);
+    return *this;
 }
 
-void music::play(const char* path, infinite_loop_tag)
+void music::play(lyo::u16 loops)
 {
-    this->internal_play(path, -1);
+    this->internal_play(loops);
+}
+
+void music::play(infinite_loop_tag)
+{
+    this->internal_play(-1);
+}
+
+void music::fade_in(lyo::f64 time, lyo::u16 loops)
+{
+    this->internal_fade(time, loops);
+}
+
+void music::fade_in(lyo::f64 time, infinite_loop_tag)
+{
+    this->internal_fade(time, -1);
+}
+
+void music::fade_out(lyo::f64 time)
+{
+    HAL_DEBUG_ASSERT(::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
 }
 
 void music::pause()
@@ -36,7 +57,6 @@ lyo::u8 music::volume() const
     return static_cast<lyo::u8>(::Mix_VolumeMusic(-1));
 }
 
-// Bit of a bodge.
 lyo::f64 music::position() const
 {
     const auto ret = ::Mix_GetMusicPosition(this->ptr());
@@ -69,10 +89,18 @@ void music::jump(lyo::f64 time)
     HAL_DEBUG_ASSERT(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
 }
 
-void music::internal_play(const char* path, int loops)
+void music::internal_load(const char* path)
 {
     sdl_object::operator=(::Mix_LoadMUS(path));
+}
 
+void music::internal_play(int loops)
+{
     HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
     HAL_DEBUG_PRINT(severity::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
+}
+
+void music::internal_fade(lyo::f64 time, int loops)
+{
+    HAL_DEBUG_ASSERT(::Mix_FadeInMusic(this->ptr(), loops, lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
 }
