@@ -42,7 +42,7 @@ void game::intro()
     logo.set_opacity(alpha.value());
 
     app.mixer.music.play("assets/ost/intro.mp3");
-    app.mixer.music.set_volume(0);
+    app.mixer.music.set_volume(volume.value());
 
     constexpr lyo::f64 music_fade_time { 1.5 };
 
@@ -70,7 +70,7 @@ void game::intro()
                 if (idx == texts.size() - 1)
                 {
                     hold_time = app.mixer.music.duration() - app.mixer.music.position() - i.fade_out;
-                    HAL_DEBUG_PRINT(hal::severity::info, "Set song_remaining to ", hold_time);
+                    HAL_DEBUG_PRINT(hal::severity::info, "Song remaining = ", hold_time);
                 }
 
                 else
@@ -139,12 +139,14 @@ void game::intro()
 
 void game::start()
 {
-    const hal::font fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
+    const hal::font    fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
     const hal::texture tex { app.window, fnt.render("[menu screen]") };
+
+    const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size());
 
     while (app.update())
     {
-        hal::texture::draw { tex }();
+        hal::texture::draw { tex }.to(pos)();
         HAL_CONSOLE_DRAW(fnt, app.window);
     }
 }
