@@ -16,7 +16,7 @@ texture::texture(const class window& wnd)
 texture::texture(const class window& wnd, const pixel_size& size)
     : sdl_object { ::SDL_CreateTexture(wnd.renderer.ptr(),
         ::SDL_GetWindowPixelFormat(wnd.ptr()),
-        SDL_TEXTUREACCESS_TARGET, size.x, size.y) }
+        SDL_TEXTUREACCESS_STATIC, size.x, size.y) }
     , m_size { size }
     , window { wnd }
 {
@@ -46,8 +46,6 @@ lyo::u8 texture::opacity() const
 
     return lyo::u8(alpha);
 }
-
-void texture::set_as_target() { window.renderer.set_target(*this); }
 
 pixel_size texture::vw(lyo::f64 percent) const
 {

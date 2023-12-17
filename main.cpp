@@ -3,6 +3,7 @@
 
 // Current arguments:
 // -xi  - Skip the intro.
+// -xg  - Skip the game.
 // -xv  - Disable VSync.
 
 int main(int argc, char* argv[])
@@ -12,7 +13,8 @@ int main(int argc, char* argv[])
     if (!game.app.args.has("-xi"))
         game.intro();
 
-    game.start();
+    if (!game.app.args.has("-xg"))
+        game.start();
 
     return EXIT_SUCCESS;
 }

@@ -25,7 +25,7 @@ namespace hal
             return m_object.get();
         }
 
-        // Release the object.
+        // Release (reset) the object.
         void release()
         {
             m_object.reset();

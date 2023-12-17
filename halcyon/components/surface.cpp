@@ -90,7 +90,7 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
     }
 }
 
-void surface::draw::operator()(const surface& dst) const
+void surface::draw::operator()(const surface& dst)
 {
     if (m_this.ptr() != nullptr)
         HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());

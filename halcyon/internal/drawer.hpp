@@ -88,8 +88,9 @@ namespace hal
             return static_cast<this_ref>(*this);
         }
 
-        const T&       m_this;
-        mutable drect  m_dst;
-        SDL::rect_wrap m_src;
+        const T& m_this;
+
+        drect m_dst;
+        srect m_src;
     };
 }

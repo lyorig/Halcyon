@@ -14,45 +14,67 @@ void game::intro()
     {
         up,
         middle,
-        down
+        down,
     };
 
-    constexpr std::array texts { "1", "2", "3", "4" };
+    struct info
+    {
+        const char* text;
+        lyo::f64    scale { 1.0 }, fade_in { 1.0 }, hold { 4.0 }, fade_out { 0.5 };
+        hal::color  color { hal::color::white };
+    };
+
+    constexpr std::array texts {
+        info { .text = "Made with Halcyon" },
+        info { .text = "by lyorig", .scale = 0.75, .hold = 2.5 },
+        info { .text = "HalodaQuest", .scale = 2.0, .fade_in = 4.0, .fade_out = 1.0, .color = hal::color::cyan }
+    };
 
     const hal::font fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
 
-    hal::texture    logo { app.window, fnt.render(texts.front()) };
-    hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size());
+    hal::texture    logo { app.window, fnt.render(texts.front().text, texts.front().color) };
+    hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size() * texts.front().scale);
 
     lyo::slider<lyo::f64> alpha { SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE, 0.0 },
-        volume { 0.0, 128.0, 0.0 };
+        volume { 0.0, MIX_MAX_VOLUME, 0.0 };
     lyo::precise_timer tmr { lyo::no_init };
+
+    logo.set_opacity(alpha.value());
 
     app.mixer.music.play("assets/ost/intro.mp3");
     app.mixer.music.set_volume(0);
 
-    constexpr lyo::f64 fii { 1.5 }, foi { 0.75 }, hlt { 4.0 };
-    lyo::f64           song_remaining { 0.0 }, mfi { 128 / fii };
+    constexpr lyo::f64 music_fade_time { 1.5 };
+
+    lyo::f64 hold_time { texts.front().hold },
+        music_fade_increment { 128 / music_fade_time };
 
     state   s { up };
     lyo::u8 idx { 0 };
 
     while (app.update())
     {
-        app.mixer.music.set_volume((volume += mfi * app.delta()).value());
+        app.mixer.music.set_volume((volume += music_fade_increment * app.delta()).value());
+        const info& i { texts[idx] };
+
+        HAL_CONSOLE_DRAW(fnt, app.window);
+        hal::texture::draw(logo).to(pos).scale(i.scale)();
 
         switch (s)
         {
         case up:
-            logo.set_opacity(lyo::cast<lyo::u8>((alpha += (SDL_ALPHA_OPAQUE / fii) * app.delta()).value()));
-
-            if (idx == 0)
-                ;
+            logo.set_opacity(lyo::cast<lyo::u8>((alpha += (alpha.max() / i.fade_in) * app.delta()).value()));
 
             if (alpha.value() == alpha.max())
             {
                 if (idx == texts.size() - 1)
-                    song_remaining = app.mixer.music.duration() - app.mixer.music.position() - foi / 2.0;
+                {
+                    hold_time = app.mixer.music.duration() - app.mixer.music.position() - i.fade_out;
+                    HAL_DEBUG_PRINT(hal::severity::info, "Set song_remaining to ", hold_time);
+                }
+
+                else
+                    hold_time = i.hold;
 
                 s = middle;
                 tmr.reset();
@@ -61,43 +83,55 @@ void game::intro()
             goto SkipCheck;
 
         case middle:
-            if (tmr() >= std::max(hlt, song_remaining))
+            if (tmr() >= hold_time)
             {
+                if (idx == texts.size() - 1)
+                {
+                    music_fade_increment = -128 / i.fade_out;
+                }
+
                 s = down;
             }
 
         SkipCheck:
             if (app.input().pressed(hal::button::esc))
             {
+                if (idx == texts.size() - 1)
+                {
+                    music_fade_increment = -128 / i.fade_out;
+                }
+
                 s = down;
             }
 
             break;
 
         case down:
-            logo.set_opacity(lyo::cast<lyo::u8>((alpha -= (SDL_ALPHA_OPAQUE / foi) * app.delta()).value()));
-
-            if (idx == texts.size() - 1)
-                mfi = -128 / foi;
+            logo.set_opacity(lyo::cast<lyo::u8>((alpha -= (SDL_ALPHA_OPAQUE / i.fade_out) * app.delta()).value()));
 
             if (alpha.value() == alpha.min())
             {
-                if (++idx == texts.size())
-                    return;
+                if (idx == texts.size() - 1)
+                {
+                    if (volume.value() == volume.min())
+                        return;
+                }
 
-                logo = fnt.render(texts[idx]);
-                logo.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
+                else
+                {
+                    const info& newi { texts[++idx] };
 
-                pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size());
+                    logo = fnt.render(newi.text, newi.color);
+                    logo.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
 
-                s = up;
+                    pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size() * newi.scale);
+
+                    s = up;
+                }
             }
 
             break;
         }
-
-        HAL_CONSOLE_DRAW(fnt, app.window);
-        hal::texture::draw(logo).to(pos)();
     }
 
     app.mixer.music.release();
@@ -105,4 +139,12 @@ void game::intro()
 
 void game::start()
 {
+    const hal::font fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
+    const hal::texture tex { app.window, fnt.render("[menu screen]") };
+
+    while (app.update())
+    {
+        hal::texture::draw { tex }();
+        HAL_CONSOLE_DRAW(fnt, app.window);
+    }
 }

@@ -30,11 +30,9 @@ namespace hal
         lyo::f64 duration() const;
 
         void set_volume(lyo::u8 volume) const;
-        void jump(double time);
+        void jump(lyo::f64 time);
 
     private:
         void internal_play(const char* path, int loops);
-
-        lyo::precise_stopwatch m_timer;
     };
 } // namespace hal

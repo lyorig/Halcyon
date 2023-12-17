@@ -1,12 +1,9 @@
 #include "music.hpp"
 
-#include <functional>
-
 using namespace hal;
 
 music::music(lyo::pass_key<mixer>)
 {
-    // TODO: Mix_HookMusicFinished to reset the timer when the music finishes.
 }
 
 void music::play(const char* path, lyo::u16 loops)
@@ -21,25 +18,17 @@ void music::play(const char* path, infinite_loop_tag)
 
 void music::pause()
 {
-    HAL_DEBUG_CHECK(m_object, "Tried to pause null music");
-
     ::Mix_PauseMusic();
-
-    m_timer.pause();
 }
 
 void music::resume()
 {
-    HAL_DEBUG_CHECK(m_object, "Tried to resume null music");
-
     ::Mix_ResumeMusic();
-
-    m_timer.resume();
 }
 
 bool music::playing() const
 {
-    return static_cast<bool>(::Mix_PlayingMusic());
+    return bool(::Mix_PlayingMusic());
 }
 
 lyo::u8 music::volume() const
@@ -47,9 +36,14 @@ lyo::u8 music::volume() const
     return static_cast<lyo::u8>(::Mix_VolumeMusic(-1));
 }
 
+// Bit of a bodge.
 lyo::f64 music::position() const
 {
-    return this->playing() ? m_timer() : 0.0;
+    const auto ret = ::Mix_GetMusicPosition(this->ptr());
+
+    HAL_DEBUG_CHECK(ret != -1.0, ::Mix_GetError());
+
+    return ret;
 }
 
 lyo::f64 music::duration() const
@@ -68,13 +62,11 @@ void music::set_volume(lyo::u8 volume) const
     ::Mix_VolumeMusic(volume);
 }
 
-void music::jump(double time)
+void music::jump(lyo::f64 time)
 {
     ::Mix_RewindMusic();
 
     HAL_DEBUG_ASSERT(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
-
-    m_timer = time;
 }
 
 void music::internal_play(const char* path, int loops)
@@ -83,6 +75,4 @@ void music::internal_play(const char* path, int loops)
 
     HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
     HAL_DEBUG_PRINT(severity::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
-
-    m_timer.reset();
 }

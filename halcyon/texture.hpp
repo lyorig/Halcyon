@@ -28,8 +28,6 @@ namespace hal
 
         void set_opacity(lyo::u8 value) const;
 
-        void set_as_target();
-
         // View-width and view-height helpers.
         pixel_size vw(lyo::f64 percent) const;
         pixel_size vh(lyo::f64 percent) const;

@@ -47,7 +47,7 @@ namespace hal
         {
         public:
             using drawer::drawer;
-            void operator()(const surface& dst) const;
+            void operator()(const surface& dst);
         };
 
     private:
