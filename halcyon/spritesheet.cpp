@@ -6,7 +6,7 @@ using namespace hal;
 
 spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size)
     : m_size { static_cast<frame_type>(tx.size().x / frame_size.x), static_cast<frame_type>(tx.size().y / frame_size.y) }
-    , m_frames { static_cast<lyo::usize>(m_size.x * m_size.y) }
+    , m_frames { static_cast<std::size_t>(m_size.x * m_size.y) }
 {
     HAL_DEBUG_ASSERT(tx.size().x % frame_size.x == 0 && tx.size().y % frame_size.y == 0, "Uneven spritesheet");
 

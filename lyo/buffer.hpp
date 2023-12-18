@@ -19,13 +19,13 @@ namespace lyo
         {
         }
 
-        constexpr buffer(usize sz) noexcept
+        constexpr buffer(std::size_t sz) noexcept
             : m_data { new T[sz] }
             , m_size { sz }
         {
         }
 
-        constexpr buffer(usize sz, zero_out_tag) noexcept
+        constexpr buffer(std::size_t sz, zero_out_tag) noexcept
             : m_data { new T[sz] {} }
             , m_size { sz }
         {
@@ -33,14 +33,14 @@ namespace lyo
 
         // Getters.
 
-        constexpr T& operator[](usize pos) noexcept
+        constexpr T& operator[](std::size_t pos) noexcept
         {
             assert(pos < m_size);
 
             return m_data[pos];
         }
 
-        constexpr const T& operator[](usize pos) const noexcept
+        constexpr const T& operator[](std::size_t pos) const noexcept
         {
             assert(pos < m_size);
 
@@ -49,21 +49,21 @@ namespace lyo
 
         // Modifiers and mutators.
 
-        constexpr void resize(usize sz) noexcept
+        constexpr void resize(std::size_t sz) noexcept
         {
             m_data = new T[sz];
             m_size = sz;
         }
 
-        constexpr void resize(usize sz, zero_out_tag) noexcept
+        constexpr void resize(std::size_t sz, zero_out_tag) noexcept
         {
             m_data = new T[sz] {};
             m_size = sz;
         }
 
-        constexpr void resize_move(usize sz) noexcept
+        constexpr void resize_move(std::size_t sz) noexcept
         {
-            const usize new_size { std::min(sz, m_size) };
+            const std::size_t new_size { std::min(sz, m_size) };
 
             capsule<T[]> temp { std::move(m_data) };
 
@@ -74,9 +74,9 @@ namespace lyo
             m_size = sz;
         }
 
-        constexpr void resize_move(usize sz, zero_out_tag) noexcept
+        constexpr void resize_move(std::size_t sz, zero_out_tag) noexcept
         {
-            const usize new_size { std::min(sz, m_size) };
+            const std::size_t new_size { std::min(sz, m_size) };
 
             capsule<T[]> temp { std::move(m_data) };
 
@@ -88,14 +88,14 @@ namespace lyo
         }
 
         template <typename... Args>
-        constexpr void emplace(usize pos, Args... args) noexcept
+        constexpr void emplace(std::size_t pos, Args... args) noexcept
         {
             assert(pos < m_size);
 
             new (m_data.get() + pos) T { args... };
         }
 
-        constexpr usize size() const noexcept
+        constexpr std::size_t size() const noexcept
         {
             return m_size;
         }
@@ -134,6 +134,6 @@ namespace lyo
 
     private:
         capsule<T[]> m_data;
-        usize        m_size;
+        std::size_t  m_size;
     };
 } // namespace lyo

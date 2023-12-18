@@ -32,7 +32,7 @@ bool input_base::quit() const
 bool input_base::held(button btn) const
 {
     if (std::to_underlying(btn) <= SDL_NUM_SCANCODES) // Key.
-        return ::SDL_GetKeyboardState(nullptr)[static_cast<lyo::usize>(btn)];
+        return ::SDL_GetKeyboardState(nullptr)[static_cast<std::size_t>(btn)];
 
     else // Mouse button.
         return SDL_BUTTON(std::to_underlying(btn) - SDL_NUM_SCANCODES) & ::SDL_GetMouseState(nullptr, nullptr);
@@ -62,12 +62,12 @@ bool input_handler::update()
 
 bool input_handler::pressed(button btn) const
 {
-    return m_pressed[static_cast<lyo::usize>(btn)];
+    return m_pressed[static_cast<std::size_t>(btn)];
 }
 
 bool input_handler::released(button btn) const
 {
-    return m_released[static_cast<lyo::usize>(btn)];
+    return m_released[static_cast<std::size_t>(btn)];
 }
 
 bool input_handler::process(const SDL_Event& event)

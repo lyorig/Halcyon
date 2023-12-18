@@ -95,13 +95,13 @@ namespace lyo
             return m_pointer;
         }
 
-        constexpr base_type& operator[](lyo::usize idx) noexcept
+        constexpr base_type& operator[](std::size_t idx) noexcept
             requires std::is_array_v<Type>
         {
             return m_pointer[idx];
         }
 
-        constexpr const base_type& operator[](lyo::usize idx) const noexcept
+        constexpr const base_type& operator[](std::size_t idx) const noexcept
             requires std::is_array_v<Type>
         {
             return m_pointer[idx];
