@@ -30,6 +30,8 @@ namespace hal
         void pause();
         void resume();
 
+        void rewind();
+
         bool playing() const;
 
         lyo::u8  volume() const;

@@ -30,6 +30,8 @@ namespace hal
     protected:
         bool         poll(SDL_Event& event) const;
         virtual bool process(const SDL_Event& event) = 0;
+
+        bool m_ok { true };
     };
 
     // A basic enough input handler. Suitable for a single-window
@@ -46,8 +48,8 @@ namespace hal
         bool released(hal::button btn) const;
 
     protected:
-        key_storage m_pressed, m_released;
-
         virtual bool process(const SDL_Event& event);
+
+        key_storage m_pressed, m_released;
     };
 } // namespace hal

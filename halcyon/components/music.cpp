@@ -49,6 +49,11 @@ void music::resume()
     ::Mix_ResumeMusic();
 }
 
+void music::rewind()
+{
+    ::Mix_RewindMusic();
+}
+
 bool music::playing() const
 {
     return bool(::Mix_PlayingMusic());
@@ -86,7 +91,7 @@ void music::set_volume(lyo::u8 volume) const
 
 void music::jump(lyo::f64 time)
 {
-    ::Mix_RewindMusic();
+    this->rewind();
 
     HAL_DEBUG_ASSERT(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
 }

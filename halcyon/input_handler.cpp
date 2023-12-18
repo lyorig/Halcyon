@@ -19,9 +19,9 @@ bool input_base::update()
 
     while (this->poll(evt))
         if (!this->process(evt))
-            return false;
+            m_ok = false;
 
-    return true;
+    return m_ok;
 }
 
 bool input_base::held(button btn) const
