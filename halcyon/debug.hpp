@@ -24,8 +24,7 @@ namespace hal
     class debug
     {
     public:
-        // Output any amount of arguments to stdout/stderr, the console and an output
-        // file.
+        // Output any amount of arguments to stdout/stderr, the console and an output file.
         template <typename... Args>
         static void print(severity type, Args&&... args)
         {
@@ -87,16 +86,16 @@ namespace hal
 
 #define HAL_DEBUG_PRINT      hal::debug::print
 #define HAL_DEBUG_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
-#define HAL_DEBUG_ASSERT(cond, if_false) \
+#define HAL_DEBUG_ASSERT_VITAL(cond, if_false) \
     hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
-#define HAL_DEBUG_CHECK(cond, if_false) HAL_DEBUG_ASSERT(cond, if_false)
+#define HAL_DEBUG_ASSERT(cond, if_false) HAL_DEBUG_ASSERT_VITAL(cond, if_false)
 
 #else
 
 #define HAL_DEBUG_PRINT(...)
 #define HAL_DEBUG_PANIC(...)
-#define HAL_DEBUG_ASSERT(condition, ...) \
-    (void(condition))        // Asserts are vital; preserve the condition.
-#define HAL_DEBUG_CHECK(...) // Checks are not vital; remove them entirely.
+#define HAL_DEBUG_ASSERT_VITAL(condition, ...) \
+    (void(condition))         // Asserts are vital; preserve the condition.
+#define HAL_DEBUG_ASSERT(...) // Checks are not vital; remove them entirely.
 
 #endif

@@ -71,7 +71,7 @@ lyo::f64 music::position() const
 {
     const auto ret = ::Mix_GetMusicPosition(this->ptr());
 
-    HAL_DEBUG_CHECK(ret != -1.0, ::Mix_GetError());
+    HAL_DEBUG_ASSERT(ret != -1.0, ::Mix_GetError());
 
     return ret;
 }
@@ -80,14 +80,14 @@ lyo::f64 music::duration() const
 {
     const auto ret = ::Mix_MusicDuration(this->ptr());
 
-    HAL_DEBUG_CHECK(ret != -1.0, ::Mix_GetError());
+    HAL_DEBUG_ASSERT(ret != -1.0, ::Mix_GetError());
 
     return ret;
 }
 
 music& music::set_volume(lyo::u8 volume)
 {
-    HAL_DEBUG_CHECK(m_object, "Tried to set volume of null music");
+    HAL_DEBUG_ASSERT(m_object, "Tried to set volume of null music");
 
     ::Mix_VolumeMusic(volume);
 
@@ -98,7 +98,7 @@ music& music::jump(lyo::f64 time)
 {
     this->rewind();
 
-    HAL_DEBUG_ASSERT(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
 
     return *this;
 }
@@ -111,10 +111,10 @@ void music::internal_load(const char* path)
 
 void music::internal_play(int loops)
 {
-    HAL_DEBUG_ASSERT(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
 }
 
 void music::internal_fade(lyo::f64 time, int loops)
 {
-    HAL_DEBUG_ASSERT(::Mix_FadeInMusic(this->ptr(), loops, lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::Mix_FadeInMusic(this->ptr(), loops, lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
 }

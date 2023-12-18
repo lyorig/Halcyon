@@ -16,6 +16,6 @@ void chunk::play(infinite_loop_tag) & { this->internal_play(-1); }
 
 void chunk::internal_play(int loops)
 {
-    HAL_DEBUG_ASSERT(::Mix_PlayChannel(-1, m_object.get(), loops) != -1,
+    HAL_DEBUG_ASSERT_VITAL(::Mix_PlayChannel(-1, m_object.get(), loops) != -1,
         ::Mix_GetError());
 }

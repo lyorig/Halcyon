@@ -24,7 +24,8 @@ void game::intro()
         hal::color  color { hal::color::white };
     };
 
-    constexpr std::array texts { // This has to be manually timed. Then again, what other option is there?
+    // This has to be manually timed. Then again, what other option is there?
+    constexpr std::array texts {
         info { .text = "Made with Halcyon", .hold = 3.8 },
         info { .text = "by lyorig", .scale = 0.75, .hold = 2.6 },
         info { .text = "HalodaQuest", .scale = 2.0, .fade_in = 4.0, .hold = 6.0, .fade_out = 1.0, .color = hal::color::cyan }
@@ -41,8 +42,6 @@ void game::intro()
     {
         const info& part { texts[i] };
 
-        HAL_DEBUG_PRINT(hal::severity::info, "Iterating: ", part.text);
-
         const hal::texture    tx { app.window, fnt.render(part.text, part.color) };
         const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
 
@@ -50,6 +49,9 @@ void game::intro()
         lyo::f64            opacity_incr { alpha.range() / part.fade_in };
 
         state dir { up };
+
+        tx.set_opacity(alpha.min());
+        HAL_DEBUG_PRINT(hal::severity::info, "Iterating: ", part.text);
 
         while (app.update())
         {
@@ -59,7 +61,8 @@ void game::intro()
             hal::texture::draw { tx }.to(pos).scale(part.scale)();
             HAL_CONSOLE_DRAW(fnt, app.window);
 
-            // HAL_DEBUG_PRINT(hal::severity::info, "New opacity is ", alpha.value());
+            if (app.input().pressed(hal::button::esc))
+                goto GetDown;
 
             switch (dir)
             {
@@ -75,6 +78,7 @@ void game::intro()
             case middle:
                 if (middle_timer() >= part.hold)
                 {
+                GetDown:
                     opacity_incr = -alpha.range() / part.fade_out;
                     dir = down;
 
@@ -89,12 +93,18 @@ void game::intro()
                 {
                     goto Breakout;
                 }
+
+                break;
             }
         }
     Breakout:
     }
 
+    // Mix_FreeMusic blocks until the music has finished
+    // fading out, which works in our favor.
     app.mixer.music.release();
+
+    HAL_DEBUG_PRINT(hal::severity::info, "Intro finished. Welcome to ", app.window.title());
 }
 
 void game::start()

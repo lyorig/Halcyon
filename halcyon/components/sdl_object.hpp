@@ -14,7 +14,7 @@ namespace hal
         sdl_object(Type* object)
             : m_object { object }
         {
-            HAL_DEBUG_CHECK(m_object.get() != nullptr, ::SDL_GetError());
+            HAL_DEBUG_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
         }
 
         // Return the underlying pointer to the object. This is only for
@@ -34,7 +34,7 @@ namespace hal
     protected:
         void operator=(Type* object)
         {
-            HAL_DEBUG_ASSERT((m_object.reset(object)).get() != nullptr, ::SDL_GetError());
+            HAL_DEBUG_ASSERT_VITAL((m_object.reset(object)).get() != nullptr, ::SDL_GetError());
         }
 
         lyo::capsule<Type, Deleter> m_object;

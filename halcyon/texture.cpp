@@ -34,14 +34,14 @@ const pixel_size& texture::size() const { return m_size; }
 
 void texture::set_opacity(lyo::u8 value) const
 {
-    HAL_DEBUG_ASSERT(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
 }
 
 lyo::u8 texture::opacity() const
 {
     Uint8 alpha;
 
-    HAL_DEBUG_ASSERT(::SDL_GetTextureAlphaMod(m_object.get(), &alpha) == 0,
+    HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureAlphaMod(m_object.get(), &alpha) == 0,
         ::SDL_GetError());
 
     return lyo::u8(alpha);
@@ -100,7 +100,7 @@ d& d::flip(enum flip f)
 void d::operator()() const
 {
     if (m_this.ptr() != nullptr)
-        HAL_DEBUG_ASSERT(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip))
+        HAL_DEBUG_ASSERT_VITAL(::SDL_RenderCopyExF(m_this.window.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip))
                 == 0,
             ::SDL_GetError());
 }

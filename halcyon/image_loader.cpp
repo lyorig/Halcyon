@@ -7,7 +7,7 @@ using namespace hal;
 
 image_loader::image_loader(engine& eng, il<image_type> types)
 {
-    HAL_DEBUG_ASSERT(::IMG_Init(il2bm<int>(types)) == il2bm<int>(types),
+    HAL_DEBUG_ASSERT_VITAL(::IMG_Init(il2bm<int>(types)) == il2bm<int>(types),
         ::IMG_GetError());
 
     HAL_DEBUG_PRINT(severity::init, "Initialized image loader with flags ",

@@ -38,9 +38,11 @@ namespace hal
 
         void set_as_target() const;
 
-        [[nodiscard]] pixel_size size() const;
+        pixel_size size() const;
 
-        [[nodiscard]] id_type id() const;
+        id_type id() const;
+
+        const char* title() const;
 
     private:
         pixel_size internal_size() const;

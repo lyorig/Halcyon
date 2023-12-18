@@ -4,7 +4,7 @@ using namespace hal;
 
 ttf_engine::ttf_engine(engine& eng)
 {
-    HAL_DEBUG_ASSERT(::TTF_Init() == 0, ::TTF_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
 
     HAL_DEBUG_PRINT(severity::init, "Initialized TTF engine");
 }

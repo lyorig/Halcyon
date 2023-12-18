@@ -37,9 +37,14 @@ window::id_type window::id() const
 {
     const id_type id { ::SDL_GetWindowID(m_object.get()) };
 
-    HAL_DEBUG_CHECK(id != 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT(id != 0, ::SDL_GetError());
 
     return id;
+}
+
+const char* window::title() const
+{
+    return ::SDL_GetWindowTitle(this->ptr());
 }
 
 pixel_size window::internal_size() const

@@ -9,7 +9,7 @@ using namespace hal;
 
 engine::engine()
 {
-    HAL_DEBUG_ASSERT(::SDL_Init(0) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::SDL_Init(0) == 0, ::SDL_GetError());
 
     HAL_DEBUG_PRINT(severity::init, "Initialized SDL engine");
 }

@@ -43,8 +43,8 @@ pixel_size surface::size() const
 
 color surface::operator[](pixel_pos coord) const
 {
-    HAL_DEBUG_CHECK(coord.x < ptr()->w, "Out-of-range width");
-    HAL_DEBUG_CHECK(coord.y < ptr()->h, "Out-of-range height");
+    HAL_DEBUG_ASSERT(coord.x < ptr()->w, "Out-of-range width");
+    HAL_DEBUG_ASSERT(coord.y < ptr()->h, "Out-of-range height");
 
     color ret;
 
@@ -57,7 +57,7 @@ color surface::operator[](pixel_pos coord) const
 
 void surface::set_blend(SDL_BlendMode bm) const
 {
-    HAL_DEBUG_ASSERT(::SDL_SetSurfaceBlendMode(this->ptr(), bm) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), bm) == 0, ::SDL_GetError());
 }
 
 Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
@@ -93,5 +93,5 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
 void surface::draw::operator()(const surface& dst)
 {
     if (m_this.ptr() != nullptr)
-        HAL_DEBUG_ASSERT(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
+        HAL_DEBUG_ASSERT_VITAL(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
 }
