@@ -26,9 +26,9 @@ void game::intro()
 
     // This has to be manually timed. Then again, what other option is there?
     constexpr std::array texts {
-        info { .text = "Made with Halcyon", .hold = 3.8 },
-        info { .text = "by lyorig", .scale = 0.75, .hold = 2.6 },
-        info { .text = "HalodaQuest", .scale = 2.0, .fade_in = 4.0, .hold = 6.0, .fade_out = 1.0, .color = hal::color::cyan }
+        info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.8 },
+        info { .text = "by lyorig", .hold = 2.6 },
+        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 4.0, .hold = 6.0, .fade_out = 1.0, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
@@ -45,11 +45,10 @@ void game::intro()
         const hal::texture    tx { app.window, fnt.render(part.text, part.color) };
         const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
 
-        lyo::f64 hold_time { part.hold };
-        if (i == texts.size() - 1)
-        {
-            hold_time -= part.fade_out;
-        }
+        hal::texture::draw dw { tx };
+        (void)dw.to(pos).scale(part.scale);
+
+        const lyo::f64 hold_time { i == texts.size() - 1 ? std::min(app.mixer.music.duration() - app.mixer.music.position() - part.fade_out, part.hold - part.fade_out) : part.hold };
 
         hal::opacity_slider alpha { 0.0 };
         lyo::f64            opacity_incr { alpha.range() / part.fade_in };
@@ -64,7 +63,7 @@ void game::intro()
             alpha += opacity_incr * app.delta();
             tx.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
 
-            hal::texture::draw { tx }.to(pos).scale(part.scale)();
+            dw();
             HAL_CONSOLE_DRAW(fnt, app.window);
 
             if (app.input().pressed(hal::button::esc))
