@@ -24,152 +24,74 @@ void game::intro()
         hal::color  color { hal::color::white };
     };
 
-    constexpr std::array texts {
-        info { .text = "Made with Halcyon" },
-        info { .text = "by lyorig", .scale = 0.75, .hold = 2.5 },
-        info { .text = "HalodaQuest", .scale = 2.0, .fade_in = 4.0, .fade_out = 1.0, .color = hal::color::cyan }
-    };
-
-    const hal::font fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
-
-    hal::texture    logo { app.window, fnt.render(texts.front().text, texts.front().color) };
-    hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size() * texts.front().scale);
-
-    lyo::slider<lyo::f64> alpha { SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE, 0.0 };
-    lyo::precise_timer    tmr { lyo::no_init };
-
-    logo.set_opacity(alpha.value());
-
-    app.mixer.music.load("assets/ost/intro.mp3").fade_in(texts.front().fade_in);
-
-    lyo::f64 hold_time { texts.front().hold };
-
-    state   s { up };
-    lyo::u8 idx { 0 };
-
-    while (app.update())
-    {
-        const info& i { texts[idx] };
-
-        HAL_CONSOLE_DRAW(fnt, app.window);
-        hal::texture::draw(logo).to(pos).scale(i.scale)();
-
-        switch (s)
-        {
-        case up:
-            logo.set_opacity(lyo::cast<lyo::u8>((alpha += (alpha.max() / i.fade_in) * app.delta()).value()));
-
-            if (alpha.value() == alpha.max())
-            {
-                if (idx == texts.size() - 1)
-                {
-                    hold_time = app.mixer.music.duration() - app.mixer.music.position() - i.fade_out;
-                    HAL_DEBUG_PRINT(hal::severity::info, "Song remaining = ", hold_time);
-                }
-
-                else
-                    hold_time = i.hold;
-
-                s = middle;
-                tmr.reset();
-            }
-
-            goto SkipCheck;
-
-        case middle:
-            if (tmr() >= hold_time)
-            {
-                if (idx == texts.size() - 1)
-                {
-                    app.mixer.music.fade_out(i.fade_out);
-                }
-
-                s = down;
-            }
-
-        SkipCheck:
-            if (app.input().pressed(hal::button::esc))
-            {
-                if (idx == texts.size() - 1)
-                {
-                    app.mixer.music.fade_out(i.fade_out);
-                }
-
-                s = down;
-            }
-
-            break;
-
-        case down:
-            logo.set_opacity(lyo::cast<lyo::u8>((alpha -= (SDL_ALPHA_OPAQUE / i.fade_out) * app.delta()).value()));
-
-            if (alpha.value() == alpha.min())
-            {
-                if (idx == texts.size() - 1)
-                {
-                    if (!app.mixer.music.playing())
-                        return;
-                }
-
-                else
-                {
-                    const info& newi { texts[++idx] };
-
-                    logo = fnt.render(newi.text, newi.color);
-                    logo.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
-
-                    pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, logo.size() * newi.scale);
-
-                    s = up;
-                }
-            }
-
-            break;
-        }
-    }
-
-    app.mixer.music.release();
-}
-
-void game::intro_v2()
-{
-    enum state
-    {
-        up,
-        middle,
-        down,
-    };
-
-    struct info
-    {
-        const char* text;
-        lyo::f64    scale { 1.0 }, fade_in { 1.0 }, hold { 4.0 }, fade_out { 0.5 };
-        hal::color  color { hal::color::white };
-    };
-
-    constexpr std::array texts {
-        info { .text = "Made with Halcyon" },
-        info { .text = "by lyorig", .scale = 0.75, .hold = 2.5 },
-        info { .text = "HalodaQuest", .scale = 2.0, .fade_in = 4.0, .fade_out = 1.0, .color = hal::color::cyan }
+    constexpr std::array texts { // This has to be manually timed. Then again, what other option is there?
+        info { .text = "Made with Halcyon", .hold = 3.8 },
+        info { .text = "by lyorig", .scale = 0.75, .hold = 2.6 },
+        info { .text = "HalodaQuest", .scale = 2.0, .fade_in = 4.0, .hold = 6.0, .fade_out = 1.0, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
     const hal::pixel_size winhalf { app.window.size() / 2 };
 
-    hal::opacity_slider alpha { 0.0 };
-    hal::volume_slider  volume { 0 };
+    lyo::precise_timer middle_timer { lyo::no_init };
 
-    app.mixer.music.load("assets/ost/intro.mp3").set_volume(volume.value()).fade_in(texts.front().fade_in);
+    app.mixer.music.load("assets/ost/intro_v2.mp3").fade_in(texts.front().fade_in);
 
-    for (const info& part : texts)
+    for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
-        const hal::texture    tx { app.window, fnt.render(part.text) };
-        const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size());
+        const info& part { texts[i] };
+
+        HAL_DEBUG_PRINT(hal::severity::info, "Iterating: ", part.text);
+
+        const hal::texture    tx { app.window, fnt.render(part.text, part.color) };
+        const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
+
+        hal::opacity_slider alpha { 0.0 };
+        lyo::f64            opacity_incr { alpha.range() / part.fade_in };
+
+        state dir { up };
 
         while (app.update())
         {
-            hal::texture::draw { tx }.to(pos)();
+            alpha += opacity_incr * app.delta();
+            tx.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
+
+            hal::texture::draw { tx }.to(pos).scale(part.scale)();
+            HAL_CONSOLE_DRAW(fnt, app.window);
+
+            // HAL_DEBUG_PRINT(hal::severity::info, "New opacity is ", alpha.value());
+
+            switch (dir)
+            {
+            case up:
+                if (alpha.value() == alpha.max())
+                {
+                    middle_timer.reset();
+                    dir = middle;
+                }
+
+                break;
+
+            case middle:
+                if (middle_timer() >= part.hold)
+                {
+                    opacity_incr = -alpha.range() / part.fade_out;
+                    dir = down;
+
+                    if (i == texts.size() - 1)
+                        app.mixer.music.fade_out(part.fade_out);
+                }
+
+                break;
+
+            case down:
+                if (alpha.value() == alpha.min())
+                {
+                    goto Breakout;
+                }
+            }
         }
+    Breakout:
     }
 
     app.mixer.music.release();

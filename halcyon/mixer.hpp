@@ -5,8 +5,6 @@
 
 namespace hal
 {
-    using volume_slider = lyo::static_slider<lyo::f64, 0, MIX_MAX_VOLUME>;
-
     enum class chunk_quality : lyo::u16
     {
         low = 1024,

@@ -119,6 +119,11 @@ namespace lyo
             return lyo::cast<T>(Max);
         }
 
+        static constexpr T range() noexcept
+        {
+            return lyo::cast<T>(Max - Min);
+        }
+
         constexpr bool on_border() const noexcept
         {
             return m_value == Min || m_value == Max;

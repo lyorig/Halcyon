@@ -10,7 +10,6 @@ namespace hq
         game(const lyo::parser& args);
 
         void intro();
-        void intro_v2();
 
         void start();
 
