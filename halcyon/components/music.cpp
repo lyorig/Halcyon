@@ -39,19 +39,22 @@ void music::fade_out(lyo::f64 time)
     ::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0));
 }
 
-void music::pause()
+music& music::pause()
 {
     ::Mix_PauseMusic();
+    return *this;
 }
 
-void music::resume()
+music& music::resume()
 {
     ::Mix_ResumeMusic();
+    return *this;
 }
 
-void music::rewind()
+music& music::rewind()
 {
     ::Mix_RewindMusic();
+    return *this;
 }
 
 bool music::playing() const
@@ -82,18 +85,22 @@ lyo::f64 music::duration() const
     return ret;
 }
 
-void music::set_volume(lyo::u8 volume) const
+music& music::set_volume(lyo::u8 volume)
 {
     HAL_DEBUG_CHECK(m_object, "Tried to set volume of null music");
 
     ::Mix_VolumeMusic(volume);
+
+    return *this;
 }
 
-void music::jump(lyo::f64 time)
+music& music::jump(lyo::f64 time)
 {
     this->rewind();
 
     HAL_DEBUG_ASSERT(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
+
+    return *this;
 }
 
 void music::internal_load(const char* path)

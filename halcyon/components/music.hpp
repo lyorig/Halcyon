@@ -27,10 +27,10 @@ namespace hal
 
         void fade_out(lyo::f64 time);
 
-        void pause();
-        void resume();
+        music& pause();
+        music& resume();
 
-        void rewind();
+        music& rewind();
 
         bool playing() const;
 
@@ -38,8 +38,8 @@ namespace hal
         lyo::f64 position() const;
         lyo::f64 duration() const;
 
-        void set_volume(lyo::u8 volume) const;
-        void jump(lyo::f64 time);
+        music& set_volume(lyo::u8 volume);
+        music& jump(lyo::f64 time);
 
     private:
         void internal_load(const char* path);

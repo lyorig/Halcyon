@@ -22,6 +22,8 @@ namespace hal
 
     using coordinate = point<position_type>;
     using world_area = rectangle<position_type>;
+
+    using opacity_slider = lyo::static_slider<lyo::f64, SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE>;
 }
 
 // Paranoia.

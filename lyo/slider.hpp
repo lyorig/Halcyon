@@ -89,7 +89,7 @@ namespace lyo
         T m_value, m_min, m_max;
     };
 
-    template <lyo::arithmetic T, T Min, T Max>
+    template <lyo::arithmetic T, auto Min, auto Max>
         requires(Min < Max)
     class static_slider
     {
@@ -100,7 +100,7 @@ namespace lyo
         }
 
         constexpr static_slider(T value) noexcept
-            : m_value { std::clamp(value, Min, Max) }
+            : m_value { clmp(value) }
         {
         }
 
@@ -109,14 +109,14 @@ namespace lyo
             return m_value;
         }
 
-        constexpr T min() const noexcept
+        static constexpr T min() noexcept
         {
-            return Min;
+            return lyo::cast<T>(Min);
         }
 
-        constexpr T max() const noexcept
+        static constexpr T max() noexcept
         {
-            return Max;
+            return lyo::cast<T>(Max);
         }
 
         constexpr bool on_border() const noexcept
@@ -126,26 +126,31 @@ namespace lyo
 
         constexpr static_slider& operator=(T value) noexcept
         {
-            m_value = std::clamp(value, Min, Max);
+            m_value = clmp(value);
 
             return *this;
         }
 
         constexpr static_slider& operator+=(T add) noexcept
         {
-            m_value = std::clamp(m_value + add, Min, Max);
+            m_value = clmp(m_value + add);
 
             return *this;
         }
 
         constexpr static_slider& operator-=(T subtract) noexcept
         {
-            m_value = std::clamp(m_value - subtract, Min, Max);
+            m_value = clmp(m_value - subtract);
 
             return *this;
         }
 
     private:
+        static T clmp(T value)
+        {
+            return std::clamp(value, lyo::cast<T>(Min), lyo::cast<T>(Max));
+        }
+
         T m_value;
     };
 } // namespace lyo

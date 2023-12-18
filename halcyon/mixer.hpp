@@ -5,8 +5,7 @@
 
 namespace hal
 {
-    class engine;
-    class chunk;
+    using volume_slider = lyo::static_slider<lyo::f64, 0, MIX_MAX_VOLUME>;
 
     enum class chunk_quality : lyo::u16
     {
@@ -14,6 +13,9 @@ namespace hal
         medium = 2048,
         high = 4096
     };
+
+    class engine;
+    class chunk;
 
     // A mixer, which can play music and load sound effects.
     // Make sure it outlives these, as chunk destructors require

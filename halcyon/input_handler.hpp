@@ -15,11 +15,13 @@ namespace hal
     public:
         using key_storage = lyo::bitset<SDL_NUM_SCANCODES + 5, lyo::u64>;
 
-        explicit input_base(engine& eng);
+        input_base(engine& eng);
 
         // Automatic polling. If you want finer control (or use
         // functions not yet implemented), use the poll() function.
         virtual bool update();
+
+        bool quit() const;
 
         // This function doesn't require any storage, so it's
         // included as part of the base.

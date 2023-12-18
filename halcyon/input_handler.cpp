@@ -24,6 +24,11 @@ bool input_base::update()
     return m_ok;
 }
 
+bool input_base::quit() const
+{
+    return !m_ok;
+}
+
 bool input_base::held(button btn) const
 {
     if (std::to_underlying(btn) <= SDL_NUM_SCANCODES) // Key.
@@ -39,7 +44,7 @@ pixel_pos input_base::mouse() const
 
     ::SDL_GetMouseState(&pos.x, &pos.y);
 
-    return static_cast<pixel_pos>(pos);
+    return pixel_pos(pos);
 }
 
 bool input_base::poll(SDL_Event& event) const

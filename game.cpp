@@ -131,6 +131,50 @@ void game::intro()
     app.mixer.music.release();
 }
 
+void game::intro_v2()
+{
+    enum state
+    {
+        up,
+        middle,
+        down,
+    };
+
+    struct info
+    {
+        const char* text;
+        lyo::f64    scale { 1.0 }, fade_in { 1.0 }, hold { 4.0 }, fade_out { 0.5 };
+        hal::color  color { hal::color::white };
+    };
+
+    constexpr std::array texts {
+        info { .text = "Made with Halcyon" },
+        info { .text = "by lyorig", .scale = 0.75, .hold = 2.5 },
+        info { .text = "HalodaQuest", .scale = 2.0, .fade_in = 4.0, .fade_out = 1.0, .color = hal::color::cyan }
+    };
+
+    const hal::font       fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
+    const hal::pixel_size winhalf { app.window.size() / 2 };
+
+    hal::opacity_slider alpha { 0.0 };
+    hal::volume_slider  volume { 0 };
+
+    app.mixer.music.load("assets/ost/intro.mp3").set_volume(volume.value()).fade_in(texts.front().fade_in);
+
+    for (const info& part : texts)
+    {
+        const hal::texture    tx { app.window, fnt.render(part.text) };
+        const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size());
+
+        while (app.update())
+        {
+            hal::texture::draw { tx }.to(pos)();
+        }
+    }
+
+    app.mixer.music.release();
+}
+
 void game::start()
 {
     const hal::font    fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
