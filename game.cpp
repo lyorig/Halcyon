@@ -28,7 +28,7 @@ void game::intro()
     constexpr std::array texts {
         info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.8 },
         info { .text = "by lyorig", .hold = 2.6 },
-        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 4.0, .hold = 6.0, .fade_out = 1.0, .color = hal::color::cyan }
+        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 4.0, .hold = 6.5, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
@@ -51,12 +51,13 @@ void game::intro()
         const lyo::f64 hold_time { i == texts.size() - 1 ? std::min(app.mixer.music.duration() - app.mixer.music.position() - part.fade_out, part.hold - part.fade_out) : part.hold };
 
         hal::opacity_slider alpha { 0.0 };
-        lyo::f64            opacity_incr { alpha.range() / part.fade_in };
+
+        lyo::f64 opacity_incr { alpha.range() / part.fade_in };
+        lyo::f64 fadeout_time { part.fade_out };
 
         state dir { up };
 
         tx.set_opacity(alpha.min());
-        HAL_DEBUG_PRINT(hal::severity::info, "Iterating: ", part.text);
 
         while (app.update())
         {
@@ -66,8 +67,12 @@ void game::intro()
             dw();
             HAL_CONSOLE_DRAW(fnt, app.window);
 
-            if (app.input().pressed(hal::button::esc))
+            if (app.input().pressed(hal::button::esc) && dir != down)
+            {
+                i = texts.size() - 1;
+                fadeout_time = texts.back().fade_out;
                 goto GetDown;
+            }
 
             switch (dir)
             {
@@ -84,11 +89,14 @@ void game::intro()
                 if (middle_timer() >= hold_time)
                 {
                 GetDown:
-                    opacity_incr = -alpha.range() / part.fade_out;
+                    // No clue why this does what I want it to do, honestly...
+                    opacity_incr = -alpha.range() / fadeout_time;
                     dir = down;
 
-                    if (i == texts.size() - 1)
-                        app.mixer.music.fade_out(part.fade_out);
+                    if (i == texts.size() - 1) // Calculate how fast the audio fade should be.
+                        app.mixer.music.fade_out(texts.back().fade_out);
+                    else
+                        opacity_incr = -alpha.range() / fadeout_time;
                 }
 
                 break;
@@ -108,8 +116,6 @@ void game::intro()
     // Mix_FreeMusic blocks until the music has finished fading
     // out, which requires a headstart in the last iteration.
     app.mixer.music.release();
-
-    HAL_DEBUG_PRINT(hal::severity::info, "Intro finished. Welcome to ", app.window.title(), '.');
 }
 
 void game::start()

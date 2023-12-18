@@ -64,7 +64,7 @@ bool music::playing() const
 
 lyo::u8 music::volume() const
 {
-    return static_cast<lyo::u8>(::Mix_VolumeMusic(-1));
+    return lyo::u8(::Mix_VolumeMusic(-1));
 }
 
 lyo::f64 music::position() const
