@@ -30,7 +30,7 @@ void game::intro()
         info { .text = "HalodaQuest", .scale = 2.0, .fade_in = 4.0, .hold = 6.0, .fade_out = 1.0, .color = hal::color::cyan }
     };
 
-    const hal::font       fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
+    const hal::font       fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
     const hal::pixel_size winhalf { app.window.size() / 2 };
 
     lyo::precise_timer middle_timer { lyo::no_init };
@@ -99,7 +99,7 @@ void game::intro()
 
 void game::start()
 {
-    const hal::font    fnt { app.ttf.load_font("assets/fonts/m5x7.ttf", 144) };
+    const hal::font    fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
     const hal::texture tex { app.window, fnt.render("[menu screen]") };
 
     const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size());

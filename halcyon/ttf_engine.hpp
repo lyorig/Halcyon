@@ -25,11 +25,11 @@ namespace hal
         // Create a font from an lvalue font loader. If you want to construct
         // it from (and use it) as an rvalue and have no intentions of any
         // further TTF operations, add the rvalue_font tag type.
-        font load_font(const char* path, lyo::u8 size) &;
+        font load(const char* path, lyo::u8 size) &;
 
         // Give a pinky promise to this library's creator that you'll only
         // use the returned font as an rvalue and have absolutely no plans
         // to do something utterly stupid like assign it to a variable.
-        font load_font(rvalue_font_tag, const char* path, lyo::u8 size) &&;
+        font load(rvalue_font_tag, const char* path, lyo::u8 size) &&;
     };
 } // namespace hal
