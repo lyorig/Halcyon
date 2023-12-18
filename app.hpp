@@ -26,7 +26,7 @@ namespace hq
         MAYBE_EMPTY hal::image_loader image;
         MAYBE_EMPTY hal::ttf_engine ttf;
 
-        app(const lyo::parser& args, const char* window_name);
+        app(lyo::parser&& args, const char* window_name);
 
         bool update();
 

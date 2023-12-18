@@ -7,7 +7,7 @@ namespace hq
     class game
     {
     public:
-        game(const lyo::parser& args);
+        game(lyo::parser&& args);
 
         void intro();
 

@@ -5,7 +5,7 @@
 
 using namespace hq;
 
-app::app(const lyo::parser& p, const char* window_name)
+app::app(lyo::parser&& p, const char* window_name)
     : m_input { m_eng }
     , mixer { m_eng }
     , window { m_eng, window_name, hal::fullscreen_mode, { hal::renderer::accelerated, !p.has("-xv") ? hal::renderer::vsync : hal::renderer::none } }

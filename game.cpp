@@ -3,8 +3,8 @@
 
 using namespace hq;
 
-game::game(const lyo::parser& args)
-    : app { args, "HalodaQuest" }
+game::game(lyo::parser&& args)
+    : app { std::move(args), "HalodaQuest" }
 {
 }
 
@@ -45,6 +45,12 @@ void game::intro()
         const hal::texture    tx { app.window, fnt.render(part.text, part.color) };
         const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
 
+        lyo::f64 hold_time { part.hold };
+        if (i == texts.size() - 1)
+        {
+            hold_time -= part.fade_out;
+        }
+
         hal::opacity_slider alpha { 0.0 };
         lyo::f64            opacity_incr { alpha.range() / part.fade_in };
 
@@ -76,7 +82,7 @@ void game::intro()
                 break;
 
             case middle:
-                if (middle_timer() >= part.hold)
+                if (middle_timer() >= hold_time)
                 {
                 GetDown:
                     opacity_incr = -alpha.range() / part.fade_out;
@@ -100,11 +106,11 @@ void game::intro()
     Breakout:
     }
 
-    // Mix_FreeMusic blocks until the music has finished
-    // fading out, which works in our favor.
+    // Mix_FreeMusic blocks until the music has finished fading
+    // out, which requires a headstart in the last iteration.
     app.mixer.music.release();
 
-    HAL_DEBUG_PRINT(hal::severity::info, "Intro finished. Welcome to ", app.window.title());
+    HAL_DEBUG_PRINT(hal::severity::info, "Intro finished. Welcome to ", app.window.title(), '.');
 }
 
 void game::start()
