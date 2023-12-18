@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include <lyo/slider.hpp>
 
 using namespace hq;
 
@@ -19,16 +18,16 @@ void game::intro()
 
     struct info
     {
-        const char* text;
-        lyo::f64    scale { 1.0 }, fade_in { 1.0 }, hold { 4.0 }, fade_out { 0.5 };
-        hal::color  color { hal::color::white };
+        const char*      text;
+        const lyo::f64   scale { 1.0 }, fade_in { 1.0 }, hold { 4.0 }, fade_out { 0.5 };
+        const hal::color color { hal::color::white };
     };
 
     // This has to be manually timed. Then again, what other option is there?
     constexpr std::array texts {
         info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.8 },
         info { .text = "by lyorig", .hold = 2.6 },
-        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 4.0, .hold = 6.5, .fade_out = 1.5, .color = hal::color::cyan }
+        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 4.0, .hold = 6.5, .fade_out = 1.0, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
@@ -67,11 +66,11 @@ void game::intro()
             dw();
             HAL_CONSOLE_DRAW(fnt, app.window);
 
-            if (app.input().pressed(hal::button::esc) && dir != down)
+            if (app.input().pressed(hal::button::esc))
             {
                 i = texts.size() - 1;
                 fadeout_time = texts.back().fade_out;
-                goto GetDown;
+                goto GoDown;
             }
 
             switch (dir)
@@ -88,7 +87,7 @@ void game::intro()
             case middle:
                 if (middle_timer() >= hold_time)
                 {
-                GetDown:
+                GoDown:
                     // No clue why this does what I want it to do, honestly...
                     opacity_incr = -alpha.range() / fadeout_time;
                     dir = down;
@@ -104,13 +103,13 @@ void game::intro()
             case down:
                 if (alpha.value() == alpha.min())
                 {
-                    goto Breakout;
+                    goto NextIter;
                 }
 
                 break;
             }
         }
-    Breakout:
+    NextIter:
     }
 
     // Mix_FreeMusic blocks until the music has finished fading

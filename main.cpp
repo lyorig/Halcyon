@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include <lyo/utility.hpp>
 
 // Current arguments:
 // -xi  - Skip the intro.
