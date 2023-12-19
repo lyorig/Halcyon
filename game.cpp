@@ -25,8 +25,8 @@ void game::intro()
 
     // This has to be manually timed. Then again, what other option is there?
     constexpr std::array texts {
-        info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.8 },
-        info { .text = "by lyorig", .hold = 2.6 },
+        info { .text = "Made with Halcyon", .scale = 1.5, .hold = 4.0 },
+        info { .text = "by lyorig", .hold = 2.5 },
         info { .text = "Interloper", .scale = 2.5, .fade_in = 4.0, .hold = 6.5, .fade_out = 1.0, .color = hal::color::cyan }
     };
 

@@ -46,7 +46,6 @@ void debug::draw(const window& wnd, const font& fnt)
 
         if (csz.x != 0)
         {
-
             const lyo::f64   scale { wnd.size().y * vhm / y_size };
             const pixel_type y_scaled = std::round(y_size * scale);
 
@@ -78,8 +77,10 @@ void debug::draw(const window& wnd, const font& fnt)
 void debug::panic(const char* why, const char* where,
     const char* message)
 {
+    const char* sanitized_msg { message && !lyo::is_c_string_empty(message) ? message : "None provided." };
+
     debug::print(severity::error, __func__, ": ", why, " in ", where, ": ",
-        message);
+        sanitized_msg);
 
     constexpr SDL_MessageBoxButtonData buttons[] {
         { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "Exit" },
@@ -87,7 +88,7 @@ void debug::panic(const char* why, const char* where,
     };
 
     const std::string msgbox_info {
-        lyo::string_from_pack("Function: ", where, "\nInfo: ", message)
+        lyo::string_from_pack("Function: ", where, "\nInfo: ", sanitized_msg)
     };
 
     const SDL_MessageBoxData msgbox {

@@ -9,6 +9,8 @@ int main(int argc, char* argv[])
 {
     hq::game game { { argc, argv } };
 
+    HAL_DEBUG_PANIC("No reason really.");
+
     if (!game.app.args.has("-xi"))
         game.intro();
 
