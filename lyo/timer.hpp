@@ -32,7 +32,6 @@ namespace lyo
         timer& reset() noexcept
         {
             m_epoch = Clock::now();
-
             return *this;
         }
 
@@ -44,21 +43,18 @@ namespace lyo
         timer& operator=(f64 time) noexcept
         {
             m_epoch = Clock::now() - second_type { time };
-
             return *this;
         }
 
         timer& operator+=(f64 time) noexcept
         {
             m_epoch -= second_type { time };
-
             return *this;
         }
 
         timer& operator-=(f64 time) noexcept
         {
             m_epoch += second_type { time };
-
             return *this;
         }
 
@@ -90,7 +86,6 @@ namespace lyo
         stopwatch& reset() noexcept
         {
             m_data = Clock::now();
-
             return *this;
         }
 
@@ -111,7 +106,7 @@ namespace lyo
             if (std::holds_alternative<tp>(m_data)) // Not paused (time-point).
                 return std::chrono::duration<f64> { Clock::now() - std::get<tp>(m_data) }.count();
 
-            else // Paused (double).
+            else // Paused (float).
                 return std::get<f64>(m_data);
         }
 
@@ -120,7 +115,7 @@ namespace lyo
             if (std::holds_alternative<tp>(m_data)) // Not paused (time-point).
                 m_data = Clock::now() - second_type { time };
 
-            else // Paused (double).
+            else // Paused (float).
                 std::get<f64>(m_data) = time;
 
             return *this;
@@ -131,7 +126,7 @@ namespace lyo
             if (std::holds_alternative<tp>(m_data)) // Not paused (time-point).
                 m_data -= second_type { time };
 
-            else // Paused (double).
+            else // Paused (float).
                 std::get<lyo::f64>(m_data) += time;
 
             return *this;
@@ -142,7 +137,7 @@ namespace lyo
             if (std::holds_alternative<tp>(m_data)) // Not paused (time-point).
                 m_data += second_type { time };
 
-            else // Paused (double).
+            else // Paused (float).
                 std::get<f64>(m_data) -= time;
 
             return *this;
