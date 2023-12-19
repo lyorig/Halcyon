@@ -27,7 +27,7 @@ void game::intro()
     constexpr std::array texts {
         info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.8 },
         info { .text = "by lyorig", .hold = 2.6 },
-        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 4.0, .hold = 6.5, .fade_out = 1.0, .color = hal::color::cyan }
+        info { .text = "Interloper", .scale = 2.5, .fade_in = 4.0, .hold = 6.5, .fade_out = 1.0, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
@@ -64,9 +64,9 @@ void game::intro()
             tx.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
 
             dw();
-            HAL_CONSOLE_DRAW(fnt, app.window);
+            HAL_DEBUG_DRAW(app.window, fnt);
 
-            if (app.input().pressed(hal::button::esc))
+            if (app.input.pressed(hal::button::esc))
             {
                 i = texts.size() - 1;
                 fadeout_time = texts.back().fade_out;
@@ -119,14 +119,25 @@ void game::intro()
 
 void game::start()
 {
-    const hal::font    fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
-    const hal::texture tex { app.window, fnt.render("[menu screen]") };
+    constexpr hal::color bgf { hal::color::black };
 
-    const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size());
+    const hal::font    fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
+    const hal::texture tex { app.window, fnt.render("[menu screen]", ~bgf) };
+
+    app.window.renderer.set_fill(bgf);
+
+    hal::texture::draw dw { tex };
+    void(dw.to(app.window.size() / 2).anchor(hal::anchor::center));
 
     while (app.update())
     {
-        hal::texture::draw { tex }.to(pos)();
-        HAL_CONSOLE_DRAW(fnt, app.window);
+        dw();
+        HAL_DEBUG_DRAW(app.window, fnt);
+
+        if (dw.dest() | app.input.mouse())
+        {
+            app.input.quit();
+            HAL_DEBUG_PRINT(hal::debug::info, "Quitting");
+        }
     }
 }

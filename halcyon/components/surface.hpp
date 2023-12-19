@@ -3,6 +3,7 @@
 #include <SDL2/SDL_surface.h>
 
 #include <halcyon/internal/drawer.hpp>
+#include <halcyon/types/color.hpp>
 #include <lyo/pass_key.hpp>
 
 #include "sdl_object.hpp"

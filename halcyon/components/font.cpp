@@ -7,7 +7,7 @@ using namespace hal;
 font::font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>)
     : sdl_object { ::TTF_OpenFont(path, size) }
 {
-    HAL_DEBUG_PRINT(severity::load, "Loaded font ", path, " with size ", static_cast<lyo::u32>(size));
+    HAL_DEBUG_PRINT(debug::load, "Loaded font ", path, " with size ", static_cast<lyo::u32>(size));
 }
 
 surface font::render(const std::string& text, color color) const

@@ -4,7 +4,12 @@
    Various debugging functions. Also hopefully the only
    part of Halcyon that uses preprocessor #defines. */
 
-#include "console.hpp"
+#ifndef NDEBUG
+#define HALDEBUG
+#endif
+
+// Manual debug switch.
+// #define HALDEBUG
 
 #ifdef HALDEBUG
 
@@ -14,16 +19,30 @@
 #endif
 
 #include <lyo/timer.hpp>
+#include <lyo/utility.hpp>
 
+#include <array>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 namespace hal
 {
     class texture;
+    class window;
+    class font;
+
     class debug
     {
     public:
+        enum severity
+        {
+            info,
+            warning,
+            error,
+            init,
+            load
+        };
         // Output any amount of arguments to stdout/stderr, the console and an output file.
         template <typename... Args>
         static void print(severity type, Args&&... args)
@@ -31,38 +50,38 @@ namespace hal
             std::stringstream fwd_info, message;
 
             fwd_info << std::fixed << std::setprecision(3) << '[' << m_timer()
-                     << "s]\t";
+                     << "s] ";
 
             switch (type)
             {
             case severity::info:
-                fwd_info << "[info]\t\t";
+                fwd_info << "[info]  ";
                 break;
 
             case severity::warning:
-                fwd_info << "[warning]\t";
+                fwd_info << "[warn]  ";
                 break;
 
             case severity::error:
-                fwd_info << "[error]\t\t";
+                fwd_info << "[error] ";
                 break;
 
             case severity::init:
-                fwd_info << "[init]\t\t";
+                fwd_info << "[init]  ";
                 break;
 
             case severity::load:
-                fwd_info << "[load]\t\t";
+                fwd_info << "[load]  ";
                 break;
 
             default:
-                fwd_info << "[ThisTypeIsNotInTheSwitchStatementYouDumbass]\t";
+                fwd_info << "[????]  ";
                 break;
             }
 
             const std::string msg { lyo::string_from_pack(args...) };
 
-            console::log(type, msg);
+            debug::log(type, msg);
 
             const std::string with_info { fwd_info.str() + msg };
 
@@ -78,24 +97,43 @@ namespace hal
         static void verify(bool condition, const char* cond_string, const char* func,
             const char* extra_info);
 
+        static void draw(const window& wnd, const font& fnt);
+
     private:
+        static void log(severity type, const std::string& msg);
+
         static std::ofstream            m_output;
         static const lyo::precise_timer m_timer;
+
+        using count_type = lyo::u8;
+
+        using value_pair = std::pair<std::string, severity>;
+        using queue_type = std::array<value_pair, 10>; // The size acts as the maximum amount of entries.
+
+        static queue_type m_queue;
+        static count_type m_entries;
+
+        static bool m_repaint; // Whether to recreate the texture.
     };
 } // namespace hal
 
 #define HAL_DEBUG_PRINT      hal::debug::print
 #define HAL_DEBUG_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
+
+#define HAL_DEBUG_ASSERT(cond, if_false) HAL_DEBUG_ASSERT_VITAL(cond, if_false)
 #define HAL_DEBUG_ASSERT_VITAL(cond, if_false) \
     hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
-#define HAL_DEBUG_ASSERT(cond, if_false) HAL_DEBUG_ASSERT_VITAL(cond, if_false)
+
+#define HAL_DEBUG_DRAW hal::debug::draw
 
 #else
 
 #define HAL_DEBUG_PRINT(...)
 #define HAL_DEBUG_PANIC(...)
-#define HAL_DEBUG_ASSERT_VITAL(condition, ...) \
-    (void(condition))         // Asserts are vital; preserve the condition.
-#define HAL_DEBUG_ASSERT(...) // Checks are not vital; remove them entirely.
+
+#define HAL_DEBUG_ASSERT(...)
+#define HAL_DEBUG_ASSERT_VITAL(condition, ...) (void(condition))
+
+#define HAL_DEBUG_DRAW(...)
 
 #endif

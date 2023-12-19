@@ -14,9 +14,9 @@ namespace hq
     {
         MAYBE_EMPTY hal::engine m_eng;
 
-        hal::input_handler m_input;
-
     public:
+        hal::input_handler input;
+
         class hal::mixer mixer;
 
         class hal::window window;
@@ -29,8 +29,6 @@ namespace hq
         app(lyo::parser&& args, const char* window_name);
 
         bool update();
-
-        const hal::input_handler& input() const;
 
         lyo::f64 delta() const;
 

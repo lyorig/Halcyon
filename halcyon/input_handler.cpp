@@ -10,7 +10,7 @@ using namespace hal;
 
 input_base::input_base(engine& eng)
 {
-    HAL_DEBUG_PRINT(severity::init, "Initialized input handler");
+    HAL_DEBUG_PRINT(debug::init, "Initialized input handler");
 }
 
 bool input_base::update()
@@ -24,9 +24,9 @@ bool input_base::update()
     return m_ok;
 }
 
-bool input_base::quit() const
+void input_base::quit()
 {
-    return !m_ok;
+    m_ok = false;
 }
 
 bool input_base::held(button btn) const

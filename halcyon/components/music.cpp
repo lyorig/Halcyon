@@ -1,4 +1,5 @@
 #include "music.hpp"
+#include <lyo/cast.hpp>
 
 using namespace hal;
 
@@ -106,7 +107,7 @@ music& music::jump(lyo::f64 time)
 void music::internal_load(const char* path)
 {
     sdl_object::operator=(::Mix_LoadMUS(path));
-    HAL_DEBUG_PRINT(severity::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
+    HAL_DEBUG_PRINT(debug::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
 }
 
 void music::internal_play(int loops)

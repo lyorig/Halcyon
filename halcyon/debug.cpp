@@ -3,7 +3,9 @@
 #ifdef HALDEBUG
 #include <SDL2/SDL_messagebox.h>
 
-#include <cstring>
+#include <halcyon/components/font.hpp>
+#include <halcyon/texture.hpp>
+#include <halcyon/window.hpp>
 #include <lyo/utility.hpp>
 
 using namespace hal;
@@ -11,6 +13,67 @@ using namespace hal;
 // Static private variables.
 std::ofstream            debug::m_output { "Halcyon debug output.txt" };
 const lyo::precise_timer debug::m_timer {};
+
+debug::queue_type debug::m_queue {};
+debug::count_type debug::m_entries { 0 };
+
+bool debug::m_repaint { false };
+
+void debug::draw(const window& wnd, const font& fnt)
+{
+    // Render settings.
+    constexpr coordinate offset { 20.0, 10.0 };
+    constexpr lyo::f64   vhm { 4.0 / 100.0 }; // View-height multiplier (only edit the lhs).
+
+    // I am not 100% sure whether it's safe to create a static
+    // SDL object, as the destructor will run after de-initialization.
+    // However, it doesn't crash, it's fast, and it's debug, so who cares.
+    static texture tx { wnd };
+
+    if (m_repaint)
+    {
+        static pixel_type y_size { fnt.render(".").size().y };
+
+        pixel_size csz { .y = pixel_type(y_size * m_entries) }; // Canvas size.
+
+        // "Calculate" canvas size.
+        for (count_type i { 0 }; i < m_entries; ++i)
+        {
+            const pixel_type x_size { fnt.size_text(m_queue[i].first).x };
+            if (x_size > csz.x)
+                csz.x = x_size;
+        }
+
+        if (csz.x != 0)
+        {
+
+            const lyo::f64   scale { wnd.size().y * vhm / y_size };
+            const pixel_type y_scaled = std::round(y_size * scale);
+
+            surface canvas { wnd, csz * scale };
+
+            // Compose the texture.
+            for (count_type i { 0 }; i < m_entries; ++i)
+            {
+                const value_pair& entry { m_queue[i] };
+
+                if (!entry.first.empty())
+                {
+                    const surface   text { fnt.render(entry.first, color::hex_type(entry.second)) };
+                    const pixel_pos pos { 0, pixel_type(i * y_scaled) };
+
+                    hal::surface::draw(text).to(pos).scale(scale)(canvas);
+                }
+            }
+
+            tx = canvas;
+        }
+
+        m_repaint = false;
+    }
+
+    hal::texture::draw(tx).to(offset)();
+}
 
 void debug::panic(const char* why, const char* where,
     const char* message)
@@ -57,5 +120,19 @@ void debug::verify(bool condition, const char* cond_string, const char* func,
 {
     if (!condition)
         debug::panic(cond_string, func, extra_info);
+}
+
+void debug::log(severity type, const std::string& msg)
+{
+    if (m_entries == m_queue.size())
+    {
+        std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
+        m_queue.back() = { msg, type };
+    }
+
+    else
+        m_queue[m_entries++] = { msg, type };
+
+    m_repaint = true;
 }
 #endif

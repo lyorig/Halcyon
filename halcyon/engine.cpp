@@ -11,7 +11,7 @@ engine::engine()
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_Init(0) == 0, ::SDL_GetError());
 
-    HAL_DEBUG_PRINT(severity::init, "Initialized SDL engine");
+    HAL_DEBUG_PRINT(debug::init, "Initialized SDL engine");
 }
 
 engine::~engine() { this->deinitialize(); }
@@ -24,7 +24,7 @@ void engine::exit() &
 
 void engine::deinitialize() const
 {
-    HAL_DEBUG_PRINT(severity::info, "Exiting. Last SDL error: ",
+    HAL_DEBUG_PRINT(debug::info, "Exiting. Last SDL error: ",
         lyo::is_c_string_empty(::SDL_GetError()) ? "none"
                                                  : ::SDL_GetError());
     ::SDL_Quit();

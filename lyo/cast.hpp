@@ -1,7 +1,6 @@
 #pragma once
 
 #include "concepts.hpp"
-#include <cmath>
 
 /* cast.hpp:
    Modular casting. */
@@ -10,9 +9,16 @@ namespace lyo
 {
 
     // Cast to a type with proper rounding.
-    template <arithmetic Cast_to, arithmetic T>
-    constexpr Cast_to cast(T value) noexcept
+    template <arithmetic To, arithmetic From>
+    constexpr To cast(From value) noexcept
     {
-        return static_cast<Cast_to>(std::round(value));
+        if constexpr (std::is_integral_v<To> && std::is_floating_point_v<From>)
+        {
+            constexpr From tolerance { 1.0 - 0.5 }; // RHS = where to round up from.
+            return static_cast<To>(value < 0.0 ? value - tolerance : value + tolerance);
+        }
+
+        else
+            return static_cast<To>(value);
     }
 } // namespace lyo

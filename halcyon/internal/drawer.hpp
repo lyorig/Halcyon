@@ -82,6 +82,18 @@ namespace hal
             return get_this();
         }
 
+        // Get the source rectangle.
+        const srect& src() const
+        {
+            return m_src;
+        }
+
+        // Get the destination rectangle.
+        const drect& dest() const
+        {
+            return m_dst;
+        }
+
     protected:
         this_ref get_this()
         {

@@ -21,7 +21,7 @@ namespace hal
         // functions not yet implemented), use the poll() function.
         virtual bool update();
 
-        bool quit() const;
+        void quit();
 
         // This function doesn't require any storage, so it's
         // included as part of the base.

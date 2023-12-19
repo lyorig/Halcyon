@@ -8,7 +8,7 @@ window::window(engine& engine, const char* title, const pixel_size& pos, const p
     : sdl_object { ::SDL_CreateWindow(title, pos.x, pos.y, size.x, size.y, il2bm<Uint32>(w_flags)) }
     , renderer { *this, il2bm<lyo::u32>(r_flags), {} }
 {
-    HAL_DEBUG_PRINT(severity::init, "Initialized window '", title, "' (", this->size().x, 'x', this->size().y, ')');
+    HAL_DEBUG_PRINT(debug::init, "Initialized window '", title, "' (", this->size().x, 'x', this->size().y, ')');
 }
 
 window::window(engine& engine, const char* title, fullscreen_mode_tag,

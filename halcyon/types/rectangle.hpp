@@ -69,6 +69,11 @@ namespace hal
             return pos.x + size.x >= other.pos.x && pos.x <= other.pos.x + other.size.x && pos.y <= other.pos.y + other.size.y && pos.y + size.y >= other.pos.y;
         }
 
+        constexpr bool operator|(const point<T> pt) const
+        {
+            return pt.x >= pos.x && pt.x <= pos.x + size.x && pt.y >= pos.y && pt.y <= pos.y + size.y;
+        }
+
         constexpr operator SDL_Rect() const
         {
             using type = decltype(SDL_Rect::x);

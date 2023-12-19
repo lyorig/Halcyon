@@ -6,7 +6,7 @@ ttf_engine::ttf_engine(engine& eng)
 {
     HAL_DEBUG_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
 
-    HAL_DEBUG_PRINT(severity::init, "Initialized TTF engine");
+    HAL_DEBUG_PRINT(debug::init, "Initialized TTF engine");
 }
 
 ttf_engine::~ttf_engine() { ::TTF_Quit(); }
