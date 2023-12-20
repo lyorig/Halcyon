@@ -1,9 +1,10 @@
 #pragma once
 
 #include "concepts.hpp"
+#include <cmath>
 
-/* cast.hpp:
-   Modular casting. */
+// cast.hpp:
+// Casting with proper rounding.
 
 namespace lyo
 {
@@ -14,8 +15,11 @@ namespace lyo
     {
         if constexpr (std::is_integral_v<To> && std::is_floating_point_v<From>)
         {
-            constexpr From tolerance { 1.0 - 0.5 }; // RHS = where to round up from.
-            return static_cast<To>(value < 0.0 ? value - tolerance : value + tolerance);
+            if (std::is_constant_evaluated())
+                return static_cast<To>(value < 0.0 ? value - 0.5 : value + 0.5);
+
+            else
+                return static_cast<To>(std::round(value));
         }
 
         else
