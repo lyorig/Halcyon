@@ -1,7 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <halcyon/debug.hpp>
+#include <lyo/types.hpp>
 
 // ecs.hpp:
 // Halcyon's Entity-Component System implementation.
@@ -81,8 +83,8 @@ namespace hal
 
         // In the name of performance, this ECS implementation attempts
         // to keep all data on the stack.
-        std::array<std::byte, Arena_Size_Bytes>                m_components;
-        std::array<std::size_t, Max_Registered_Components + 1> m_begins {};
+        std::array<std::byte, Arena_Size_Bytes>             m_components;
+        std::array<lyo::u32, Max_Registered_Components + 1> m_begins {};
 
         component::id m_currentID { 0 };
     };
