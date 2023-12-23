@@ -7,8 +7,7 @@ namespace hal
     template <lyo::arithmetic T>
     constexpr T unset { std::numeric_limits<T>::max() };
 
-    template <typename T, typename Dest_type, typename This = void>
-        requires(lyo::is_any_of<Dest_type, SDL::pixel_type, SDL::position_type>())
+    template <typename T, lyo::one_of<SDL::pixel_type, SDL::position_type> Dest_type, typename This = void>
     class drawer
     {
     protected:

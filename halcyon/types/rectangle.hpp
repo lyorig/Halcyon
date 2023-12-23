@@ -99,13 +99,13 @@ namespace hal
         }
 
         constexpr SDL::rect_type<T>* addr()
-            requires(lyo::is_any_of<T, SDL::pixel_type, SDL::position_type>())
+            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::position_type>)
         {
             return reinterpret_cast<SDL::rect_type<T>*>(this);
         }
 
         constexpr const SDL::rect_type<T>* addr() const
-            requires(lyo::is_any_of<T, SDL::pixel_type, SDL::position_type>())
+            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::position_type>)
         {
             return reinterpret_cast<const SDL::rect_type<T>*>(this);
         }

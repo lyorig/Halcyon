@@ -1,19 +1,33 @@
 #include "game.hpp"
+#include <halcyon/ecs.hpp>
 
 // Current arguments:
-// -xi  - Skip the intro.
-// -xg  - Skip the game.
-// -xv  - Disable VSync.
+//  -xg  - Skip the game.
+//  -xi  - Skip the intro.
+//  -xv  - Disable VSync.
+
+void ecs_test()
+{
+    using ecs = hal::ecs<640, hal::pixel_size>;
+
+    ecs e { 10 };
+}
 
 int main(int argc, char* argv[])
 {
-    hq::game game { { argc, argv } };
+    lyo::parser p { argc, argv };
 
-    if (!game.app.args.has("-xi"))
-        game.intro();
+    ecs_test();
 
-    if (!game.app.args.has("-xg"))
+    if (!p.has("-xg"))
+    {
+        hq::game game { std::move(p) };
+
+        if (!game.app.args.has("-xi"))
+            game.intro();
+
         game.start();
+    };
 
     return EXIT_SUCCESS;
 }

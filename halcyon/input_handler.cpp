@@ -2,55 +2,7 @@
 
 #include <SDL2/SDL_events.h>
 
-#include <utility>
-
-#include "debug.hpp"
-
 using namespace hal;
-
-input_base::input_base(engine& eng)
-{
-    HAL_DEBUG_PRINT(debug::init, "Initialized input handler");
-}
-
-bool input_base::update()
-{
-    SDL_Event evt;
-
-    while (this->poll(evt))
-        if (!this->process(evt))
-            m_ok = false;
-
-    return m_ok;
-}
-
-void input_base::quit()
-{
-    m_ok = false;
-}
-
-bool input_base::held(button btn) const
-{
-    if (std::to_underlying(btn) <= SDL_NUM_SCANCODES) // Key.
-        return ::SDL_GetKeyboardState(nullptr)[static_cast<std::size_t>(btn)];
-
-    else // Mouse button.
-        return SDL_BUTTON(std::to_underlying(btn) - SDL_NUM_SCANCODES) & ::SDL_GetMouseState(nullptr, nullptr);
-}
-
-pixel_pos input_base::mouse() const
-{
-    point<int> pos;
-
-    ::SDL_GetMouseState(&pos.x, &pos.y);
-
-    return pixel_pos(pos);
-}
-
-bool input_base::poll(SDL_Event& event) const
-{
-    return ::SDL_PollEvent(&event);
-}
 
 bool input_handler::update()
 {

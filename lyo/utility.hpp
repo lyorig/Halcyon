@@ -12,7 +12,7 @@
 namespace lyo
 {
     template <character T>
-        requires(lyo::is_any_of<T, char, wchar_t>())
+        requires(lyo::is_present_v<T, char, wchar_t>)
     constexpr bool streq(const T* first, const T* second) noexcept
     {
         if (std::is_same_v<T, char>)

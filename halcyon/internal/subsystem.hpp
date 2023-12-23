@@ -25,12 +25,12 @@ namespace hal
     public:
         subsystem()
         {
-            ::SDL_InitSubSystem(static_cast<Uint32>(System));
+            ::SDL_InitSubSystem(Uint32(System));
         }
 
         ~subsystem()
         {
-            ::SDL_QuitSubSystem(static_cast<Uint32>(System));
+            ::SDL_QuitSubSystem(Uint32(System));
         }
     };
 } // namespace hal

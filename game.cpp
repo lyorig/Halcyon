@@ -27,7 +27,7 @@ void game::intro()
     // This has to be manually timed. Then again, what other option is there?
     constexpr std::array texts {
         info {
-            .text = "Made with Halcyon", .scale = 1.5, .hold = 3.85 },
+            .text = "Made with Halcyon", .scale = 1.5, .hold = 3.8 },
         info { .text = "by lyorig", .hold = 2.6 },
         info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 6.5, .fade_out = 1.5, .color = hal::color::cyan }
     };
@@ -38,6 +38,9 @@ void game::intro()
     lyo::precise_timer middle_timer { lyo::no_init };
 
     app.mixer.music.load("assets/ost/intro_v2.mp3").fade_in(texts.front().fade_in);
+
+    while (!app.mixer.music.playing())
+        ;
 
     for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
@@ -125,7 +128,7 @@ void game::start()
     hal::texture::draw dw { tex };
     void(dw.to(app.window.size() / 2).anchor(hal::anchor::center));
 
-    while (app.update())
+    while (app.update() && !app.input.pressed(hal::button::esc))
     {
         dw();
         HAL_DEBUG_DRAW(app.window, fnt);

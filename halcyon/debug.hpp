@@ -18,12 +18,12 @@
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
+#include <halcyon/internal/printing.hpp>
 #include <lyo/timer.hpp>
 #include <lyo/utility.hpp>
 
 #include <array>
 #include <fstream>
-#include <iostream>
 #include <sstream>
 
 namespace hal
@@ -43,6 +43,7 @@ namespace hal
             init,
             load
         };
+
         // Output any amount of arguments to stdout/stderr, the console and an output file.
         template <typename... Args>
         static void print(severity type, Args&&... args)
