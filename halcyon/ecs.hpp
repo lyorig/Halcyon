@@ -40,7 +40,7 @@ namespace hal
         {
             (this->add<Cs>(sizes), ...);
 
-            HAL_DEBUG_PRINT(hal::debug::load, "ECS loaded with ", sizeof...(Cs), " component(s), totalling ", this->memory_used(), "B out of ", this->memory_total(), 'B');
+            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ", sizeof...(Cs), " component(s), totalling ", this->memory_used(), "B out of ", this->memory_total(), 'B');
         }
 
         template <lyo::one_of<Cs...> C>
