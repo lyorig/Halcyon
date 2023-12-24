@@ -39,6 +39,7 @@ void game::intro()
 
     app.mixer.music.load("assets/ost/intro_v2.mp3").fade_in(texts.front().fade_in);
 
+    // Ensure synchronization.
     while (!app.mixer.music.playing())
         ;
 
@@ -112,7 +113,7 @@ void game::intro()
                 break;
             }
         }
-    NextIter:
+    NextIter:;
     }
 
     // Mix_FreeMusic blocks until the music has finished fading

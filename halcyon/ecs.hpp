@@ -28,15 +28,15 @@ namespace hal
     // Max_Registered_Components: the maximum amount of components one can register.
     // Both affect the resulting size of the class. Use according to your own needs.
     template <std::size_t Arena_Size_Bytes, typename... Cs>
-        requires(Arena_Size_Bytes > 0 && sizeof...(Cs) > 0)
-    class ecs
+    requires(Arena_Size_Bytes > 0 && sizeof...(Cs) > 0) class ecs
     {
     public:
+        // The smaller the size type, the smaller the total size.
         using size_type = lyo::u16;
 
         template <std::convertible_to<component::index>... Sizes>
-            requires(sizeof...(Sizes) == sizeof...(Cs))
-        ecs(Sizes... sizes)
+        requires(sizeof...(Sizes) == sizeof...(Cs))
+            ecs(Sizes... sizes)
         {
             (this->add<Cs>(sizes), ...);
 
@@ -54,9 +54,6 @@ namespace hal
             // Adjust sizes.
             std::for_each(begin, m_begins.end(), [](size_type& sz)
                 { sz -= amnt_bytes; });
-
-            // Shift everything left to leave space at the end.
-            std::shift_left(begin, m_begins.end(), 1);
         }
 
         template <lyo::one_of<Cs...> C>
@@ -115,7 +112,7 @@ namespace hal
 
     private:
         template <typename C>
-            requires lyo::is_present_v<C, Cs...>
+        requires lyo::is_present_v<C, Cs...>
         constexpr void add(component::index how_many)
         {
             constexpr auto id = ecs::id<C>();
