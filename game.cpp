@@ -26,8 +26,7 @@ void game::intro()
 
     // This has to be manually timed. Then again, what other option is there?
     constexpr std::array texts {
-        info {
-            .text = "Made with Halcyon", .scale = 1.5, .hold = 3.8 },
+        info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.85 },
         info { .text = "by lyorig", .hold = 2.6 },
         info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 6.5, .fade_out = 1.5, .color = hal::color::cyan }
     };
@@ -37,7 +36,7 @@ void game::intro()
 
     lyo::precise_timer middle_timer { lyo::no_init };
 
-    app.mixer.music.load("assets/ost/intro_v2.mp3").fade_in(texts.front().fade_in).sync();
+    app.mixer.music.load("assets/ost/intro.mp3").fade_in(texts.front().fade_in).sync();
 
     for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
@@ -120,12 +119,12 @@ void game::intro()
 void game::start()
 {
     const hal::font    fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
-    const hal::texture tex { app.window, fnt.render("[X]", hal::color::red) };
+    const hal::texture tex { app.window, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
 
     hal::input_handler& inp { app.input };
 
     hal::texture::draw dw { tex };
-    void(dw.to({ 20, 20, 100, 100 }));
+    void(dw.to({ 20, 20 }));
 
     app.mixer.music.load("assets/ost/Magic Spear.mp3").play(hal::infinite_loop).sync();
 

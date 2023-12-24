@@ -28,8 +28,8 @@ namespace hal
         void fade_out(lyo::f64 time);
 
         // As everything audio-related happens in a separate thread,
-        // music can sometimes become unsynced. This function aims to mitigate
-        // that by spinning until the music has been started.
+        // music can sometimes begin unsynced. This function aims to
+        // mitigate that by spinning until the track has been started.
         void sync();
 
         music& pause();

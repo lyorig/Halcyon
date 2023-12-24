@@ -16,7 +16,6 @@
 
 namespace lyo
 {
-
     // Use potentially faster types (e.g. int_fastN_t instead of intN_t).
     // I say potentially, because some platforms (for example macOS on ARM)
     // have no difference between fixed-size and fast types.
