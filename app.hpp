@@ -12,7 +12,7 @@ namespace hq
 {
     class app
     {
-        MAYBE_EMPTY hal::engine m_eng;
+        LYO_MAYBE_EMPTY hal::engine m_eng;
 
     public:
         hal::input_handler input;
@@ -23,8 +23,8 @@ namespace hq
 
         const lyo::parser args;
 
-        MAYBE_EMPTY hal::image_loader image;
-        MAYBE_EMPTY hal::ttf_engine ttf;
+        LYO_MAYBE_EMPTY hal::image_loader image;
+        LYO_MAYBE_EMPTY hal::ttf_engine ttf;
 
         app(lyo::parser&& args, const char* window_name);
 

@@ -8,9 +8,9 @@
 
 namespace hal
 {
-    TAG_TYPE(as_size);
+    LYO_TAG_TYPE(as_size);
 
-    TAG_TYPE(infinite_loop);
+    LYO_TAG_TYPE(infinite_loop);
 
-    TAG_TYPE(fill);
+    LYO_TAG_TYPE(fill);
 }

@@ -4,12 +4,12 @@
 #include <cstdint>
 #include <type_traits>
 
-#define MAYBE_EMPTY [[no_unique_address]]
+#define LYO_MAYBE_EMPTY [[no_unique_address]]
 
-#define TAG_TYPE(name) \
-    struct name##_tag  \
-    {                  \
-    } constexpr name
+#define LYO_TAG_TYPE(name) \
+    struct name##_tag      \
+    {                      \
+    } inline constexpr name
 
 /* types.hpp:
    Various type aliases and related stuff. */

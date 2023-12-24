@@ -6,7 +6,7 @@ namespace hal
 {
     class engine;
 
-    TAG_TYPE(rvalue_font);
+    LYO_TAG_TYPE(rvalue_font);
 
     // A class that makes sure everything TTF-related is loaded and
     // ready to use. This includes not only loading fonts, but also

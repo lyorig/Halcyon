@@ -27,9 +27,9 @@ namespace hal
         chunk load_sfx(const char* path) &;
 
     private:
-        MAYBE_EMPTY subsystem<subsys::audio> m_subsys;
+        LYO_MAYBE_EMPTY subsystem<subsys::audio> m_subsys;
 
-        MAYBE_EMPTY class init
+        LYO_MAYBE_EMPTY class init
         {
         public:
             init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual);

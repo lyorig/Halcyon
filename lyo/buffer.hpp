@@ -7,7 +7,7 @@
 
 namespace lyo
 {
-    TAG_TYPE(zero_out);
+    LYO_TAG_TYPE(zero_out);
 
     template <typename T>
     class buffer

@@ -12,7 +12,7 @@ namespace hal
     class engine;
     class input_handler;
 
-    TAG_TYPE(fullscreen_mode);
+    LYO_TAG_TYPE(fullscreen_mode);
 
     class window : public sdl_object<SDL_Window, &::SDL_DestroyWindow>
     {

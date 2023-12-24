@@ -9,7 +9,7 @@
 
 namespace lyo
 {
-    TAG_TYPE(no_init);
+    LYO_TAG_TYPE(no_init);
 
     // A simple timer for all your timing needs. It'll keep
     // running no matter what, so if you require pause/resume
