@@ -63,17 +63,6 @@ namespace hal
             return *this;
         }
 
-        // "Intersects with" operator.
-        constexpr bool operator|(const rectangle& other) const
-        {
-            return pos.x + size.x >= other.pos.x && pos.x <= other.pos.x + other.size.x && pos.y <= other.pos.y + other.size.y && pos.y + size.y >= other.pos.y;
-        }
-
-        constexpr bool operator|(const point<T> pt) const
-        {
-            return pt.x >= pos.x && pt.x <= pos.x + size.x && pt.y >= pos.y && pt.y <= pos.y + size.y;
-        }
-
         constexpr operator SDL_Rect() const
         {
             using type = decltype(SDL_Rect::x);
@@ -117,4 +106,15 @@ namespace hal
         using frect_wrap = rectangle<SDL::position_type>;
     }
 
+    template <typename T>
+    constexpr bool operator|(const rectangle<T>& r1, const rectangle<T>& r2)
+    {
+        return r1.pos.x + r1.size.x >= r2.pos.x && r1.pos.x <= r2.pos.x + r2.size.x && r1.pos.y <= r2.pos.y + r2.size.y && r1.pos.y + r1.size.y >= r2.pos.y;
+    }
+
+    template <typename T>
+    constexpr bool operator|(const point<T>& pt, const rectangle<T> rect)
+    {
+        return pt.x >= rect.pos.x && pt.x <= rect.pos.x + rect.size.x && pt.y >= rect.pos.y && pt.y <= rect.pos.y + rect.size.y;
+    }
 } // namespace hal

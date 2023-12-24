@@ -1,17 +1,11 @@
 #pragma once
 
-#include "components/music.hpp"
-#include "internal/subsystem.hpp"
+#include <halcyon/components/chunk.hpp>
+#include <halcyon/components/music.hpp>
+#include <halcyon/internal/subsystem.hpp>
 
 namespace hal
 {
-    enum class chunk_quality : lyo::u16
-    {
-        low = 1024,
-        medium = 2048,
-        high = 4096
-    };
-
     class engine;
     class chunk;
 
@@ -22,7 +16,7 @@ namespace hal
     {
     public:
         mixer(engine& eng);
-        mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk_quality qual);
+        mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
 
         chunk load_sfx(const char* path) &;
 
@@ -32,7 +26,7 @@ namespace hal
         LYO_MAYBE_EMPTY class init
         {
         public:
-            init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual);
+            init(lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
             ~init();
         } m_init;
 

@@ -7,7 +7,7 @@
 
 using namespace hal;
 
-mixer::init::init(lyo::u32 freq, lyo::u8 channels, chunk_quality qual)
+mixer::init::init(lyo::u32 freq, lyo::u8 channels, chunk::quality qual)
 {
     constexpr int types = MIX_INIT_MP3 | MIX_INIT_OGG;
 
@@ -25,11 +25,11 @@ mixer::init::~init()
 }
 
 mixer::mixer(engine& eng)
-    : mixer { eng, 48000, 8, chunk_quality::medium }
+    : mixer { eng, 44100, 8, chunk::quality::medium } // Sane defaults, I guess?
 {
 }
 
-mixer::mixer(engine& engine, lyo::u32 freq, lyo::u8 channels, chunk_quality qual)
+mixer::mixer(engine& engine, lyo::u32 freq, lyo::u8 channels, chunk::quality qual)
     : m_init { freq, channels, qual }
     , music { {} }
 

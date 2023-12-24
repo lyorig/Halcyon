@@ -26,17 +26,18 @@ namespace hal
     // This class attempts to be as constexpr-friendly as possible. Templates ahoy!
     // Arena_Size_Bytes: the size of the component arena in bytes.
     // Max_Registered_Components: the maximum amount of components one can register.
-    // Both affect the resulting size of the class. Use according to your own needs.
+    // Both affect the resulting size of the class. Set according to your own needs.
     template <std::size_t Arena_Size_Bytes, typename... Cs>
-    requires(Arena_Size_Bytes > 0 && sizeof...(Cs) > 0) class ecs
+        requires(Arena_Size_Bytes > 0 && sizeof...(Cs) > 0)
+    class static_ecs
     {
     public:
         // The smaller the size type, the smaller the total size.
         using size_type = lyo::u16;
 
         template <std::convertible_to<component::index>... Sizes>
-        requires(sizeof...(Sizes) == sizeof...(Cs))
-            ecs(Sizes... sizes)
+            requires(sizeof...(Sizes) == sizeof...(Cs))
+        static_ecs(Sizes... sizes)
         {
             (this->add<Cs>(sizes), ...);
 
@@ -46,7 +47,7 @@ namespace hal
         template <lyo::one_of<Cs...> C>
         constexpr void remove()
         {
-            constexpr auto id = ecs::id<C>();
+            constexpr auto id = static_ecs::id<C>();
 
             const auto amnt_bytes = this->space_bytes<C>();
             const auto begin = m_begins.begin() + id + 1;
@@ -59,7 +60,7 @@ namespace hal
         template <lyo::one_of<Cs...> C>
         constexpr std::span<C> get()
         {
-            constexpr auto id = ecs::id<C>();
+            constexpr auto id = static_ecs::id<C>();
 
             C* begin { reinterpret_cast<C*>(m_arena.begin() + m_begins[id]) };
 
@@ -69,7 +70,7 @@ namespace hal
         template <lyo::one_of<Cs...> C>
         constexpr std::span<const C> get() const
         {
-            constexpr auto id = ecs::id<C>();
+            constexpr auto id = static_ecs::id<C>();
 
             const C* begin { reinterpret_cast<const C*>(m_arena.begin() + m_begins[id]) };
 
@@ -111,11 +112,10 @@ namespace hal
         }
 
     private:
-        template <typename C>
-        requires lyo::is_present_v<C, Cs...>
+        template <lyo::one_of<Cs...> C>
         constexpr void add(component::index how_many)
         {
-            constexpr auto id = ecs::id<C>();
+            constexpr auto id = static_ecs::id<C>();
 
             auto next = m_begins.begin() + id + 1;
             HAL_DEBUG_ASSERT(*next == 0, "Component already added");
@@ -128,7 +128,7 @@ namespace hal
         template <lyo::one_of<Cs...> C>
         constexpr size_type space_bytes() const
         {
-            constexpr auto id = ecs::id<C>();
+            constexpr auto id = static_ecs::id<C>();
 
             return m_begins[id + 1] - m_begins[id];
         }

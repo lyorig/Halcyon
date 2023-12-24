@@ -22,7 +22,8 @@ namespace hal
             green = 0x00FF00,
             blue = 0x0000FF,
 
-            orange = 0xFFFF00,
+            yellow = 0xFFFF00,
+            orange = 0xFFA500,
             cyan = 0x00FFFF,
 
             weezer_blue = 0x0099D3,
@@ -32,8 +33,8 @@ namespace hal
 
         enum limits
         {
-            min = std::numeric_limits<value_type>::min(),
-            max = std::numeric_limits<value_type>::max()
+            min = SDL_ALPHA_TRANSPARENT,
+            max = SDL_ALPHA_OPAQUE
         };
 
         constexpr color()

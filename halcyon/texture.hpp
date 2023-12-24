@@ -13,7 +13,6 @@
 
 namespace hal
 {
-
     class window;
 
     class texture : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
@@ -26,7 +25,11 @@ namespace hal
         const pixel_size& size() const;
         lyo::u8           opacity() const;
 
-        void set_opacity(lyo::u8 value) const;
+        void set_opacity(lyo::u8 value);
+
+        // Set the color mod used in rendering.
+        // Passing white as the parameter resets it.
+        void set_color_mod(hal::color mod);
 
         // View-width and view-height helpers.
         pixel_size vw(lyo::f64 percent) const;

@@ -8,7 +8,7 @@
 
 void ecs_test()
 {
-    using ecs = hal::ecs<640, hal::pixel_size>;
+    using ecs = hal::static_ecs<640, hal::pixel_size>;
 
     ecs e { 10 };
 }

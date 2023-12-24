@@ -32,9 +32,14 @@ texture::texture(const class window& wnd, const surface& image)
 
 const pixel_size& texture::size() const { return m_size; }
 
-void texture::set_opacity(lyo::u8 value) const
+void texture::set_opacity(lyo::u8 value)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
+}
+
+void texture::set_color_mod(color clr)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, ::SDL_GetError());
 }
 
 lyo::u8 texture::opacity() const
