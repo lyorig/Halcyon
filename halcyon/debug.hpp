@@ -55,23 +55,23 @@ namespace hal
 
             switch (type)
             {
-            case severity::info:
+            case info:
                 fwd_info << "[info]  ";
                 break;
 
-            case severity::warning:
+            case warning:
                 fwd_info << "[warn]  ";
                 break;
 
-            case severity::error:
+            case error:
                 fwd_info << "[error] ";
                 break;
 
-            case severity::init:
+            case init:
                 fwd_info << "[init]  ";
                 break;
 
-            case severity::load:
+            case load:
                 fwd_info << "[load]  ";
                 break;
 
@@ -87,7 +87,7 @@ namespace hal
             const std::string with_info { fwd_info.str() + msg };
 
             m_output << with_info << std::endl;
-            (type == severity::error ? std::cerr : std::cout) << with_info << std::endl;
+            (type == error ? std::cerr : std::cout) << with_info << std::endl;
         }
 
         // Show a message box with an error message.

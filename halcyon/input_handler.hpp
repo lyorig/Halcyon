@@ -12,11 +12,11 @@ namespace hal
 {
     class engine;
 
-    template <typename This>
+    template <typename Derived>
     class input_base
     {
     public:
-        using key_storage = lyo::bitset<SDL_NUM_SCANCODES + 5, lyo::u64>;
+        using key_storage = lyo::bitset<SDL_NUM_SCANCODES + (SDL_BUTTON_X2 - SDL_BUTTON_LEFT) + 1>;
 
         input_base(engine& eng)
         {
@@ -30,7 +30,7 @@ namespace hal
             SDL_Event evt;
 
             while (this->poll(evt))
-                if (!static_cast<This*>(this)->process(evt))
+                if (!static_cast<Derived*>(this)->process(evt))
                     m_ok = false;
 
             return m_ok;

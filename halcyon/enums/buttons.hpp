@@ -73,10 +73,10 @@ namespace hal
         left_alt = SDL_SCANCODE_LALT,
         right_alt = SDL_SCANCODE_RALT,
 
-        lmb = SDL_NUM_SCANCODES + SDL_BUTTON_LEFT,
-        mmb = SDL_NUM_SCANCODES + SDL_BUTTON_MIDDLE,
-        rmb = SDL_NUM_SCANCODES + SDL_BUTTON_RIGHT,
-        mx1 = SDL_NUM_SCANCODES + SDL_BUTTON_X1,
-        mx2 = SDL_NUM_SCANCODES + SDL_BUTTON_X2
+        lmb = SDL_NUM_SCANCODES + SDL_BUTTON_LEFT - 1,
+        mmb = SDL_NUM_SCANCODES + SDL_BUTTON_MIDDLE - 1,
+        rmb = SDL_NUM_SCANCODES + SDL_BUTTON_RIGHT - 1,
+        mx1 = SDL_NUM_SCANCODES + SDL_BUTTON_X1 - 1,
+        mx2 = SDL_NUM_SCANCODES + SDL_BUTTON_X2 - 1
     };
 } // namespace hal

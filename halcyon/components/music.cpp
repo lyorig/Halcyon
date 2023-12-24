@@ -9,28 +9,27 @@ music::music(lyo::pass_key<mixer>)
 
 music& music::load(const char* path)
 {
-    this->internal_load(path);
-    return *this;
+    return this->internal_load(path);
 }
 
-void music::play(lyo::u16 loops)
+music& music::play(lyo::u16 loops)
 {
-    this->internal_play(loops);
+    return this->internal_play(loops);
 }
 
-void music::play(infinite_loop_tag)
+music& music::play(infinite_loop_tag)
 {
-    this->internal_play(-1);
+    return this->internal_play(-1);
 }
 
-void music::fade_in(lyo::f64 time, lyo::u16 loops)
+music& music::fade_in(lyo::f64 time, lyo::u16 loops)
 {
-    this->internal_fade(time, loops);
+    return this->internal_fade(time, loops);
 }
 
-void music::fade_in(lyo::f64 time, infinite_loop_tag)
+music& music::fade_in(lyo::f64 time, infinite_loop_tag)
 {
-    this->internal_fade(time, -1);
+    return this->internal_fade(time, -1);
 }
 
 void music::fade_out(lyo::f64 time)
@@ -38,6 +37,12 @@ void music::fade_out(lyo::f64 time)
     // There is apparently no fail state here. It only returns
     // a non-zero value if it's already fading, but that's allowed.
     ::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0));
+}
+
+void music::sync()
+{
+    while (!this->playing())
+        ;
 }
 
 music& music::pause()
@@ -104,18 +109,22 @@ music& music::jump(lyo::f64 time)
     return *this;
 }
 
-void music::internal_load(const char* path)
+music& music::internal_load(const char* path)
 {
     sdl_object::operator=(::Mix_LoadMUS(path));
     HAL_DEBUG_PRINT(debug::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
+
+    return *this;
 }
 
-void music::internal_play(int loops)
+music& music::internal_play(int loops)
 {
     HAL_DEBUG_ASSERT_VITAL(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
+    return *this;
 }
 
-void music::internal_fade(lyo::f64 time, int loops)
+music& music::internal_fade(lyo::f64 time, int loops)
 {
     HAL_DEBUG_ASSERT_VITAL(::Mix_FadeInMusic(this->ptr(), loops, lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
+    return *this;
 }

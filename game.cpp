@@ -37,11 +37,7 @@ void game::intro()
 
     lyo::precise_timer middle_timer { lyo::no_init };
 
-    app.mixer.music.load("assets/ost/intro_v2.mp3").fade_in(texts.front().fade_in);
-
-    // Ensure synchronization.
-    while (!app.mixer.music.playing())
-        ;
+    app.mixer.music.load("assets/ost/intro_v2.mp3").fade_in(texts.front().fade_in).sync();
 
     for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
@@ -124,20 +120,21 @@ void game::intro()
 void game::start()
 {
     const hal::font    fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
-    const hal::texture tex { app.window, fnt.render("[menu screen]") };
+    const hal::texture tex { app.window, fnt.render("[X]", hal::color::red) };
+
+    hal::input_handler& inp { app.input };
 
     hal::texture::draw dw { tex };
-    void(dw.to(app.window.size() / 2).anchor(hal::anchor::center));
+    void(dw.to({ 20, 20, 100, 100 }));
 
-    while (app.update() && !app.input.pressed(hal::button::esc))
+    app.mixer.music.load("assets/ost/Magic Spear.mp3").play(hal::infinite_loop).sync();
+
+    while (app.update() && !inp.pressed(hal::button::esc))
     {
         dw();
         HAL_DEBUG_DRAW(app.window, fnt);
 
-        if (dw.dest() | app.input.mouse())
-        {
-            app.input.quit();
-            HAL_DEBUG_PRINT(hal::debug::info, "Quitting");
-        }
+        if (inp.pressed(hal::button::lmb) && dw.dest() | inp.mouse())
+            inp.quit();
     }
 }

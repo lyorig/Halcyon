@@ -11,8 +11,7 @@
 namespace lyo
 {
     template <std::size_t Size, std::unsigned_integral Storage_type = unsigned char>
-        requires(Size > 0)
-    class bitset
+    requires(Size > 0) class bitset
     {
     public:
         constexpr bitset() noexcept
@@ -26,7 +25,7 @@ namespace lyo
             // Set all bits to 1 if initializer == true by negating zero.
             if (initializer)
                 for (Storage_type& unit : m_storage)
-                    unit = ~static_cast<Storage_type>(0);
+                    unit = ~Storage_type(0);
         }
 
         constexpr void set(std::size_t pos) noexcept
@@ -50,7 +49,7 @@ namespace lyo
                 unit = static_cast<Storage_type>(0);
         }
 
-        constexpr std::size_t size() const noexcept
+        constexpr static std::size_t size() noexcept
         {
             return Size;
         }
@@ -58,19 +57,19 @@ namespace lyo
         constexpr bool operator[](std::size_t pos) const noexcept
         {
             assert(pos < Size);
-            return static_cast<bool>((m_storage[storage_index(pos)] >> (pos % (sizeof(Storage_type) * 8))) & static_cast<Storage_type>(1));
+            return bool((m_storage[storage_index(pos)] >> (pos % (sizeof(Storage_type) * 8))) & Storage_type(1));
         }
 
     private:
         // Convenience functions.
         constexpr static Storage_type shifted_one(std::size_t pos) noexcept
         {
-            return static_cast<Storage_type>(1) << (pos % (sizeof(Storage_type) * 8));
+            return Storage_type(1) << (pos % (sizeof(Storage_type) * 8));
         }
 
         constexpr static std::size_t storage_index(std::size_t pos) noexcept
         {
-            return static_cast<std::size_t>(pos / (sizeof(Storage_type) * 8));
+            return std::size_t(pos / (sizeof(Storage_type) * 8));
         }
 
         // You'll need eye bleach for this one. All you need to know is that it works.

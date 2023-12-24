@@ -14,12 +14,12 @@ bool input_handler::update()
 
 bool input_handler::pressed(button btn) const
 {
-    return m_pressed[static_cast<std::size_t>(btn)];
+    return m_pressed[std::size_t(btn)];
 }
 
 bool input_handler::released(button btn) const
 {
-    return m_released[static_cast<std::size_t>(btn)];
+    return m_released[std::size_t(btn)];
 }
 
 bool input_handler::process(const SDL_Event& event)
