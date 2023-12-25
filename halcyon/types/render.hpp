@@ -1,11 +1,11 @@
 #pragma once
 
-#include <lyo/slider.hpp>
+#include <halcyon/types/slider.hpp>
 #include <lyo/types.hpp>
 
-#include "point.hpp"
-#include "rectangle.hpp"
 #include <halcyon/internal/SDL_types.hpp>
+#include <halcyon/types/point.hpp>
+#include <halcyon/types/rectangle.hpp>
 
 /* render.hpp:
    Rendering-related types used throughout Halcyon. */
@@ -23,7 +23,7 @@ namespace hal
     using coordinate = point<position_type>;
     using world_area = rectangle<position_type>;
 
-    using opacity_slider = lyo::static_slider<lyo::f64, SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE>;
+    using opacity_slider = static_slider<lyo::f64, SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE>;
 }
 
 // Paranoia.
