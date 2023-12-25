@@ -19,6 +19,7 @@
 #endif
 
 #include <halcyon/internal/printing.hpp>
+#include <halcyon/types/color.hpp>
 #include <lyo/timer.hpp>
 #include <lyo/utility.hpp>
 
@@ -37,16 +38,41 @@ namespace hal
     public:
         enum severity
         {
-            info,
-            warning,
-            error,
-            init,
-            load
+            info = color::white,
+            warning = color::orange,
+            error = color::red,
+            init = color::green,
+            load = color::cyan
         };
 
         // Output any amount of arguments to stdout/stderr, the console and an output file.
         template <typename... Args>
-        static void print(severity type, Args&&... args)
+        static void print(Args&&... args)
+        {
+            debug::print_severity(info, std::forward<Args>(args)...);
+        }
+
+        // Output any amount of arguments to stdout/stderr, the console and an output file.
+        // This overload additionally specifies the type of message to output..
+        template <typename... Args>
+        static void print(severity sev, Args&&... args)
+        {
+            debug::print_severity(sev, std::forward<Args>(args)...);
+        }
+
+        // Show a message box with an error message.
+        static void panic(const char* why, const char* where,
+            const char* message = nullptr);
+
+        // Check a condition, and panic if it's false.
+        static void verify(bool condition, const char* cond_string, const char* func,
+            const char* extra_info);
+
+        static void draw(const window& wnd, const font& fnt);
+
+    private:
+        template <typename... Args>
+        static void print_severity(severity type, Args&&... args)
         {
             std::stringstream fwd_info, message;
 
@@ -90,17 +116,6 @@ namespace hal
             (type == error ? std::cerr : std::cout) << with_info << std::endl;
         }
 
-        // Show a message box with an error message.
-        static void panic(const char* why, const char* where,
-            const char* message = nullptr);
-
-        // Check a condition, and panic if it's false.
-        static void verify(bool condition, const char* cond_string, const char* func,
-            const char* extra_info);
-
-        static void draw(const window& wnd, const font& fnt);
-
-    private:
         static void log(severity type, const std::string& msg);
 
         static std::ofstream            m_output;

@@ -27,7 +27,7 @@ void game::intro()
     // This has to be manually timed. Then again, what other option is there?
     constexpr std::array texts {
         info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.85 },
-        info { .text = "by lyorig", .hold = 2.6 },
+        info { .text = "by lyorig", .hold = 2.4, .fade_out = 0.5 },
         info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 6.5, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
@@ -125,13 +125,13 @@ void game::start()
     hal::texture        tex { app.window, fnt.render("[X]", hal::color::orange).resize({ 100, 100 }) };
     hal::input_handler& inp { app.input };
     hal::texture::draw  dw { tex };
-    void(dw.to({ 20, 20 }));
+    void(dw.to(hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size())));
 
     bool held = false;
 
     app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();
 
-    while (app.update() && !inp.pressed(hal::button::esc))
+    while (app.update())
     {
         if (hal::SDL::FPoint(inp.mouse()) | dw.dest())
         {

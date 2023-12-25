@@ -93,7 +93,7 @@ lyo::f64 music::duration() const
 
 music& music::set_volume(lyo::u8 volume)
 {
-    HAL_DEBUG_ASSERT(m_object, "Tried to set volume of null music");
+    HAL_DEBUG_ASSERT(this->ptr() != nullptr, "Tried to set volume of null music");
 
     ::Mix_VolumeMusic(volume);
 

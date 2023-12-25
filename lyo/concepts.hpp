@@ -1,7 +1,6 @@
 #pragma once
 
-#include <type_traits>
-
+#include <tuple>
 /* concepts.hpp:
    An extension of STL concepts. */
 
@@ -35,4 +34,7 @@ namespace lyo
 
     template <typename T, typename... Ts>
     constexpr inline std::size_t index_v = index<T, Ts...>::value;
+
+    template <std::size_t Index, typename... Args>
+    using type_at_index = std::tuple_element_t<Index, std::tuple<Args...>>;
 } // namespace lyo

@@ -58,7 +58,7 @@ void debug::draw(const window& wnd, const font& fnt)
 
                 if (!entry.first.empty())
                 {
-                    const surface   text { fnt.render(entry.first, color::hex_type(entry.second)) };
+                    const surface   text { fnt.render(entry.first, entry.second) };
                     const pixel_pos pos { 0, pixel_type(i * y_scaled) };
 
                     hal::surface::draw(text).to(pos).scale(scale)(canvas);
@@ -79,7 +79,7 @@ void debug::panic(const char* why, const char* where,
 {
     const char* sanitized_msg { message && !lyo::is_c_string_empty(message) ? message : "None provided." };
 
-    debug::print(severity::error, __func__, ": ", why, " in ", where, ": ",
+    debug::print_severity(error, __func__, ": ", why, " in ", where, ": ",
         sanitized_msg);
 
     constexpr SDL_MessageBoxButtonData buttons[] {
@@ -100,13 +100,13 @@ void debug::panic(const char* why, const char* where,
 
     if (::SDL_ShowMessageBox(&msgbox, &response) < 0)
     {
-        debug::print(severity::error, __func__,
+        debug::print_severity(error, __func__,
             ": Message box creation failed, exiting");
         goto Exit;
     }
 
     else
-        debug::print(severity::info, __func__, ": User chose to ",
+        debug::print_severity(info, __func__, ": User chose to ",
             response == 0 ? "exit" : "continue execution");
 
     if (response == 0)
