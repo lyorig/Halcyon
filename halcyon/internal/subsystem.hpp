@@ -4,8 +4,8 @@
 
 #include <lyo/types.hpp>
 
-/* subsystem.hpp:
-   A "smart pointer way" to initialize SDL subsystems. */
+// subsystem.hpp:
+// A RAII way of initializing SDL subsystems.
 
 namespace hal
 {

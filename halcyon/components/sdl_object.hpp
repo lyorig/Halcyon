@@ -38,6 +38,7 @@ namespace hal
             HAL_DEBUG_ASSERT_VITAL((m_object.reset(object)).get() != nullptr, ::SDL_GetError());
         }
 
+    private:
         lyo::capsule<Type, Deleter> m_object;
     };
 } // namespace hal

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <halcyon/input_handler.hpp>
-#include <halcyon/internal/config.hpp>
 #include <halcyon/types/other.hpp>
 #include <unordered_map>
 
@@ -32,7 +31,7 @@ namespace hal
             {
                 bool should_trigger;
 
-                switch (bind.second.first) // Why is the formatting like this?!?!
+                switch (bind.second.first)
                 {
                 case press:
                     should_trigger = m_input.pressed(bind.first);

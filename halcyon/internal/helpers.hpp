@@ -1,7 +1,5 @@
 #pragma once
 
-#include <bit>
-#include <cassert>
 #include <halcyon/types/other.hpp>
 #include <lyo/concepts.hpp>
 
@@ -16,7 +14,7 @@ namespace hal
 
         for (const auto value : list)
         {
-            mask |= static_cast<Cvt>(value);
+            mask |= Cvt(value);
         }
 
         return mask;

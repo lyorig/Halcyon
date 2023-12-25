@@ -119,7 +119,7 @@ music& music::internal_load(const char* path)
 
 music& music::internal_play(int loops)
 {
-    HAL_DEBUG_ASSERT_VITAL(::Mix_PlayMusic(m_object.get(), loops) == 0, ::Mix_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::Mix_PlayMusic(this->ptr(), loops) == 0, ::Mix_GetError());
     return *this;
 }
 

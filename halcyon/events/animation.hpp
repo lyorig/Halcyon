@@ -2,8 +2,8 @@
 
 #include <lyo/timer.hpp>
 
-/* animation.hpp:
-   An experimental system for animations. */
+// animation.hpp:
+// An experimental system for animations.
 
 namespace hal
 {

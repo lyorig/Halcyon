@@ -35,7 +35,7 @@ pixel_size window::size() const
 
 window::id_type window::id() const
 {
-    const id_type id { ::SDL_GetWindowID(m_object.get()) };
+    const id_type id { ::SDL_GetWindowID(this->ptr()) };
 
     HAL_DEBUG_ASSERT(id != 0, ::SDL_GetError());
 
@@ -51,7 +51,7 @@ pixel_size window::internal_size() const
 {
     point<int> sz;
 
-    ::SDL_GetWindowSize(m_object.get(), &sz.x, &sz.y);
+    ::SDL_GetWindowSize(this->ptr(), &sz.x, &sz.y);
 
     return static_cast<pixel_size>(sz);
 }

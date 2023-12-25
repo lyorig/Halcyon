@@ -5,12 +5,12 @@
 #include <queue>
 #include <variant>
 
-/* queue.hpp:
-   A rather convoluted, but working system for queueing operations
-   on an object. By default, only timing is supported, but a second template
-   parameter can be specified (taking a const& in the constructor), which can
-   be queued in a lambda -> bool, providing an an alternative way to decide whether
-   or not the event should be executed and popped. I'm not touching this again, BTW. */
+// queue.hpp:
+// A rather convoluted, but working system for queueing operations
+// on an object. By default, only timing is supported, but a second template
+// parameter can be specified (taking a const& in the constructor), which can
+// be queued in a lambda -> bool, providing an an alternative way to decide whether
+// or not the event should be executed and popped. I'm not touching this again, BTW. <- lie!
 
 namespace hal
 {

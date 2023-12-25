@@ -37,8 +37,8 @@ surface surface::resize(lyo::f64 scale) const
 
 pixel_size surface::size() const
 {
-    return { static_cast<pixel_type>(m_object->w),
-        static_cast<pixel_type>(m_object->h) };
+    return { static_cast<pixel_type>(this->ptr()->w),
+        static_cast<pixel_type>(this->ptr()->h) };
 }
 
 color surface::operator[](pixel_pos coord) const

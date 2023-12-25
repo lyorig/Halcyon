@@ -46,7 +46,7 @@ lyo::u8 texture::opacity() const
 {
     Uint8 alpha;
 
-    HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureAlphaMod(m_object.get(), &alpha) == 0,
+    HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureAlphaMod(this->ptr(), &alpha) == 0,
         ::SDL_GetError());
 
     return lyo::u8(alpha);
@@ -83,7 +83,7 @@ pixel_size texture::internal_size() const
 {
     int w, h;
 
-    ::SDL_QueryTexture(m_object.get(), nullptr, nullptr, &w, &h);
+    ::SDL_QueryTexture(this->ptr(), nullptr, nullptr, &w, &h);
 
     return { pixel_type(w), pixel_type(h) };
 }
