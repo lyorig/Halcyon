@@ -127,8 +127,8 @@ namespace hal
 
     namespace SDL
     {
-        using point_wrap = point<SDL::pixel_type>;
-        using fpoint_wrap = point<SDL::position_type>;
+        using Point = point<SDL::pixel_type>;
+        using FPoint = point<SDL::position_type>;
     }
 
 } // namespace hal

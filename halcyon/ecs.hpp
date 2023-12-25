@@ -79,7 +79,6 @@ namespace hal
 
         template <lyo::one_of<Cs...> C>
         constexpr component::index space() const
-
         {
             return this->space_bytes<C>() / sizeof(C);
         }
@@ -97,7 +96,7 @@ namespace hal
 
         constexpr std::size_t memory_available()
         {
-            return this->memory_total() - this->memory_used();
+            return static_ecs::memory_total() - this->memory_used();
         }
 
         constexpr component::id registered() const

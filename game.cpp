@@ -31,12 +31,12 @@ void game::intro()
         info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 6.5, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
-    const hal::font       fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
+    const hal::font       fnt { app.ttf.load("assets/m5x7.ttf", 144) };
     const hal::pixel_size winhalf { app.window.size() / 2 };
 
     lyo::precise_timer middle_timer { lyo::no_init };
 
-    app.mixer.music.load("assets/ost/intro.mp3").fade_in(texts.front().fade_in).sync();
+    app.mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in).sync();
 
     for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
@@ -119,8 +119,8 @@ void game::intro()
 
 void game::start()
 {
-    const hal::font  fnt { app.ttf.load("assets/fonts/m5x7.ttf", 144) };
-    const hal::chunk chk { app.mixer.load_sfx("assets/sfx/button_hover.wav") };
+    const hal::font  fnt { app.ttf.load("assets/m5x7.ttf", 144) };
+    const hal::chunk chk { app.mixer.load_sfx("assets/Button Hover.wav") };
 
     hal::texture        tex { app.window, fnt.render("[X]", hal::color::orange).resize({ 100, 100 }) };
     hal::input_handler& inp { app.input };
@@ -129,11 +129,11 @@ void game::start()
 
     bool held = false;
 
-    app.mixer.music.load("assets/ost/Magic Spear.mp3").play(hal::infinite_loop).sync();
+    app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();
 
     while (app.update() && !inp.pressed(hal::button::esc))
     {
-        if (hal::SDL::fpoint_wrap(inp.mouse()) | dw.dest())
+        if (hal::SDL::FPoint(inp.mouse()) | dw.dest())
         {
             if (!held)
             {

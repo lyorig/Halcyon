@@ -30,4 +30,4 @@ namespace hal
 static_assert(std::is_signed_v<hal::pixel_type>, "Pixel type must be signed");
 static_assert(std::is_floating_point_v<hal::position_type>, "Position type must be floating point");
 
-static_assert(sizeof(hal::SDL::point_wrap) == sizeof(SDL_Point) && sizeof(hal::SDL::fpoint_wrap) == sizeof(SDL_FPoint) && sizeof(hal::SDL::rect_wrap) == sizeof(SDL_Rect) && sizeof(hal::SDL::frect_wrap) == sizeof(SDL_FRect), "Incompatible memory layout between SDL structs and their wrappers");
+static_assert(sizeof(hal::SDL::Point) == sizeof(SDL_Point) && sizeof(hal::SDL::FPoint) == sizeof(SDL_FPoint) && sizeof(hal::SDL::Rect) == sizeof(SDL_Rect) && sizeof(hal::SDL::FRect) == sizeof(SDL_FRect), "Incompatible memory layout between SDL structs and their wrappers");

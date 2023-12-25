@@ -102,8 +102,8 @@ namespace hal
 
     namespace SDL
     {
-        using rect_wrap = rectangle<SDL::pixel_type>;
-        using frect_wrap = rectangle<SDL::position_type>;
+        using Rect = rectangle<SDL::pixel_type>;
+        using FRect = rectangle<SDL::position_type>;
     }
 
     template <typename T>
