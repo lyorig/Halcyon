@@ -1,6 +1,7 @@
 #pragma once
 
-#include "app.hpp"
+#include <app.hpp>
+#include <ents/manager.hpp>
 
 namespace hq
 {
@@ -10,9 +11,11 @@ namespace hq
         game(lyo::parser&& args);
 
         void intro();
-
         void start();
 
         class app app;
+
+    private:
+        entity_manager m_emgr;
     };
 }

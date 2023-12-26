@@ -129,7 +129,7 @@ void game::start()
 
     app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();
 
-    while (app.update())
+    while (app.update() && !inp.pressed(hal::button::esc))
     {
         if (hal::SDL::FPoint(inp.mouse()) | dw.dest())
         {
