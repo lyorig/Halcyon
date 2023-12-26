@@ -11,10 +11,13 @@ window::window(engine& engine, const char* title, const pixel_size& pos, const p
     HAL_DEBUG_PRINT(debug::init, "Initialized window ", title, ", size ", this->size());
 }
 
-// Okay, simply put: Proper fullscreen is a pain in the ass, and I
-// truly regret ever trying to implement it.
+// This is a bit of a bodge. I do not like the split call to display(),
+// and it'll hopefully eventually be replaced with something better.
+// The problem is that if the constructor is delegated, the subsystem isn't
+// initialized by the time display() is called, which causes errors.
 window::window(engine& engine, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags)
-    : window { engine, title, {}, {}, { fullscreen }, r_flags }
+    : sdl_object { ::SDL_CreateWindow(title, 0, 0, this->display(0).size.x, this->display(0).size.y, fullscreen) }
+    , renderer { *this, il2bm<Uint32>(r_flags), {} }
 {
 }
 
@@ -40,38 +43,18 @@ pixel_size window::size() const
     return renderer.output_size();
 }
 
-window::id_type window::id() const
-{
-    const auto ret { ::SDL_GetWindowID(this->ptr()) };
-
-    HAL_DEBUG_ASSERT(ret != 0, ::SDL_GetError());
-
-    return window::id_type(ret);
-}
-
-display::index_type window::display_index() const
+display_info::index window::display_index() const
 {
     const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
 
     HAL_DEBUG_ASSERT(ret >= 0, ::SDL_GetError());
 
-    return display::index_type(ret);
-}
-
-bool window::is_fullscreen() const
-{
-    return ::SDL_GetWindowFlags(this->ptr()) & fullscreen;
+    return display_info::index(ret);
 }
 
 const char* window::title() const
 {
     return ::SDL_GetWindowTitle(this->ptr());
-}
-
-void window::set_display_mode(const SDL_DisplayMode& mode)
-{
-    HAL_DEBUG_ASSERT(this->is_fullscreen(), "Changing display mode of non-fullscreen window");
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetWindowDisplayMode(this->ptr(), &mode) == 0, ::SDL_GetError());
 }
 
 pixel_size window::internal_size() const

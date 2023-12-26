@@ -131,6 +131,9 @@ void game::start()
 
     while (app.update() && !inp.pressed(hal::button::esc))
     {
+        if (inp.pressed(hal::button::lmb))
+            HAL_DEBUG_PRINT("Mouse click at ", inp.mouse());
+
         if (hal::SDL::FPoint(inp.mouse()) | dw.dest())
         {
             if (!held)

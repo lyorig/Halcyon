@@ -4,6 +4,7 @@
 
 #include <halcyon/debug.hpp>
 #include <halcyon/types/render.hpp>
+#include <lyo/pass_key.hpp>
 #include <utility>
 
 // subsystem.hpp:
@@ -35,12 +36,20 @@ namespace hal
         all = SDL_INIT_EVERYTHING
     };
 
-    struct display
+    // Primary template.
+    template <subsys System>
+    class subsystem
     {
-        using index_type = lyo::u8;
+    public:
+        HAL_SUBSYSTEM_BASE(System);
+    };
+
+    struct display_info
+    {
+        using index = lyo::u8;
         using hz_type = lyo::u16;
 
-        display(const SDL_DisplayMode& mode)
+        display_info(const SDL_DisplayMode& mode, lyo::pass_key<subsystem<subsys::video>>)
             : size { pixel_type(mode.w), pixel_type(mode.h) }
             , hz { hz_type(mode.refresh_rate) }
         {
@@ -50,14 +59,6 @@ namespace hal
         hz_type    hz;
     };
 
-    // Primary template.
-    template <subsys System>
-    class subsystem
-    {
-    public:
-        HAL_SUBSYSTEM_BASE(System);
-    };
-
     // Specializations.
     template <>
     class subsystem<subsys::video>
@@ -65,29 +66,7 @@ namespace hal
     public:
         HAL_SUBSYSTEM_BASE(subsys::video);
 
-        SDL_DisplayMode display_mode(display::index_type idx) const
-        {
-            HAL_DEBUG_ASSERT(idx < this->num_displays(), "Display index out of range");
-
-            SDL_DisplayMode mode;
-
-            HAL_DEBUG_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(idx, &mode) == 0, ::SDL_GetError());
-
-            return mode;
-        }
-
-        SDL_DisplayMode closest_display_mode(const SDL_DisplayMode& req, display::index_type idx) const
-        {
-            HAL_DEBUG_ASSERT(idx < this->num_displays(), "Display index out of range");
-
-            SDL_DisplayMode closest;
-
-            HAL_DEBUG_ASSERT_VITAL(::SDL_GetClosestDisplayMode(idx, &req, &closest) != nullptr, ::SDL_GetError());
-
-            return closest;
-        }
-
-        display::index_type num_displays() const
+        display_info::index num_displays() const
         {
             const auto ret = ::SDL_GetNumVideoDisplays();
 
@@ -96,13 +75,21 @@ namespace hal
             return ret;
         }
 
-        point<lyo::f64> dpi(display::index_type idx) const
+        display_info display(display_info::index idx) const
         {
-            point<float> ret;
+            return { this->display_mode(idx), {} };
+        }
 
-            HAL_DEBUG_ASSERT(::SDL_GetDisplayDPI(idx, nullptr, &ret.x, &ret.y) == 0, ::SDL_GetError());
+    private:
+        SDL_DisplayMode display_mode(display_info::index idx) const
+        {
+            HAL_DEBUG_ASSERT(idx < this->num_displays(), "Display index out of range");
 
-            return point<lyo::f64>(ret);
+            SDL_DisplayMode mode;
+
+            HAL_DEBUG_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(idx, &mode) == 0, ::SDL_GetError());
+
+            return mode;
         }
     };
 } // namespace hal

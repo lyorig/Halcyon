@@ -14,10 +14,8 @@ namespace hal
 
     LYO_TAG_TYPE(fullscreen_mode);
 
-    class window : public sdl_object<SDL_Window, &::SDL_DestroyWindow>
+    class window : subsystem<subsys::video>, public sdl_object<SDL_Window, &::SDL_DestroyWindow>
     {
-        LYO_MAYBE_EMPTY subsystem<subsys::video> m_video;
-
     public:
         using id_type = Uint32;
 
@@ -34,6 +32,7 @@ namespace hal
 
         hal::renderer renderer;
 
+        // The "size" parameter acts as a resolution if fullscreen is specified.
         window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
         window(engine& engine, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
 
@@ -44,15 +43,11 @@ namespace hal
 
         pixel_size size() const;
 
-        id_type             id() const;
-        display::index_type display_index() const;
-        bool                is_fullscreen() const;
+        display_info::index display_index() const;
 
         const char* title() const;
 
     private:
-        void set_display_mode(const SDL_DisplayMode& mode);
-
         pixel_size internal_size() const;
     };
 } // namespace hal
