@@ -24,7 +24,7 @@ namespace hal
 
         chunk(const char* path, lyo::pass_key<mixer>);
 
-        // If you use these on an rvalue, that's on you, buddy.
+        // If you try to play an rvalue chunk, that's on you, buddy.
         void play(lyo::u16 loops = 0) const;
         void play(infinite_loop_tag) const;
 

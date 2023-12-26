@@ -11,13 +11,7 @@ ttf_engine::ttf_engine(engine& eng)
 
 ttf_engine::~ttf_engine() { ::TTF_Quit(); }
 
-font ttf_engine::load(const char* path, lyo::u8 size) &
-{
-    return { path, size, {} };
-}
-
-font ttf_engine::load(rvalue_font_tag, const char* path,
-    lyo::u8 size) &&
+font ttf_engine::load(const char* path, lyo::u8 size)
 {
     return { path, size, {} };
 }
