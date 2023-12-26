@@ -34,6 +34,8 @@ namespace hal
         void reset_target() const;
 
         void set_fill(color clr) const;
+        void set_scale(point<lyo::f64> scale);
+        void set_integer_scaling(bool enable);
 
         pixel_size output_size() const;
     };

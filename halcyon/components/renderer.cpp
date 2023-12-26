@@ -7,7 +7,6 @@ using namespace hal;
 renderer::renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>)
     : sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, flags) }
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BLENDMODE_BLEND) == 0, ::SDL_GetError());
 }
 
 void renderer::present(lyo::pass_key<window>) const
@@ -40,4 +39,14 @@ void renderer::reset_target() const
 void renderer::set_fill(color clr) const
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
+}
+
+void renderer::set_scale(point<lyo::f64> scale)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderSetScale(this->ptr(), float(scale.x), float(scale.y)) == 0, ::SDL_GetError());
+}
+
+void renderer::set_integer_scaling(bool enable)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderSetIntegerScale(this->ptr(), SDL_bool(enable)) == 0, ::SDL_GetError());
 }

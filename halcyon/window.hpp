@@ -16,13 +16,16 @@ namespace hal
 
     class window : public sdl_object<SDL_Window, &::SDL_DestroyWindow>
     {
+        LYO_MAYBE_EMPTY subsystem<subsys::video> m_video;
+
     public:
         using id_type = Uint32;
 
         enum flags : lyo::u16
         {
             none = 0,
-            fullscreen = SDL_WINDOW_FULLSCREEN_DESKTOP,
+            fullscreen = SDL_WINDOW_FULLSCREEN,
+            fullscreen_windowed = SDL_WINDOW_FULLSCREEN_DESKTOP,
             hidden = SDL_WINDOW_HIDDEN,
             resizeable = SDL_WINDOW_RESIZABLE,
             minimized = SDL_WINDOW_MINIMIZED,
@@ -34,17 +37,22 @@ namespace hal
         window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
         window(engine& engine, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
 
-        void present() const;
+        void present();
 
-        void set_as_target() const;
+        void set_size(pixel_size sz);
+        void set_as_target();
 
         pixel_size size() const;
 
-        id_type id() const;
+        id_type             id() const;
+        display::index_type display_index() const;
+        bool                is_fullscreen() const;
 
         const char* title() const;
 
     private:
+        void set_display_mode(const SDL_DisplayMode& mode);
+
         pixel_size internal_size() const;
     };
 } // namespace hal
