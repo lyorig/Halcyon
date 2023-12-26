@@ -10,6 +10,8 @@ namespace hq
 {
     class entity_manager
     {
-        std::vector<entity> ents;
+    public:
+    private:
+        std::vector<entity> m_ents;
     };
 }

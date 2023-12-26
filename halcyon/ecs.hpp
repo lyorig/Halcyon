@@ -41,7 +41,7 @@ namespace hal
         {
             (this->add<Cs>(sizes), ...);
 
-            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ", num_components(), ' ', num_components() == 1 ? "component" : "components", ", totalling ", this->memory_used(), "B out of ", static_ecs::memory_total(), 'B');
+            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ", make_printable(num_components()), ' ', num_components() == 1 ? "component" : "components", ", totalling ", this->memory_used(), "B out of ", static_ecs::memory_total(), 'B');
         }
 
         // This function is only ever really useful when removing
@@ -72,6 +72,18 @@ namespace hal
             const C* begin { reinterpret_cast<const C*>(m_arena.begin() + m_begins[id]) };
 
             return { begin, reinterpret_cast<const C*>(&m_begins[id + 1]) };
+        }
+
+        template <lyo::one_of<Cs...> C>
+        constexpr component::index component_add()
+        {
+            return 69; // TODO: this whole mechanism!
+        }
+
+        template <lyo::one_of<Cs...> C>
+        constexpr void component_remove(component::index idx)
+        {
+            // TODO: this too!
         }
 
         template <lyo::one_of<Cs...> C>
