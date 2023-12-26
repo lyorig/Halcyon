@@ -7,6 +7,12 @@ namespace hal
     template <lyo::arithmetic T>
     constexpr T unset { std::numeric_limits<T>::max() };
 
+    // A base drawer class, implementing the builder method for drawing textures.
+    // Designed to be used as an rvalue - all functions should only be called once.
+    // It's possible to store it, but this is only recommended for:
+    // a) constant textures, and
+    // b) people who know what they're doing. That's you!
+    // "Now, now, if you follow standard insertion procedures, everything will be fine."
     template <typename T, lyo::one_of<SDL::pixel_type, SDL::position_type> Dest_type, typename This = void>
     class drawer
     {
