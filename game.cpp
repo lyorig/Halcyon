@@ -52,8 +52,7 @@ void game::intro()
         const lyo::f64 hold_time { i == texts.size() - 1 ? std::min(app.mixer.music.duration() - app.mixer.music.position() - part.fade_out, part.hold - part.fade_out) : part.hold };
 
         hal::opacity_slider alpha { 0.0 };
-
-        lyo::f64 opacity_incr { alpha.range() / part.fade_in };
+        alpha.set_mod(alpha.range() / part.fade_in);
 
         state dir { up };
 
@@ -61,8 +60,7 @@ void game::intro()
 
         while (app.update())
         {
-            alpha += opacity_incr * app.delta();
-            tx.set_opacity(lyo::cast<lyo::u8>(alpha.value()));
+            tx.set_opacity(lyo::cast<lyo::u8>(alpha.update(app.delta())));
 
             dw();
             HAL_DEBUG_DRAW(app.window, fnt);
@@ -89,13 +87,13 @@ void game::intro()
                 {
                 GoDown:
                     // No clue why this does what I want it to do, honestly...
-                    opacity_incr = -alpha.range() / part.fade_out;
+                    alpha.set_mod(-alpha.range() / part.fade_out);
                     dir = down;
 
                     if (i == texts.size() - 1) // Calculate how fast the audio fade should be.
                         app.mixer.music.fade_out(texts.back().fade_out);
                     else
-                        opacity_incr = -alpha.range() / part.fade_out;
+                        alpha.set_mod(-alpha.range() / part.fade_out);
                 }
 
                 break;

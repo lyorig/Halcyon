@@ -22,8 +22,8 @@ namespace hal
         texture(const window& wnd, const pixel_size& size);
         texture(const window& wnd, const surface& image);
 
-        const pixel_size& size() const;
-        lyo::u8           opacity() const;
+        pixel_size size() const;
+        lyo::u8    opacity() const;
 
         void set_opacity(lyo::u8 value);
 
@@ -60,12 +60,9 @@ namespace hal
             };
         };
 
+        const class window& window;
+
     private:
         pixel_size internal_size() const;
-
-        pixel_size m_size;
-
-    public:
-        const class window& window;
     };
 } // namespace hal

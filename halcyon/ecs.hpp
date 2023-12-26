@@ -41,20 +41,17 @@ namespace hal
         {
             (this->add<Cs>(sizes), ...);
 
-            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ", sizeof...(Cs), ' ', sizeof...(Cs) == 1 ? "component" : "components", ", totalling ", this->memory_used(), "B out of ", this->memory_total(), 'B');
+            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ", num_components(), ' ', num_components() == 1 ? "component" : "components", ", totalling ", this->memory_used(), "B out of ", static_ecs::memory_total(), 'B');
         }
 
+        // This function is only ever really useful when removing
+        // an element at index > 1.
         template <lyo::one_of<Cs...> C>
         constexpr void remove()
         {
             constexpr auto id = static_ecs::id<C>();
 
-            const auto amnt_bytes = this->space_bytes<C>();
-            const auto begin = m_begins.begin() + id + 1;
-
-            // Adjust sizes.
-            std::for_each(begin, m_begins.end(), [](size_type& sz)
-                { sz -= amnt_bytes; });
+            m_begins[id] = m_begins[id + 1];
         }
 
         template <lyo::one_of<Cs...> C>
@@ -83,7 +80,7 @@ namespace hal
             return this->space_bytes<C>() / sizeof(C);
         }
 
-        constexpr static std::size_t memory_total()
+        consteval static std::size_t memory_total()
         {
             return Arena_Size_Bytes;
         }
@@ -99,9 +96,9 @@ namespace hal
             return static_ecs::memory_total() - this->memory_used();
         }
 
-        constexpr component::id registered() const
+        consteval static component::id num_components()
         {
-            return m_currentID;
+            return sizeof...(Cs);
         }
 
         template <lyo::one_of<Cs...> C>
@@ -134,7 +131,5 @@ namespace hal
 
         std::array<std::byte, Arena_Size_Bytes>  m_arena;
         std::array<size_type, sizeof...(Cs) + 1> m_begins {};
-
-        component::id m_currentID { 0 };
     };
 }

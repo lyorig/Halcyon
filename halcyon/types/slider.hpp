@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <lyo/cast.hpp>
+#include <lyo/types.hpp>
 
 // slider.hpp:
 // A bounded "sliding value" with a modifier.
@@ -21,9 +22,9 @@ namespace hal
         }
 
         // Adds the modifier and returns the new value.
-        constexpr T update()
+        constexpr T update(lyo::f64 delta)
         {
-            this->operator+=(m_mod);
+            this->operator+=(m_mod * delta);
             return this->value();
         }
 
@@ -115,9 +116,9 @@ namespace hal
         }
 
         // Adds the modifier and returns the new value.
-        constexpr T update()
+        constexpr T update(lyo::f64 delta)
         {
-            this->operator+=(m_mod);
+            this->operator+=(m_mod * delta);
             return this->value();
         }
 
