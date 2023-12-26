@@ -73,6 +73,15 @@ namespace hal
             return *this;
         }
 
+        constexpr point operator-() const
+            requires std::is_signed_v<T>
+        {
+            return point {
+                -x,
+                -y
+            };
+        }
+
         // Create a new rectangle with this point acting as the size.
         constexpr rectangle<T> rect() const
         {

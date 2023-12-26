@@ -19,6 +19,18 @@ void renderer::clear(lyo::pass_key<window>) const
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
 }
 
+void renderer::draw_line(const coordinate& from, const coordinate& to, color clr)
+{
+    const draw_hijack dh { *this, clr };
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), from.x, from.y, to.x, to.y) == 0, ::SDL_GetError());
+}
+
+void renderer::draw_rect(const world_area& area, color clr)
+{
+    const draw_hijack dh { *this, clr };
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), SDL::FRect(area).addr()) == 0, ::SDL_GetError());
+}
+
 pixel_size renderer::output_size() const
 {
     point<int> size;
@@ -26,27 +38,26 @@ pixel_size renderer::output_size() const
     return pixel_size(size);
 }
 
-void renderer::set_target(texture& tx) const
+void renderer::set_target(texture& tx)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), tx.ptr()) == 0, ::SDL_GetError());
 }
 
-void renderer::reset_target() const
+void renderer::reset_target()
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), nullptr) == 0, ::SDL_GetError());
 }
 
-void renderer::set_fill(color clr) const
+color renderer::get_color() const
+{
+    color ret;
+
+    HAL_DEBUG_ASSERT_VITAL(::SDL_GetRenderDrawColor(this->ptr(), &ret.r, &ret.g, &ret.b, &ret.a) == 0, ::SDL_GetError());
+
+    return ret;
+}
+
+void renderer::set_color(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
-}
-
-void renderer::set_scale(point<lyo::f64> scale)
-{
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderSetScale(this->ptr(), float(scale.x), float(scale.y)) == 0, ::SDL_GetError());
-}
-
-void renderer::set_integer_scaling(bool enable)
-{
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderSetIntegerScale(this->ptr(), SDL_bool(enable)) == 0, ::SDL_GetError());
 }

@@ -24,19 +24,41 @@ namespace hal
             vsync = SDL_RENDERER_PRESENTVSYNC
         };
 
+        class draw_hijack
+        {
+        public:
+            draw_hijack(renderer& rnd, color new_clr)
+                : m_rnd { rnd }
+                , m_old { rnd.get_color() }
+            {
+                rnd.set_color(new_clr);
+            }
+
+            ~draw_hijack()
+            {
+                m_rnd.set_color(m_old);
+            }
+
+        private:
+            renderer&   m_rnd;
+            const color m_old;
+        };
+
         // Might as well leave the pure bitmask parameter here.
         renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>);
 
         void present(lyo::pass_key<window>) const;
         void clear(lyo::pass_key<window>) const;
 
-        void set_target(texture& tx) const;
-        void reset_target() const;
+        void draw_line(const coordinate& from, const coordinate& to, color clr = color::white);
+        void draw_rect(const world_area& area, color clr = color::white);
 
-        void set_fill(color clr) const;
-        void set_scale(point<lyo::f64> scale);
-        void set_integer_scaling(bool enable);
+        void set_target(texture& tx);
+        void reset_target();
+
+        color get_color() const;
+        void  set_color(color clr);
 
         pixel_size output_size() const;
     };
-} // namespace hal
+}

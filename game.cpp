@@ -123,6 +123,8 @@ void game::start()
 
     void(dw.to(hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size())));
 
+    const hal::SDL::FPoint sz { -dw.dest().size };
+
     bool held { false };
 
     constexpr hal::SDL::position_type mod { 400.0 };
@@ -162,6 +164,8 @@ void game::start()
             tex.set_color_mod(0xFFFFFF);
             held = false;
         }
+
+        app.window.renderer.draw_line(hal::anchor::resolve(hal::anchor::center, dw.dest().pos, sz), inp.mouse());
 
         dw();
         HAL_DEBUG_DRAW(app.window, fnt);
