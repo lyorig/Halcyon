@@ -5,6 +5,7 @@
 //  -xg     - Skip the game.
 //  -xi     - Skip the intro.
 //  -xv     - Disable VSync.
+//  -xd     - Disable line drawing.
 //  -xbgm   - Disable background music.
 
 void ecs_test()
