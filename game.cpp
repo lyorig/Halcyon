@@ -26,9 +26,9 @@ void game::intro()
 
     // This has to be manually timed. Then again, what other option is there?
     constexpr std::array texts {
-        info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.85 },
+        info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.9 },
         info { .text = "by lyorig", .hold = 2.4, .fade_out = 0.5 },
-        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 4.0, .fade_out = 1.5, .color = hal::color::cyan }
+        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 5.0, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load("assets/m5x7.ttf", 144) };
@@ -125,7 +125,8 @@ void game::start()
 
     const hal::SDL::FPoint sz { -dw.dest().size };
 
-    bool held { false };
+    const bool should_draw_lines { !app.args.has("-xd") };
+    bool       held { false };
 
     constexpr hal::SDL::position_type mod { 400.0 };
 
@@ -165,7 +166,8 @@ void game::start()
             held = false;
         }
 
-        app.window.renderer.draw_line(hal::anchor::resolve(hal::anchor::center, dw.dest().pos, sz), inp.mouse());
+        if (should_draw_lines)
+            app.window.renderer.draw_line(hal::anchor::resolve(hal::anchor::center, dw.dest().pos, sz), inp.mouse());
 
         dw();
         HAL_DEBUG_DRAW(app.window, fnt);

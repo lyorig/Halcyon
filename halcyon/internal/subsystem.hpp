@@ -57,8 +57,8 @@ namespace hal
         {
         }
 
-        pixel_size size;
-        hz_type    hz;
+        const pixel_size size;
+        const hz_type    hz;
     };
 
     // Specializations.

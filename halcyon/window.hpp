@@ -34,13 +34,11 @@ namespace hal
 
         using system = subsystem<subsys::video>;
 
-        // The "size" parameter acts as a resolution if fullscreen is specified.
         window(const system& video, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
         window(const system& video, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
 
         void present();
 
-        void set_size(pixel_size sz);
         void set_as_target();
 
         pixel_size size() const;

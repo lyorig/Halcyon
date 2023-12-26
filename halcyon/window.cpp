@@ -11,10 +11,6 @@ window::window(const system& video, const char* title, const pixel_size& pos, co
     HAL_DEBUG_PRINT(debug::init, "Initialized window ", title, ", size ", this->size());
 }
 
-// This is a bit of a bodge. I do not like the split call to display(),
-// and it'll hopefully eventually be replaced with something better.
-// The problem is that if the constructor is delegated, the subsystem isn't
-// initialized by the time display() is called, which causes errors.
 window::window(const system& video, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags)
     : window { video, title, {}, video.display(0).size, { fullscreen }, r_flags }
 {
@@ -24,12 +20,6 @@ void window::present()
 {
     renderer.present({});
     renderer.clear({});
-}
-
-void window::set_size(pixel_size sz)
-{
-    // Returns void, no error checking required.
-    ::SDL_SetWindowSize(this->ptr(), sz.x, sz.y);
 }
 
 void window::set_as_target()
