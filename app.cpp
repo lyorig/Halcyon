@@ -7,8 +7,8 @@ using namespace hq;
 
 app::app(lyo::parser&& p, const char* window_name)
     : input { m_eng }
-    , mixer { m_eng, p.parse<lyo::u32>("-freq=", 44100), 16, hal::chunk::quality::medium }
-    , window { m_eng, window_name, hal::fullscreen_mode, { hal::renderer::accelerated, !p.has("-xv") ? hal::renderer::vsync : hal::renderer::none } }
+    , mixer { m_audio, p.parse<lyo::u32>("-freq=", 44100), 16, hal::chunk::quality::medium }
+    , window { m_video, window_name, hal::fullscreen_mode, { hal::renderer::accelerated, !p.has("-xv") ? hal::renderer::vsync : hal::renderer::none } }
     , args { p }
     , image { m_eng, { hal::image_loader::jpg, hal::image_loader::png } }
     , ttf { m_eng }

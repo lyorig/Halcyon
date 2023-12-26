@@ -14,6 +14,9 @@ namespace hq
     {
         LYO_MAYBE_EMPTY hal::engine m_eng;
 
+        LYO_MAYBE_EMPTY const hal::window::system m_video;
+        LYO_MAYBE_EMPTY const hal::mixer::system m_audio;
+
     public:
         hal::input_handler input;
 

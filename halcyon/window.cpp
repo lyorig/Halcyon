@@ -4,7 +4,7 @@
 
 using namespace hal;
 
-window::window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags)
+window::window(const system& video, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags)
     : sdl_object { ::SDL_CreateWindow(title, pos.x, pos.y, size.x, size.y, il2bm<Uint32>(w_flags)) }
     , renderer { *this, il2bm<Uint32>(r_flags), {} }
 {
@@ -15,9 +15,8 @@ window::window(engine& engine, const char* title, const pixel_size& pos, const p
 // and it'll hopefully eventually be replaced with something better.
 // The problem is that if the constructor is delegated, the subsystem isn't
 // initialized by the time display() is called, which causes errors.
-window::window(engine& engine, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags)
-    : sdl_object { ::SDL_CreateWindow(title, 0, 0, this->display(0).size.x, this->display(0).size.y, fullscreen) }
-    , renderer { *this, il2bm<Uint32>(r_flags), {} }
+window::window(const system& video, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags)
+    : window { video, title, {}, video.display(0).size, { fullscreen }, r_flags }
 {
 }
 

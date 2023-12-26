@@ -12,11 +12,13 @@ namespace hal
     // A mixer, which can play music and load sound effects.
     // Make sure it outlives these, as chunk destructors require
     // the various mixer libraries to be initialized.
-    class mixer : subsystem<subsys::audio>
+    class mixer
     {
     public:
-        mixer(engine& eng);
-        mixer(engine& eng, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
+        using system = subsystem<subsys::audio>;
+
+        mixer(const system& audio);
+        mixer(const system& audio, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
 
         chunk load_sfx(const char* path) &;
 

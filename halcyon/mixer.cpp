@@ -24,12 +24,12 @@ mixer::init::~init()
     ::Mix_Quit();
 }
 
-mixer::mixer(engine& eng)
-    : mixer { eng, 44100, 8, chunk::quality::medium } // Sane defaults, I guess?
+mixer::mixer(const system& audio)
+    : mixer { audio, 44100, 8, chunk::quality::medium } // Sane defaults, I guess?
 {
 }
 
-mixer::mixer(engine& engine, lyo::u32 freq, lyo::u8 channels, chunk::quality qual)
+mixer::mixer(const system& audio, lyo::u32 freq, lyo::u8 channels, chunk::quality qual)
     : m_init { freq, channels, qual }
     , music { {} }
 

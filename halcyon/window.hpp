@@ -14,7 +14,7 @@ namespace hal
 
     LYO_TAG_TYPE(fullscreen_mode);
 
-    class window : subsystem<subsys::video>, public sdl_object<SDL_Window, &::SDL_DestroyWindow>
+    class window : public sdl_object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
         using id_type = Uint32;
@@ -32,9 +32,11 @@ namespace hal
 
         hal::renderer renderer;
 
+        using system = subsystem<subsys::video>;
+
         // The "size" parameter acts as a resolution if fullscreen is specified.
-        window(engine& engine, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
-        window(engine& engine, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
+        window(const system& video, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
+        window(const system& video, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
 
         void present();
 
