@@ -10,7 +10,7 @@ spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size)
 {
     HAL_DEBUG_ASSERT(tx.size().x % frame_size.x == 0 && tx.size().y % frame_size.y == 0, "Uneven spritesheet");
 
-    HAL_DEBUG_PRINT(debug::info, "Created new spritesheet (texture size ", tx.size().x, 'x', tx.size().y, ", frame size ", lyo::u32(frame_size.x), 'x', lyo::u32(frame_size.y), ')');
+    HAL_DEBUG_PRINT(debug::info, "Created new spritesheet (texture size ", tx.size(), ", frame size ", frame_size);
 
     // HALFIX: Indexing error or some such
 
