@@ -15,7 +15,7 @@
     {                                            \
         system = std::to_underlying(sys)         \
     };                                           \
-    subsystem()                                  \
+    subsystem(const engine& eng)                 \
     {                                            \
         ::SDL_InitSubSystem(Uint32(sys));        \
     }                                            \
@@ -26,6 +26,8 @@
 
 namespace hal
 {
+    class engine;
+
     enum class subsys : lyo::u16
     {
         video = SDL_INIT_VIDEO,

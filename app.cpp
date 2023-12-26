@@ -6,7 +6,9 @@
 using namespace hq;
 
 app::app(lyo::parser&& p, const char* window_name)
-    : input { m_eng }
+    : m_video { m_eng }
+    , m_audio { m_eng }
+    , input { m_eng }
     , mixer { m_audio, p.parse<lyo::u32>("-freq=", 44100), 16, hal::chunk::quality::medium }
     , window { m_video, window_name, hal::fullscreen_mode, { hal::renderer::accelerated, !p.has("-xv") ? hal::renderer::vsync : hal::renderer::none } }
     , args { p }
