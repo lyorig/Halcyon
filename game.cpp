@@ -28,7 +28,7 @@ void game::intro()
     constexpr std::array texts {
         info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.85 },
         info { .text = "by lyorig", .hold = 2.4, .fade_out = 0.5 },
-        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 6.5, .fade_out = 1.5, .color = hal::color::cyan }
+        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 4.0, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load("assets/m5x7.ttf", 144) };
@@ -36,7 +36,8 @@ void game::intro()
 
     lyo::precise_timer middle_timer { lyo::no_init };
 
-    app.mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in).sync();
+    if (!app.args.has("-xbgm"))
+        app.mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in).sync();
 
     for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
@@ -49,7 +50,7 @@ void game::intro()
         hal::texture::draw dw { tx };
         (void)dw.to(pos).scale(part.scale);
 
-        const lyo::f64 hold_time { i == texts.size() - 1 ? std::min(app.mixer.music.duration() - app.mixer.music.position() - part.fade_out, part.hold - part.fade_out) : part.hold };
+        const lyo::f64 hold_time { part.hold };
 
         hal::opacity_slider alpha { 0.0 };
         alpha.set_mod(alpha.range() / part.fade_in);
@@ -128,7 +129,8 @@ void game::start()
 
     bool held = false;
 
-    app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();
+    if (!app.args.has("-xbgm"))
+        app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();
 
     constexpr hal::SDL::position_type mod { 400.0 };
 
@@ -145,9 +147,6 @@ void game::start()
 
         if (inp.held(hal::button::D))
             dw.dest().pos.x += mod * app.delta();
-
-        if (inp.pressed(hal::button::lmb))
-            HAL_DEBUG_PRINT("Mouse click at ", inp.mouse());
 
         if (hal::SDL::FPoint(inp.mouse()) | dw.dest())
         {

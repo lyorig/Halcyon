@@ -75,7 +75,7 @@ lyo::u8 music::volume() const
 
 lyo::f64 music::position() const
 {
-    const auto ret = ::Mix_GetMusicPosition(this->ptr());
+    const auto ret = this->ptr() == nullptr ? 0.0 : ::Mix_GetMusicPosition(this->ptr());
 
     HAL_DEBUG_ASSERT(ret != -1.0, ::Mix_GetError());
 
@@ -84,7 +84,7 @@ lyo::f64 music::position() const
 
 lyo::f64 music::duration() const
 {
-    const auto ret = ::Mix_MusicDuration(this->ptr());
+    const auto ret = this->ptr() == nullptr ? 0.0 : ::Mix_MusicDuration(this->ptr());
 
     HAL_DEBUG_ASSERT(ret != -1.0, ::Mix_GetError());
 
