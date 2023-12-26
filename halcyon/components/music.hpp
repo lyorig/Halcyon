@@ -6,7 +6,7 @@
 #include <lyo/pass_key.hpp>
 #include <lyo/timer.hpp>
 
-#include "sdl_object.hpp"
+#include <halcyon/components/sdl_object.hpp>
 
 namespace hal
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/font.hpp"
+#include <halcyon/components/font.hpp>
 
 namespace hal
 {

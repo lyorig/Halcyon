@@ -3,9 +3,9 @@
 #include <halcyon/types/other.hpp>
 #include <lyo/timer.hpp>
 
-#include "components/renderer.hpp"
-#include "internal/subsystem.hpp"
-#include "texture.hpp"
+#include <halcyon/components/renderer.hpp>
+#include <halcyon/internal/subsystem.hpp>
+#include <halcyon/texture.hpp>
 
 namespace hal
 {

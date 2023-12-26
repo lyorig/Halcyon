@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL_mixer.h>
 
-#include "components/chunk.hpp"
-#include "debug.hpp"
+#include <halcyon/components/chunk.hpp>
+#include <halcyon/debug.hpp>
 
 using namespace hal;
 

@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "debug.hpp"
+#include <halcyon/debug.hpp>
 
 using namespace hal;
 

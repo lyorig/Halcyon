@@ -1,7 +1,7 @@
 #include "image_loader.hpp"
 
-#include "components/surface.hpp"
-#include "halcyon/internal/helpers.hpp"
+#include <halcyon/components/surface.hpp>
+#include <halcyon/internal/helpers.hpp>
 
 using namespace hal;
 

@@ -1,6 +1,6 @@
 #include "font.hpp"
 
-#include "surface.hpp"
+#include <halcyon/components/surface.hpp>
 
 using namespace hal;
 

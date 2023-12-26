@@ -1,6 +1,6 @@
 #include "spritesheet.hpp"
 
-#include "texture.hpp"
+#include <halcyon/texture.hpp>
 
 using namespace hal;
 

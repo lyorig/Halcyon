@@ -8,7 +8,7 @@
 #include <lyo/types.hpp>
 #include <string>
 
-#include "sdl_object.hpp"
+#include <halcyon/components/sdl_object.hpp>
 
 namespace hal
 {
