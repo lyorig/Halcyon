@@ -9,10 +9,13 @@
 void ecs_test()
 {
     using ecs = hal::static_ecs<640, hal::pixel_size>;
+    using ent = hq::entity;
 
     ecs e { 10 };
 
     HAL_DEBUG_PRINT("Remaining space = ", e.memory_available(), 'B');
+
+    ent entity { ent::init<hq::position> {} };
 }
 
 int main(int argc, char* argv[])
