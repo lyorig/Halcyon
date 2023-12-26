@@ -50,8 +50,6 @@ void game::intro()
         hal::texture::draw dw { tx };
         (void)dw.to(pos).scale(part.scale);
 
-        const lyo::f64 hold_time { part.hold };
-
         hal::opacity_slider alpha { 0.0 };
         alpha.set_mod(alpha.range() / part.fade_in);
 
@@ -84,7 +82,7 @@ void game::intro()
                 break;
 
             case middle:
-                if (middle_timer() >= hold_time)
+                if (middle_timer() >= part.hold)
                 {
                 GoDown:
                     // No clue why this does what I want it to do, honestly...
@@ -101,9 +99,7 @@ void game::intro()
 
             case down:
                 if (alpha.value() == alpha.min())
-                {
                     goto NextIter;
-                }
 
                 break;
             }
@@ -127,12 +123,12 @@ void game::start()
 
     void(dw.to(hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size())));
 
-    bool held = false;
+    bool held { false };
+
+    constexpr hal::SDL::position_type mod { 400.0 };
 
     if (!app.args.has("-xbgm"))
         app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();
-
-    constexpr hal::SDL::position_type mod { 400.0 };
 
     while (app.update())
     {

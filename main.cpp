@@ -2,9 +2,10 @@
 #include <halcyon/ecs.hpp>
 
 // Current arguments:
-//  -xg  - Skip the game.
-//  -xi  - Skip the intro.
-//  -xv  - Disable VSync.
+//  -xg     - Skip the game.
+//  -xi     - Skip the intro.
+//  -xv     - Disable VSync.
+//  -xbgm   - Disable background music.
 
 void ecs_test()
 {
