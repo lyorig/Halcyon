@@ -19,13 +19,13 @@ void renderer::clear(lyo::pass_key<window>) const
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
 }
 
-void renderer::draw_line(const coordinate& from, const coordinate& to, color clr)
+void renderer::draw_line(const coord& from, const coord& to, color clr)
 {
     const draw_hijack dh { *this, clr };
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), from.x, from.y, to.x, to.y) == 0, ::SDL_GetError());
 }
 
-void renderer::draw_rect(const world_area& area, color clr)
+void renderer::draw_rect(const coord_area& area, color clr)
 {
     const draw_hijack dh { *this, clr };
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), SDL::FRect(area).addr()) == 0, ::SDL_GetError());

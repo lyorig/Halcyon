@@ -7,11 +7,11 @@
 
 namespace hq
 {
-    struct position : public hal::coordinate
+    struct position : public hal::coord
     {
     };
 
-    struct velocity : public hal::coordinate
+    struct velocity : public hal::coord
     {
     };
 }

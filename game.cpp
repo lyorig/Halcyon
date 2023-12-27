@@ -45,7 +45,7 @@ void game::intro()
 
         hal::texture tx { app.window, fnt.render(part.text, part.color) };
 
-        const hal::coordinate pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
+        const hal::coord pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
 
         hal::texture::draw dw { tx };
         (void)dw.to(pos).scale(part.scale);

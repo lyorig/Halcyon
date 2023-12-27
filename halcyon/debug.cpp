@@ -22,8 +22,8 @@ bool debug::m_repaint { false };
 void debug::draw(const window& wnd, const font& fnt)
 {
     // Render settings.
-    constexpr coordinate offset { 20.0, 10.0 };
-    constexpr lyo::f64   vhm { 4.0 / 100.0 }; // View-height multiplier (only edit the lhs).
+    constexpr coord    offset { 20.0, 10.0 };
+    constexpr lyo::f64 vhm { 4.0 / 100.0 }; // View-height multiplier (only edit the lhs).
 
     // I am not 100% sure whether it's safe to create a static
     // SDL object, as the destructor will run after de-initialization.
