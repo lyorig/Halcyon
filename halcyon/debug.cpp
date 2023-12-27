@@ -19,7 +19,7 @@ debug::count_type debug::m_entries { 0 };
 
 bool debug::m_repaint { false };
 
-void debug::draw(const window& wnd, const font& fnt)
+void debug::draw(window& wnd, const font& fnt)
 {
     // Render settings.
     constexpr coord    offset { 20.0, 10.0 };

@@ -60,5 +60,8 @@ namespace hal
         void  set_color(color clr);
 
         pixel_size output_size() const;
+
+    private:
+        void internal_set_target(SDL_Texture* target);
     };
 }

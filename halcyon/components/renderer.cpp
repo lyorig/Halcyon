@@ -40,12 +40,12 @@ pixel_size renderer::output_size() const
 
 void renderer::set_target(texture& tx)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), tx.ptr()) == 0, ::SDL_GetError());
+    this->internal_set_target(tx.ptr());
 }
 
 void renderer::reset_target()
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), nullptr) == 0, ::SDL_GetError());
+    this->internal_set_target(nullptr);
 }
 
 color renderer::get_color() const
@@ -60,4 +60,9 @@ color renderer::get_color() const
 void renderer::set_color(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
+}
+
+void renderer::internal_set_target(SDL_Texture* target)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), target) == 0, ::SDL_GetError());
 }

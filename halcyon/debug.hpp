@@ -5,7 +5,7 @@
    part of Halcyon that uses preprocessor #defines. */
 
 #ifndef NDEBUG
-#define HALDEBUG
+    #define HALDEBUG
 #endif
 
 // Manual debug switch.
@@ -13,19 +13,19 @@
 
 #ifdef HALDEBUG
 
-// MSVC has its own version, because of course it does.
-#if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
-#define __PRETTY_FUNCTION__ __FUNCSIG__
-#endif
+    // MSVC has its own version, because of course it does.
+    #if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
+        #define __PRETTY_FUNCTION__ __FUNCSIG__
+    #endif
 
-#include <halcyon/internal/printing.hpp>
-#include <halcyon/types/color.hpp>
-#include <lyo/timer.hpp>
-#include <lyo/utility.hpp>
+    #include <halcyon/internal/printing.hpp>
+    #include <halcyon/types/color.hpp>
+    #include <lyo/timer.hpp>
+    #include <lyo/utility.hpp>
 
-#include <array>
-#include <fstream>
-#include <sstream>
+    #include <array>
+    #include <fstream>
+    #include <sstream>
 
 namespace hal
 {
@@ -68,7 +68,7 @@ namespace hal
         static void verify(bool condition, const char* cond_string, const char* func,
             const char* extra_info);
 
-        static void draw(const window& wnd, const font& fnt);
+        static void draw(window& wnd, const font& fnt);
 
     private:
         template <typename... Args>
@@ -133,23 +133,30 @@ namespace hal
     };
 } // namespace hal
 
-#define HAL_DEBUG_PRINT      hal::debug::print
-#define HAL_DEBUG_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
+    #define DEBUG(...)  \
+        {               \
+            __VA_ARGS__ \
+        }
 
-#define HAL_DEBUG_ASSERT(cond, if_false) HAL_DEBUG_ASSERT_VITAL(cond, if_false)
-#define HAL_DEBUG_ASSERT_VITAL(cond, if_false) \
-    hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
+    #define HAL_DEBUG_PRINT      hal::debug::print
+    #define HAL_DEBUG_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
 
-#define HAL_DEBUG_DRAW hal::debug::draw
+    #define HAL_DEBUG_ASSERT(cond, if_false) HAL_DEBUG_ASSERT_VITAL(cond, if_false)
+    #define HAL_DEBUG_ASSERT_VITAL(cond, if_false) \
+        hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
+
+    #define HAL_DEBUG_DRAW hal::debug::draw
 
 #else
 
-#define HAL_DEBUG_PRINT(...)
-#define HAL_DEBUG_PANIC(...)
+    #define DEBUG(...)
 
-#define HAL_DEBUG_ASSERT(...)
-#define HAL_DEBUG_ASSERT_VITAL(condition, ...) (void(condition))
+    #define HAL_DEBUG_PRINT(...)
+    #define HAL_DEBUG_PANIC(...)
 
-#define HAL_DEBUG_DRAW(...)
+    #define HAL_DEBUG_ASSERT(...)
+    #define HAL_DEBUG_ASSERT_VITAL(condition, ...) (void(condition))
+
+    #define HAL_DEBUG_DRAW(...)
 
 #endif
