@@ -122,13 +122,13 @@ namespace hal
         }
 
         constexpr SDL::point_type<T>* addr()
-            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::position_type>)
+            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::coord_type>)
         {
             return reinterpret_cast<SDL::point_type<T>*>(this);
         }
 
         constexpr const SDL::point_type<T>* addr() const
-            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::position_type>)
+            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::coord_type>)
         {
             return reinterpret_cast<const SDL::point_type<T>*>(this);
         }
@@ -137,7 +137,7 @@ namespace hal
     namespace SDL
     {
         using Point = point<SDL::pixel_type>;
-        using FPoint = point<SDL::position_type>;
+        using FPoint = point<SDL::coord_type>;
     }
 
 } // namespace hal

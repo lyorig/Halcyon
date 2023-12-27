@@ -128,7 +128,7 @@ void game::start()
     const bool should_draw_lines { !app.args.has("-xd") };
     bool       held { false };
 
-    constexpr hal::SDL::position_type mod { 400.0 };
+    constexpr hal::SDL::coord_type mod { 400.0 };
 
     if (!app.args.has("-xbgm"))
         app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();

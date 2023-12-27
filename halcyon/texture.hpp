@@ -37,7 +37,7 @@ namespace hal
 
         texture& operator=(const surface& image);
 
-        class draw final : public drawer<texture, SDL::position_type, draw>
+        class draw final : public drawer<texture, SDL::coord_type, draw>
         {
         public:
             using drawer::drawer;

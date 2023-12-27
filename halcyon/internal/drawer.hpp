@@ -13,7 +13,7 @@ namespace hal
     // a) constant textures, and
     // b) people who know what they're doing. That's you!
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
-    template <typename T, lyo::one_of<SDL::pixel_type, SDL::position_type> Dest_type, typename This = void>
+    template <typename T, lyo::one_of<SDL::pixel_type, SDL::coord_type> Dest_type, typename This = void>
     class drawer
     {
     protected:
