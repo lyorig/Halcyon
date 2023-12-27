@@ -3,7 +3,7 @@
 #include <halcyon/internal/SDL_types.hpp>
 #include <lyo/cast.hpp>
 
-#include "tags.hpp"
+#include <halcyon/internal/tags.hpp>
 
 namespace hal
 {

@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL_mixer.h>
 
-#include <halcyon/types/tags.hpp>
+#include <halcyon/internal/tags.hpp>
 #include <lyo/pass_key.hpp>
 #include <lyo/timer.hpp>
 

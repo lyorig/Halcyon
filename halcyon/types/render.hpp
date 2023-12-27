@@ -1,14 +1,12 @@
 #pragma once
 
 #include <halcyon/types/slider.hpp>
-#include <lyo/types.hpp>
 
-#include <halcyon/internal/SDL_types.hpp>
 #include <halcyon/types/point.hpp>
 #include <halcyon/types/rectangle.hpp>
 
-/* render.hpp:
-   Rendering-related types used throughout Halcyon. */
+// render.hpp:
+// Rendering-related types used throughout Halcyon.
 
 namespace hal
 {

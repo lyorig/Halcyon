@@ -2,8 +2,7 @@
 
 #include <halcyon/internal/SDL_types.hpp>
 
-#include "SDL2/SDL_rect.h"
-#include "point.hpp"
+#include <halcyon/types/point.hpp>
 
 namespace hal
 {
