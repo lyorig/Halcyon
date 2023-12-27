@@ -12,13 +12,13 @@
 
 namespace hal
 {
-    using pixel_type = lyo::i16;
+    using pixel_type = lyo::CFT<lyo::i16, SDL::pixel_type>;
 
     using pixel_size = point<pixel_type>;
     using pixel_pos = point<pixel_type>;
     using pixel_area = rectangle<pixel_type>;
 
-    using coord_type = lyo::f64;
+    using coord_type = lyo::CFT<lyo::f64, SDL::coord_type>;
 
     using coord = point<coord_type>;
     using coord_area = rectangle<coord_type>;
