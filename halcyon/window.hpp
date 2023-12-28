@@ -43,7 +43,7 @@ namespace hal
 
         pixel_size size() const;
 
-        video::display::index display_index() const;
+        display::index_type display_index() const;
 
         const char* title() const;
 

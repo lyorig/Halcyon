@@ -26,9 +26,7 @@ namespace hal
         return str << '[' << make_printable(pt.x) << ',' << make_printable(pt.y) << ']';
     }
 
-    template <lyo::arithmetic T>
-    std::ostream& operator<<(std::ostream& str, rectangle<T> rect)
-    {
-        return str << '{' << rect.pos << ' ' << rect.size << '}';
-    }
+    struct display;
+
+    std::ostream& operator<<(std::ostream& std, const display& disp);
 }

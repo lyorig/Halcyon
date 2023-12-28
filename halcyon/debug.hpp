@@ -25,6 +25,7 @@
 
     #include <array>
     #include <fstream>
+    #include <iostream>
     #include <sstream>
 
 namespace hal

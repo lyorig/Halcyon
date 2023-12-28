@@ -12,7 +12,7 @@ window::window(const system& video, const char* title, const pixel_size& pos, co
 }
 
 window::window(const system& video, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags)
-    : window { video, title, {}, video.display(0).size, { fullscreen }, r_flags }
+    : window { video, title, {}, video.display_at(0).size(), { fullscreen }, r_flags }
 {
 }
 
@@ -32,7 +32,7 @@ pixel_size window::size() const
     return renderer.output_size();
 }
 
-video::display::index window::display_index() const
+display::index_type window::display_index() const
 {
     const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
 

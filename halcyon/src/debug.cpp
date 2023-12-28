@@ -4,6 +4,7 @@
     #include <SDL2/SDL_messagebox.h>
 
     #include <halcyon/components/font.hpp>
+    #include <halcyon/internal/printing.hpp>
     #include <halcyon/texture.hpp>
     #include <halcyon/window.hpp>
     #include <lyo/utility.hpp>

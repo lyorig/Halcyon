@@ -47,33 +47,30 @@ namespace hal
         }
     };
 
-    // Specializations.
+    class video;
+
+    struct display : SDL_DisplayMode
+    {
+        using index_type = lyo::u8;
+        using hz_type = lyo::u16;
+
+        display(index_type idx, lyo::pass_key<video>);
+
+        pixel_size  size() const;
+        const char* name() const;
+        hz_type     hz() const;
+
+        const index_type index;
+    };
+
     class video : subsystem<system::video>
     {
     public:
         using subsystem::subsystem;
 
-        struct display
-        {
-            using index = lyo::u8;
-            using hz_type = lyo::u16;
+        display::index_type num_displays() const;
 
-            display(const SDL_DisplayMode& mode, lyo::pass_key<video>)
-                : size { pixel_type(mode.w), pixel_type(mode.h) }
-                , hz { hz_type(mode.refresh_rate) }
-            {
-            }
-
-            const pixel_size size;
-            const hz_type    hz;
-        };
-
-        display::index num_displays() const;
-
-        display display(display::index idx) const;
-
-    private:
-        SDL_DisplayMode display_mode(display::index idx) const;
+        display display_at(display::index_type idx) const;
     };
 
     class audio : subsystem<system::audio>

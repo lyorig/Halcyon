@@ -3,6 +3,7 @@
 #include <halcyon/internal/SDL_types.hpp>
 
 #include <halcyon/types/point.hpp>
+#include <iosfwd>
 
 namespace hal
 {
@@ -116,4 +117,4 @@ namespace hal
     {
         return pt.x >= rect.pos.x && pt.x <= rect.pos.x + rect.size.x && pt.y >= rect.pos.y && pt.y <= rect.pos.y + rect.size.y;
     }
-} // namespace hal
+}
