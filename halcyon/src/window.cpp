@@ -8,7 +8,7 @@ window::window(const system& video, const char* title, const pixel_size& pos, co
     : sdl_object { ::SDL_CreateWindow(title, pos.x, pos.y, size.x, size.y, il2bm<Uint32>(w_flags)) }
     , renderer { *this, il2bm<Uint32>(r_flags), {} }
 {
-    HAL_DEBUG_PRINT(debug::init, "Initialized window ", title, ", size ", this->size());
+    HAL_DEBUG_PRINT(debug::init, "Initialized window ", title, ", size ", this->size(), " at ", video.display_at(this->display_index()));
 }
 
 window::window(const system& video, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags)

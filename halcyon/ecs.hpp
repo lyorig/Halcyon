@@ -41,7 +41,7 @@ namespace hal
         {
             (this->add<Cs>(sizes), ...);
 
-            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ", make_printable(num_components()), ' ', num_components() == 1 ? "component" : "components", ", totalling ", this->memory_used(), "B out of ", static_ecs::memory_total(), 'B');
+            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ", make_printable_int(num_components()), ' ', num_components() == 1 ? "component" : "components", ", totalling ", this->memory_used(), "B out of ", static_ecs::memory_total(), 'B');
         }
 
         // This function is only ever really useful when removing

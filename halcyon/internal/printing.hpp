@@ -1,8 +1,7 @@
 #pragma once
 
 #include <halcyon/types/rectangle.hpp>
-#include <iostream>
-#include <lyo/concepts.hpp>
+#include <ostream>
 
 // printing.hpp:
 // Stream insertion support for custom types.
@@ -15,18 +14,24 @@ namespace hal
 
     // Convenience function.
     template <lyo::arithmetic T>
-    constexpr to_printable_int_t<T> make_printable(T val)
+    constexpr to_printable_int_t<T> make_printable_int(T val)
     {
         return to_printable_int_t<T>(val);
     }
 
+    class display;
+
     template <lyo::arithmetic T>
-    std::ostream& operator<<(std::ostream& str, point<T> pt)
+    std::ostream& operator<<(std::ostream& str, const point<T>& pt)
     {
-        return str << '[' << make_printable(pt.x) << ',' << make_printable(pt.y) << ']';
+        return str << '[' << make_printable_int(pt.x) << ',' << make_printable_int(pt.y) << ']';
     }
 
-    struct display;
+    template <typename T>
+    std::ostream& operator<<(std::ostream& str, const rectangle<T>& rect)
+    {
+        return str << '{' << rect.pos << ' ' << rect.size << '}';
+    }
 
     std::ostream& operator<<(std::ostream& std, const display& disp);
 }

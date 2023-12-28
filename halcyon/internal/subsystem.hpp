@@ -49,18 +49,21 @@ namespace hal
 
     class video;
 
-    struct display : SDL_DisplayMode
+    class display : SDL_DisplayMode
     {
+    public:
         using index_type = lyo::u8;
         using hz_type = lyo::u16;
 
         display(index_type idx, lyo::pass_key<video>);
 
+        index_type  index() const;
         pixel_size  size() const;
         const char* name() const;
         hz_type     hz() const;
 
-        const index_type index;
+    private:
+        const index_type m_index;
     };
 
     class video : subsystem<system::video>

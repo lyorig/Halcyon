@@ -3,7 +3,8 @@
 
 using namespace hal;
 
-std::ostream& operator<<(std::ostream& str, const display& disp)
+// The linker takes issue with this not being explicitly namespaced.
+std::ostream& hal::operator<<(std::ostream& str, const display& disp)
 {
-    return str << "[Display " << disp.index << ", " << disp.size() << ", " << disp.hz() << " Hz]";
+    return str << "[Display " << make_printable_int(disp.index()) << ", " << disp.size() << ", " << make_printable_int(disp.hz()) << " Hz]";
 }

@@ -44,7 +44,8 @@ halcyon/src/components/font.cpp
 halcyon/src/components/music.cpp
 halcyon/src/components/renderer.cpp
 halcyon/src/components/surface.cpp
-halcyon/src/internal/subsystem.cpp)
+halcyon/src/internal/subsystem.cpp
+halcyon/src/internal/printing.cpp)
 
 target_include_directories(Halcyon PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(Halcyon SDL2 SDL2_image SDL2_ttf SDL2_mixer)
