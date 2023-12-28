@@ -57,7 +57,7 @@ void debug::draw(window& wnd, const font& fnt)
             {
                 const value_pair& entry { m_queue[i] };
 
-                if (!entry.first.empty())
+                if (!entry.first.empty()) [[likely]]
                 {
                     const surface   text { fnt.render(entry.first, entry.second) };
                     const pixel_pos pos { 0, pixel_type(i * y_scaled) };
@@ -99,7 +99,7 @@ void debug::panic(const char* why, const char* where,
 
     int response { 0 };
 
-    if (::SDL_ShowMessageBox(&msgbox, &response) < 0)
+    if (::SDL_ShowMessageBox(&msgbox, &response) < 0) [[unlikely]]
     {
         debug::print_severity(error, __func__,
             ": Message box creation failed, exiting");
@@ -110,7 +110,7 @@ void debug::panic(const char* why, const char* where,
         debug::print_severity(info, __func__, ": User chose to ",
             response == 0 ? "exit" : "continue execution");
 
-    if (response == 0)
+    if (response == 0) [[likely]]
     {
     Exit:
         std::exit(EXIT_FAILURE);
@@ -120,13 +120,13 @@ void debug::panic(const char* why, const char* where,
 void debug::verify(bool condition, const char* cond_string, const char* func,
     const char* extra_info)
 {
-    if (!condition)
+    if (!condition) [[unlikely]]
         debug::panic(cond_string, func, extra_info);
 }
 
 void debug::log(severity type, const std::string& msg)
 {
-    if (m_entries == m_queue.size())
+    if (m_entries == m_queue.size()) [[likely]]
     {
         std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
         m_queue.back() = { msg, type };

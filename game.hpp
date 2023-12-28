@@ -13,9 +13,9 @@ namespace hq
         void intro();
         void start();
 
+    private:
         class app app;
 
-    private:
         entity_manager m_emgr;
     };
 }

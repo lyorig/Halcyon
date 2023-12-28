@@ -30,7 +30,7 @@ pixel_size texture::size() const
     return this->internal_size();
 }
 
-void texture::set_opacity(color::value_type value)
+void texture::set_opacity(color::value value)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
 }

@@ -10,6 +10,9 @@ game::game(lyo::parser&& args)
 
 void game::intro()
 {
+    if (app.args.has("-xi"))
+        return;
+
     enum state
     {
         up,
@@ -59,7 +62,7 @@ void game::intro()
 
         while (app.update())
         {
-            tx.set_opacity(lyo::cast<lyo::u8>(alpha.update(app.delta())));
+            tx.set_opacity(lyo::cast<hal::color::value>(alpha.update(app.delta())));
 
             dw();
             HAL_DEBUG_DRAW(app.window, fnt);
@@ -121,10 +124,12 @@ void game::start()
     hal::input_handler& inp { app.input };
     hal::texture::draw  dw { tex };
 
+    const auto func = [](lyo::f64 val)
+    {
+        return val * val * (3.0 - 2.0 * val);
+    };
     void(dw.to(hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size())));
     bool held { false };
-
-    HAL_DEBUG(const hal::SDL::FPoint sz { -dw.dest().size };)
 
     constexpr hal::SDL::coord_type mod { 400.0 };
 
@@ -147,6 +152,8 @@ void game::start()
         if (inp.held(hal::button::D))
             dw.dest().pos.x += mod * app.delta();
 
+        constexpr hal::coord max { 500.0, 500.0 };
+
         if (hal::SDL::FPoint(inp.mouse()) | dw.dest())
         {
             if (!held)
@@ -166,9 +173,15 @@ void game::start()
             held = false;
         }
 
-        HAL_DEBUG(app.window.renderer.draw_line(hal::anchor::resolve(hal::anchor::center, dw.dest().pos, sz), inp.mouse(), hal::color::cyan);)
+        const auto       bval = (std::sin(tmr()) + 1.0) / 2.0;
+        const hal::coord dest {
+            hal::coord_type(max.x * bval),
+            hal::coord_type(max.y * func(bval))
+        };
 
         dw();
+
+        HAL_DEBUG(app.window.renderer.draw_line(inp.mouse(), dest, hal::color::cyan);)
         HAL_DEBUG_DRAW(app.window, fnt);
     }
 }

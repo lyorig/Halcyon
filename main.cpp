@@ -29,9 +29,7 @@ int main(int argc, char* argv[])
     {
         hq::game game { std::move(p) };
 
-        if (!game.app.args.has("-xi"))
-            game.intro();
-
+        game.intro();
         game.start();
     };
 

@@ -24,7 +24,7 @@ namespace hal
 
         const window& window() const;
 
-        void set_opacity(lyo::u8 value);
+        void set_opacity(color::value value);
         void set_color_mod(hal::color mod);
         void set_as_target();
 

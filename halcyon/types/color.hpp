@@ -10,11 +10,14 @@ namespace hal
 {
     struct color : public SDL_Color
     {
-        using hex_type = lyo::u32;
-        using value_type = Uint8;
+        // A hex value in the form of 0xNNNNNN.
+        using hexRGB = lyo::u32;
+
+        // A single R, G, B or A value.
+        using value = Uint8;
 
         // Predefined colors in RGB form.
-        enum predefined : hex_type
+        enum predefined : hexRGB
         {
             black = 0x000000,
 
@@ -42,16 +45,16 @@ namespace hal
         {
         }
 
-        constexpr color(hex_type rgb, value_type alpha = SDL_ALPHA_OPAQUE)
-            : SDL_Color { static_cast<value_type>((rgb >> 16) & 0xFF),
-                static_cast<value_type>((rgb >> 8) & 0xFF),
-                static_cast<value_type>(rgb & 0xFF),
-                static_cast<value_type>(rgb) }
+        constexpr color(hexRGB rgb, value alpha = SDL_ALPHA_OPAQUE)
+            : SDL_Color { static_cast<value>((rgb >> 16) & 0xFF),
+                static_cast<value>((rgb >> 8) & 0xFF),
+                static_cast<value>(rgb & 0xFF),
+                static_cast<value>(rgb) }
         {
         }
 
-        constexpr color(value_type red, value_type green, value_type blue,
-            value_type alpha = SDL_ALPHA_OPAQUE)
+        constexpr color(value red, value green, value blue,
+            value alpha = SDL_ALPHA_OPAQUE)
             : SDL_Color { red, green, blue, alpha }
         {
         }
