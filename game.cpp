@@ -133,6 +133,8 @@ void game::start()
     if (!app.args.has("-xbgm"))
         app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();
 
+    lyo::precise_timer tmr;
+
     while (app.update())
     {
         if (inp.held(hal::button::W))
@@ -167,7 +169,10 @@ void game::start()
         }
 
         if (should_draw_lines)
-            app.window.renderer.draw_line(hal::anchor::resolve(hal::anchor::center, dw.dest().pos, sz), inp.mouse());
+            app.window.renderer.draw_line(hal::anchor::resolve(hal::anchor::center, dw.dest().pos, sz), inp.mouse(), hal::color::cyan);
+
+        if (std::fmod(tmr(), 5.0) <= 1.0)
+            app.window.renderer.fill_target(hal::color::weezer_blue);
 
         dw();
         HAL_DEBUG_DRAW(app.window, fnt);

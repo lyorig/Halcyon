@@ -50,8 +50,11 @@ namespace hal
         void present(lyo::pass_key<window>) const;
         void clear(lyo::pass_key<window>) const;
 
-        void draw_line(const coord& from, const coord& to, color clr = color::white);
-        void draw_rect(const coord_area& area, color clr = color::white);
+        void draw_line(const coord& from, const coord& to, color clr);
+        void draw_rect(const coord_area& area, color clr);
+
+        void fill_rect(const SDL::FRect& area, color clr);
+        void fill_target(color clr);
 
         void set_target(texture& tx);
         void reset_target();

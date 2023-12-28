@@ -31,6 +31,18 @@ void renderer::draw_rect(const coord_area& area, color clr)
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), SDL::FRect(area).addr()) == 0, ::SDL_GetError());
 }
 
+void renderer::fill_rect(const SDL::FRect& area, color clr)
+{
+    const draw_hijack dh { *this, clr };
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), area.addr()) == 0, ::SDL_GetError());
+}
+
+void renderer::fill_target(color clr)
+{
+    const draw_hijack dh { *this, clr };
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), nullptr) == 0, ::SDL_GetError());
+}
+
 pixel_size renderer::output_size() const
 {
     point<int> size;
