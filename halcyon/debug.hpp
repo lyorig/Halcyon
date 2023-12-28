@@ -134,11 +134,7 @@ namespace hal
     };
 } // namespace hal
 
-    #define DEBUG(...)  \
-        {               \
-            __VA_ARGS__ \
-        }
-
+    #define HAL_DEBUG(...)       __VA_ARGS__
     #define HAL_DEBUG_PRINT      hal::debug::print
     #define HAL_DEBUG_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
 
@@ -150,7 +146,7 @@ namespace hal
 
 #else
 
-    #define DEBUG(...)
+    #define HAL_DEBUG(...)
 
     #define HAL_DEBUG_PRINT(...)
     #define HAL_DEBUG_PANIC(...)

@@ -13,37 +13,29 @@ music& music::load(const char* path)
     return this->internal_load(path);
 }
 
-music& music::play(lyo::u16 loops)
+void music::play(lyo::u16 loops)
 {
-    return this->internal_play(loops);
+    this->internal_play(loops);
 }
 
-music& music::play(infinite_loop_tag)
+void music::play(infinite_loop_tag)
 {
-    return this->internal_play(-1);
+    this->internal_play(-1);
 }
 
-music& music::fade_in(lyo::f64 time, lyo::u16 loops)
+void music::fade_in(lyo::f64 time, lyo::u16 loops)
 {
-    return this->internal_fade(time, loops);
+    this->internal_fade(time, loops);
 }
 
-music& music::fade_in(lyo::f64 time, infinite_loop_tag)
+void music::fade_in(lyo::f64 time, infinite_loop_tag)
 {
-    return this->internal_fade(time, -1);
+    this->internal_fade(time, -1);
 }
 
 void music::fade_out(lyo::f64 time)
 {
-    // There is apparently no fail state here. It only returns
-    // a non-zero value if it's already fading, but that's allowed.
-    ::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0));
-}
-
-void music::sync()
-{
-    while (!this->playing())
-        ;
+    HAL_DEBUG_ASSERT_VITAL(::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0)) != 0, ::SDL_GetError());
 }
 
 music& music::pause()
@@ -118,14 +110,12 @@ music& music::internal_load(const char* path)
     return *this;
 }
 
-music& music::internal_play(int loops)
+void music::internal_play(int loops)
 {
     HAL_DEBUG_ASSERT_VITAL(::Mix_PlayMusic(this->ptr(), loops) == 0, ::Mix_GetError());
-    return *this;
 }
 
-music& music::internal_fade(lyo::f64 time, int loops)
+void music::internal_fade(lyo::f64 time, int loops)
 {
     HAL_DEBUG_ASSERT_VITAL(::Mix_FadeInMusic(this->ptr(), loops, lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
-    return *this;
 }

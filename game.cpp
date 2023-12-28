@@ -37,7 +37,7 @@ void game::intro()
     lyo::precise_timer middle_timer { lyo::no_init };
 
     if (!app.args.has("-xbgm"))
-        app.mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in).sync();
+        app.mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in);
 
     for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
@@ -122,16 +122,14 @@ void game::start()
     hal::texture::draw  dw { tex };
 
     void(dw.to(hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size())));
+    bool held { false };
 
-    const hal::SDL::FPoint sz { -dw.dest().size };
-
-    const bool should_draw_lines { !app.args.has("-xd") };
-    bool       held { false };
+    HAL_DEBUG(const hal::SDL::FPoint sz { -dw.dest().size };)
 
     constexpr hal::SDL::coord_type mod { 400.0 };
 
     if (!app.args.has("-xbgm"))
-        app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop).sync();
+        app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop);
 
     lyo::precise_timer tmr;
 
@@ -168,11 +166,7 @@ void game::start()
             held = false;
         }
 
-        if (should_draw_lines)
-            app.window.renderer.draw_line(hal::anchor::resolve(hal::anchor::center, dw.dest().pos, sz), inp.mouse(), hal::color::cyan);
-
-        if (std::fmod(tmr(), 5.0) <= 1.0)
-            app.window.renderer.fill_target(hal::color::weezer_blue);
+        HAL_DEBUG(app.window.renderer.draw_line(hal::anchor::resolve(hal::anchor::center, dw.dest().pos, sz), inp.mouse(), hal::color::cyan);)
 
         dw();
         HAL_DEBUG_DRAW(app.window, fnt);

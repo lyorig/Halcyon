@@ -19,18 +19,13 @@ namespace hal
 
         music& load(const char* path);
 
-        music& play(lyo::u16 loops = 0);
-        music& play(infinite_loop_tag);
+        void play(lyo::u16 loops = 0);
+        void play(infinite_loop_tag);
 
-        music& fade_in(lyo::f64 time, lyo::u16 loops = 0);
-        music& fade_in(lyo::f64 time, infinite_loop_tag);
+        void fade_in(lyo::f64 time, lyo::u16 loops = 0);
+        void fade_in(lyo::f64 time, infinite_loop_tag);
 
         void fade_out(lyo::f64 time);
-
-        // As everything audio-related happens in a separate thread,
-        // music can sometimes begin unsynced. This function aims to
-        // mitigate that by spinning until the track has been started.
-        void sync();
 
         music& pause();
         music& resume();
@@ -48,7 +43,7 @@ namespace hal
 
     private:
         music& internal_load(const char* path);
-        music& internal_play(int loops);
-        music& internal_fade(lyo::f64 time, int loops);
+        void   internal_play(int loops);
+        void   internal_fade(lyo::f64 time, int loops);
     };
 } // namespace hal

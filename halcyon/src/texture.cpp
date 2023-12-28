@@ -42,7 +42,8 @@ void texture::set_color_mod(color clr)
 
 void texture::set_as_target()
 {
-    DEBUG(if (this->get_access() == SDL_TEXTUREACCESS_STATIC) HAL_DEBUG_PRINT(hal::debug::warning, "Setting static texture as target"););
+    HAL_DEBUG(if (this->get_access() == SDL_TEXTUREACCESS_STATIC) { HAL_DEBUG_PRINT(hal::debug::warning, "Setting static texture as target"); });
+
     m_window.renderer.set_target(*this);
 }
 
