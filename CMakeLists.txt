@@ -22,9 +22,29 @@ project(Halcyon VERSION 0.1 LANGUAGES CXX)
 
 find_package(SDL2 REQUIRED)
 
-add_executable(Halcyon main.cpp game.cpp app.cpp halcyon/engine.cpp halcyon/window.cpp halcyon/image_loader.cpp halcyon/ttf_engine.cpp halcyon/mixer.cpp halcyon/input_handler.cpp halcyon/debug.cpp halcyon/texture.cpp halcyon/spritesheet.cpp halcyon/components/music.cpp halcyon/components/chunk.cpp halcyon/components/surface.cpp halcyon/components/font.cpp halcyon/components/renderer.cpp halcyon/internal/subsystem.cpp)
+add_executable(Halcyon)
 
 set_property(TARGET Halcyon PROPERTY CXX_STANDARD 23)
+
+target_sources(Halcyon PRIVATE
+main.cpp
+game.cpp
+app.cpp
+halcyon/src/debug.cpp
+halcyon/src/engine.cpp
+halcyon/src/image_loader.cpp
+halcyon/src/input_handler.cpp
+halcyon/src/mixer.cpp
+halcyon/src/spritesheet.cpp
+halcyon/src/subsystem.cpp
+halcyon/src/texture.cpp
+halcyon/src/ttf_engine.cpp
+halcyon/src/window.cpp
+halcyon/src/components/chunk.cpp
+halcyon/src/components/font.cpp
+halcyon/src/components/music.cpp
+halcyon/src/components/renderer.cpp
+halcyon/src/components/surface.cpp)
 
 target_include_directories(Halcyon PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(Halcyon SDL2 SDL2_image SDL2_ttf SDL2_mixer)

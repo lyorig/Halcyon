@@ -1,4 +1,4 @@
-#include "subsystem.hpp"
+#include <halcyon/internal/subsystem.hpp>
 
 using namespace hal;
 

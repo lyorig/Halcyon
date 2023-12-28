@@ -1,4 +1,4 @@
-#include "texture.hpp"
+#include <halcyon/texture.hpp>
 
 #include <halcyon/debug.hpp>
 #include <halcyon/window.hpp>

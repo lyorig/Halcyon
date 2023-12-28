@@ -1,4 +1,4 @@
-#include "chunk.hpp"
+#include <halcyon/components/chunk.hpp>
 
 #include <halcyon/debug.hpp>
 

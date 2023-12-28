@@ -1,4 +1,4 @@
-#include "image_loader.hpp"
+#include <halcyon/image_loader.hpp>
 
 #include <halcyon/components/surface.hpp>
 #include <halcyon/internal/helpers.hpp>

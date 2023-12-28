@@ -1,4 +1,4 @@
-#include "spritesheet.hpp"
+#include <halcyon/spritesheet.hpp>
 
 #include <halcyon/texture.hpp>
 

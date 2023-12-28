@@ -1,4 +1,4 @@
-#include "renderer.hpp"
+#include <halcyon/components/renderer.hpp>
 
 #include <halcyon/window.hpp>
 

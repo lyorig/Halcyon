@@ -1,4 +1,4 @@
-#include "font.hpp"
+#include <halcyon/components/font.hpp>
 
 #include <halcyon/components/surface.hpp>
 

@@ -1,4 +1,4 @@
-#include "window.hpp"
+#include <halcyon/window.hpp>
 
 #include <halcyon/internal/helpers.hpp>
 

@@ -1,4 +1,5 @@
-#include "music.hpp"
+#include <halcyon/components/music.hpp>
+
 #include <lyo/cast.hpp>
 
 using namespace hal;
