@@ -10,25 +10,11 @@
 // subsystem.hpp:
 // A RAII way of initializing SDL subsystems.
 
-#define HAL_SUBSYSTEM_BASE(sys)                  \
-    enum : std::underlying_type_t<decltype(sys)> \
-    {                                            \
-        system = std::to_underlying(sys)         \
-    };                                           \
-    subsystem(const engine& eng)                 \
-    {                                            \
-        ::SDL_InitSubSystem(Uint32(sys));        \
-    }                                            \
-    ~subsystem()                                 \
-    {                                            \
-        ::SDL_QuitSubSystem(Uint32(sys));        \
-    }
-
 namespace hal
 {
     class engine;
 
-    enum class subsys : lyo::u16
+    enum class system : lyo::u16
     {
         video = SDL_INIT_VIDEO,
         audio = SDL_INIT_AUDIO,
@@ -38,60 +24,60 @@ namespace hal
         all = SDL_INIT_EVERYTHING
     };
 
-    // Primary template.
-    template <subsys System>
+    // A base for SDL subsystem proxies.
+    // Meant for internal use. Do not use directly,
+    // instead use the derived classes provided below.
+    template <system Sys>
     class subsystem
     {
     public:
-        HAL_SUBSYSTEM_BASE(System);
-    };
-
-    struct display_info
-    {
-        using index = lyo::u8;
-        using hz_type = lyo::u16;
-
-        display_info(const SDL_DisplayMode& mode, lyo::pass_key<subsystem<subsys::video>>)
-            : size { pixel_type(mode.w), pixel_type(mode.h) }
-            , hz { hz_type(mode.refresh_rate) }
+        enum : std::underlying_type_t<decltype(Sys)>
         {
+            system = std::to_underlying(Sys)
+        };
+
+        subsystem(const engine& eng)
+        {
+            HAL_DEBUG_ASSERT_VITAL(::SDL_InitSubSystem(Uint32(Sys)) == 0, ::SDL_GetError());
         }
 
-        const pixel_size size;
-        const hz_type    hz;
+        ~subsystem()
+        {
+            ::SDL_QuitSubSystem(Uint32(Sys));
+        }
     };
 
     // Specializations.
-    template <>
-    class subsystem<subsys::video>
+    class video : subsystem<system::video>
     {
     public:
-        HAL_SUBSYSTEM_BASE(subsys::video);
+        using subsystem::subsystem;
 
-        display_info::index num_displays() const
+        struct display
         {
-            const auto ret = ::SDL_GetNumVideoDisplays();
+            using index = lyo::u8;
+            using hz_type = lyo::u16;
 
-            HAL_DEBUG_ASSERT(ret != -1, ::SDL_GetError());
+            display(const SDL_DisplayMode& mode, lyo::pass_key<video>)
+                : size { pixel_type(mode.w), pixel_type(mode.h) }
+                , hz { hz_type(mode.refresh_rate) }
+            {
+            }
 
-            return ret;
-        }
+            const pixel_size size;
+            const hz_type    hz;
+        };
 
-        display_info display(display_info::index idx) const
-        {
-            return { this->display_mode(idx), {} };
-        }
+        display::index num_displays() const;
+
+        display display(display::index idx) const;
 
     private:
-        SDL_DisplayMode display_mode(display_info::index idx) const
-        {
-            HAL_DEBUG_ASSERT(idx < this->num_displays(), "Display index out of range");
-
-            SDL_DisplayMode mode;
-
-            HAL_DEBUG_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(idx, &mode) == 0, ::SDL_GetError());
-
-            return mode;
-        }
+        SDL_DisplayMode display_mode(display::index idx) const;
     };
-} // namespace hal
+
+    class audio : subsystem<system::audio>
+    {
+        using subsystem::subsystem;
+    };
+}

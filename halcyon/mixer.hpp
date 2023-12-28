@@ -15,7 +15,7 @@ namespace hal
     class mixer
     {
     public:
-        using system = subsystem<subsys::audio>;
+        using system = audio;
 
         mixer(const system& audio);
         mixer(const system& audio, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);

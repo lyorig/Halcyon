@@ -32,13 +32,13 @@ pixel_size window::size() const
     return renderer.output_size();
 }
 
-display_info::index window::display_index() const
+video::display::index window::display_index() const
 {
     const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
 
     HAL_DEBUG_ASSERT(ret >= 0, ::SDL_GetError());
 
-    return display_info::index(ret);
+    return ret;
 }
 
 const char* window::title() const

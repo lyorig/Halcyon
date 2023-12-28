@@ -32,7 +32,7 @@ namespace hal
 
         hal::renderer renderer;
 
-        using system = subsystem<subsys::video>;
+        using system = video;
 
         window(const system& video, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
         window(const system& video, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
@@ -43,7 +43,7 @@ namespace hal
 
         pixel_size size() const;
 
-        display_info::index display_index() const;
+        video::display::index display_index() const;
 
         const char* title() const;
 
