@@ -52,18 +52,18 @@ namespace hal
     class display : SDL_DisplayMode
     {
     public:
-        using index_type = lyo::u8;
+        using index = lyo::u8;
         using hz_type = lyo::u16;
 
-        display(index_type idx, lyo::pass_key<video>);
+        display(index idx, lyo::pass_key<video>);
 
-        index_type  index() const;
+        index       idx() const;
         pixel_size  size() const;
         const char* name() const;
         hz_type     hz() const;
 
     private:
-        const index_type m_index;
+        const index m_index;
     };
 
     class video : subsystem<system::video>
@@ -71,9 +71,9 @@ namespace hal
     public:
         using subsystem::subsystem;
 
-        display::index_type num_displays() const;
+        display::index num_displays() const;
 
-        display display_at(display::index_type idx) const;
+        display display_at(display::index idx) const;
     };
 
     class audio : subsystem<system::audio>

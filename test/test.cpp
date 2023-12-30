@@ -64,9 +64,8 @@ int main(int argc, char* argv[])
 
     const lyo::f64 texture_result { tmr() };
 
-    std::cout << "Surface drawing took " << surface_result << "s.\n";
-    std::cout << "Texture drawing took " << texture_result << "s.\n";
-    std::cout << "Texture drawing is " << surface_result / texture_result << "x faster at " << iter << " iterations.\n";
+    std::cout << "Surface drawing took " << surface_result << "s\n";
+    std::cout << "Texture drawing took " << texture_result << "s => " << surface_result / texture_result << "x faster at " << iter << " iterations.\n";
 
     return EXIT_SUCCESS;
 }

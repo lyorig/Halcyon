@@ -4,15 +4,15 @@
 
 using namespace hal;
 
-window::window(const system& video, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags)
+window::window(const video& sys, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags)
     : sdl_object { ::SDL_CreateWindow(title, pos.x, pos.y, size.x, size.y, il2bm<Uint32>(w_flags)) }
     , renderer { *this, il2bm<Uint32>(r_flags), {} }
 {
     HAL_DEBUG_PRINT(debug::init, "Initialized window ", title, ", size ", this->size(), " at ", video.display_at(this->display_index()));
 }
 
-window::window(const system& video, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags)
-    : window { video, title, {}, video.display_at(0).size(), { fullscreen }, r_flags }
+window::window(const video& sys, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags)
+    : window { sys, title, {}, sys.display_at(0).size(), { fullscreen }, r_flags }
 {
 }
 
@@ -32,7 +32,7 @@ pixel_size window::size() const
     return renderer.output_size();
 }
 
-display::index_type window::display_index() const
+display::index window::display_index() const
 {
     const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
 

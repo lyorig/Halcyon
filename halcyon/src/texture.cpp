@@ -75,12 +75,6 @@ pixel_size texture::vh(lyo::f64 percent) const
     return { pixel_type(sz.x * scale), height };
 }
 
-texture& texture::operator=(const surface& image)
-{
-    sdl_object::operator=(::SDL_CreateTextureFromSurface(m_window.renderer.ptr(), image.ptr()));
-    return *this;
-}
-
 pixel_size texture::internal_size() const
 {
     int w, h;
@@ -103,6 +97,12 @@ static_texture::static_texture(class window& wnd)
 static_texture::static_texture(class window& wnd, const surface& image)
     : texture { wnd, image }
 {
+}
+
+static_texture& static_texture::operator=(const surface& image)
+{
+    sdl_object::operator=(::SDL_CreateTextureFromSurface(m_window.renderer.ptr(), image.ptr()));
+    return *this;
 }
 
 target_texture::target_texture(class window& wnd)

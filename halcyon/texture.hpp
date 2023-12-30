@@ -56,21 +56,23 @@ namespace hal
         pixel_size vw(lyo::f64 percent) const;
         pixel_size vh(lyo::f64 percent) const;
 
-        texture& operator=(const surface& image);
-
-    private:
+    protected:
         class window& m_window;
 
+    private:
         pixel_size internal_size() const;
 
         void query(Uint32* format, int* access, int* w, int* h) const;
     };
 
+    // A texture that isn't drawn onto. It can change, but
     class static_texture : public texture
     {
     public:
         static_texture(class window& wnd);
         static_texture(class window& wnd, const surface& image);
+
+        static_texture& operator=(const surface& image);
     };
 
     class target_texture : public texture

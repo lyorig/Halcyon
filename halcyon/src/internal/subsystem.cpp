@@ -2,13 +2,13 @@
 
 using namespace hal;
 
-display::display(display::index_type idx, lyo::pass_key<video>)
+display::display(display::index idx, lyo::pass_key<video>)
     : m_index { idx }
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(idx, static_cast<SDL_DisplayMode*>(this)) == 0, ::SDL_GetError());
 }
 
-display::index_type display::index() const
+display::index display::idx() const
 {
     return m_index;
 }
@@ -25,14 +25,14 @@ display::hz_type display::hz() const
 
 const char* display::name() const
 {
-    const char* name { ::SDL_GetDisplayName(this->index()) };
+    const char* name { ::SDL_GetDisplayName(this->idx()) };
 
     HAL_DEBUG_ASSERT(name != nullptr, ::SDL_GetError());
 
     return name;
 }
 
-display::index_type video::num_displays() const
+display::index video::num_displays() const
 {
     const auto ret = ::SDL_GetNumVideoDisplays();
 
@@ -41,7 +41,7 @@ display::index_type video::num_displays() const
     return ret;
 }
 
-display video::display_at(display::index_type idx) const
+display video::display_at(display::index idx) const
 {
     return { idx, {} };
 }

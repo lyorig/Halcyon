@@ -15,10 +15,8 @@ namespace hal
     class mixer
     {
     public:
-        using system = audio;
-
-        mixer(const system& audio);
-        mixer(const system& audio, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
+        mixer(const audio& sys);
+        mixer(const audio& sys, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
 
         chunk load_sfx(const char* path) &;
 
