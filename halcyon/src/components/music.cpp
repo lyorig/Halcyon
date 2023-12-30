@@ -5,6 +5,7 @@
 using namespace hal;
 
 music::music(lyo::pass_key<mixer>)
+    : sdl_object { nullptr }
 {
 }
 

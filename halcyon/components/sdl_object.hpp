@@ -10,7 +10,8 @@ namespace hal
     class sdl_object
     {
     public:
-        sdl_object() = default;
+        // A "default constructor" that doesn't check for null.
+        sdl_object(std::nullptr_t) { }
 
         sdl_object(Type* object)
             : m_object { object }

@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_render.h>
 
+#include <halcyon/internal/drawer.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
@@ -11,7 +12,57 @@
 namespace hal
 {
     class window;
+    class texture;
+    class renderer;
     class target_texture;
+
+    class draw final : public drawer<texture, SDL::coord_type, draw>
+    {
+    public:
+        using drawer::drawer;
+        // Set the texture's rotation.
+        // Can be called at any time.
+        [[nodiscard]] draw& rotate(lyo::f64 angle);
+
+        // Set the texture's flip.
+        // Can be called at any time.
+        [[nodiscard]] draw& flip(enum flip f);
+
+        void operator()(window& wnd) const;
+
+    private:
+        lyo::f64 m_angle { 0.0 };
+
+        enum flip m_flip
+        {
+            flip::none
+        };
+    };
+
+    class draw_hijack
+    {
+    public:
+        draw_hijack(window& rnd, color new_clr);
+        draw_hijack(renderer& rnd, color new_clr);
+
+        ~draw_hijack();
+
+    private:
+        renderer&   m_rnd;
+        const color m_old;
+    };
+
+    class target_hijack
+    {
+    public:
+        target_hijack(window& wnd, target_texture& tgt);
+        target_hijack(renderer& rnd, target_texture& tgt);
+
+        ~target_hijack();
+
+    private:
+        renderer& m_rnd;
+    };
 
     class renderer : public sdl_object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
@@ -22,26 +73,6 @@ namespace hal
             software = SDL_RENDERER_SOFTWARE,
             accelerated = SDL_RENDERER_ACCELERATED,
             vsync = SDL_RENDERER_PRESENTVSYNC
-        };
-
-        class draw_hijack
-        {
-        public:
-            draw_hijack(renderer& rnd, color new_clr)
-                : m_rnd { rnd }
-                , m_old { rnd.get_color() }
-            {
-                rnd.set_color(new_clr);
-            }
-
-            ~draw_hijack()
-            {
-                m_rnd.set_color(m_old);
-            }
-
-        private:
-            renderer&   m_rnd;
-            const color m_old;
         };
 
         // Might as well leave the pure bitmask parameter here.

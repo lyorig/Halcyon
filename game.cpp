@@ -69,7 +69,7 @@ void game::intro()
         {
             tx.set_opacity(lyo::cast<hal::color::value>(alpha.update(app.delta())));
 
-            dw();
+            dw(app.window);
             HAL_DEBUG_DRAW(app.window, fnt);
 
             if (app.input.pressed(hal::button::esc))
@@ -170,7 +170,7 @@ void game::start()
             held = false;
         }
 
-        dw();
+        dw(app.window);
 
         HAL_DEBUG_DRAW(app.window, fnt);
     }

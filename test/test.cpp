@@ -31,16 +31,13 @@ void surface_drawing(holder& hld)
 void texture_drawing(holder& hld)
 {
     hal::target_texture tex { hld.wnd, { 1024, 768 } };
-
-    hld.wnd.renderer.set_target(tex);
+    hal::target_hijack  th { hld.wnd, tex };
 
     for (int i = 0; i < draw_iters; ++i)
     {
         const hal::static_texture dt { hld.wnd, hld.fnt.render(string) };
-        hal::draw { dt }();
+        hal::draw { dt }(hld.wnd);
     }
-
-    hld.wnd.set_as_target();
 }
 
 int main(int argc, char* argv[])

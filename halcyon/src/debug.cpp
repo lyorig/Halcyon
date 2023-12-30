@@ -50,10 +50,9 @@ void debug::draw(window& wnd, const font& fnt)
             const lyo::f64   scale { wnd.size().y * vhm / y_size };
             const pixel_type y_scaled = std::round(y_size * scale);
 
-            tx.resize(csz * scale);
+            tx.resize(wnd, csz * scale);
 
-            wnd.renderer.set_target(tx);
-            wnd.renderer.fill_target({ 0x000000, 0 });
+            target_hijack th { wnd, tx };
 
             // Compose the texture.
             for (count_type i { 0 }; i < m_entries; ++i)
@@ -65,17 +64,15 @@ void debug::draw(window& wnd, const font& fnt)
                     const hal::static_texture text { wnd, fnt.render(entry.first, entry.second) };
                     const pixel_pos           pos { 0, pixel_type(i * y_scaled) };
 
-                    hal::draw(text).to(pos).scale(scale)();
+                    hal::draw(text).to(pos).scale(scale)(wnd);
                 }
             }
-
-            wnd.renderer.reset_target();
         }
 
         m_repaint = false;
     }
 
-    hal::draw(tx).to(offset)();
+    hal::draw(tx).to(offset)(wnd);
 }
 
 void debug::panic(const char* why, const char* where,
