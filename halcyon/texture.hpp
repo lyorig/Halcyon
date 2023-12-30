@@ -59,6 +59,9 @@ namespace hal
     protected:
         class window& m_window;
 
+        // Multiple things can fail here, so it's better to have it as a separate function.
+        static SDL_Texture* create_with_size(class window& wnd, const pixel_size& sz, SDL_TextureAccess access);
+
     private:
         pixel_size internal_size() const;
 
@@ -72,7 +75,7 @@ namespace hal
         static_texture(class window& wnd);
         static_texture(class window& wnd, const surface& image);
 
-        static_texture& operator=(const surface& image);
+        static_texture& operator=(const surface& surf);
     };
 
     class target_texture : public texture
@@ -80,5 +83,7 @@ namespace hal
     public:
         target_texture(class window& wnd);
         target_texture(class window& wnd, const pixel_size& size);
+
+        void resize(const pixel_size& sz);
     };
 } // namespace hal

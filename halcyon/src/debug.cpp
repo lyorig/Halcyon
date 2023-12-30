@@ -29,7 +29,7 @@ void debug::draw(window& wnd, const font& fnt)
     // I am not 100% sure whether it's safe to create a static
     // SDL object, as the destructor will run after de-initialization.
     // However, it doesn't crash, it's fast, and it's debug, so who cares.
-    static texture tx { wnd };
+    static target_texture tx { wnd };
 
     if (m_repaint)
     {
@@ -45,12 +45,15 @@ void debug::draw(window& wnd, const font& fnt)
                 csz.x = x_size;
         }
 
-        if (csz.x != 0)
+        if (csz.x != 0) [[likely]]
         {
             const lyo::f64   scale { wnd.size().y * vhm / y_size };
             const pixel_type y_scaled = std::round(y_size * scale);
 
-            surface canvas { wnd, csz * scale };
+            tx.resize(csz * scale);
+
+            wnd.renderer.set_target(tx);
+            wnd.renderer.fill_target({ 0x000000, 0 });
 
             // Compose the texture.
             for (count_type i { 0 }; i < m_entries; ++i)
@@ -59,14 +62,14 @@ void debug::draw(window& wnd, const font& fnt)
 
                 if (!entry.first.empty()) [[likely]]
                 {
-                    const surface   text { fnt.render(entry.first, entry.second) };
-                    const pixel_pos pos { 0, pixel_type(i * y_scaled) };
+                    const hal::static_texture text { wnd, fnt.render(entry.first, entry.second) };
+                    const pixel_pos           pos { 0, pixel_type(i * y_scaled) };
 
-                    hal::blit(text).to(pos).scale(scale)(canvas);
+                    hal::draw(text).to(pos).scale(scale)();
                 }
             }
 
-            tx = canvas;
+            wnd.renderer.reset_target();
         }
 
         m_repaint = false;
