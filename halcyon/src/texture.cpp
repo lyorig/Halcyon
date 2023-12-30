@@ -10,7 +10,7 @@ texture::texture(class window& wnd)
 {
 }
 
-texture::texture(class window& wnd, const pixel_size& size)
+texture::texture(class window& wnd, const pixel_size& size, SDL_TextureAccess access)
     : sdl_object { ::SDL_CreateTexture(wnd.renderer.ptr(),
         ::SDL_GetWindowPixelFormat(wnd.ptr()),
         SDL_TEXTUREACCESS_STATIC, size.x, size.y) }
@@ -18,7 +18,7 @@ texture::texture(class window& wnd, const pixel_size& size)
 {
 }
 
-texture::texture(class window& wnd, const surface& image)
+texture::texture(class window& wnd, const surface& image, SDL_TextureAccess access)
     : sdl_object { ::SDL_CreateTextureFromSurface(wnd.renderer.ptr(),
         image.ptr()) }
     , m_window { wnd }
@@ -38,13 +38,6 @@ void texture::set_opacity(color::value value)
 void texture::set_color_mod(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, ::SDL_GetError());
-}
-
-void texture::set_as_target()
-{
-    HAL_DEBUG(if (this->get_access() == SDL_TEXTUREACCESS_STATIC) { HAL_DEBUG_PRINT(hal::debug::warning, "Setting static texture as target"); });
-
-    m_window.renderer.set_target(*this);
 }
 
 lyo::u8 texture::opacity() const
@@ -97,35 +90,44 @@ pixel_size texture::internal_size() const
     return { pixel_type(w), pixel_type(h) };
 }
 
-SDL_TextureAccess texture::get_access() const
-{
-    int access;
-
-    this->query(nullptr, &access, nullptr, nullptr);
-
-    return SDL_TextureAccess(access);
-}
-
 void texture::query(Uint32* format, int* access, int* w, int* h) const
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, ::SDL_GetError());
 }
 
-using d = texture::draw;
+static_texture::static_texture(class window& wnd)
+    : texture { wnd }
+{
+}
 
-d& d::rotate(lyo::f64 angle)
+static_texture::static_texture(class window& wnd, const surface& image)
+    : texture { wnd, image, SDL_TEXTUREACCESS_STATIC }
+{
+}
+
+target_texture::target_texture(class window& wnd)
+    : texture { wnd }
+{
+}
+
+target_texture::target_texture(class window& wnd, const pixel_size& sz)
+    : texture { wnd, sz, SDL_TEXTUREACCESS_TARGET }
+{
+}
+
+draw& draw::rotate(lyo::f64 angle)
 {
     m_angle = angle;
     return *this;
 }
 
-d& d::flip(enum flip f)
+draw& draw::flip(enum flip f)
 {
     m_flip = f;
     return *this;
 }
 
-void d::operator()() const
+void draw::operator()() const
 {
     if (m_this.ptr() != nullptr)
         HAL_DEBUG_ASSERT_VITAL(::SDL_RenderCopyExF(m_this.window().renderer.ptr(), m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip))

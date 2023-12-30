@@ -62,7 +62,7 @@ void debug::draw(window& wnd, const font& fnt)
                     const surface   text { fnt.render(entry.first, entry.second) };
                     const pixel_pos pos { 0, pixel_type(i * y_scaled) };
 
-                    hal::surface::draw(text).to(pos).scale(scale)(canvas);
+                    hal::blit(text).to(pos).scale(scale)(canvas);
                 }
             }
 
@@ -72,7 +72,7 @@ void debug::draw(window& wnd, const font& fnt)
         m_repaint = false;
     }
 
-    hal::texture::draw(tx).to(offset)();
+    hal::draw(tx).to(offset)();
 }
 
 void debug::panic(const char* why, const char* where,

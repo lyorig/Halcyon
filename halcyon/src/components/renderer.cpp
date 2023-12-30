@@ -50,7 +50,7 @@ pixel_size renderer::output_size() const
     return pixel_size(size);
 }
 
-void renderer::set_target(texture& tx)
+void renderer::set_target(target_texture& tx)
 {
     this->internal_set_target(tx.ptr());
 }

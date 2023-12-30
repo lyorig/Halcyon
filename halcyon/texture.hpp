@@ -11,22 +11,46 @@
 namespace hal
 {
     class window;
+    class texture;
+
+    class draw final : public drawer<texture, SDL::coord_type, draw>
+    {
+    public:
+        using drawer::drawer;
+
+        // Set the texture's rotation.
+        // Can be called at any time.
+        [[nodiscard]] draw& rotate(lyo::f64 angle);
+
+        // Set the texture's flip.
+        // Can be called at any time.
+        [[nodiscard]] draw& flip(enum flip f);
+
+        void operator()() const;
+
+    private:
+        lyo::f64 m_angle { 0.0 };
+
+        enum flip m_flip
+        {
+            flip::none
+        };
+    };
 
     class texture : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
     {
     public:
         texture(window& wnd);
-        texture(window& wnd, const pixel_size& size);
-        texture(window& wnd, const surface& image);
+        texture(window& wnd, const pixel_size& size, SDL_TextureAccess access);
+        texture(window& wnd, const surface& image, SDL_TextureAccess access);
 
-        pixel_size size() const;
-        lyo::u8    opacity() const;
+        pixel_size   size() const;
+        color::value opacity() const;
 
         const window& window() const;
 
         void set_opacity(color::value value);
         void set_color_mod(hal::color mod);
-        void set_as_target();
 
         // View-width and view-height helpers.
         pixel_size vw(lyo::f64 percent) const;
@@ -34,36 +58,25 @@ namespace hal
 
         texture& operator=(const surface& image);
 
-        class draw final : public drawer<texture, SDL::coord_type, draw>
-        {
-        public:
-            using drawer::drawer;
-            // Set the texture's rotation.
-            // Can be called at any time.
-            [[nodiscard]] draw& rotate(lyo::f64 angle);
-
-            // Set the texture's flip.
-            // Can be called at any time.
-            [[nodiscard]] draw& flip(enum flip f);
-
-            void operator()() const;
-
-        private:
-            lyo::f64 m_angle { 0.0 };
-
-            enum flip m_flip
-            {
-                flip::none
-            };
-        };
-
     private:
         class window& m_window;
 
         pixel_size internal_size() const;
 
-        SDL_TextureAccess get_access() const;
-
         void query(Uint32* format, int* access, int* w, int* h) const;
+    };
+
+    class static_texture : public texture
+    {
+    public:
+        static_texture(class window& wnd);
+        static_texture(class window& wnd, const surface& image);
+    };
+
+    class target_texture : public texture
+    {
+    public:
+        target_texture(class window& wnd);
+        target_texture(class window& wnd, const pixel_size& size);
     };
 } // namespace hal

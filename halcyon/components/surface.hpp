@@ -20,6 +20,14 @@ namespace hal
     class image_loader;
     class window;
     class font;
+    class surface;
+
+    class blit : public drawer<surface, SDL::pixel_type, blit>
+    {
+    public:
+        using drawer::drawer;
+        void operator()(const surface& dst);
+    };
 
     class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface>
     {
@@ -43,13 +51,6 @@ namespace hal
         // This functionality is exclusive to surfaces, as textures
         // are extremely slow to retrieve pixel information.
         color operator[](pixel_pos coord) const;
-
-        class draw : public drawer<surface, SDL::pixel_type, draw>
-        {
-        public:
-            using drawer::drawer;
-            void operator()(const surface& dst);
-        };
 
     private:
         friend class image_loader;

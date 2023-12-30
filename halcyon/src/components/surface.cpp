@@ -23,7 +23,7 @@ surface surface::resize(pixel_size sz) const
 
     this->set_blend(SDL_BLENDMODE_NONE);
 
-    draw { *this }.to(hal::fill)(ret);
+    blit { *this }.to(hal::fill)(ret);
 
     this->set_blend(SDL_BLENDMODE_BLEND);
 
@@ -90,7 +90,7 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
     }
 }
 
-void surface::draw::operator()(const surface& dst)
+void blit::operator()(const surface& dst)
 {
     if (m_this.ptr() != nullptr)
         HAL_DEBUG_ASSERT_VITAL(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());

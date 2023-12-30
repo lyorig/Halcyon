@@ -18,18 +18,20 @@ endif()
 # add_compile_options(-fsanitize=address)
 # add_link_options(-fsanitize=address)
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+link_libraries(SDL2 SDL2_image SDL2_ttf SDL2_mixer)
+
 project(Halcyon VERSION 0.1 LANGUAGES CXX)
 
 find_package(SDL2 REQUIRED)
 
 add_executable(Halcyon)
+add_executable(Haltest)
 
 set_property(TARGET Halcyon PROPERTY CXX_STANDARD 23)
+set_property(TARGET Haltest PROPERTY CXX_STANDARD 23)
 
-target_sources(Halcyon PRIVATE
-main.cpp
-game.cpp
-app.cpp
+list(APPEND Halcyon_sources
 halcyon/src/debug.cpp
 halcyon/src/engine.cpp
 halcyon/src/image_loader.cpp
@@ -47,5 +49,12 @@ halcyon/src/components/surface.cpp
 halcyon/src/internal/subsystem.cpp
 halcyon/src/internal/printing.cpp)
 
-target_include_directories(Halcyon PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(Halcyon SDL2 SDL2_image SDL2_ttf SDL2_mixer)
+target_sources(Halcyon PRIVATE
+main.cpp
+game.cpp
+app.cpp
+${Halcyon_sources})
+
+target_sources(Haltest PRIVATE
+test/test.cpp
+${Halcyon_sources})

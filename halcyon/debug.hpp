@@ -30,7 +30,6 @@
 
 namespace hal
 {
-    class texture;
     class window;
     class font;
 

@@ -11,7 +11,7 @@
 namespace hal
 {
     class window;
-    class texture;
+    class target_texture;
 
     class renderer : public sdl_object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
@@ -56,7 +56,7 @@ namespace hal
         void fill_rect(const SDL::FRect& area, color clr);
         void fill_target(color clr);
 
-        void set_target(texture& tx);
+        void set_target(target_texture& tx);
         void reset_target();
 
         color get_color() const;

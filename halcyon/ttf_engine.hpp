@@ -20,6 +20,6 @@ namespace hal
         // use the font as an rvalue. Do not assign it to a variable
         // or anything like that, because its usage after this class'
         // destructor runs is a one-way trip to seg-fault land.
-        font load(const char* path, lyo::u8 size);
+        font load(const char* path, lyo::u8 size) const;
     };
 } // namespace hal
