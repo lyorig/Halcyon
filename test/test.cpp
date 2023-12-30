@@ -20,7 +20,7 @@ struct holder
 
 void surface_drawing(holder& hld)
 {
-    hal::surface res { hld.wnd, { 1024, 768 } };
+    hal::surface res { hld.vid, { 1024, 768 } };
 
     for (int i = 0; i < draw_iters; ++i)
         hal::blit(hld.fnt.render(string))(res);

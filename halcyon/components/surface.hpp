@@ -18,7 +18,7 @@
 namespace hal
 {
     class image_loader;
-    class window;
+    class video;
     class font;
     class surface;
 
@@ -33,7 +33,7 @@ namespace hal
     {
     public:
         // Create a sized surface.
-        surface(const window& wnd, pixel_size sz);
+        surface(const video& sys, pixel_size sz);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
@@ -42,8 +42,6 @@ namespace hal
         // Get a scaled copy of the surface. Useful for saving
         // memory after converting to a texture.
         surface resize(lyo::f64 scale) const;
-
-        void set_blend(SDL_BlendMode bm) const;
 
         pixel_size size() const;
 
@@ -61,6 +59,8 @@ namespace hal
 
         // Special c-tor for resizing.
         surface(pixel_size sz);
+
+        void set_blend(SDL_BlendMode bm) const;
 
         Uint32 get_pixel(pixel_type x, pixel_type y) const;
     };
