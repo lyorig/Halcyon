@@ -13,12 +13,12 @@ texture::texture(class window& wnd)
 texture::texture(class window& wnd, const pixel_size& size, SDL_TextureAccess access)
     : sdl_object { ::SDL_CreateTexture(wnd.renderer.ptr(),
         ::SDL_GetWindowPixelFormat(wnd.ptr()),
-        SDL_TEXTUREACCESS_STATIC, size.x, size.y) }
+        access, size.x, size.y) }
     , m_window { wnd }
 {
 }
 
-texture::texture(class window& wnd, const surface& image, SDL_TextureAccess access)
+texture::texture(class window& wnd, const surface& image)
     : sdl_object { ::SDL_CreateTextureFromSurface(wnd.renderer.ptr(),
         image.ptr()) }
     , m_window { wnd }
@@ -101,7 +101,7 @@ static_texture::static_texture(class window& wnd)
 }
 
 static_texture::static_texture(class window& wnd, const surface& image)
-    : texture { wnd, image, SDL_TEXTUREACCESS_STATIC }
+    : texture { wnd, image }
 {
 }
 

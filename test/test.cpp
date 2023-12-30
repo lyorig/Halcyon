@@ -2,7 +2,11 @@
 #include <halcyon/texture.hpp>
 #include <halcyon/ttf_engine.hpp>
 #include <halcyon/window.hpp>
+#include <iostream>
 #include <lyo/argparse.hpp>
+
+constexpr int  draw_iters { 32 };
+constexpr char string[] { "abcdef1234" };
 
 struct holder
 {
@@ -14,28 +18,12 @@ struct holder
     const hal::font fnt { ttf.load("assets/m5x7.ttf", 144) };
 };
 
-constexpr int draw_iters { 10 };
-constexpr int random_strlen { 15 };
-
-std::string get_random_string()
-{
-    constexpr char range { 'z' - ' ' };
-
-    std::string str;
-    str.resize(random_strlen);
-
-    for (char& c : str)
-        c = (std::rand() % range) + ' ';
-
-    return str;
-}
-
 void surface_drawing(holder& hld)
 {
     hal::surface res { hld.wnd, { 1024, 768 } };
 
     for (int i = 0; i < draw_iters; ++i)
-        hal::blit(hld.fnt.render(get_random_string()))(res);
+        hal::blit(hld.fnt.render(string))(res);
 
     hal::static_texture tes { hld.wnd, res };
 }
@@ -48,7 +36,7 @@ void texture_drawing(holder& hld)
 
     for (int i = 0; i < draw_iters; ++i)
     {
-        const hal::static_texture dt { hld.wnd, hld.fnt.render(get_random_string()) };
+        const hal::static_texture dt { hld.wnd, hld.fnt.render(string) };
         hal::draw { dt }();
     }
 
@@ -58,7 +46,7 @@ void texture_drawing(holder& hld)
 int main(int argc, char* argv[])
 {
     using sz = std::size_t;
-    const auto iter = lyo::parser { argc, argv }.parse<sz>("-iter=", 1000);
+    const auto iter = lyo::parser { argc, argv }.parse<sz>("-iter=", 100);
 
     holder h;
 
@@ -67,13 +55,18 @@ int main(int argc, char* argv[])
     for (sz i { 0 }; i < iter; ++i)
         surface_drawing(h);
 
-    std::cout << "Surface drawing took " << tmr() << "seconds.\n";
+    const lyo::f64 surface_result { tmr() };
+
     tmr.reset();
 
     for (sz i { 0 }; i < iter; ++i)
         texture_drawing(h);
 
-    std::cout << "Texture drawing took " << tmr() << "seconds.\n";
+    const lyo::f64 texture_result { tmr() };
+
+    std::cout << "Surface drawing took " << surface_result << "s.\n";
+    std::cout << "Texture drawing took " << texture_result << "s.\n";
+    std::cout << "Texture drawing is " << surface_result / texture_result << "x faster at " << iter << " iterations.\n";
 
     return EXIT_SUCCESS;
 }

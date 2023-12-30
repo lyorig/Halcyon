@@ -42,7 +42,7 @@ namespace hal
     public:
         texture(window& wnd);
         texture(window& wnd, const pixel_size& size, SDL_TextureAccess access);
-        texture(window& wnd, const surface& image, SDL_TextureAccess access);
+        texture(window& wnd, const surface& image);
 
         pixel_size   size() const;
         color::value opacity() const;
