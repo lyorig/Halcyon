@@ -11,7 +11,7 @@ texture::texture(class window& wnd)
 }
 
 texture::texture(class window& wnd, const pixel_size& size, SDL_TextureAccess access)
-    : sdl_object { texture::create_with_size(wnd, size, access) }
+    : sdl_object { texture::create_texture(wnd, size, access) }
     , m_window { wnd }
 {
 }
@@ -73,7 +73,7 @@ pixel_size texture::vh(lyo::f64 percent) const
     return { pixel_type(sz.x * scale), height };
 }
 
-SDL_Texture* texture::create_with_size(class window& wnd, const pixel_size& sz, SDL_TextureAccess access)
+SDL_Texture* texture::create_texture(class window& wnd, const pixel_size& sz, SDL_TextureAccess access)
 {
     const Uint32 pixel_format { ::SDL_GetWindowPixelFormat(wnd.ptr()) };
     HAL_DEBUG_ASSERT(pixel_format != SDL_PIXELFORMAT_UNKNOWN, ::SDL_GetError());
@@ -110,7 +110,7 @@ static_texture::static_texture(class window& wnd, const surface& image)
 
 static_texture& static_texture::operator=(const surface& surf)
 {
-    sdl_object::operator=(::SDL_CreateTextureFromSurface(m_window.renderer.ptr(), surf.ptr()));
+    sdl_object::reset(::SDL_CreateTextureFromSurface(m_window.renderer.ptr(), surf.ptr()));
     return *this;
 }
 
@@ -126,7 +126,7 @@ target_texture::target_texture(class window& wnd, const pixel_size& sz)
 
 void target_texture::resize(const pixel_size& sz)
 {
-    sdl_object::operator=(texture::create_with_size(m_window, sz, SDL_TEXTUREACCESS_TARGET));
+    sdl_object::reset(texture::create_texture(m_window, sz, SDL_TEXTUREACCESS_TARGET));
 }
 
 draw& draw::rotate(lyo::f64 angle)

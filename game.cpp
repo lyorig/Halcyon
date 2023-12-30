@@ -3,6 +3,11 @@
 
 using namespace hq;
 
+constexpr lyo::f64 curve(lyo::f64 t)
+{
+    return t * (2.0 - t);
+}
+
 game::game(lyo::parser&& args)
     : app { std::move(args), "HalodaQuest" }
 {
@@ -53,7 +58,7 @@ void game::intro()
         hal::draw dw { tx };
         (void)dw.to(pos).scale(part.scale);
 
-        hal::opacity_slider alpha { 0.0 };
+        hal::opacity_slider<curve> alpha { 0.0 };
         alpha.set_mod(alpha.range() / part.fade_in);
 
         state dir { up };

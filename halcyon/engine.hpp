@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL.h>
 
-/* core.hpp:
-   The core of Halcyon, without which nothing can be initialized. */
+// engine.hpp:
+// The core of Halcyon, without which nothing can be initialized.
 
 namespace hal
 {

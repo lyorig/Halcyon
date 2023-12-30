@@ -21,7 +21,8 @@ namespace hal
     using coord = point<coord_type>;
     using coord_area = rectangle<coord_type>;
 
-    using opacity_slider = static_slider<lyo::f64, SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE>;
+    template <auto Func>
+    using opacity_slider = static_slider<lyo::f64, SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE, Func>;
 }
 
 // Paranoia.

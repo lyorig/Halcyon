@@ -33,7 +33,7 @@ namespace hal
         }
 
     protected:
-        void operator=(Type* object)
+        void reset(Type* object)
         {
             HAL_DEBUG_ASSERT_VITAL((m_object.reset(object)).get() != nullptr, ::SDL_GetError());
         }

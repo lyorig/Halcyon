@@ -1,11 +1,6 @@
 #pragma once
 
-#include <halcyon/engine.hpp>
-#include <halcyon/image_loader.hpp>
-#include <halcyon/input_handler.hpp>
-#include <halcyon/mixer.hpp>
-#include <halcyon/ttf_engine.hpp>
-#include <halcyon/window.hpp>
+#include <halcyon/halcyon.hpp>
 #include <lyo/argparse.hpp>
 
 namespace hq

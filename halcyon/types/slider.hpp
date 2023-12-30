@@ -9,7 +9,14 @@
 
 namespace hal
 {
-    template <lyo::arithmetic T>
+    constexpr lyo::f64 linear_modifier(lyo::f64 val)
+    {
+        return val;
+    };
+
+    // The functor accepts a value 0.0 - 1.0 and returns a value in the same range.
+    template <lyo::arithmetic T, auto Functor = linear_modifier>
+        requires(requires(lyo::f64 val) { static_cast<void>(Functor(val)); })
     class slider
     {
     public:
@@ -18,7 +25,7 @@ namespace hal
             , m_max { max }
             , m_value { min }
         {
-            assert(min <= max);
+            assert(min < max);
         }
 
         // Adds the modifier and returns the new value.
@@ -30,7 +37,7 @@ namespace hal
 
         constexpr T value() const
         {
-            return m_value;
+            return Functor(this->progress()) * this->range() + this->min();
         }
 
         constexpr T min() const
@@ -94,14 +101,21 @@ namespace hal
         }
 
     private:
+        // Returns 0.0 - 1.0. Used for the functor.
+        lyo::f64 progress() const
+        {
+            return (m_value - min()) / this->range();
+        }
+
         T m_min {};
         T m_max {};
         T m_value {};
         T m_mod {};
     };
 
-    template <lyo::arithmetic T, auto Min, auto Max>
-        requires(lyo::arithmetic<decltype(Min)> && lyo::arithmetic<decltype(Max)> && Min <= Max)
+    // The functor accepts a value 0.0 - 1.0 and returns a value in the same range.
+    template <lyo::arithmetic T, auto Min, auto Max, auto Functor = linear_modifier>
+        requires(lyo::arithmetic<decltype(Min)> && lyo::arithmetic<decltype(Max)> && Min < Max && requires(lyo::f64 val) { static_cast<void>(Functor(val)); })
     class static_slider
     {
     public:
@@ -124,7 +138,7 @@ namespace hal
 
         constexpr T value() const
         {
-            return m_value;
+            return Functor(this->progress()) * range() + min();
         }
 
         consteval static T min()
@@ -178,6 +192,12 @@ namespace hal
         }
 
     private:
+        // Returns 0.0 - 1.0. Used for the functor.
+        lyo::f64 progress() const
+        {
+            return (m_value - min()) / range();
+        }
+
         T m_value {};
         T m_mod {};
     };

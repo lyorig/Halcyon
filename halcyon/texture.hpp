@@ -60,7 +60,7 @@ namespace hal
         class window& m_window;
 
         // Multiple things can fail here, so it's better to have it as a separate function.
-        static SDL_Texture* create_with_size(class window& wnd, const pixel_size& sz, SDL_TextureAccess access);
+        static SDL_Texture* create_texture(class window& wnd, const pixel_size& sz, SDL_TextureAccess access);
 
     private:
         pixel_size internal_size() const;
