@@ -13,6 +13,7 @@ endif()
 
 if (CMAKE_BUILD_TYPE MATCHES Release AND NOT MSVC)
   add_compile_options(-flto)
+  add_link_options(-flto)
 endif()
 
 # add_compile_options(-fsanitize=address)
