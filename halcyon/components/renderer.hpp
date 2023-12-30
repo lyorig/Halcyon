@@ -12,11 +12,11 @@
 namespace hal
 {
     class window;
-    class texture;
+    class texture_base;
     class renderer;
     class target_texture;
 
-    class draw final : public drawer<texture, SDL::coord_type, draw>
+    class draw final : public drawer<texture_base, SDL::coord_type, draw>
     {
     public:
         using drawer::drawer;

@@ -4,7 +4,7 @@
 
 using namespace hal;
 
-spritesheet::spritesheet(const texture& tx, const pixel_size& frame_size)
+spritesheet::spritesheet(const texture_base& tx, const pixel_size& frame_size)
     : m_size { static_cast<frame_type>(tx.size().x / frame_size.x), static_cast<frame_type>(tx.size().y / frame_size.y) }
     , m_frames { static_cast<std::size_t>(m_size.x * m_size.y) }
 {

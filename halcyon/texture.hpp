@@ -9,7 +9,7 @@ namespace hal
 {
     class window;
 
-    class texture : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
+    class texture_base : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
     {
     public:
         pixel_size   size() const;
@@ -19,8 +19,8 @@ namespace hal
         void set_color_mod(hal::color mod);
 
     protected:
-        texture() = default;
-        texture(SDL_Texture* ptr);
+        texture_base() = default;
+        texture_base(SDL_Texture* ptr);
 
     private:
         pixel_size internal_size() const;
@@ -29,13 +29,13 @@ namespace hal
     };
 
     // A texture that cannot be drawn onto, only reassigned.
-    class static_texture : public texture
+    class texture : public texture_base
     {
     public:
-        static_texture() = default;
-        static_texture(window& wnd, const surface& surf);
+        texture() = default;
+        texture(window& wnd, const surface& surf);
 
-        static_texture& change(window& wnd, const surface& surf);
+        texture& change(window& wnd, const surface& surf);
 
     private:
         // Convenience function.
@@ -43,7 +43,7 @@ namespace hal
     };
 
     // A texture that can be drawn onto.
-    class target_texture : public texture
+    class target_texture : public texture_base
     {
     public:
         target_texture() = default;

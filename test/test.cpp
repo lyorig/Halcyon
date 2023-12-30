@@ -25,7 +25,7 @@ void surface_drawing(holder& hld)
     for (int i = 0; i < draw_iters; ++i)
         hal::blit(hld.fnt.render(string))(res);
 
-    hal::static_texture tes { hld.wnd, res };
+    hal::texture tes { hld.wnd, res };
 }
 
 void texture_drawing(holder& hld)
@@ -35,7 +35,7 @@ void texture_drawing(holder& hld)
 
     for (int i = 0; i < draw_iters; ++i)
     {
-        const hal::static_texture dt { hld.wnd, hld.fnt.render(string) };
+        const hal::texture dt { hld.wnd, hld.fnt.render(string) };
         hal::draw { dt }(hld.wnd);
     }
 }

@@ -5,22 +5,22 @@
 
 using namespace hal;
 
-pixel_size texture::size() const
+pixel_size texture_base::size() const
 {
     return this->internal_size();
 }
 
-void texture::set_opacity(color::value value)
+void texture_base::set_opacity(color::value value)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
 }
 
-void texture::set_color_mod(color clr)
+void texture_base::set_color_mod(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, ::SDL_GetError());
 }
 
-lyo::u8 texture::opacity() const
+lyo::u8 texture_base::opacity() const
 {
     Uint8 alpha;
 
@@ -30,12 +30,12 @@ lyo::u8 texture::opacity() const
     return lyo::u8(alpha);
 }
 
-texture::texture(SDL_Texture* ptr)
+texture_base::texture_base(SDL_Texture* ptr)
     : sdl_object { ptr }
 {
 }
 
-pixel_size texture::internal_size() const
+pixel_size texture_base::internal_size() const
 {
     point<int> size;
 
@@ -44,28 +44,28 @@ pixel_size texture::internal_size() const
     return size;
 }
 
-void texture::query(Uint32* format, int* access, int* w, int* h) const
+void texture_base::query(Uint32* format, int* access, int* w, int* h) const
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, ::SDL_GetError());
 }
-static_texture::static_texture(window& wnd, const surface& image)
-    : texture { create(wnd, image) }
+texture::texture(window& wnd, const surface& image)
+    : texture_base { create(wnd, image) }
 {
 }
 
-static_texture& static_texture::change(window& wnd, const surface& image)
+texture& texture::change(window& wnd, const surface& image)
 {
     sdl_object::reset(create(wnd, image));
     return *this;
 }
 
-SDL_Texture* static_texture::create(window& wnd, const surface& image)
+SDL_Texture* texture::create(window& wnd, const surface& image)
 {
     return ::SDL_CreateTextureFromSurface(wnd.renderer.ptr(), image.ptr());
 }
 
 target_texture::target_texture(window& wnd, const pixel_size& sz)
-    : texture { create(wnd, sz) }
+    : texture_base { create(wnd, sz) }
 {
 }
 

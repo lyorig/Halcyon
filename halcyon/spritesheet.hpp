@@ -9,12 +9,12 @@ namespace hal
     using frame_size = point<frame_type>;
     using frame_pos = frame_size;
 
-    class texture;
+    class texture_base;
 
     class spritesheet
     {
     public:
-        spritesheet(const texture& tx, const pixel_size& frame_size);
+        spritesheet(const texture_base& tx, const pixel_size& frame_size);
 
         const pixel_area& operator[](frame_pos pos) const;
 

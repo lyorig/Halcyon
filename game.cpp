@@ -51,7 +51,7 @@ void game::intro()
     {
         const info& part { texts[i] };
 
-        hal::static_texture tx { app.window, fnt.render(part.text, part.color) };
+        hal::texture tx { app.window, fnt.render(part.text, part.color) };
 
         const hal::coord pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
 
@@ -125,7 +125,7 @@ void game::start()
     const hal::font  fnt { app.ttf.load("assets/m5x7.ttf", 144) };
     const hal::chunk chk { app.mixer.load_sfx("assets/Button Hover.wav") };
 
-    hal::static_texture tex { app.window, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
+    hal::texture        tex { app.window, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
     hal::input_handler& inp { app.input };
     hal::draw           dw { tex };
 

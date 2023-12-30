@@ -61,8 +61,8 @@ void debug::draw(window& wnd, const font& fnt)
 
                 if (!entry.first.empty()) [[likely]]
                 {
-                    const hal::static_texture text { wnd, fnt.render(entry.first, entry.second) };
-                    const pixel_pos           pos { 0, pixel_type(i * y_scaled) };
+                    const hal::texture text { wnd, fnt.render(entry.first, entry.second) };
+                    const pixel_pos    pos { 0, pixel_type(i * y_scaled) };
 
                     hal::draw(text).to(pos).scale(scale)(wnd);
                 }
