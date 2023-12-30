@@ -4,9 +4,22 @@
 
 using namespace hal;
 
+draw_hijack::draw_hijack(renderer& rnd, color new_clr)
+    : m_rnd { rnd }
+    , m_old { rnd.get_color() }
+{
+    rnd.set_color(new_clr);
+}
+
+draw_hijack::~draw_hijack()
+{
+    m_rnd.set_color(m_old);
+}
+
 renderer::renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>)
     : sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, flags) }
 {
+    this->set_blend_mode(SDL_BLENDMODE_BLEND);
 }
 
 void renderer::present(lyo::pass_key<window>) const
@@ -72,6 +85,11 @@ color renderer::get_color() const
 void renderer::set_color(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
+}
+
+void renderer::set_blend_mode(SDL_BlendMode bm)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), bm) == 0, ::SDL_GetError());
 }
 
 void renderer::internal_set_target(SDL_Texture* target)
