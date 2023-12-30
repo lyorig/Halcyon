@@ -19,6 +19,7 @@ namespace hal
         void set_color_mod(hal::color mod);
 
     protected:
+        texture() = default;
         texture(SDL_Texture* ptr);
 
     private:
@@ -31,7 +32,7 @@ namespace hal
     class static_texture : public texture
     {
     public:
-        static_texture(window& wnd);
+        static_texture() = default;
         static_texture(window& wnd, const surface& surf);
 
         static_texture& change(window& wnd, const surface& surf);
@@ -45,7 +46,7 @@ namespace hal
     class target_texture : public texture
     {
     public:
-        target_texture(window& wnd);
+        target_texture() = default;
         target_texture(window& wnd, const pixel_size& size);
 
         void resize(window& wnd, const pixel_size& sz);

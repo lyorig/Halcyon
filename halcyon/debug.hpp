@@ -5,13 +5,13 @@
    part of Halcyon that uses preprocessor #defines. */
 
 #ifndef NDEBUG
-    #define HALDEBUG
+    #define HAL_DEBUG_ENABLED
 #endif
 
 // Manual debug switch.
-// #define HALDEBUG
+// #define HAL_DEBUG_ENABLED
 
-#ifdef HALDEBUG
+#ifdef HAL_DEBUG_ENABLED
 
     // MSVC has its own version, because of course it does.
     #if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)

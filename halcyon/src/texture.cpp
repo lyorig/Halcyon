@@ -48,12 +48,6 @@ void texture::query(Uint32* format, int* access, int* w, int* h) const
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, ::SDL_GetError());
 }
-
-static_texture::static_texture(window& wnd)
-    : texture { nullptr }
-{
-}
-
 static_texture::static_texture(window& wnd, const surface& image)
     : texture { create(wnd, image) }
 {
@@ -68,11 +62,6 @@ static_texture& static_texture::change(window& wnd, const surface& image)
 SDL_Texture* static_texture::create(window& wnd, const surface& image)
 {
     return ::SDL_CreateTextureFromSurface(wnd.renderer.ptr(), image.ptr());
-}
-
-target_texture::target_texture(window& wnd)
-    : texture { nullptr }
-{
 }
 
 target_texture::target_texture(window& wnd, const pixel_size& sz)

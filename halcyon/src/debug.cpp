@@ -1,6 +1,6 @@
 #include <halcyon/debug.hpp>
 
-#ifdef HALDEBUG
+#ifdef HAL_DEBUG_ENABLED
     #include <SDL2/SDL_messagebox.h>
 
     #include <halcyon/components/font.hpp>
@@ -29,7 +29,7 @@ void debug::draw(window& wnd, const font& fnt)
     // I am not 100% sure whether it's safe to create a static
     // SDL object, as the destructor will run after de-initialization.
     // However, it doesn't crash, it's fast, and it's debug, so who cares.
-    static target_texture tx { wnd };
+    static target_texture tx;
 
     if (m_repaint)
     {
