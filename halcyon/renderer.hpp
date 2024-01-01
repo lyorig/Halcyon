@@ -61,6 +61,8 @@ namespace hal
         void internal_set_target(SDL_Texture* target);
     };
 
+    // C-tor: Sets the renderer's draw color.
+    // D-tor: Sets the draw color back to the previous one.
     class color_lock
     {
     public:
@@ -73,6 +75,8 @@ namespace hal
         const color m_old;
     };
 
+    // C-tor: Sets the renderer's target texture.
+    // D-tor: Sets the target back to the renderer's window.
     class target_lock
     {
     public:
