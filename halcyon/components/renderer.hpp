@@ -39,26 +39,24 @@ namespace hal
         };
     };
 
-    class draw_hijack
+    class color_lock
     {
     public:
-        draw_hijack(window& rnd, color new_clr);
-        draw_hijack(renderer& rnd, color new_clr);
+        color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>);
 
-        ~draw_hijack();
+        ~color_lock();
 
     private:
         renderer&   m_rnd;
         const color m_old;
     };
 
-    class target_hijack
+    class target_lock
     {
     public:
-        target_hijack(window& wnd, target_texture& tgt);
-        target_hijack(renderer& rnd, target_texture& tgt);
+        target_lock(renderer& rnd, target_texture& tgt, lyo::pass_key<renderer>);
 
-        ~target_hijack();
+        ~target_lock();
 
     private:
         renderer& m_rnd;
@@ -81,17 +79,22 @@ namespace hal
         void present(lyo::pass_key<window>) const;
         void clear(lyo::pass_key<window>) const;
 
-        void draw_line(const coord& from, const coord& to, color clr);
-        void draw_rect(const coord_area& area, color clr);
+        void draw_line(const coord& from, const coord& to);
+        void draw_rect(const coord_area& area);
 
-        void fill_rect(const SDL::FRect& area, color clr);
-        void fill_target(color clr);
+        void fill_rect(const SDL::FRect& area);
+        void fill_target();
+
+        void render_copy(const texture_base& tex, const SDL::Rect src, const SDL::FRect dst, lyo::f64 angle, flip f);
 
         void set_target(target_texture& tx);
         void reset_target();
 
         color get_color() const;
         void  set_color(color clr);
+
+        target_lock lock_target(target_texture& tx);
+        color_lock  lock_color(color clr);
 
         pixel_size output_size() const;
 

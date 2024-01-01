@@ -21,7 +21,7 @@ namespace hal
         {
         }
 
-        constexpr rectangle(as_size_tag, const point<T>& size)
+        constexpr rectangle(const point<T>& size)
             : size { size }
         {
         }

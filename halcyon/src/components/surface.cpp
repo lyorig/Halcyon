@@ -23,7 +23,7 @@ surface surface::resize(pixel_size sz) const
 
     this->set_blend(SDL_BLENDMODE_NONE);
 
-    blit { *this }.to(hal::fill)(ret);
+    hal::blit { *this }.to(hal::fill)(ret);
 
     this->set_blend(SDL_BLENDMODE_BLEND);
 
@@ -53,6 +53,14 @@ color surface::operator[](pixel_pos coord) const
         &ret.g, &ret.b, &ret.a);
 
     return ret;
+}
+
+void surface::internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* dst, lyo::pass_key<blit>) const
+{
+    HAL_DEBUG_ASSERT(this->ptr() != nullptr, "Drawing null surface");
+    HAL_DEBUG_ASSERT(to.ptr() != nullptr, "Drawing to null surface");
+
+    ::SDL_BlitSurface(this->ptr(), src, to.ptr(), dst);
 }
 
 void surface::set_blend(SDL_BlendMode bm) const
@@ -92,6 +100,10 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
 
 void blit::operator()(const surface& dst)
 {
-    if (m_this.ptr() != nullptr)
-        HAL_DEBUG_ASSERT_VITAL(::SDL_BlitScaled(m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), dst.ptr(), m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr()) == 0, ::SDL_GetError());
+    constexpr st us { unset<st> };
+
+    m_this.internal_blit(dst,
+        m_src.pos.x == us ? nullptr : m_src.addr(),
+        m_dst.pos.x == us ? nullptr : m_dst.addr(),
+        {});
 }

@@ -48,11 +48,11 @@ void debug::draw(window& wnd, const font& fnt)
         if (csz.x != 0) [[likely]]
         {
             const lyo::f64   scale { wnd.size().y * vhm / y_size };
-            const pixel_type y_scaled = std::round(y_size * scale);
+            const pixel_type y_scaled = lyo::cast<pixel_type>(y_size * scale);
 
             tx.resize(wnd, csz * scale);
 
-            target_hijack th { wnd, tx };
+            auto lock = wnd.renderer.lock_target(tx);
 
             // Compose the texture.
             for (count_type i { 0 }; i < m_entries; ++i)

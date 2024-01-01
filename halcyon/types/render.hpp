@@ -10,19 +10,17 @@
 
 namespace hal
 {
+    // Native SDL interop ought to be the fastest.
+    // As such, using fast types will map Halcyon's types to SDL's.
     using pixel_type = lyo::CFT<lyo::i16, SDL::pixel_type>;
+    using coord_type = lyo::CFT<lyo::f64, SDL::coord_type>;
 
     using pixel_size = point<pixel_type>;
     using pixel_pos = point<pixel_type>;
     using pixel_area = rectangle<pixel_type>;
 
-    using coord_type = lyo::CFT<lyo::f64, SDL::coord_type>;
-
     using coord = point<coord_type>;
     using coord_area = rectangle<coord_type>;
-
-    template <auto Func>
-    using opacity_slider = static_slider<lyo::f64, SDL_ALPHA_TRANSPARENT, SDL_ALPHA_OPAQUE, Func>;
 }
 
 // Paranoia.

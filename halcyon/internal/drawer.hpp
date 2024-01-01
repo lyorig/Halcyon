@@ -31,7 +31,7 @@ namespace hal
     public:
         [[nodiscard]] drawer(const T& src)
             : m_this { src }
-            , m_dst { as_size, src.size() }
+            , m_dst { src.size() }
         {
             m_src.pos.x = unset<st>;
         }

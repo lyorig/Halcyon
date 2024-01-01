@@ -18,6 +18,8 @@ void game::intro()
     if (app.args.has("-xi"))
         return;
 
+    using opacity_slider = hal::static_slider<lyo::f64, hal::color::min, hal::color::max, curve>;
+
     enum state
     {
         up,
@@ -58,7 +60,7 @@ void game::intro()
         hal::draw dw { tx };
         (void)dw.to(pos).scale(part.scale);
 
-        hal::opacity_slider<curve> alpha { 0.0 };
+        opacity_slider alpha { 0.0 };
         alpha.set_mod(alpha.range() / part.fade_in);
 
         state dir { up };
@@ -81,7 +83,7 @@ void game::intro()
             switch (dir)
             {
             case up:
-                if (alpha.value() == alpha.max())
+                if (alpha.progress() == 1.0)
                 {
                     middle_timer.reset();
                     dir = middle;
@@ -106,7 +108,7 @@ void game::intro()
                 break;
 
             case down:
-                if (alpha.value() == alpha.min())
+                if (alpha.progress() == 0.0)
                     goto NextIter;
 
                 break;
@@ -133,6 +135,7 @@ void game::start()
     bool held { false };
 
     constexpr hal::SDL::coord_type mod { 400.0 };
+    const lyo::precise_timer       tmr;
 
     if (!app.args.has("-xbgm"))
         app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop);
@@ -170,8 +173,8 @@ void game::start()
             held = false;
         }
 
-        dw(app.window);
-
         HAL_DEBUG_DRAW(app.window, fnt);
+
+        dw(app.window);
     }
 }

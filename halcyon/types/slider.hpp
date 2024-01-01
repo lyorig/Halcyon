@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <halcyon/debug.hpp>
 #include <lyo/cast.hpp>
 #include <lyo/types.hpp>
 
@@ -9,13 +10,18 @@
 
 namespace hal
 {
-    constexpr lyo::f64 linear_modifier(lyo::f64 val)
+    // Slider Functor Placeholder Type.
+    struct SFPT
     {
-        return val;
+        lyo::f64 operator()(lyo::f64 val) const
+        {
+            HAL_DEBUG_PANIC("SFPT functor was called");
+            return 69.420;
+        }
     };
 
-    // The functor accepts a value 0.0 - 1.0 and returns a value in the same range.
-    template <lyo::arithmetic T, auto Functor = linear_modifier>
+    // The functor receives a value 0.0 - 1.0 and returns a value in the same range.
+    template <lyo::arithmetic T, auto Functor = SFPT {}>
         requires(requires(lyo::f64 val) { static_cast<void>(Functor(val)); })
     class slider
     {
@@ -25,7 +31,7 @@ namespace hal
             , m_max { max }
             , m_value { min }
         {
-            assert(min < max);
+            HAL_DEBUG_ASSERT(min < max, "Slider min is >= max");
         }
 
         // Adds the modifier and returns the new value.
@@ -37,7 +43,17 @@ namespace hal
 
         constexpr T value() const
         {
-            return Functor(this->progress()) * this->range() + this->min();
+            if constexpr (!std::is_same_v<decltype(Functor), SFPT>)
+                return Functor(this->progress()) * this->range() + this->min();
+
+            else
+                return m_value;
+        }
+
+        // Returns 0.0 - 1.0. Used for the functor.
+        lyo::f64 progress() const
+        {
+            return (m_value - min()) / this->range();
         }
 
         constexpr T min() const
@@ -101,21 +117,17 @@ namespace hal
         }
 
     private:
-        // Returns 0.0 - 1.0. Used for the functor.
-        lyo::f64 progress() const
-        {
-            return (m_value - min()) / this->range();
-        }
-
         T m_min {};
         T m_max {};
         T m_value {};
         T m_mod {};
     };
 
-    // The functor accepts a value 0.0 - 1.0 and returns a value in the same range.
-    template <lyo::arithmetic T, auto Min, auto Max, auto Functor = linear_modifier>
-        requires(lyo::arithmetic<decltype(Min)> && lyo::arithmetic<decltype(Max)> && Min < Max && requires(lyo::f64 val) { static_cast<void>(Functor(val)); })
+    // A slider with static bounds. Min/Max values have to be "auto" due to floating
+    // point template parameters causing a compilation error.
+    // The functor receives a value 0.0 - 1.0 and returns a value in the same range.
+    template <lyo::arithmetic T, auto Min, auto Max, auto Functor = SFPT {}>
+        requires(std::convertible_to<decltype(Min), T> && std::convertible_to<decltype(Max), T> && Min < Max && requires(lyo::f64 val) { static_cast<void>(Functor(val)); })
     class static_slider
     {
     public:
@@ -138,17 +150,27 @@ namespace hal
 
         constexpr T value() const
         {
-            return Functor(this->progress()) * range() + min();
+            if constexpr (!std::is_same_v<decltype(Functor), SFPT>)
+                return Functor(this->progress()) * range() + min();
+
+            else
+                return m_value;
+        }
+
+        // Returns 0.0 - 1.0. Used for the functor.
+        lyo::f64 progress() const
+        {
+            return (m_value - min()) / range();
         }
 
         consteval static T min()
         {
-            return T(Min);
+            return Min;
         }
 
         consteval static T max()
         {
-            return T(Max);
+            return Max;
         }
 
         consteval static T range()
@@ -192,12 +214,6 @@ namespace hal
         }
 
     private:
-        // Returns 0.0 - 1.0. Used for the functor.
-        lyo::f64 progress() const
-        {
-            return (m_value - min()) / range();
-        }
-
         T m_value {};
         T m_mod {};
     };

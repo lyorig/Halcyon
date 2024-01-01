@@ -50,6 +50,9 @@ namespace hal
         // are extremely slow to retrieve pixel information.
         color operator[](pixel_pos coord) const;
 
+        // Public, but only available to the blit class.
+        void internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* dst, lyo::pass_key<blit>) const;
+
     private:
         friend class image_loader;
         friend class font;

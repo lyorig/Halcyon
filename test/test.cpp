@@ -31,7 +31,8 @@ void surface_drawing(holder& hld)
 void texture_drawing(holder& hld)
 {
     hal::target_texture tex { hld.wnd, { 1024, 768 } };
-    hal::target_hijack  th { hld.wnd, tex };
+
+    auto lock = hld.wnd.renderer.lock_target(tex);
 
     for (int i = 0; i < draw_iters; ++i)
     {

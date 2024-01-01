@@ -18,41 +18,30 @@ draw& draw::flip(enum flip f)
 
 void draw::operator()(window& wnd) const
 {
-    if (m_this.ptr() != nullptr)
-        HAL_DEBUG_ASSERT_VITAL(::SDL_RenderCopyExF(wnd.renderer.ptr(), m_this.ptr(), m_src.pos.x == unset<st> ? nullptr : m_src.addr(), m_dst.addr(), m_angle, nullptr, SDL_RendererFlip(m_flip))
-                == 0,
-            ::SDL_GetError());
+    HAL_DEBUG_ASSERT(m_this.ptr() != nullptr, "Drawing null texture");
+
+    wnd.renderer.render_copy(m_this, m_src, m_dst, m_angle, m_flip);
 }
 
-draw_hijack::draw_hijack(window& wnd, color new_clr)
-    : draw_hijack { wnd.renderer, new_clr }
-{
-}
-
-draw_hijack::draw_hijack(renderer& rnd, color new_clr)
+color_lock::color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>)
     : m_rnd { rnd }
     , m_old { rnd.get_color() }
 {
     m_rnd.set_color(new_clr);
 }
 
-draw_hijack::~draw_hijack()
+color_lock::~color_lock()
 {
     m_rnd.set_color(m_old);
 }
 
-target_hijack::target_hijack(window& wnd, target_texture& tgt)
-    : target_hijack { wnd.renderer, tgt }
-{
-}
-
-target_hijack::target_hijack(renderer& rnd, target_texture& tgt)
+target_lock::target_lock(renderer& rnd, target_texture& tgt, lyo::pass_key<renderer>)
     : m_rnd { rnd }
 {
     m_rnd.set_target(tgt);
 }
 
-target_hijack::~target_hijack()
+target_lock::~target_lock()
 {
     m_rnd.reset_target();
 }
@@ -72,28 +61,29 @@ void renderer::clear(lyo::pass_key<window>) const
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
 }
 
-void renderer::draw_line(const coord& from, const coord& to, color clr)
+void renderer::draw_line(const coord& from, const coord& to)
 {
-    const draw_hijack dh { *this, clr };
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), from.x, from.y, to.x, to.y) == 0, ::SDL_GetError());
 }
 
-void renderer::draw_rect(const coord_area& area, color clr)
+void renderer::draw_rect(const coord_area& area)
 {
-    const draw_hijack dh { *this, clr };
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), SDL::FRect(area).addr()) == 0, ::SDL_GetError());
 }
 
-void renderer::fill_rect(const SDL::FRect& area, color clr)
+void renderer::fill_rect(const SDL::FRect& area)
 {
-    const draw_hijack dh { *this, clr };
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), area.addr()) == 0, ::SDL_GetError());
 }
 
-void renderer::fill_target(color clr)
+void renderer::fill_target()
 {
-    const draw_hijack dh { *this, clr };
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), nullptr) == 0, ::SDL_GetError());
+}
+
+void renderer::render_copy(const texture_base& tex, const SDL::Rect src, const SDL::FRect dst, lyo::f64 angle, flip f)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderCopyExF(this->ptr(), tex.ptr(), src.addr(), dst.addr(), angle, NULL, SDL_RendererFlip(f)) == 0, ::SDL_GetError());
 }
 
 pixel_size renderer::output_size() const
@@ -115,6 +105,11 @@ void renderer::reset_target()
     this->internal_set_target(nullptr);
 }
 
+target_lock renderer::lock_target(target_texture& tx)
+{
+    return { *this, tx, {} };
+}
+
 color renderer::get_color() const
 {
     color ret;
@@ -127,6 +122,11 @@ color renderer::get_color() const
 void renderer::set_color(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
+}
+
+color_lock renderer::lock_color(color clr)
+{
+    return { *this, clr, {} };
 }
 
 void renderer::internal_set_target(SDL_Texture* target)
