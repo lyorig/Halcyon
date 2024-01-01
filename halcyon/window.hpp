@@ -3,7 +3,6 @@
 #include <halcyon/types/other.hpp>
 #include <lyo/timer.hpp>
 
-#include <halcyon/components/renderer.hpp>
 #include <halcyon/internal/subsystem.hpp>
 #include <halcyon/texture.hpp>
 
@@ -30,22 +29,13 @@ namespace hal
             maximized = SDL_WINDOW_MAXIMIZED
         };
 
-        hal::renderer renderer;
-
-        window(video& sys, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
-        window(video& sys, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
-
-        void present();
-
-        void set_as_target();
+        window(video& sys, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> flags);
+        window(video& sys, const char* title, fullscreen_mode_tag);
 
         pixel_size size() const;
 
         display::index display_index() const;
 
         const char* title() const;
-
-    private:
-        pixel_size internal_size() const;
     };
 } // namespace hal

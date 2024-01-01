@@ -38,6 +38,7 @@ halcyon/src/engine.cpp
 halcyon/src/image_loader.cpp
 halcyon/src/input_handler.cpp
 halcyon/src/mixer.cpp
+halcyon/src/renderer.cpp
 halcyon/src/spritesheet.cpp
 halcyon/src/texture.cpp
 halcyon/src/ttf_engine.cpp
@@ -45,7 +46,6 @@ halcyon/src/window.cpp
 halcyon/src/components/chunk.cpp
 halcyon/src/components/font.cpp
 halcyon/src/components/music.cpp
-halcyon/src/components/renderer.cpp
 halcyon/src/components/surface.cpp
 halcyon/src/internal/subsystem.cpp
 halcyon/src/internal/printing.cpp)

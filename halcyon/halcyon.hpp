@@ -5,6 +5,7 @@
 #include <halcyon/image_loader.hpp>
 #include <halcyon/input_handler.hpp>
 #include <halcyon/mixer.hpp>
+#include <halcyon/renderer.hpp>
 #include <halcyon/texture.hpp>
 #include <halcyon/ttf_engine.hpp>
 #include <halcyon/window.hpp>

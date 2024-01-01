@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    class window;
+    class renderer;
 
     class texture_base : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
     {
@@ -38,13 +38,13 @@ namespace hal
     {
     public:
         texture() = default;
-        texture(window& wnd, const surface& surf);
+        texture(renderer& rnd, const surface& surf);
 
-        texture& change(window& wnd, const surface& surf);
+        texture& change(renderer& rnd, const surface& surf);
 
     private:
         // Convenience function.
-        static SDL_Texture* create(window& wnd, const surface& image);
+        static SDL_Texture* create(renderer& rnd, const surface& image);
     };
 
     // A texture that can be drawn onto.
@@ -52,13 +52,13 @@ namespace hal
     {
     public:
         target_texture() = default;
-        target_texture(window& wnd, const pixel_size& size);
+        target_texture(renderer& rnd, const pixel_size& size);
 
-        void resize(window& wnd, const pixel_size& sz);
+        void resize(renderer& rnd, const pixel_size& sz);
 
     private:
         // Multiple things can fail here on top of it being a convenience function.
-        static SDL_Texture* create(window& wnd, const pixel_size& sz);
+        static SDL_Texture* create(renderer& rnd, const pixel_size& sz);
     };
 
     class draw final : public drawer<texture_base, SDL::coord_type, draw>
@@ -73,7 +73,7 @@ namespace hal
         // Can be called at any time.
         [[nodiscard]] draw& flip(enum flip f);
 
-        void operator()(window& wnd) const;
+        void operator()(renderer& rnd) const;
 
     private:
         lyo::f64 m_angle { 0.0 };

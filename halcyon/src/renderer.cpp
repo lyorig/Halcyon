@@ -1,21 +1,23 @@
-#include <halcyon/components/renderer.hpp>
+#include <halcyon/renderer.hpp>
 
+#include <halcyon/internal/helpers.hpp>
 #include <halcyon/window.hpp>
 
 using namespace hal;
 
-renderer::renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>)
-    : sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, flags) }
+renderer::renderer(window& wnd, il<flags> flags)
+    : sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, il2bm<Uint32>(flags)) }
 {
     this->set_blend(blend_mode::blend);
 }
 
-void renderer::present(lyo::pass_key<window>) const
+void renderer::present()
 {
     ::SDL_RenderPresent(this->ptr());
+    this->clear();
 }
 
-void renderer::clear(lyo::pass_key<window>) const
+void renderer::clear()
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
 }
@@ -59,11 +61,6 @@ void renderer::reset_target()
     this->internal_set_target(nullptr);
 }
 
-target_lock renderer::lock_target(target_texture& tx)
-{
-    return { *this, tx, {} };
-}
-
 color renderer::draw_color() const
 {
     color ret;
@@ -92,11 +89,6 @@ void renderer::set_blend(blend_mode bm)
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
-color_lock renderer::lock_color(color clr)
-{
-    return { *this, clr, {} };
-}
-
 void renderer::internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>)
 {
     HAL_DEBUG_ASSERT(tex.ptr() != nullptr, "Drawing null texture");
@@ -109,7 +101,7 @@ void renderer::internal_set_target(SDL_Texture* target)
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), target) == 0, ::SDL_GetError());
 }
 
-color_lock::color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>)
+color_lock::color_lock(renderer& rnd, color new_clr)
     : m_rnd { rnd }
     , m_old { rnd.draw_color() }
 {
@@ -121,7 +113,7 @@ color_lock::~color_lock()
     m_rnd.set_draw_color(m_old);
 }
 
-target_lock::target_lock(renderer& rnd, target_texture& tgt, lyo::pass_key<renderer>)
+target_lock::target_lock(renderer& rnd, target_texture& tgt)
     : m_rnd { rnd }
 {
     m_rnd.set_target(tgt);

@@ -5,8 +5,8 @@
 
     #include <halcyon/components/font.hpp>
     #include <halcyon/internal/printing.hpp>
+    #include <halcyon/renderer.hpp>
     #include <halcyon/texture.hpp>
-    #include <halcyon/window.hpp>
     #include <lyo/utility.hpp>
 
 using namespace hal;
@@ -20,7 +20,7 @@ debug::count_type debug::m_entries { 0 };
 
 bool debug::m_repaint { false };
 
-void debug::draw(window& wnd, const font& fnt)
+void debug::draw(renderer& rnd, const font& fnt)
 {
     // Render settings.
     constexpr coord    offset { 20.0, 10.0 };
@@ -47,12 +47,12 @@ void debug::draw(window& wnd, const font& fnt)
 
         if (csz.x != 0) [[likely]]
         {
-            const lyo::f64   scale { wnd.size().y * vhm / y_size };
+            const lyo::f64   scale { rnd.output_size().y * vhm / y_size };
             const pixel_type y_scaled = lyo::cast<pixel_type>(y_size * scale);
 
-            tx.resize(wnd, csz * scale);
+            tx.resize(rnd, csz * scale);
 
-            auto lock = wnd.renderer.lock_target(tx);
+            hal::target_lock lock { rnd, tx };
 
             // Compose the texture.
             for (count_type i { 0 }; i < m_entries; ++i)
@@ -61,10 +61,10 @@ void debug::draw(window& wnd, const font& fnt)
 
                 if (!entry.first.empty()) [[likely]]
                 {
-                    const hal::texture text { wnd, fnt.render(entry.first, entry.second) };
+                    const hal::texture text { rnd, fnt.render(entry.first, entry.second) };
                     const pixel_pos    pos { 0, pixel_type(i * y_scaled) };
 
-                    hal::draw(text).to(pos).scale(scale)(wnd);
+                    hal::draw(text).to(pos).scale(scale)(rnd);
                 }
             }
         }
@@ -72,7 +72,7 @@ void debug::draw(window& wnd, const font& fnt)
         m_repaint = false;
     }
 
-    hal::draw(tx).to(offset)(wnd);
+    hal::draw(tx).to(offset)(rnd);
 }
 
 void debug::panic(const char* why, const char* where,

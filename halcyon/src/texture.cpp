@@ -1,7 +1,7 @@
 #include <halcyon/texture.hpp>
 
 #include <halcyon/debug.hpp>
-#include <halcyon/window.hpp>
+#include <halcyon/renderer.hpp>
 
 using namespace hal;
 
@@ -73,38 +73,41 @@ void texture_base::query(Uint32* format, int* access, int* w, int* h) const
     HAL_DEBUG_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, ::SDL_GetError());
 }
 
-texture::texture(window& wnd, const surface& image)
+texture::texture(renderer& wnd, const surface& image)
     : texture_base { create(wnd, image) }
 {
 }
 
-texture& texture::change(window& wnd, const surface& image)
+texture& texture::change(renderer& wnd, const surface& image)
 {
     sdl_object::reset(create(wnd, image));
     return *this;
 }
 
-SDL_Texture* texture::create(window& wnd, const surface& image)
+SDL_Texture* texture::create(renderer& rnd, const surface& image)
 {
-    return ::SDL_CreateTextureFromSurface(wnd.renderer.ptr(), image.ptr());
+    return ::SDL_CreateTextureFromSurface(rnd.ptr(), image.ptr());
 }
 
-target_texture::target_texture(window& wnd, const pixel_size& sz)
-    : texture_base { create(wnd, sz) }
+target_texture::target_texture(renderer& rnd, const pixel_size& sz)
+    : texture_base { create(rnd, sz) }
 {
 }
 
-void target_texture::resize(window& wnd, const pixel_size& sz)
+void target_texture::resize(renderer& rnd, const pixel_size& sz)
 {
-    sdl_object::reset(create(wnd, sz));
+    sdl_object::reset(create(rnd, sz));
 }
 
-SDL_Texture* target_texture::create(window& wnd, const pixel_size& sz)
+SDL_Texture* target_texture::create(renderer& rnd, const pixel_size& sz)
 {
-    const Uint32 pixel_format { ::SDL_GetWindowPixelFormat(wnd.ptr()) };
+    SDL_Window* wnd { ::SDL_RenderGetWindow(rnd.ptr()) };
+    HAL_DEBUG_ASSERT(wnd != nullptr, ::SDL_GetError());
+
+    const Uint32 pixel_format { ::SDL_GetWindowPixelFormat(wnd) };
     HAL_DEBUG_ASSERT(pixel_format != SDL_PIXELFORMAT_UNKNOWN, ::SDL_GetError());
 
-    SDL_Texture* tex { ::SDL_CreateTexture(wnd.renderer.ptr(), pixel_format, SDL_TEXTUREACCESS_TARGET, sz.x, sz.y) };
+    SDL_Texture* tex { ::SDL_CreateTexture(rnd.ptr(), pixel_format, SDL_TEXTUREACCESS_TARGET, sz.x, sz.y) };
     HAL_DEBUG_ASSERT(tex != nullptr, ::SDL_GetError());
 
     return tex;
@@ -122,9 +125,9 @@ draw& draw::flip(enum flip f)
     return *this;
 }
 
-void draw::operator()(window& wnd) const
+void draw::operator()(renderer& rnd) const
 {
-    wnd.renderer.internal_render_copy(
+    rnd.internal_render_copy(
         m_this,
         m_src.pos.x == unset<st> ? nullptr : m_src.addr(),
         m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr(),

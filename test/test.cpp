@@ -1,7 +1,4 @@
-#include <halcyon/engine.hpp>
-#include <halcyon/texture.hpp>
-#include <halcyon/ttf_engine.hpp>
-#include <halcyon/window.hpp>
+#include <halcyon/halcyon.hpp>
 #include <iostream>
 #include <lyo/argparse.hpp>
 
@@ -14,7 +11,9 @@ struct holder
     LYO_MAYBE_EMPTY hal::video vid { eng };
     LYO_MAYBE_EMPTY hal::ttf_engine ttf { vid };
 
-    hal::window     wnd { vid, "Renderer proxy", {}, { 100, 100 }, { hal::window::hidden }, { hal::renderer::accelerated } };
+    hal::window   wnd { vid, "Renderer proxy", {}, { 100, 100 }, { hal::window::hidden } };
+    hal::renderer rnd { wnd, { hal::renderer::accelerated } };
+
     const hal::font fnt { ttf.load("assets/m5x7.ttf", 144) };
 };
 
@@ -25,19 +24,18 @@ void surface_drawing(holder& hld)
     for (int i = 0; i < draw_iters; ++i)
         hal::blit(hld.fnt.render(string))(res);
 
-    hal::texture tes { hld.wnd, res };
+    hal::texture tes { hld.rnd, res };
 }
 
 void texture_drawing(holder& hld)
 {
-    hal::target_texture tex { hld.wnd, { 1024, 768 } };
-
-    auto lock = hld.wnd.renderer.lock_target(tex);
+    hal::target_texture tex { hld.rnd, { 1024, 768 } };
+    hal::target_lock    tl { hld.rnd, tex };
 
     for (int i = 0; i < draw_iters; ++i)
     {
-        const hal::texture dt { hld.wnd, hld.fnt.render(string) };
-        hal::draw { dt }(hld.wnd);
+        const hal::texture dt { hld.rnd, hld.fnt.render(string) };
+        hal::draw { dt }(hld.rnd);
     }
 }
 

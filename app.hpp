@@ -1,6 +1,7 @@
 #pragma once
 
 #include <halcyon/halcyon.hpp>
+#include <halcyon/renderer.hpp>
 #include <lyo/argparse.hpp>
 
 namespace hq
@@ -17,7 +18,8 @@ namespace hq
 
         class hal::mixer mixer;
 
-        class hal::window window;
+        class hal::window   window;
+        class hal::renderer renderer;
 
         const lyo::parser args;
 

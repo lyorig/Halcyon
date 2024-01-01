@@ -53,7 +53,7 @@ void game::intro()
     {
         const info& part { texts[i] };
 
-        hal::texture tx { app.window, fnt.render(part.text, part.color) };
+        hal::texture tx { app.renderer, fnt.render(part.text, part.color) };
 
         const hal::coord pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
 
@@ -71,8 +71,8 @@ void game::intro()
         {
             tx.set_opacity(lyo::cast<hal::color::value>(alpha.update(app.delta())));
 
-            dw(app.window);
-            HAL_DEBUG_DRAW(app.window, fnt);
+            dw(app.renderer);
+            HAL_DEBUG_DRAW(app.renderer, fnt);
 
             if (app.input.pressed(hal::button::esc))
             {
@@ -127,7 +127,7 @@ void game::start()
     const hal::font  fnt { app.ttf.load("assets/m5x7.ttf", 144) };
     const hal::chunk chk { app.mixer.load_sfx("assets/Button Hover.wav") };
 
-    hal::texture        tex { app.window, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
+    hal::texture        tex { app.renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
     hal::input_handler& inp { app.input };
     hal::draw           dw { tex };
 
@@ -140,7 +140,7 @@ void game::start()
     if (!app.args.has("-xbgm"))
         app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop);
 
-    app.window.renderer.set_draw_color(0x04015c);
+    app.renderer.set_draw_color(0x04015c);
 
     while (app.update())
     {
@@ -175,8 +175,8 @@ void game::start()
             held = false;
         }
 
-        HAL_DEBUG_DRAW(app.window, fnt);
+        HAL_DEBUG_DRAW(app.renderer, fnt);
 
-        dw(app.window);
+        dw(app.renderer);
     }
 }

@@ -10,7 +10,8 @@ app::app(lyo::parser&& p, const char* window_name)
     , m_audio { m_eng }
     , input { m_eng }
     , mixer { m_audio, p.parse<lyo::u32>("-freq=", 44100), 16, hal::chunk::quality::medium }
-    , window { m_video, window_name, hal::fullscreen_mode, { hal::renderer::accelerated, !p.has("-xv") ? hal::renderer::vsync : hal::renderer::none } }
+    , window { m_video, window_name, hal::fullscreen_mode }
+    , renderer { window, { hal::renderer::accelerated, !p.has("-xv") ? hal::renderer::vsync : hal::renderer::none } }
     , args { p }
     , image { m_video, { hal::image_loader::jpg, hal::image_loader::png } }
     , ttf { m_video }
@@ -20,7 +21,7 @@ app::app(lyo::parser&& p, const char* window_name)
 bool app::update()
 {
     m_delta.reset();
-    window.present();
+    renderer.present();
 
     return input.update();
 }

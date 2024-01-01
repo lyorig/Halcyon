@@ -30,7 +30,7 @@
 
 namespace hal
 {
-    class window;
+    class renderer;
     class font;
 
     class debug
@@ -68,7 +68,7 @@ namespace hal
         static void verify(bool condition, const char* cond_string, const char* func,
             const char* extra_info);
 
-        static void draw(window& wnd, const font& fnt);
+        static void draw(renderer& rnd, const font& fnt);
 
     private:
         template <typename... Args>
