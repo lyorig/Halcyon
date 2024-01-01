@@ -44,9 +44,9 @@ namespace hal
         // Get pixel at position.
         // This functionality is exclusive to surfaces, as textures
         // are extremely slow to retrieve pixel information.
-        color operator[](pixel_pos coord) const;
+        color operator[](const pixel_pos& pos) const;
 
-        blend_mode get_blend() const;
+        blend_mode blend() const;
         void       set_blend(blend_mode bm);
 
         // Public, but only available to the blit class.
@@ -62,7 +62,7 @@ namespace hal
         // Special c-tor for resizing.
         surface(pixel_size sz);
 
-        Uint32 get_pixel(pixel_type x, pixel_type y) const;
+        Uint32 pixel_at(const pixel_pos& pos) const;
     };
 
     LYO_TAG_TYPE(keep_dest);
@@ -85,7 +85,7 @@ namespace hal
     public:
         blend_lock(T& obj, blend_mode new_mode)
             : m_obj { obj }
-            , m_old { obj.get_blend() }
+            , m_old { obj.blend() }
         {
             obj.set_blend(new_mode);
         }

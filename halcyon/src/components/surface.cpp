@@ -15,6 +15,7 @@ surface::surface(pixel_size sz)
 surface::surface(SDL_Surface* surf)
     : sdl_object { surf }
 {
+    this->set_blend(blend_mode::blend);
 }
 
 surface surface::resize(pixel_size sz)
@@ -40,15 +41,15 @@ pixel_size surface::size() const
     };
 }
 
-color surface::operator[](pixel_pos coord) const
+color surface::operator[](const pixel_pos& pos) const
 {
-    HAL_DEBUG_ASSERT(coord.x < ptr()->w, "Out-of-range width");
-    HAL_DEBUG_ASSERT(coord.y < ptr()->h, "Out-of-range height");
+    HAL_DEBUG_ASSERT(pos.x < ptr()->w, "Out-of-range width");
+    HAL_DEBUG_ASSERT(pos.y < ptr()->h, "Out-of-range height");
 
     color ret;
 
     // I couldn't find any mention of this function having a fail state.
-    ::SDL_GetRGBA(this->get_pixel(coord.x, coord.y), ptr()->format, &ret.r,
+    ::SDL_GetRGBA(this->pixel_at(pos), ptr()->format, &ret.r,
         &ret.g, &ret.b, &ret.a);
 
     return ret;
@@ -62,7 +63,7 @@ void surface::internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* ds
     ::SDL_BlitScaled(this->ptr(), src, to.ptr(), dst);
 }
 
-blend_mode surface::get_blend() const
+blend_mode surface::blend() const
 {
     SDL_BlendMode bm;
 
@@ -76,10 +77,10 @@ void surface::set_blend(blend_mode bm)
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
-Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
+Uint32 surface::pixel_at(const pixel_pos& pos) const
 {
     const auto   bpp { ptr()->format->BytesPerPixel };
-    const Uint8* p { static_cast<Uint8*>(ptr()->pixels) + y * ptr()->pitch + x * bpp };
+    const Uint8* p { static_cast<Uint8*>(ptr()->pixels) + pos.y * ptr()->pitch + pos.x * bpp };
 
     switch (bpp)
     {

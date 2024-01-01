@@ -15,12 +15,21 @@ void texture_base::set_opacity(color::value value)
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
 }
 
+color texture_base::color_mod() const
+{
+    color c;
+
+    HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureColorMod(this->ptr(), &c.r, &c.g, &c.b) == 0, ::SDL_GetError());
+
+    return c;
+}
+
 void texture_base::set_color_mod(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, ::SDL_GetError());
 }
 
-blend_mode texture_base::get_blend() const
+blend_mode texture_base::blend() const
 {
     SDL_BlendMode bm;
 
@@ -47,6 +56,7 @@ lyo::u8 texture_base::opacity() const
 texture_base::texture_base(SDL_Texture* ptr)
     : sdl_object { ptr }
 {
+    this->set_blend(blend_mode::blend);
 }
 
 pixel_size texture_base::internal_size() const

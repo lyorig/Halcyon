@@ -12,14 +12,16 @@ namespace hal
     class texture_base : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
     {
     public:
-        pixel_size   size() const;
+        pixel_size size() const;
+
         color::value opacity() const;
+        void         set_opacity(color::value value);
 
-        void set_opacity(color::value value);
-        void set_color_mod(hal::color mod);
+        color color_mod() const;
+        void  set_color_mod(hal::color mod);
 
-        blend_mode get_blend() const;
-        void set_blend(blend_mode bm);
+        blend_mode blend() const;
+        void       set_blend(blend_mode bm);
 
     protected:
         texture_base() = default;

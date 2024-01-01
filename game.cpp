@@ -140,6 +140,8 @@ void game::start()
     if (!app.args.has("-xbgm"))
         app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop);
 
+    app.window.renderer.set_draw_color(0x04015c);
+
     while (app.update())
     {
         if (inp.held(hal::button::W))

@@ -49,10 +49,10 @@ namespace hal
         void set_target(target_texture& tx);
         void reset_target();
 
-        color get_color() const;
-        void  set_color(color clr);
+        color draw_color() const;
+        void  set_draw_color(color clr);
 
-        blend_mode get_blend() const;
+        blend_mode blend() const;
         void       set_blend(blend_mode bm);
 
         target_lock lock_target(target_texture& tx);
@@ -60,6 +60,7 @@ namespace hal
 
         pixel_size output_size() const;
 
+        // Public, but only accessible to the draw class.
         void internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>);
 
     private:

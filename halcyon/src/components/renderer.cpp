@@ -7,6 +7,7 @@ using namespace hal;
 renderer::renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>)
     : sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, flags) }
 {
+    this->set_blend(blend_mode::blend);
 }
 
 void renderer::present(lyo::pass_key<window>) const
@@ -63,7 +64,7 @@ target_lock renderer::lock_target(target_texture& tx)
     return { *this, tx, {} };
 }
 
-color renderer::get_color() const
+color renderer::draw_color() const
 {
     color ret;
 
@@ -72,12 +73,12 @@ color renderer::get_color() const
     return ret;
 }
 
-void renderer::set_color(color clr)
+void renderer::set_draw_color(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
 }
 
-blend_mode renderer::get_blend() const
+blend_mode renderer::blend() const
 {
     SDL_BlendMode bm;
 
@@ -110,14 +111,14 @@ void renderer::internal_set_target(SDL_Texture* target)
 
 color_lock::color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>)
     : m_rnd { rnd }
-    , m_old { rnd.get_color() }
+    , m_old { rnd.draw_color() }
 {
-    m_rnd.set_color(new_clr);
+    m_rnd.set_draw_color(new_clr);
 }
 
 color_lock::~color_lock()
 {
-    m_rnd.set_color(m_old);
+    m_rnd.set_draw_color(m_old);
 }
 
 target_lock::target_lock(renderer& rnd, target_texture& tgt, lyo::pass_key<renderer>)
