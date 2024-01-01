@@ -6,11 +6,11 @@
 
 namespace hal
 {
-    class engine;
+    class video;
     class surface;
 
-    // For loading images, obviously. This class isn't required to outlive
-    // its loaded surfaces, as they are "supported" by SDL itself.
+    // For loading images, obviously. This class doesn't need to
+    // outlive its loaded surface, so it may be used as an rvalue.
     class image_loader
     {
     public:
@@ -22,7 +22,7 @@ namespace hal
             webp = IMG_INIT_WEBP
         };
 
-        image_loader(engine& eng, il<image_type> types);
+        image_loader(video& sys, il<image_type> types);
         ~image_loader();
 
         surface load(const char* file) const;

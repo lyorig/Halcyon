@@ -2,7 +2,7 @@
 
 using namespace hal;
 
-ttf_engine::ttf_engine(engine& eng)
+ttf_engine::ttf_engine(video& sys)
 {
     HAL_DEBUG_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
 

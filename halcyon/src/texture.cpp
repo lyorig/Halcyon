@@ -114,7 +114,11 @@ draw& draw::flip(enum flip f)
 
 void draw::operator()(window& wnd) const
 {
-    HAL_DEBUG_ASSERT(m_this.ptr() != nullptr, "Drawing null texture");
-
-    wnd.renderer.render_copy(m_this, m_src, m_dst, m_angle, m_flip);
+    wnd.renderer.internal_render_copy(
+        m_this,
+        m_src.pos.x == unset<st> ? nullptr : m_src.addr(),
+        m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr(),
+        m_angle,
+        m_flip,
+        {});
 }

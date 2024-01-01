@@ -32,8 +32,8 @@ namespace hal
 
         hal::renderer renderer;
 
-        window(const video& sys, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
-        window(const video& sys, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
+        window(video& sys, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> w_flags, il<renderer::flags> r_flags);
+        window(video& sys, const char* title, fullscreen_mode_tag, il<renderer::flags> r_flags);
 
         void present();
 

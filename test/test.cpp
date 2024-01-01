@@ -12,7 +12,7 @@ struct holder
 {
     LYO_MAYBE_EMPTY hal::engine eng;
     LYO_MAYBE_EMPTY hal::video vid { eng };
-    LYO_MAYBE_EMPTY hal::ttf_engine ttf { eng };
+    LYO_MAYBE_EMPTY hal::ttf_engine ttf { vid };
 
     hal::window     wnd { vid, "Renderer proxy", {}, { 100, 100 }, { hal::window::hidden }, { hal::renderer::accelerated } };
     const hal::font fnt { ttf.load("assets/m5x7.ttf", 144) };

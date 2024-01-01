@@ -18,46 +18,12 @@
 
 namespace hal
 {
+    class blit;
+
     class image_loader;
     class video;
     class font;
     class surface;
-
-    LYO_TAG_TYPE(keep_dest);
-
-    class blit : public drawer<surface, SDL::pixel_type, blit>
-    {
-    public:
-        using drawer::drawer;
-
-        void operator()(const surface& dst);
-
-        // SDL's blitting function overwrites the destination rectangle.
-        // This overload creates a copy to ensure it remains unchanged.
-        void operator()(const surface& dst, keep_dest_tag) const;
-    };
-
-    template <typename T>
-    class blend_lock
-    {
-    public:
-        blend_lock(T& obj, blend_mode new_mode)
-            : m_obj { obj }
-            , m_old { obj.get_blend() }
-        {
-            obj.set_blend(new_mode);
-        }
-
-        ~blend_lock()
-        {
-            m_obj.set_blend(m_old);
-        }
-
-    private:
-        T& m_obj;
-
-        blend_mode m_old;
-    };
 
     class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface>
     {
@@ -97,5 +63,41 @@ namespace hal
         surface(pixel_size sz);
 
         Uint32 get_pixel(pixel_type x, pixel_type y) const;
+    };
+
+    LYO_TAG_TYPE(keep_dest);
+
+    class blit : public drawer<surface, SDL::pixel_type, blit>
+    {
+    public:
+        using drawer::drawer;
+
+        void operator()(const surface& dst);
+
+        // SDL's blitting function overwrites the destination rectangle.
+        // This overload creates a copy to ensure it remains unchanged.
+        void operator()(const surface& dst, keep_dest_tag) const;
+    };
+
+    template <typename T>
+    class blend_lock
+    {
+    public:
+        blend_lock(T& obj, blend_mode new_mode)
+            : m_obj { obj }
+            , m_old { obj.get_blend() }
+        {
+            obj.set_blend(new_mode);
+        }
+
+        ~blend_lock()
+        {
+            m_obj.set_blend(m_old);
+        }
+
+    private:
+        T& m_obj;
+
+        blend_mode m_old;
     };
 } // namespace hal

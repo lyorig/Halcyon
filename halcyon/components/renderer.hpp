@@ -2,43 +2,26 @@
 
 #include <SDL2/SDL_render.h>
 
+#include <halcyon/enums/blend.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
-#include <halcyon/enums/blend.hpp>
 #include <lyo/pass_key.hpp>
 
 #include <halcyon/components/sdl_object.hpp>
 
 namespace hal
 {
+    class draw;
+
     class window;
     class renderer;
+
     class texture_base;
     class target_texture;
 
-    class color_lock
-    {
-    public:
-        color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>);
-
-        ~color_lock();
-
-    private:
-        renderer&   m_rnd;
-        const color m_old;
-    };
-
-    class target_lock
-    {
-    public:
-        target_lock(renderer& rnd, target_texture& tgt, lyo::pass_key<renderer>);
-
-        ~target_lock();
-
-    private:
-        renderer& m_rnd;
-    };
+    class target_lock;
+    class color_lock;
 
     class renderer : public sdl_object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
@@ -63,8 +46,6 @@ namespace hal
         void fill_rect(const SDL::FRect& area);
         void fill_target();
 
-        void render_copy(const texture_base& tex, const SDL::Rect src, const SDL::FRect dst, lyo::f64 angle, flip f);
-
         void set_target(target_texture& tx);
         void reset_target();
 
@@ -72,7 +53,6 @@ namespace hal
         void  set_color(color clr);
 
         blend_mode get_blend() const;
-
         void       set_blend(blend_mode bm);
 
         target_lock lock_target(target_texture& tx);
@@ -80,9 +60,32 @@ namespace hal
 
         pixel_size output_size() const;
 
+        void internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>);
+
     private:
         void internal_set_target(SDL_Texture* target);
     };
 
-    
+    class color_lock
+    {
+    public:
+        color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>);
+
+        ~color_lock();
+
+    private:
+        renderer&   m_rnd;
+        const color m_old;
+    };
+
+    class target_lock
+    {
+    public:
+        target_lock(renderer& rnd, target_texture& tgt, lyo::pass_key<renderer>);
+
+        ~target_lock();
+
+    private:
+        renderer& m_rnd;
+    };
 }

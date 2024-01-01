@@ -4,29 +4,6 @@
 
 using namespace hal;
 
-color_lock::color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>)
-    : m_rnd { rnd }
-    , m_old { rnd.get_color() }
-{
-    m_rnd.set_color(new_clr);
-}
-
-color_lock::~color_lock()
-{
-    m_rnd.set_color(m_old);
-}
-
-target_lock::target_lock(renderer& rnd, target_texture& tgt, lyo::pass_key<renderer>)
-    : m_rnd { rnd }
-{
-    m_rnd.set_target(tgt);
-}
-
-target_lock::~target_lock()
-{
-    m_rnd.reset_target();
-}
-
 renderer::renderer(window& wnd, lyo::u32 flags, lyo::pass_key<window>)
     : sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, flags) }
 {
@@ -60,11 +37,6 @@ void renderer::fill_rect(const SDL::FRect& area)
 void renderer::fill_target()
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), nullptr) == 0, ::SDL_GetError());
-}
-
-void renderer::render_copy(const texture_base& tex, const SDL::Rect src, const SDL::FRect dst, lyo::f64 angle, flip f)
-{
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderCopyExF(this->ptr(), tex.ptr(), src.addr(), dst.addr(), angle, NULL, SDL_RendererFlip(f)) == 0, ::SDL_GetError());
 }
 
 pixel_size renderer::output_size() const
@@ -124,7 +96,37 @@ color_lock renderer::lock_color(color clr)
     return { *this, clr, {} };
 }
 
+void renderer::internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>)
+{
+    HAL_DEBUG_ASSERT(tex.ptr() != nullptr, "Drawing null texture");
+
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderCopyExF(this->ptr(), tex.ptr(), src, dst, angle, NULL, SDL_RendererFlip(f)) == 0, ::SDL_GetError());
+}
+
 void renderer::internal_set_target(SDL_Texture* target)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), target) == 0, ::SDL_GetError());
+}
+
+color_lock::color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>)
+    : m_rnd { rnd }
+    , m_old { rnd.get_color() }
+{
+    m_rnd.set_color(new_clr);
+}
+
+color_lock::~color_lock()
+{
+    m_rnd.set_color(m_old);
+}
+
+target_lock::target_lock(renderer& rnd, target_texture& tgt, lyo::pass_key<renderer>)
+    : m_rnd { rnd }
+{
+    m_rnd.set_target(tgt);
+}
+
+target_lock::~target_lock()
+{
+    m_rnd.reset_target();
 }

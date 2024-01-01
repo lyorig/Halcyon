@@ -4,7 +4,7 @@
 
 namespace hal
 {
-    class engine;
+    class video;
 
     // A class that makes sure everything TTF-related is loaded and
     // ready to use. This includes not only loading fonts, but also
@@ -13,7 +13,7 @@ namespace hal
     class ttf_engine
     {
     public:
-        ttf_engine(engine& eng);
+        ttf_engine(video& sys);
         ~ttf_engine();
 
         // Warning: If loading from an rvalue TTF engine, only

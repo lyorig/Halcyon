@@ -2,28 +2,6 @@
 
 using namespace hal;
 
-void blit::operator()(const surface& dst)
-{
-    constexpr st us { unset<st> };
-
-    m_this.internal_blit(dst,
-        m_src.pos.x == us ? nullptr : m_src.addr(),
-        m_dst.pos.x == us ? nullptr : m_dst.addr(),
-        {});
-}
-
-void blit::operator()(const surface& dst, keep_dest_tag) const
-{
-    constexpr st us { unset<st> };
-
-    SDL::Rect copy { m_dst };
-
-    m_this.internal_blit(dst,
-        m_src.pos.x == us ? nullptr : m_src.addr(),
-        copy.pos.x == us ? nullptr : copy.addr(),
-        {});
-}
-
 surface::surface(const video& sys, pixel_size sz)
     : surface { sz }
 {
@@ -56,8 +34,10 @@ surface surface::resize(lyo::f64 scale)
 
 pixel_size surface::size() const
 {
-    return { static_cast<pixel_type>(this->ptr()->w),
-        static_cast<pixel_type>(this->ptr()->h) };
+    return {
+        pixel_type(this->ptr()->w),
+        pixel_type(this->ptr()->h)
+    };
 }
 
 color surface::operator[](pixel_pos coord) const
@@ -79,7 +59,7 @@ void surface::internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* ds
     HAL_DEBUG_ASSERT(this->ptr() != nullptr, "Drawing null surface");
     HAL_DEBUG_ASSERT(to.ptr() != nullptr, "Drawing to null surface");
 
-    ::SDL_BlitSurface(this->ptr(), src, to.ptr(), dst);
+    ::SDL_BlitScaled(this->ptr(), src, to.ptr(), dst);
 }
 
 blend_mode surface::get_blend() const
@@ -124,4 +104,26 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
 
         return 0;
     }
+}
+
+void blit::operator()(const surface& dst)
+{
+    m_this.internal_blit(
+        dst,
+        m_src.pos.x == unset<st> ? nullptr : m_src.addr(),
+        m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr(),
+        {});
+}
+
+void blit::operator()(const surface& dst, keep_dest_tag) const
+{
+    constexpr st us { unset<st> };
+
+    SDL::Rect copy { m_dst };
+
+    m_this.internal_blit(
+        dst,
+        m_src.pos.x == us ? nullptr : m_src.addr(),
+        copy.pos.x == us ? nullptr : copy.addr(),
+        {});
 }

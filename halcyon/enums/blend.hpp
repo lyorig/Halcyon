@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL_blendmode.h>
+#include <type_traits>
 
 namespace hal
 {
