@@ -4,25 +4,6 @@
 
 using namespace hal;
 
-draw& draw::rotate(lyo::f64 angle)
-{
-    m_angle = angle;
-    return *this;
-}
-
-draw& draw::flip(enum flip f)
-{
-    m_flip = f;
-    return *this;
-}
-
-void draw::operator()(window& wnd) const
-{
-    HAL_DEBUG_ASSERT(m_this.ptr() != nullptr, "Drawing null texture");
-
-    wnd.renderer.render_copy(m_this, m_src, m_dst, m_angle, m_flip);
-}
-
 color_lock::color_lock(renderer& rnd, color new_clr, lyo::pass_key<renderer>)
     : m_rnd { rnd }
     , m_old { rnd.get_color() }
@@ -122,6 +103,20 @@ color renderer::get_color() const
 void renderer::set_color(color clr)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
+}
+
+blend_mode renderer::get_blend() const
+{
+    SDL_BlendMode bm;
+
+    HAL_DEBUG_ASSERT_VITAL(::SDL_GetRenderDrawBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
+
+    return blend_mode(bm);
+}
+
+void renderer::set_blend(blend_mode bm)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
 color_lock renderer::lock_color(color clr)

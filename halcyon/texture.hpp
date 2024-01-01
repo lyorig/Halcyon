@@ -18,6 +18,9 @@ namespace hal
         void set_opacity(color::value value);
         void set_color_mod(hal::color mod);
 
+        blend_mode get_blend() const;
+        void set_blend(blend_mode bm);
+
     protected:
         texture_base() = default;
         texture_base(SDL_Texture* ptr);
@@ -54,5 +57,28 @@ namespace hal
     private:
         // Multiple things can fail here on top of it being a convenience function.
         static SDL_Texture* create(window& wnd, const pixel_size& sz);
+    };
+
+    class draw final : public drawer<texture_base, SDL::coord_type, draw>
+    {
+    public:
+        using drawer::drawer;
+        // Set the texture's rotation.
+        // Can be called at any time.
+        [[nodiscard]] draw& rotate(lyo::f64 angle);
+
+        // Set the texture's flip.
+        // Can be called at any time.
+        [[nodiscard]] draw& flip(enum flip f);
+
+        void operator()(window& wnd) const;
+
+    private:
+        lyo::f64 m_angle { 0.0 };
+
+        enum flip m_flip
+        {
+            flip::none
+        };
     };
 } // namespace hal

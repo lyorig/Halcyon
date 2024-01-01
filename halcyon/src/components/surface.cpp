@@ -2,6 +2,28 @@
 
 using namespace hal;
 
+void blit::operator()(const surface& dst)
+{
+    constexpr st us { unset<st> };
+
+    m_this.internal_blit(dst,
+        m_src.pos.x == us ? nullptr : m_src.addr(),
+        m_dst.pos.x == us ? nullptr : m_dst.addr(),
+        {});
+}
+
+void blit::operator()(const surface& dst, keep_dest_tag) const
+{
+    constexpr st us { unset<st> };
+
+    SDL::Rect copy { m_dst };
+
+    m_this.internal_blit(dst,
+        m_src.pos.x == us ? nullptr : m_src.addr(),
+        copy.pos.x == us ? nullptr : copy.addr(),
+        {});
+}
+
 surface::surface(const video& sys, pixel_size sz)
     : surface { sz }
 {
@@ -17,20 +39,17 @@ surface::surface(SDL_Surface* surf)
 {
 }
 
-surface surface::resize(pixel_size sz) const
+surface surface::resize(pixel_size sz)
 {
-    surface ret { sz };
-
-    this->set_blend(SDL_BLENDMODE_NONE);
+    surface    ret { sz };
+    blend_lock bl { *this, blend_mode::none };
 
     hal::blit { *this }.to(hal::fill)(ret);
-
-    this->set_blend(SDL_BLENDMODE_BLEND);
 
     return ret;
 }
 
-surface surface::resize(lyo::f64 scale) const
+surface surface::resize(lyo::f64 scale)
 {
     return this->resize(this->size() * scale);
 }
@@ -63,9 +82,18 @@ void surface::internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* ds
     ::SDL_BlitSurface(this->ptr(), src, to.ptr(), dst);
 }
 
-void surface::set_blend(SDL_BlendMode bm) const
+blend_mode surface::get_blend() const
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), bm) == 0, ::SDL_GetError());
+    SDL_BlendMode bm;
+
+    HAL_DEBUG_ASSERT_VITAL(::SDL_GetSurfaceBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
+
+    return blend_mode(bm);
+}
+
+void surface::set_blend(blend_mode bm)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
 Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
@@ -96,14 +124,4 @@ Uint32 surface::get_pixel(pixel_type x, pixel_type y) const
 
         return 0;
     }
-}
-
-void blit::operator()(const surface& dst)
-{
-    constexpr st us { unset<st> };
-
-    m_this.internal_blit(dst,
-        m_src.pos.x == us ? nullptr : m_src.addr(),
-        m_dst.pos.x == us ? nullptr : m_dst.addr(),
-        {});
 }

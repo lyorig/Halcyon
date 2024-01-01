@@ -20,6 +20,20 @@ void texture_base::set_color_mod(color clr)
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, ::SDL_GetError());
 }
 
+blend_mode texture_base::get_blend() const
+{
+    SDL_BlendMode bm;
+
+    HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
+
+    return blend_mode(bm);
+}
+
+void texture_base::set_blend(blend_mode bm)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
+}
+
 lyo::u8 texture_base::opacity() const
 {
     Uint8 alpha;
@@ -27,7 +41,7 @@ lyo::u8 texture_base::opacity() const
     HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureAlphaMod(this->ptr(), &alpha) == 0,
         ::SDL_GetError());
 
-    return lyo::u8(alpha);
+    return alpha;
 }
 
 texture_base::texture_base(SDL_Texture* ptr)
@@ -48,6 +62,7 @@ void texture_base::query(Uint32* format, int* access, int* w, int* h) const
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, ::SDL_GetError());
 }
+
 texture::texture(window& wnd, const surface& image)
     : texture_base { create(wnd, image) }
 {
@@ -83,4 +98,23 @@ SDL_Texture* target_texture::create(window& wnd, const pixel_size& sz)
     HAL_DEBUG_ASSERT(tex != nullptr, ::SDL_GetError());
 
     return tex;
+}
+
+draw& draw::rotate(lyo::f64 angle)
+{
+    m_angle = angle;
+    return *this;
+}
+
+draw& draw::flip(enum flip f)
+{
+    m_flip = f;
+    return *this;
+}
+
+void draw::operator()(window& wnd) const
+{
+    HAL_DEBUG_ASSERT(m_this.ptr() != nullptr, "Drawing null texture");
+
+    wnd.renderer.render_copy(m_this, m_src, m_dst, m_angle, m_flip);
 }

@@ -5,6 +5,7 @@
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
+#include <halcyon/enums/blend.hpp>
 #include <lyo/pass_key.hpp>
 
 #include <halcyon/components/sdl_object.hpp>
@@ -12,32 +13,9 @@
 namespace hal
 {
     class window;
-    class texture_base;
     class renderer;
+    class texture_base;
     class target_texture;
-
-    class draw final : public drawer<texture_base, SDL::coord_type, draw>
-    {
-    public:
-        using drawer::drawer;
-        // Set the texture's rotation.
-        // Can be called at any time.
-        [[nodiscard]] draw& rotate(lyo::f64 angle);
-
-        // Set the texture's flip.
-        // Can be called at any time.
-        [[nodiscard]] draw& flip(enum flip f);
-
-        void operator()(window& wnd) const;
-
-    private:
-        lyo::f64 m_angle { 0.0 };
-
-        enum flip m_flip
-        {
-            flip::none
-        };
-    };
 
     class color_lock
     {
@@ -93,6 +71,10 @@ namespace hal
         color get_color() const;
         void  set_color(color clr);
 
+        blend_mode get_blend() const;
+
+        void       set_blend(blend_mode bm);
+
         target_lock lock_target(target_texture& tx);
         color_lock  lock_color(color clr);
 
@@ -101,4 +83,6 @@ namespace hal
     private:
         void internal_set_target(SDL_Texture* target);
     };
+
+    
 }
