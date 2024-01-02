@@ -1,11 +1,15 @@
 #include "game.hpp"
 #include <halcyon/ecs.hpp>
 
-// Current arguments:
-//  -xg     - Skip the game.
-//  -xi     - Skip the intro.
-//  -xv     - Disable VSync.
-//  -xbgm   - Disable background music.
+constexpr char help_text[] {
+    "HalodaQuest, by lyorig.\n"
+    "Options:\n"
+    "\t-h\t- Show this message.\n"
+    "\t-xg\t- Skip the game.\n"
+    "\t-xi\t- Skip the intro.\n"
+    "\t-xv\t- Disable VSync.\n"
+    "\t-xbgm\t- Disable music."
+};
 
 void ecs_test()
 {
@@ -22,6 +26,12 @@ void ecs_test()
 int main(int argc, char* argv[])
 {
     lyo::parser p { argc, argv };
+
+    if (p.has("-h"))
+    {
+        std::cout << help_text << '\n';
+        return EXIT_SUCCESS;
+    }
 
     ecs_test();
 
