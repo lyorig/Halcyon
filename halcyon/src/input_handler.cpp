@@ -60,3 +60,83 @@ bool input_handler::process(const SDL_Event& event)
 
     return true;
 }
+
+using qih = queued_input_handler;
+
+bool qih::update()
+{
+    m_pressed.clear();
+    m_released.clear();
+
+    return input_base::update();
+}
+
+const qih::holder& qih::pressed() const
+{
+    return m_pressed;
+}
+
+const qih::holder& qih::held() const
+{
+    return m_held;
+}
+const qih::holder& qih::released() const
+{
+    return m_released;
+}
+
+bool qih::process(const SDL_Event& event)
+{
+    switch (event.type)
+    {
+    case SDL_KEYDOWN:
+        if (event.key.repeat == 0)
+        {
+            const button prs { button(event.key.keysym.scancode) };
+
+            m_pressed.add(prs);
+            m_held.add(prs);
+        }
+
+        break;
+
+    case SDL_KEYUP:
+        if (event.key.repeat == 0)
+        {
+            const button rel { button(event.key.keysym.scancode) };
+
+            m_held.remove(rel);
+            m_released.add(rel);
+        }
+
+        break;
+
+    case SDL_MOUSEBUTTONDOWN:
+    {
+        const button prs { button(SDL_NUM_SCANCODES - 1 + event.button.button) };
+
+        m_pressed.add(prs);
+        m_held.add(prs);
+    }
+    break;
+
+    case SDL_MOUSEBUTTONUP:
+    {
+        const button rel { button(SDL_NUM_SCANCODES - 1 + event.button.button) };
+
+        m_held.remove(rel);
+        m_released.add(rel);
+    }
+
+    break;
+
+    case SDL_QUIT:
+        return false;
+        break;
+
+    default:
+        break;
+    }
+
+    return true;
+}

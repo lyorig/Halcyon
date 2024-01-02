@@ -14,7 +14,7 @@ namespace hq
         LYO_MAYBE_EMPTY hal::audio m_audio;
 
     public:
-        hal::input_handler input;
+        hal::queued_input_handler input;
 
         class hal::mixer mixer;
 

@@ -13,6 +13,8 @@ constexpr char help_text[] {
 
 void ecs_test()
 {
+    std::vector<int> v;
+
     using ecs = hal::static_ecs<640, hal::pixel_size>;
     using ent = hq::entity;
 

@@ -9,6 +9,8 @@ namespace hal
 {
     enum class button : lyo::u16
     {
+        none = SDL_SCANCODE_UNKNOWN,
+
         A = SDL_SCANCODE_A,
         B = SDL_SCANCODE_B,
         C = SDL_SCANCODE_C,

@@ -74,7 +74,7 @@ void game::intro()
             dw(app.renderer);
             HAL_DEBUG_DRAW(app.renderer, fnt);
 
-            if (app.input.pressed(hal::button::esc))
+            if (app.input.pressed().has(hal::button::esc))
             {
                 i = texts.size() - 1;
                 goto GoDown;
@@ -127,9 +127,12 @@ void game::start()
     const hal::font  fnt { app.ttf.load("assets/m5x7.ttf", 144) };
     const hal::chunk chk { app.mixer.load_sfx("assets/Button Hover.wav") };
 
-    hal::texture        tex { app.renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
-    hal::input_handler& inp { app.input };
-    hal::draw           dw { tex };
+    hal::texture tex { app.renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
+    hal::texture arr;
+
+    hal::queued_input_handler& inp { app.input };
+
+    hal::draw dw { tex };
 
     void(dw.to(hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size())));
     bool held { false };
@@ -144,17 +147,30 @@ void game::start()
 
     while (app.update())
     {
-        if (inp.held(hal::button::W))
-            dw.dest().pos.y -= mod * app.delta();
+        for (auto val : inp.held())
+        {
+            switch (val)
+            {
+            case hal::button::W:
+                dw.dest().pos.y -= mod * app.delta();
+                break;
 
-        if (inp.held(hal::button::S))
-            dw.dest().pos.y += mod * app.delta();
+            case hal::button::S:
+                dw.dest().pos.y += mod * app.delta();
+                break;
 
-        if (inp.held(hal::button::A))
-            dw.dest().pos.x -= mod * app.delta();
+            case hal::button::A:
+                dw.dest().pos.x -= mod * app.delta();
+                break;
 
-        if (inp.held(hal::button::D))
-            dw.dest().pos.x += mod * app.delta();
+            case hal::button::D:
+                dw.dest().pos.x += mod * app.delta();
+                break;
+
+            default:
+                break;
+            }
+        }
 
         if (hal::SDL::FPoint(inp.mouse()) | dw.dest())
         {
@@ -165,7 +181,7 @@ void game::start()
                 held = true;
             }
 
-            if (inp.pressed(hal::button::lmb))
+            if (inp.pressed().has(hal::button::lmb))
                 inp.quit();
         }
 
@@ -177,6 +193,9 @@ void game::start()
 
         HAL_DEBUG_DRAW(app.renderer, fnt);
 
+        arr.change(app.renderer, fnt.render(lyo::string_from_pack(inp.held())));
+        hal::draw(arr).to({ 10, 500 })(app.renderer);
+        
         dw(app.renderer);
     }
 }

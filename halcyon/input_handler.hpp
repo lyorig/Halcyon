@@ -4,6 +4,7 @@
 
 #include <halcyon/debug.hpp>
 #include <halcyon/enums/buttons.hpp>
+#include <halcyon/types/packed_array.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/bitset.hpp>
 #include <utility>
@@ -70,8 +71,7 @@ namespace hal
         bool m_ok { true };
     };
 
-    // A basic enough input handler. Suitable for a single-window
-    // application. Extend if necessary.
+    // A basic input handler. Suitable for a single-window application.
     class input_handler : public input_base<input_handler>
     {
     public:
@@ -86,5 +86,25 @@ namespace hal
 
     protected:
         key_storage m_pressed, m_released;
+    };
+
+    // A basic input handler which queues its 
+    class queued_input_handler : public input_base<queued_input_handler>
+    {
+        using holder = packed_array<hal::button, 10, hal::button::none>;
+
+    public:
+        using input_base::input_base;
+
+        bool update();
+
+        const holder& pressed() const;
+        const holder& held() const;
+        const holder& released() const;
+
+        bool process(const SDL_Event& event);
+
+    protected:
+        holder m_pressed, m_held, m_released;
     };
 } // namespace hal
