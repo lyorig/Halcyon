@@ -128,7 +128,6 @@ void game::start()
     const hal::chunk chk { app.mixer.load_sfx("assets/Button Hover.wav") };
 
     hal::texture tex { app.renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
-    hal::texture arr;
 
     hal::queued_input_handler& inp { app.input };
 
@@ -193,9 +192,6 @@ void game::start()
 
         HAL_DEBUG_DRAW(app.renderer, fnt);
 
-        arr.change(app.renderer, fnt.render(lyo::string_from_pack(inp.held())));
-        hal::draw(arr).to({ 10, 500 })(app.renderer);
-        
         dw(app.renderer);
     }
 }

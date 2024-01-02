@@ -5,6 +5,7 @@
 
 #include <halcyon/enums/anchor.hpp>
 #include <halcyon/enums/blend.hpp>
+#include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
 

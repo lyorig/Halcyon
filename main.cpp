@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include <halcyon/ecs.hpp>
+#include <iostream>
 
 constexpr char help_text[] {
     "HalodaQuest, by lyorig.\n"

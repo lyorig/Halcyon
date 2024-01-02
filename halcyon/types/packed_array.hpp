@@ -8,8 +8,10 @@ namespace hal
 {
 
     template <typename T, std::size_t Size, T Empty_Value>
-    class packed_array
+    class packed_array : std::array<T, Size>
     {
+        using Base = std::array<T, Size>;
+
     public:
         packed_array()
         {
@@ -25,7 +27,7 @@ namespace hal
 
             T* ptr { this->find(Empty_Value) };
 
-            if (ptr == m_array.end())
+            if (ptr == Base::end())
                 return;
 
             *ptr = value;
@@ -37,34 +39,34 @@ namespace hal
         {
             T* ptr { this->find(value) };
 
-            if (ptr == m_array.end())
+            if (ptr == Base::end())
                 return;
 
             *ptr = Empty_Value;
-            std::rotate(ptr, ptr + 1, m_array.end());
+            std::rotate(ptr, ptr + 1, Base::end());
         }
 
         // Check if the array has an element.
         bool has(const T& value) const
         {
-            return this->find(value) != m_array.end();
+            return this->find(value) != Base::end();
         }
 
         // Clear the array.
         // This fills the underlying array with the user-specified empty value.
         void clear()
         {
-            std::fill(m_array.begin(), m_array.end(), Empty_Value);
+            std::fill(Base::begin(), Base::end(), Empty_Value);
         }
 
         T* begin()
         {
-            return m_array.begin();
+            return Base::begin();
         }
 
         const T* begin() const
         {
-            return m_array.begin();
+            return Base::begin();
         }
 
         T* end()
@@ -80,14 +82,12 @@ namespace hal
     private:
         T* find(const T& value)
         {
-            return std::find(m_array.begin(), m_array.end(), value);
+            return std::find(begin(), Base::end(), value);
         }
 
         const T* find(const T& value) const
         {
-            return std::find(m_array.begin(), m_array.end(), value);
+            return std::find(Base::begin(), Base::end(), value);
         }
-
-        std::array<T, Size> m_array;
     };
 }

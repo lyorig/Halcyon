@@ -88,7 +88,7 @@ namespace hal
         key_storage m_pressed, m_released;
     };
 
-    // A basic input handler which queues its 
+    // A basic input handler which queues its
     class queued_input_handler : public input_base<queued_input_handler>
     {
         using holder = packed_array<hal::button, 10, hal::button::none>;
