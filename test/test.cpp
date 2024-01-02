@@ -4,6 +4,14 @@
 
 constexpr int  draw_iters { 32 };
 constexpr char string[] { "abcdef1234" };
+constexpr char help_text[] {
+    "Haltest, by lyorig.\n"
+    "Options:\n"
+    "\t-h\t- Show this message.\n"
+    "\t-s\t- Measure surface performance.\n"
+    "\t-t\t- Measure texture performance.\n"
+    "\t-iter=[num]\t- The amount of iterations (default 100).\n"
+};
 
 struct holder
 {
@@ -41,27 +49,56 @@ void texture_drawing(holder& hld)
 
 int main(int argc, char* argv[])
 {
-    using sz = std::size_t;
-    const auto iter = lyo::parser { argc, argv }.parse<sz>("-iter=", 100);
+    lyo::parser p { argc, argv };
+    if (p.has("-h"))
+    {
+        std::cout << help_text << 'n';
+        return EXIT_SUCCESS;
+    }
 
-    holder h;
+    const bool arg_t { p.has("-t") }, arg_s { p.has("-s") };
+    if (!(arg_t || arg_s))
+    {
+        std::cout << "No measuring options specified. Exiting.\n";
+        return EXIT_FAILURE;
+    }
+
+    using sz = std::size_t;
+    const auto iter = p.parse<sz>("-iter=", 100);
+
+    holder   h;
+    lyo::f64 surface_result, texture_result;
 
     lyo::precise_timer tmr;
 
-    for (sz i { 0 }; i < iter; ++i)
-        surface_drawing(h);
+    if (arg_s)
+    {
+        for (sz i { 0 }; i < iter; ++i)
+            surface_drawing(h);
 
-    const lyo::f64 surface_result { tmr() };
+        surface_result = tmr();
+    }
 
     tmr.reset();
 
-    for (sz i { 0 }; i < iter; ++i)
-        texture_drawing(h);
+    if (arg_t)
+    {
+        for (sz i { 0 }; i < iter; ++i)
+            texture_drawing(h);
 
-    const lyo::f64 texture_result { tmr() };
+        texture_result = tmr();
+    }
 
-    std::cout << "Surface drawing took " << surface_result << "s\n";
-    std::cout << "Texture drawing took " << texture_result << "s => " << surface_result / texture_result << "x faster at " << iter << " iterations.\n";
+    std::cout << "Starting test with " << iter << " iterations.\n";
+
+    if (arg_s)
+        std::cout << "Surface drawing took " << surface_result << "s\n";
+
+    if (arg_t)
+        std::cout << "Texture drawing took " << texture_result << "s\n";
+
+    if (arg_t && arg_s)
+        std::cout << "Result: Texture drawing is " << surface_result / texture_result << "x faster\n";
 
     return EXIT_SUCCESS;
 }
