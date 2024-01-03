@@ -9,5 +9,6 @@ IndentPPDirectives: BeforeHash
 BreakBeforeBraces: Allman
 
 AlignConsecutiveDeclarations: Consecutive
+AlignConsecutiveAssignments: Consecutive
 AlignConsecutiveMacros: Consecutive
 AlignTrailingComments: true

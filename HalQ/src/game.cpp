@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include <HalQ/game.hpp>
 #include <array>
 
 using namespace hq;
@@ -37,8 +37,8 @@ void game::intro()
     // This has to be manually timed. Then again, what other option is there?
     constexpr std::array texts {
         info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.9 },
-        info { .text = "by lyorig", .hold = 2.4, .fade_out = 0.5 },
-        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 5.0, .hold = 5.0, .fade_out = 1.5, .color = hal::color::cyan }
+        info { .text = "by lyorig", .hold = 2.5, .fade_out = 0.5 },
+        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 6.0, .hold = 4.0, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load("assets/m5x7.ttf", 144) };

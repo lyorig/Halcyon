@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <array>
 
-namespace hal
+namespace lyo
 {
     template <typename T, std::size_t Size, T Empty_Value>
     class sparse_array : std::array<T, Size>
@@ -15,10 +15,10 @@ namespace hal
         {
         public:
             using iterator_category = std::forward_iterator_tag;
-            using difference_type = std::ptrdiff_t;
-            using value_type = Iter_type;
-            using pointer = value_type*;
-            using reference = value_type&;
+            using difference_type   = std::ptrdiff_t;
+            using value_type        = Iter_type;
+            using pointer           = value_type*;
+            using reference         = value_type&;
 
             sparse_iterator(pointer ptr, pointer end)
                 : m_ptr { ptr }
@@ -57,7 +57,7 @@ namespace hal
         };
 
     public:
-        using iterator = sparse_iterator<T>;
+        using iterator       = sparse_iterator<T>;
         using const_iterator = sparse_iterator<const T>;
 
         sparse_array()

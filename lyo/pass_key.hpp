@@ -7,6 +7,6 @@ namespace lyo
     {
         friend T;
 
-        pass_key() { }
+        constexpr pass_key() { }
     };
 } // namespace lyo

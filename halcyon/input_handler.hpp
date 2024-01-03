@@ -2,11 +2,11 @@
 
 #include <SDL2/SDL_events.h>
 
+#include <bitset>
 #include <halcyon/debug.hpp>
 #include <halcyon/enums/buttons.hpp>
-#include <halcyon/types/packed_array.hpp>
 #include <halcyon/types/render.hpp>
-#include <lyo/bitset.hpp>
+#include <lyo/packed_array.hpp>
 #include <utility>
 
 namespace hal
@@ -17,7 +17,7 @@ namespace hal
     class input_base
     {
     public:
-        using key_storage = lyo::bitset<SDL_NUM_SCANCODES + (SDL_BUTTON_X2 - SDL_BUTTON_LEFT) + 1>;
+        using key_storage = std::bitset<SDL_NUM_SCANCODES + (SDL_BUTTON_X2 - SDL_BUTTON_LEFT) + 1>;
 
         input_base(engine& eng)
         {
@@ -88,10 +88,11 @@ namespace hal
         key_storage m_pressed, m_released;
     };
 
-    // A basic input handler which queues its
+    // A basic input handler which queues its inputs.
     class queued_input_handler : public input_base<queued_input_handler>
     {
-        using holder = packed_array<hal::button, 10, hal::button::none>;
+        // N-key rollover, basically.
+        using holder = lyo::packed_array<hal::button, 8>;
 
     public:
         using input_base::input_base;
@@ -106,5 +107,8 @@ namespace hal
 
     protected:
         holder m_pressed, m_held, m_released;
+
+        void internal_push_back(holder& array, button btn);
+        void internal_erase(holder& array, button btn);
     };
 } // namespace hal

@@ -6,8 +6,8 @@ using namespace hal;
 
 bool input_handler::update()
 {
-    m_pressed.clear();
-    m_released.clear();
+    m_pressed.reset();
+    m_released.reset();
 
     return input_base::update();
 }
@@ -94,8 +94,8 @@ bool qih::process(const SDL_Event& event)
         {
             const button prs { button(event.key.keysym.scancode) };
 
-            m_pressed.add(prs);
-            m_held.add(prs);
+            this->internal_push_back(m_pressed, prs);
+            this->internal_push_back(m_held, prs);
         }
 
         break;
@@ -105,8 +105,8 @@ bool qih::process(const SDL_Event& event)
         {
             const button rel { button(event.key.keysym.scancode) };
 
-            m_held.remove(rel);
-            m_released.add(rel);
+            this->internal_erase(m_held, rel);
+            this->internal_push_back(m_released, rel);
         }
 
         break;
@@ -115,8 +115,8 @@ bool qih::process(const SDL_Event& event)
     {
         const button prs { button(SDL_NUM_SCANCODES - 1 + event.button.button) };
 
-        m_pressed.add(prs);
-        m_held.add(prs);
+        this->internal_push_back(m_pressed, prs);
+        this->internal_push_back(m_held, prs);
     }
     break;
 
@@ -124,8 +124,8 @@ bool qih::process(const SDL_Event& event)
     {
         const button rel { button(SDL_NUM_SCANCODES - 1 + event.button.button) };
 
-        m_held.remove(rel);
-        m_released.add(rel);
+        this->internal_erase(m_held, rel);
+        this->internal_push_back(m_released, rel);
     }
 
     break;
@@ -139,4 +139,20 @@ bool qih::process(const SDL_Event& event)
     }
 
     return true;
+}
+
+void qih::internal_push_back(holder& array, button btn)
+{
+    if (array.full())
+        return;
+
+    array.push_back(btn);
+}
+
+void qih::internal_erase(holder& array, button btn)
+{
+    auto iter = std::find(array.begin(), array.end(), btn);
+
+    if (iter != array.end())
+        array.erase(iter);
 }

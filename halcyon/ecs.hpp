@@ -3,145 +3,120 @@
 #include <algorithm>
 #include <array>
 #include <halcyon/debug.hpp>
-#include <lyo/concepts.hpp>
+#include <halcyon/internal/component.hpp>
 #include <lyo/types.hpp>
 #include <span>
 
 // ecs.hpp:
-// Halcyon's Entity-Component System implementation.
+// Halcyon's ECS component manager implementation.
+// Honestly, the static_ecs class is a goddamn abomination.
+// In spite of this, however, I'm somewhat proud of myself for
+// having made it. So, if all you want is speed, here it is.
 
 namespace hal
 {
-    namespace component
-    {
-        using id = lyo::u8;
-        using index = lyo::u16;
-    }
-
-    namespace entity
-    {
-        using id = lyo::u16;
-    }
-
-    // This class attempts to be as constexpr-friendly as possible. Templates ahoy!
-    // Arena_Size_Bytes: the size of the component arena in bytes.
-    // Max_Registered_Components: the maximum amount of components one can register.
-    // Both affect the resulting size of the class. Set according to your own needs.
-    template <std::size_t Arena_Size_Bytes, typename... Cs>
-        requires(Arena_Size_Bytes > 0 && sizeof...(Cs) > 0)
+    // A fully stack-based component manager.
+    // For template parameters, use a pack of hal::comp::info structs.
+    template <typename... Is>
+        requires(sizeof...(Is) > 0 && sizeof...(Is) <= std::numeric_limits<comp::ID>::max() && (std::is_trivially_destructible_v<typename Is::type>, ...))
     class static_ecs
     {
     public:
-        // The smaller the size type, the smaller the total size.
-        using size_type = lyo::u16;
-
-        template <std::convertible_to<component::index>... Sizes>
-            requires(sizeof...(Sizes) == sizeof...(Cs))
-        static_ecs(Sizes... sizes)
+        constexpr static_ecs()
         {
-            (this->add<Cs>(sizes), ...);
+            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ",
+                to_printable_int(component_total_amount()), " comp(s), totalling ",
+                m_arena.size(), "B and ",
+                m_used.size(), " elements");
 
-            HAL_DEBUG_PRINT(hal::debug::init, "ECS loaded with ", to_printable(num_components()), ' ', num_components() == 1 ? "component" : "components", ", totalling ", this->memory_used(), "B out of ", static_ecs::memory_total(), 'B');
+            // Extra verbose debug message if need be.
+            // (HAL_DEBUG_PRINT("ECS: Comp. #", lyo::index_v<Cs, Cs...>, ", byte start = ", comp::byte_begin_v<typename Cs::type, Cs...>, ", index start = ", comp::index_begin_v<typename Cs::type, Cs...>), ...);
         }
 
-        // This function is only ever really useful when removing
-        // an element at index > 1.
-        template <lyo::one_of<Cs...> C>
-        constexpr void remove()
+        template <comp::in_infos<Is...> C, typename... Args>
+        constexpr comp::index component_add(Args&&... args)
         {
-            constexpr auto id = static_ecs::id<C>();
+            constexpr std::size_t begin { comp::index_begin_v<C, Is...> };
+            constexpr std::size_t end { begin + component_amount<C>() };
 
-            m_begins[id] = m_begins[id + 1];
+            const std::size_t idx { this->find_in_bitset<false>(begin, end) };
+
+            HAL_DEBUG_ASSERT(idx != end, "Component space exhausted, consider allocating more");
+
+            this->get<C>(idx) = C { std::forward(args)... };
+            m_used.set(idx);
+
+            return idx - begin;
         }
 
-        template <lyo::one_of<Cs...> C>
-        constexpr std::span<C> get()
+        template <comp::in_infos<Is...> C>
+        constexpr void component_remove(comp::index idx)
         {
-            constexpr auto id = static_ecs::id<C>();
+            if (idx == comp::invalid_index)
+                return;
 
-            C* begin { reinterpret_cast<C*>(m_arena.begin() + m_begins[id]) };
+            constexpr std::size_t bgn { comp::index_begin_v<C, Is...> };
+            constexpr std::size_t num { component_amount<C>() };
 
-            return { begin, reinterpret_cast<C*>(&m_begins[id + 1]) };
+            HAL_DEBUG_ASSERT(idx < num, "Removing invalid component index from ECS");
+
+            m_used.reset(bgn + idx);
         }
 
-        template <lyo::one_of<Cs...> C>
-        constexpr std::span<const C> get() const
+        template <comp::in_infos<Is...> C>
+        constexpr void component_clear()
         {
-            constexpr auto id = static_ecs::id<C>();
+            constexpr std::size_t bgn { comp::index_begin_v<C, Is...> };
+            constexpr std::size_t end { bgn + component_amount<C>() };
 
-            const C* begin { reinterpret_cast<const C*>(m_arena.begin() + m_begins[id]) };
-
-            return { begin, reinterpret_cast<const C*>(&m_begins[id + 1]) };
+            for (std::size_t i { bgn }; i != end; ++i)
+                m_used.reset(i);
         }
 
-        template <lyo::one_of<Cs...> C>
-        constexpr component::index component_add()
+        template <comp::in_infos<Is...> C>
+        consteval static comp::index component_amount()
         {
-            return 69; // TODO: this whole mechanism!
+            return comp::associated_type_t<C, Is...>::amount();
         }
 
-        template <lyo::one_of<Cs...> C>
-        constexpr void component_remove(component::index idx)
+        consteval static comp::index component_total_amount()
         {
-            // TODO: this too!
+            return sizeof...(Is);
         }
 
-        template <lyo::one_of<Cs...> C>
-        constexpr component::index space() const
+        template <comp::in_infos<Is...> C>
+        consteval static comp::ID component_ID()
         {
-            return this->space_bytes<C>() / sizeof(C);
-        }
-
-        consteval static std::size_t memory_total()
-        {
-            return Arena_Size_Bytes;
-        }
-
-        constexpr std::size_t memory_used() const
-        {
-            return *std::find_if(m_begins.crbegin(), m_begins.crend(), [](size_type val)
-                { return val != 0; });
-        }
-
-        constexpr std::size_t memory_available()
-        {
-            return static_ecs::memory_total() - this->memory_used();
-        }
-
-        consteval static component::id num_components()
-        {
-            return sizeof...(Cs);
-        }
-
-        template <lyo::one_of<Cs...> C>
-        consteval static component::id id()
-        {
-            return component::id(lyo::index_v<C, Cs...>);
+            return lyo::index_v<C, typename Is::type...>;
         }
 
     private:
-        template <lyo::one_of<Cs...> C>
-        constexpr void add(component::index how_many)
+        template <comp::in_infos<Is...> C>
+        constexpr C& get(comp::index idx)
         {
-            constexpr auto id = static_ecs::id<C>();
+            constexpr std::size_t begin { comp::byte_begin_v<C, Is...> };
 
-            auto next = m_begins.begin() + id + 1;
-            HAL_DEBUG_ASSERT(*next == 0, "Component already added");
-
-            *next = *(next - 1) + how_many * sizeof(C);
-
-            HAL_DEBUG_ASSERT(*next <= Arena_Size_Bytes, "Arena size exceeded");
+            return reinterpret_cast<C&>(m_arena[begin + idx]);
         }
 
-        template <lyo::one_of<Cs...> C>
-        constexpr size_type space_bytes() const
+        template <comp::in_infos<Is...> C>
+        constexpr const C& get(comp::index idx) const
         {
-            constexpr auto id = static_ecs::id<C>();
+            constexpr std::size_t begin { comp::byte_begin_v<C, Is...> };
 
-            return m_begins[id + 1] - m_begins[id];
+            return reinterpret_cast<const C&>(m_arena[begin + idx]);
         }
 
-        std::array<std::byte, Arena_Size_Bytes>  m_arena;
-        std::array<size_type, sizeof...(Cs) + 1> m_begins {};
+        template <bool B>
+        constexpr std::size_t find_in_bitset(std::size_t begin, std::size_t end)
+        {
+            for (; m_used[begin] != B && begin != end; ++begin)
+                ;
+            return begin;
+        }
+
+        std::array<std::byte, comp::total_size_bytes_v<Is...>> m_arena;
+
+        std::bitset<comp::total_amount_v<Is...>> m_used;
     };
 }

@@ -1,7 +1,4 @@
-#include "app.hpp"
-
-#include "halcyon/input_handler.hpp"
-#include "halcyon/window.hpp"
+#include <HalQ/app.hpp>
 
 using namespace hq;
 

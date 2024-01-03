@@ -38,11 +38,11 @@ namespace hal
     public:
         enum severity
         {
-            info = color::white,
+            info    = color::white,
             warning = color::orange,
-            error = color::red,
-            init = color::green,
-            load = color::cyan
+            error   = color::red,
+            init    = color::green,
+            load    = color::cyan
         };
 
         // Output any amount of arguments to stdout/stderr, the console and an output file.

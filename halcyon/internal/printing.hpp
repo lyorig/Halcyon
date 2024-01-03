@@ -1,9 +1,7 @@
 #pragma once
 
 #include <halcyon/enums/buttons.hpp>
-#include <halcyon/types/packed_array.hpp>
 #include <halcyon/types/rectangle.hpp>
-#include <halcyon/types/sparse_array.hpp>
 #include <ostream>
 #include <utility>
 
@@ -18,7 +16,7 @@ namespace hal
 
     // Convenience function.
     template <lyo::arithmetic T>
-    constexpr printable_int_t<T> to_printable(T val)
+    constexpr printable_int_t<T> to_printable_int(T val)
     {
         return printable_int_t<T>(val);
     }
@@ -28,41 +26,19 @@ namespace hal
         requires std::is_enum_v<T>
     std::ostream& operator<<(std::ostream& str, T val)
     {
-        return str << to_printable(std::to_underlying(val));
+        return str << to_printable_int(std::to_underlying(val));
     }
 
     template <lyo::arithmetic T>
     std::ostream& operator<<(std::ostream& str, const point<T>& pt)
     {
-        return str << '[' << to_printable(pt.x) << ',' << to_printable(pt.y) << ']';
+        return str << '[' << to_printable_int(pt.x) << ',' << to_printable_int(pt.y) << ']';
     }
 
     template <typename T>
     std::ostream& operator<<(std::ostream& str, const rectangle<T>& rect)
     {
         return str << '{' << rect.pos << ' ' << rect.size << '}';
-    }
-
-    template <typename T, std::size_t Size, T Empty_Value>
-    std::ostream& operator<<(std::ostream& str, const packed_array<T, Size, Empty_Value>& arr)
-    {
-        str << "[ ";
-
-        for (const T value : arr)
-            str << value << ' ';
-
-        return str << ']';
-    }
-
-    template <typename T, std::size_t Size, T Empty_Value>
-    std::ostream& operator<<(std::ostream& str, const sparse_array<T, Size, Empty_Value>& arr)
-    {
-        str << "[ ";
-
-        for (const T value : arr)
-            str << value << ' ';
-
-        return str << ']';
     }
 
     class display;

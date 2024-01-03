@@ -39,7 +39,6 @@ halcyon/src/image_loader.cpp
 halcyon/src/input_handler.cpp
 halcyon/src/mixer.cpp
 halcyon/src/renderer.cpp
-halcyon/src/spritesheet.cpp
 halcyon/src/texture.cpp
 halcyon/src/ttf_engine.cpp
 halcyon/src/window.cpp
@@ -51,9 +50,9 @@ halcyon/src/internal/subsystem.cpp
 halcyon/src/internal/printing.cpp)
 
 target_sources(Halcyon PRIVATE
-main.cpp
-game.cpp
-app.cpp
+HalQ/src/main.cpp
+HalQ/src/game.cpp
+HalQ/src/app.cpp
 ${Halcyon_sources})
 
 target_sources(Haltest PRIVATE

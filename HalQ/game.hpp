@@ -1,7 +1,7 @@
 #pragma once
 
-#include <app.hpp>
-#include <ents/manager.hpp>
+#include <HalQ/app.hpp>
+#include <HalQ/manager.hpp>
 
 namespace hq
 {
@@ -16,6 +16,6 @@ namespace hq
     private:
         class app app;
 
-        entity_manager m_emgr;
+        manager m_entityMgr;
     };
 }
