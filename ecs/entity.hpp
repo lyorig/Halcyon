@@ -31,7 +31,6 @@ namespace ECS
         constexpr entity_base(ID eid)
             : m_id { eid }
         {
-            std::fill(m_comps.begin(), m_comps.end(), comp::invalid_index);
         }
 
         template <typename C, typename System>
@@ -43,11 +42,9 @@ namespace ECS
         template <typename C, typename System>
         constexpr void remove(System& sys)
         {
-            constexpr auto id = sys.template id<C>();
-
             sys.template remove<C>(m_comps[sys.template id<C>()]);
 
-            m_comps[id] = comp::invalid_index;
+            m_comps[sys.template id<C>()] = comp::invalid_index;
         }
 
         template <typename C, typename System>
@@ -87,18 +84,27 @@ namespace ECS
             return m_comps;
         }
 
-    private:
+    protected:
         template <typename C, typename System>
         comp::ID cid(const System& sys) { return m_comps[sys.template cid<C>()]; }
 
         Container m_comps;
 
+    private:
         ID m_id;
     };
 
     template <typename Component_System>
     class static_entity : public entity_base<std::array<comp::index, Component_System::components()>>
     {
+        using Base = entity_base<std::array<comp::index, Component_System::components()>>;
+
+    public:
+        static_entity(Base::ID eid)
+            : Base { eid } // I hate this. I utterly despise this.
+        {
+            std::fill(Base::m_comps.begin(), Base::m_comps.end(), comp::invalid_index);
+        }
     };
 
     template <typename Container>

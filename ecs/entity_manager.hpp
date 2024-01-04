@@ -8,23 +8,23 @@
 // manager.hpp:
 // HalQ's entity manager.
 
-namespace hq
+namespace ECS
 {
-    template <std::size_t Max_Ents>
-    class manager
+    template <typename Comp_Mgr, std::size_t Max_Ents>
+    class static_entity_manager
     {
         template <typename T>
         using vec = lyo::static_vector<T, Max_Ents>;
 
     public:
-        using entity = ECS::static_entity<holder>;
+        using entity = static_entity<Comp_Mgr>;
 
         enum : std::size_t
         {
             max_ents = Max_Ents
         };
 
-        manager()
+        static_entity_manager()
             : m_free { max_ents }
         {
             std::iota(m_free.begin(), m_free.end(), 0);
@@ -37,7 +37,7 @@ namespace hq
             m_free.pop_back();
 
             entity& ent { m_ents.back() };
-            (ent.add<Comps>(m_holder), ...);
+            (ent.template add<Comps>(m_holder), ...);
 
             return ent.id();
         }
@@ -55,7 +55,7 @@ namespace hq
 
             // I don't know why, but if I try setting the type list as
             // a default argument, compilation fails. I love templates!
-            this->free_entity(eid, holder::type_list {});
+            this->free_entity(eid, typename Comp_Mgr::type_list {});
 
             m_free.push_back(eid);
             m_ents.erase(iter);
@@ -81,14 +81,14 @@ namespace hq
         template <typename... Ts>
         constexpr void free_entity(entity::ID eid, lyo::type_list<Ts...>)
         {
-            const entity::container& c { this->operator[](eid).comps() };
+            const typename entity::container& c { this->operator[](eid).comps() };
 
-            (m_holder.remove<Ts>(c[holder::id<Ts>()]), ...);
+            (m_holder.template remove<Ts>(c[Comp_Mgr::template id<Ts>()]), ...);
         }
 
-        holder m_holder;
+        Comp_Mgr m_holder;
 
-        vec<entity>     m_ents;
-        vec<entity::ID> m_free;
+        vec<entity>              m_ents;
+        vec<typename entity::ID> m_free;
     };
 }

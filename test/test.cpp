@@ -1,7 +1,7 @@
+#include <ecs/entity_manager.hpp>
 #include <halcyon/halcyon.hpp>
 #include <iostream>
 #include <lyo/argparse.hpp>
-#include <manager.hpp>
 #include <vector>
 
 using sz = std::size_t;
@@ -62,7 +62,7 @@ I random_element(I begin, I end)
 
 void ecs_test(sz iters)
 {
-    using man = hq::manager<20>;
+    using man = ECS::static_entity_manager<hq::holder, 20>;
     man mgr;
 
     std::vector<man::entity::ID> ids;

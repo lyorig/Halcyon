@@ -38,16 +38,16 @@ void game::intro()
     struct info
     {
         const char*      text;
-        const lyo::f64   scale { 1.0 }, fade_in { 1.0 }, until, fade_out { 0.5 };
+        const lyo::f64   scale { 1.0 }, fade_in { 1.0 }, until, fade_out;
         const hal::color color { hal::color::white };
     };
 
     // This has to be manually timed. Then again, what other option is there?
     // Warning: The hold value is relative to the intro's start.
     constexpr std::array texts {
-        info { .text = "T1-MWH", .scale = 1.5, .until = 5.0 },
-        info { .text = "T2-bl", .until = 10.0, .fade_out = 0.5 },
-        info { .text = "T3-HQ", .scale = 2.5, .fade_in = 6.0, .until = 15.0, .fade_out = 1.5, .color = hal::color::cyan }
+        info { .text = "Made with Halcyon", .scale = 1.5, .fade_in = 2.0, .until = 4.8, .fade_out = 0.75 },
+        info { .text = "by lyorig", .until = 9.0, .fade_out = 0.6 },
+        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 6.0, .until = 20.0, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { m_ttf.load("assets/m5x7.ttf", 144) };
@@ -56,7 +56,7 @@ void game::intro()
     if (!m_args.has("-xbgm"))
         m_mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in);
 
-    lyo::precise_timer middle_timer;
+    const lyo::precise_timer timer;
 
     for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
@@ -74,11 +74,9 @@ void game::intro()
 
         state dir { up };
 
-        tx.set_opacity(alpha.min());
-
         while (this->update())
         {
-            tx.set_opacity(lyo::cast<hal::color::value>(alpha.update(m_delta())));
+            tx.set_opacity(lyo::cast<hal::color::value>(alpha.update(this->delta())));
 
             dw(m_renderer);
             HAL_DEBUG_DRAW(m_renderer, fnt);
@@ -100,7 +98,7 @@ void game::intro()
                 break;
 
             case middle:
-                if (middle_timer() >= part.until)
+                if (timer() >= part.until)
                 {
                 GoDown:
                     // No clue why this does what I want it to do, honestly...

@@ -1,8 +1,8 @@
 #pragma once
 
+#include <ecs/entity_manager.hpp>
 #include <halcyon/halcyon.hpp>
 #include <lyo/argparse.hpp>
-#include <manager.hpp>
 
 namespace hq
 {
@@ -19,7 +19,7 @@ namespace hq
 
         lyo::f64 delta() const;
 
-        using mgr = manager<128>;
+        using mgr = ECS::static_entity_manager<holder, 128>;
 
         LYO_MAYBE_EMPTY hal::engine m_eng;
         LYO_MAYBE_EMPTY hal::video m_video;
