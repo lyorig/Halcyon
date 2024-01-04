@@ -19,7 +19,7 @@ namespace hq
 
     using timer = lyo::precise_timer;
 
-    using holder = ecs::static_component_manager<ecs::comp::info<position, 20>,
-        ecs::comp::info<velocity, 20>,
-        ecs::comp::info<timer, 10>>;
+    using holder = ECS::static_component_manager<ECS::comp::info<position, 20>,
+        ECS::comp::info<velocity, 20>,
+        ECS::comp::info<timer, 10>>;
 }

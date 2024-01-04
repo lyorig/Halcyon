@@ -37,4 +37,11 @@ namespace lyo
 
     template <std::size_t Index, typename... Args>
     using type_at_index = std::tuple_element_t<Index, std::tuple<Args...>>;
-} // namespace lyo
+
+    template <typename... Args>
+    struct type_list
+    {
+        template <template <typename...> typename T>
+        using type = T<Args...>;
+    };
+}

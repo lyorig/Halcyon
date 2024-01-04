@@ -1,7 +1,7 @@
-#include <HalQ/manager.hpp>
 #include <halcyon/halcyon.hpp>
 #include <iostream>
 #include <lyo/argparse.hpp>
+#include <manager.hpp>
 #include <vector>
 
 using sz = std::size_t;
@@ -53,15 +53,57 @@ void texture_drawing(holder& hld)
     }
 }
 
+template <typename I>
+I random_element(I begin, I end)
+{
+    std::advance(begin, std::rand() % std::distance(begin, end));
+    return begin;
+}
+
 void ecs_test(sz iters)
 {
-    holder h;
+    using man = hq::manager<20>;
+    man mgr;
 
-    std::cout << "ECS test ended.\n";
+    std::vector<man::entity::ID> ids;
+
+    std::cout << "ECS test ready.\n";
+
+    char ch;
+    while (true)
+    {
+        ch = getchar();
+        switch (ch)
+        {
+        case '+':
+            ids.push_back(mgr.spawn<hq::position, hq::velocity>());
+            std::cout << "Spawned ID " << ids.back() << '\n';
+            break;
+
+        case '-':
+        {
+            const auto iter = random_element(ids.begin(), ids.end());
+
+            mgr.kill(*iter);
+            std::cout << "Killed ID " << *iter << '\n';
+
+            ids.erase(iter);
+            break;
+        }
+
+        case 'q':
+            std::cout << "Size is " << ids.size() << '\n';
+            break;
+        case 'x':
+            goto Hell;
+        }
+    }
+Hell:;
 }
 
 int main(int argc, char* argv[])
 {
+    std::srand(std::time(nullptr));
     lyo::parser p { argc, argv };
 
     const auto iter = p.parse<sz>("-iter=", 100);

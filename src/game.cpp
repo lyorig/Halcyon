@@ -1,5 +1,5 @@
-#include <HalQ/game.hpp>
 #include <array>
+#include <game.hpp>
 
 using namespace hq;
 

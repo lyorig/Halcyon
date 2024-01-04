@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <lyo/tags.hpp>
 
 namespace lyo
 {
@@ -23,6 +24,16 @@ namespace lyo
         };
 
         constexpr static_vector() = default;
+
+        constexpr static_vector(std::size_t sz)
+        {
+            this->resize(sz);
+        }
+
+        constexpr static_vector(std::size_t sz, no_init_tag)
+        {
+            this->resize(sz, no_init);
+        }
 
         constexpr ~static_vector()
         {
@@ -46,10 +57,10 @@ namespace lyo
         template <typename... Args>
         constexpr void emplace(iterator pos, Args&&... args)
         {
-            if (this->size() == capacity())
-                return;
+            assert(pos < this->end());
 
             new (pos) T { std::forward<Args>(args)... };
+            std::shift_right(pos, this->end(), 1);
         }
 
         template <typename... Args>
@@ -63,6 +74,36 @@ namespace lyo
         {
             assert(m_size > 0);
             this->erase(this->end() - 1);
+        }
+
+        // Resize with a specified object.
+        constexpr void resize(std::size_t sz, const T& obj = T {})
+        {
+            if (sz == this->size()) // Nothing to do.
+                return;
+
+            if (sz < this->size()) // Erase sets the size.
+                this->erase(this->begin() + sz, this->end());
+
+            else
+            {
+                const std::size_t old_size { this->size() };
+                m_size = sz;
+                std::fill(this->begin() + old_size, this->end(), obj);
+            }
+        }
+
+        // Resize without initializing new objects.
+        constexpr void resize(std::size_t sz, no_init_tag)
+        {
+            if (sz == this->size()) // Nothing to do.
+                return;
+
+            if (sz < this->size()) // Erase sets the size.
+                this->erase(this->begin() + sz, this->end());
+
+            else
+                m_size = sz;
         }
 
         constexpr void erase(iterator pos)

@@ -50,8 +50,8 @@ halcyon/src/internal/subsystem.cpp
 halcyon/src/internal/printing.cpp)
 
 target_sources(Halcyon PRIVATE
-HalQ/src/main.cpp
-HalQ/src/game.cpp
+main.cpp
+src/game.cpp
 ${Halcyon_sources})
 
 target_sources(Haltest PRIVATE

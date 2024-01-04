@@ -1,7 +1,7 @@
 #pragma once
 
 #include <chrono>
-#include <lyo/types.hpp>
+#include <lyo/tags.hpp>
 #include <variant>
 
 /* timer.hpp:
@@ -9,8 +9,6 @@
 
 namespace lyo
 {
-    LYO_TAG_TYPE(no_init);
-
     // A simple timer for all your timing needs. It'll keep
     // running no matter what, so if you require pause/resume
     // functionality, use the stopwatch instead.

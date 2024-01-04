@@ -3,7 +3,7 @@
 #include <lyo/concepts.hpp>
 #include <lyo/types.hpp>
 
-namespace ecs
+namespace ECS
 {
     template <lyo::arithmetic T>
     constexpr inline T invalid = std::numeric_limits<T>::max();

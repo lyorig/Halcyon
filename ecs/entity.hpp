@@ -7,7 +7,7 @@
 // entity.hpp:
 // The base entity class.
 
-namespace ecs
+namespace ECS
 {
     template <typename Container>
     class entity_base
@@ -15,7 +15,8 @@ namespace ecs
         using CID = comp::index;
 
     public:
-        using ID = lyo::u16;
+        using ID        = lyo::u16;
+        using container = Container;
 
         enum : ID
         {
@@ -58,17 +59,17 @@ namespace ecs
         }
 
         template <typename C, typename System>
-        constexpr const C& get(System& sys) const
+        constexpr const C& get(const System& sys) const
         {
             HAL_DEBUG_ASSERT(this->has<C>(sys), "Getting non-existent component");
 
             return sys.template get<C>(m_comps[sys.template id<C>()]);
         }
 
-        template <typename C, typename System>
-        constexpr bool has(System& sys)
+        template <typename System, typename... Cs>
+        constexpr bool has(const System& sys)
         {
-            return m_comps[sys.template id<C>()] != comp::invalid_index;
+            return ((m_comps[sys.template id<Cs>()] != comp::invalid_index) && ...);
         }
 
         constexpr ID id() const
@@ -79,6 +80,11 @@ namespace ecs
         constexpr bool valid() const
         {
             return m_id != invalid_id;
+        }
+
+        const Container& comps()
+        {
+            return m_comps;
         }
 
     private:

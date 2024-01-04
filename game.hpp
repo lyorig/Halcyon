@@ -1,8 +1,8 @@
 #pragma once
 
-#include <HalQ/manager.hpp>
 #include <halcyon/halcyon.hpp>
 #include <lyo/argparse.hpp>
+#include <manager.hpp>
 
 namespace hq
 {
@@ -19,13 +19,15 @@ namespace hq
 
         lyo::f64 delta() const;
 
+        using mgr = manager<128>;
+
         LYO_MAYBE_EMPTY hal::engine m_eng;
         LYO_MAYBE_EMPTY hal::video m_video;
         LYO_MAYBE_EMPTY hal::audio m_audio;
         LYO_MAYBE_EMPTY hal::image_loader m_image;
         LYO_MAYBE_EMPTY hal::ttf_engine m_ttf;
 
-        manager<128> m_entityMgr;
+        mgr m_entityMgr;
 
         hal::queued_input_handler m_input;
 
