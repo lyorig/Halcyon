@@ -11,7 +11,7 @@ if (APPLE)
   link_directories(/opt/homebrew/lib)
 endif()
 
-if (CMAKE_BUILD_TYPE MATCHES Release AND NOT MSVC)
+if (NOT CMAKE_BUILD_TYPE MATCHES Debug AND NOT MSVC)
   add_compile_options(-flto)
   add_link_options(-flto)
 endif()
@@ -52,7 +52,6 @@ halcyon/src/internal/printing.cpp)
 target_sources(Halcyon PRIVATE
 HalQ/src/main.cpp
 HalQ/src/game.cpp
-HalQ/src/app.cpp
 ${Halcyon_sources})
 
 target_sources(Haltest PRIVATE

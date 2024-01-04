@@ -9,13 +9,21 @@ constexpr lyo::f64 curve(lyo::f64 t)
 }
 
 game::game(lyo::parser&& args)
-    : app { std::move(args), "HalodaQuest" }
+    : m_video { m_eng }
+    , m_audio { m_eng }
+    , m_image { m_video, { hal::image_loader::png } }
+    , m_ttf { m_video }
+    , m_input { m_eng }
+    , m_args { std::move(args) }
+    , m_mixer { m_audio }
+    , m_window { m_video, "HalodaQuest v0.1", hal::fullscreen_mode }
+    , m_renderer { m_window, { hal::renderer::accelerated } }
 {
 }
 
 void game::intro()
 {
-    if (app.args.has("-xi"))
+    if (m_args.has("-xi"))
         return;
 
     using opacity_slider = hal::static_slider<lyo::f64, hal::color::min, hal::color::max, curve>;
@@ -42,11 +50,11 @@ void game::intro()
         info { .text = "T3-HQ", .scale = 2.5, .fade_in = 6.0, .until = 15.0, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
-    const hal::font       fnt { app.ttf.load("assets/m5x7.ttf", 144) };
-    const hal::pixel_size winhalf { app.window.size() / 2 };
+    const hal::font       fnt { m_ttf.load("assets/m5x7.ttf", 144) };
+    const hal::pixel_size winhalf { m_window.size() / 2 };
 
-    if (!app.args.has("-xbgm"))
-        app.mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in);
+    if (!m_args.has("-xbgm"))
+        m_mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in);
 
     lyo::precise_timer middle_timer;
 
@@ -54,7 +62,7 @@ void game::intro()
     {
         const info& part { texts[i] };
 
-        hal::texture tx { app.renderer, fnt.render(part.text, part.color) };
+        hal::texture tx { m_renderer, fnt.render(part.text, part.color) };
 
         const hal::coord pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
 
@@ -68,14 +76,14 @@ void game::intro()
 
         tx.set_opacity(alpha.min());
 
-        while (app.update())
+        while (this->update())
         {
-            tx.set_opacity(lyo::cast<hal::color::value>(alpha.update(app.delta())));
+            tx.set_opacity(lyo::cast<hal::color::value>(alpha.update(m_delta())));
 
-            dw(app.renderer);
-            HAL_DEBUG_DRAW(app.renderer, fnt);
+            dw(m_renderer);
+            HAL_DEBUG_DRAW(m_renderer, fnt);
 
-            if (app.input.pressed().has(hal::button::esc))
+            if (m_input.pressed().has(hal::button::esc))
             {
                 i = texts.size() - 1;
                 goto GoDown;
@@ -100,7 +108,7 @@ void game::intro()
                     dir = down;
 
                     if (i == texts.size() - 1) // Calculate how fast the audio fade should be.
-                        app.mixer.music.fade_out(texts.back().fade_out);
+                        m_mixer.music.fade_out(texts.back().fade_out);
                     else
                         alpha.set_mod(-alpha.range() / part.fade_out);
                 }
@@ -119,51 +127,49 @@ void game::intro()
 
     // Mix_FreeMusic blocks until the music has finished fading
     // out, which requires a headstart in the last iteration.
-    app.mixer.music.release();
+    m_mixer.music.release();
 }
 
 void game::start()
 {
-    const hal::font  fnt { app.ttf.load("assets/m5x7.ttf", 144) };
-    const hal::chunk chk { app.mixer.load_sfx("assets/Button Hover.wav") };
+    const hal::font  fnt { m_ttf.load("assets/m5x7.ttf", 144) };
+    const hal::chunk chk { m_mixer.load_sfx("assets/Button Hover.wav") };
 
-    hal::texture tex { app.renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
-
-    hal::queued_input_handler& inp { app.input };
+    hal::texture tex { m_renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
 
     hal::draw dw { tex };
 
-    void(dw.to(hal::anchor::resolve(hal::anchor::center, app.window.size() / 2, tex.size())));
+    void(dw.to(hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size())));
     bool held { false };
 
     constexpr hal::SDL::coord_type mod { 400.0 };
     const lyo::precise_timer       tmr;
 
-    if (!app.args.has("-xbgm"))
-        app.mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop);
+    if (!m_args.has("-xbgm"))
+        m_mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop);
 
-    app.renderer.set_draw_color(0x04015c);
+    m_renderer.set_draw_color(0x04015c);
 
-    while (app.update())
+    while (this->update())
     {
-        for (auto val : inp.held())
+        for (auto val : m_input.held())
         {
             switch (val)
             {
             case hal::button::W:
-                dw.dest().pos.y -= mod * app.delta();
+                dw.dest().pos.y -= mod * m_delta();
                 break;
 
             case hal::button::S:
-                dw.dest().pos.y += mod * app.delta();
+                dw.dest().pos.y += mod * m_delta();
                 break;
 
             case hal::button::A:
-                dw.dest().pos.x -= mod * app.delta();
+                dw.dest().pos.x -= mod * m_delta();
                 break;
 
             case hal::button::D:
-                dw.dest().pos.x += mod * app.delta();
+                dw.dest().pos.x += mod * m_delta();
                 break;
 
             default:
@@ -171,7 +177,7 @@ void game::start()
             }
         }
 
-        if (hal::SDL::FPoint(inp.mouse()) | dw.dest())
+        if (hal::SDL::FPoint(m_input.mouse()) | dw.dest())
         {
             if (!held)
             {
@@ -180,8 +186,8 @@ void game::start()
                 held = true;
             }
 
-            if (inp.pressed().has(hal::button::lmb))
-                inp.quit();
+            if (m_input.pressed().has(hal::button::lmb))
+                m_input.quit();
         }
 
         else if (held)
@@ -190,8 +196,21 @@ void game::start()
             held = false;
         }
 
-        HAL_DEBUG_DRAW(app.renderer, fnt);
+        HAL_DEBUG_DRAW(m_renderer, fnt);
 
-        dw(app.renderer);
+        dw(m_renderer);
     }
+}
+
+bool game::update()
+{
+    m_delta.reset();
+    m_renderer.present();
+
+    return m_input.update();
+}
+
+lyo::f64 game::delta() const
+{
+    return m_delta();
 }
