@@ -24,8 +24,9 @@ struct holder
     LYO_MAYBE_EMPTY hal::video vid { eng };
     LYO_MAYBE_EMPTY hal::ttf_engine ttf { vid };
 
-    hal::window   wnd { vid, "Renderer proxy", {}, { 100, 100 }, { hal::window::hidden } };
-    hal::renderer rnd { wnd, { hal::renderer::accelerated } };
+    hal::input_handler inp { eng };
+    hal::window        wnd { vid, "Renderer proxy", {}, { 100, 100 }, {} };
+    hal::renderer      rnd { wnd, { hal::renderer::accelerated } };
 
     const hal::font fnt { ttf.load("assets/m5x7.ttf", 144) };
 };
@@ -54,12 +55,9 @@ void texture_drawing(holder& hld)
 
 void ecs_test(sz iters)
 {
-    hq::manager mgr;
+    holder h;
 
-    std::vector<hq::entity::ID> ids;
-
-    for (sz i { 0 }; i < iters; ++i)
-        ids.push_back(mgr.add<hq::velocity, hq::position>());
+    std::cout << "ECS test ended.\n";
 }
 
 int main(int argc, char* argv[])

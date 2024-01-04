@@ -8,25 +8,20 @@
 
 namespace hal
 {
-    class engine;
-    class input_handler;
-
     LYO_TAG_TYPE(fullscreen_mode);
 
     class window : public sdl_object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
-        using id_type = Uint32;
-
-        enum flags : lyo::u16
+        enum flags : Uint32
         {
-            none = 0,
-            fullscreen = SDL_WINDOW_FULLSCREEN,
+            none                = 0,
+            fullscreen          = SDL_WINDOW_FULLSCREEN,
             fullscreen_windowed = SDL_WINDOW_FULLSCREEN_DESKTOP,
-            hidden = SDL_WINDOW_HIDDEN,
-            resizeable = SDL_WINDOW_RESIZABLE,
-            minimized = SDL_WINDOW_MINIMIZED,
-            maximized = SDL_WINDOW_MAXIMIZED
+            hidden              = SDL_WINDOW_HIDDEN,
+            resizeable          = SDL_WINDOW_RESIZABLE,
+            minimized           = SDL_WINDOW_MINIMIZED,
+            maximized           = SDL_WINDOW_MAXIMIZED
         };
 
         window(video& sys, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> flags);

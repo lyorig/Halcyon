@@ -27,6 +27,11 @@ namespace hal
             return m_object.get();
         }
 
+        bool exists() const
+        {
+            return m_object.get() != nullptr;
+        }
+
         // Release (reset) the object.
         void release()
         {

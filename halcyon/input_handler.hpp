@@ -6,7 +6,7 @@
 #include <halcyon/debug.hpp>
 #include <halcyon/enums/buttons.hpp>
 #include <halcyon/types/render.hpp>
-#include <lyo/packed_array.hpp>
+#include <lyo/static_vector.hpp>
 #include <utility>
 
 namespace hal
@@ -92,7 +92,7 @@ namespace hal
     class queued_input_handler : public input_base<queued_input_handler>
     {
         // N-key rollover, basically.
-        using holder = lyo::packed_array<hal::button, 8>;
+        using holder = lyo::static_vector<hal::button, 6>;
 
     public:
         using input_base::input_base;

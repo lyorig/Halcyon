@@ -35,7 +35,8 @@ void music::fade_in(lyo::f64 time, infinite_loop_tag)
 
 void music::fade_out(lyo::f64 time)
 {
-    HAL_DEBUG_ASSERT_VITAL(::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0)) != 0, ::SDL_GetError());
+    if (this->exists())
+        HAL_DEBUG_ASSERT_VITAL(::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0)) != 0, ::SDL_GetError());
 }
 
 music& music::pause()
@@ -86,7 +87,7 @@ lyo::f64 music::duration() const
 
 music& music::set_volume(lyo::u8 volume)
 {
-    HAL_DEBUG_ASSERT(this->ptr() != nullptr, "Tried to set volume of null music");
+    HAL_DEBUG_ASSERT(this->exists(), "Tried to set volume of null music");
 
     ::Mix_VolumeMusic(volume);
 

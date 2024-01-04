@@ -1,6 +1,5 @@
 #pragma once
 
-#include <halcyon/ecs.hpp>
 #include <halcyon/engine.hpp>
 #include <halcyon/image_loader.hpp>
 #include <halcyon/input_handler.hpp>

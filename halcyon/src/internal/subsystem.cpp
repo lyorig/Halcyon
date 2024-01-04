@@ -15,7 +15,7 @@ display::index display::idx() const
 
 pixel_size display::size() const
 {
-    return { w, h };
+    return { pixel_type(w), pixel_type(h) };
 }
 
 display::hz_type display::hz() const

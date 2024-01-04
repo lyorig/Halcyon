@@ -3,8 +3,11 @@
 #include <lyo/concepts.hpp>
 #include <lyo/types.hpp>
 
-namespace hal
+namespace ecs
 {
+    template <lyo::arithmetic T>
+    constexpr inline T invalid = std::numeric_limits<T>::max();
+
     namespace comp
     {
         using ID    = lyo::u8;
@@ -12,7 +15,7 @@ namespace hal
 
         enum : index
         {
-            invalid_index = std::numeric_limits<index>::max()
+            invalid_index = invalid<index>
         };
 
         template <typename T, index Size>

@@ -1,23 +1,30 @@
 #pragma once
 
-#include <HalQ/entity.hpp>
-#include <lyo/packed_array.hpp>
+#include <HalQ/components.hpp>
+#include <ecs/entity.hpp>
+#include <lyo/static_vector.hpp>
 
 // manager.hpp:
 // HalQ's entity manager.
 
 namespace hq
 {
+    template <std::size_t Max_Ents>
     class manager
     {
-        using vec = lyo::packed_array<entity, 128>;
+        using entity = ecs::static_entity<holder>;
+        using vec    = lyo::static_vector<entity, Max_Ents>;
 
     public:
         template <typename... Comps>
-        constexpr entity::ID add()
+        constexpr entity::ID spawn()
         {
-            m_ents.push_back(entity::create<Comps...>(m_ecs, m_ents.size(), {}));
-            return m_ents.back().id();
+            entity e { m_ents.size() };
+            (e.add<Comps>(m_holder), ...);
+
+            m_ents.push_back(std::move(e));
+
+            return e.id();
         }
 
         constexpr entity& operator[](entity::ID eid)
@@ -37,7 +44,8 @@ namespace hq
         }
 
     private:
-        ecs m_ecs;
+        holder m_holder;
+
         vec m_ents;
     };
 }

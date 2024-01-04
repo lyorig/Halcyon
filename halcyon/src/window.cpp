@@ -14,6 +14,7 @@ window::window(video& sys, const char* title, fullscreen_mode_tag)
     : window { sys, title, {}, sys.display_at(0).size(), { fullscreen } }
 {
 }
+
 pixel_size window::size() const
 {
     point<int> size;

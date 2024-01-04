@@ -16,6 +16,6 @@ namespace hq
     private:
         class app app;
 
-        manager m_entityMgr;
+        manager<128> m_entityMgr;
     };
 }

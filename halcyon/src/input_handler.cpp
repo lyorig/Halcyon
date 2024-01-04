@@ -143,7 +143,7 @@ bool qih::process(const SDL_Event& event)
 
 void qih::internal_push_back(holder& array, button btn)
 {
-    if (array.full())
+    if (array.size() == array.capacity())
         return;
 
     array.push_back(btn);

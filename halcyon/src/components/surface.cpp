@@ -57,8 +57,8 @@ color surface::operator[](const pixel_pos& pos) const
 
 void surface::internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* dst, lyo::pass_key<blit>) const
 {
-    HAL_DEBUG_ASSERT(this->ptr() != nullptr, "Drawing null surface");
-    HAL_DEBUG_ASSERT(to.ptr() != nullptr, "Drawing to null surface");
+    HAL_DEBUG_ASSERT(this->exists(), "Drawing null surface");
+    HAL_DEBUG_ASSERT(to.exists(), "Drawing to null surface");
 
     ::SDL_BlitScaled(this->ptr(), src, to.ptr(), dst);
 }

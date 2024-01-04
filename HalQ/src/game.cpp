@@ -30,24 +30,25 @@ void game::intro()
     struct info
     {
         const char*      text;
-        const lyo::f64   scale { 1.0 }, fade_in { 1.0 }, hold { 4.0 }, fade_out { 0.5 };
+        const lyo::f64   scale { 1.0 }, fade_in { 1.0 }, until, fade_out { 0.5 };
         const hal::color color { hal::color::white };
     };
 
     // This has to be manually timed. Then again, what other option is there?
+    // Warning: The hold value is relative to the intro's start.
     constexpr std::array texts {
-        info { .text = "Made with Halcyon", .scale = 1.5, .hold = 3.9 },
-        info { .text = "by lyorig", .hold = 2.5, .fade_out = 0.5 },
-        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 6.0, .hold = 4.0, .fade_out = 1.5, .color = hal::color::cyan }
+        info { .text = "T1-MWH", .scale = 1.5, .until = 5.0 },
+        info { .text = "T2-bl", .until = 10.0, .fade_out = 0.5 },
+        info { .text = "T3-HQ", .scale = 2.5, .fade_in = 6.0, .until = 15.0, .fade_out = 1.5, .color = hal::color::cyan }
     };
 
     const hal::font       fnt { app.ttf.load("assets/m5x7.ttf", 144) };
     const hal::pixel_size winhalf { app.window.size() / 2 };
 
-    lyo::precise_timer middle_timer { lyo::no_init };
-
     if (!app.args.has("-xbgm"))
         app.mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in);
+
+    lyo::precise_timer middle_timer;
 
     for (lyo::u8 i { 0 }; i < texts.size(); ++i)
     {
@@ -85,14 +86,13 @@ void game::intro()
             case up:
                 if (alpha.progress() == 1.0)
                 {
-                    middle_timer.reset();
                     dir = middle;
                 }
 
                 break;
 
             case middle:
-                if (middle_timer() >= part.hold)
+                if (middle_timer() >= part.until)
                 {
                 GoDown:
                     // No clue why this does what I want it to do, honestly...
