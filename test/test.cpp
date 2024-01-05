@@ -1,4 +1,6 @@
-#include <ecs/entity_manager.hpp>
+#include <ecs/component_manager.hpp>
+#include <ecs/entity.hpp>
+#include <ecs/scene.hpp>
 #include <halcyon/halcyon.hpp>
 #include <iostream>
 #include <lyo/argparse.hpp>
@@ -60,50 +62,58 @@ I random_element(I begin, I end)
     return begin;
 }
 
-void ecs_test(sz iters)
+void ecs_test(sz iters [[maybe_unused]])
 {
-    using man = ECS::static_entity_manager<hq::holder, 20>;
-    man mgr;
+    std::cout << "Commencing ECS test.\n";
 
-    std::vector<man::entity::ID> ids;
+    using t1 = hal::pixel_size;
+    using t2 = hal::pixel_area;
 
-    std::cout << "ECS test ready.\n";
+    using scm = ECS::static_component_manager<ECS::comp::info<t1, 1000>, ECS::comp::info<t2, 1000>>;
+    using sem = ECS::dynamic_scene<scm, ECS::static_entity>;
 
-    char ch;
-    while (true)
+    lyo::precise_timer tmr;
+
+    sem manager;
+
+    // Part one: Entity allocation.
+    std::vector<sem::entity::ID> ids;
+
+    for (sz i { 0 }; i < iters; ++i)
     {
-        ch = getchar();
-        switch (ch)
-        {
-        case '+':
-            ids.push_back(mgr.spawn<hq::position, hq::velocity>());
-            std::cout << "Spawned ID " << ids.back() << '\n';
-            break;
-
-        case '-':
-        {
-            const auto iter = random_element(ids.begin(), ids.end());
-
-            mgr.kill(*iter);
-            std::cout << "Killed ID " << *iter << '\n';
-
-            ids.erase(iter);
-            break;
-        }
-
-        case 'q':
-            std::cout << "Size is " << ids.size() << '\n';
-            break;
-        case 'x':
-            goto Hell;
-        }
+        ids.push_back(manager.spawn<t1, t2>());
+        // std::cout << "Spawned ID " << ids.back() << '\n';
     }
-Hell:;
+
+    for (sz i { 0 }; i < iters; ++i)
+    {
+        const auto iter = random_element(ids.begin(), ids.end());
+
+        // std::cout << "Killed ID " << *iter << '\n';
+        manager.kill(manager.find(*iter));
+        ids.erase(iter);
+    }
+
+    // Part two: Guaranteed reallocation.
+    for (sz i { 0 }; i < iters; ++i)
+    {
+        ids.push_back(manager.spawn<t1, t2>());
+        assert(manager.ents() == 1);
+
+        const auto iter = random_element(ids.begin(), ids.end());
+
+        manager.kill(manager.find(*iter));
+        ids.erase(iter);
+    }
+
+    std::cout << "Test concluded, having taken " << tmr() << "s.\n";
 }
 
 int main(int argc, char* argv[])
 {
     std::srand(std::time(nullptr));
+    std::ios_base::sync_with_stdio(false);
+
     lyo::parser p { argc, argv };
 
     const auto iter = p.parse<sz>("-iter=", 100);

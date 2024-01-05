@@ -13,7 +13,7 @@ namespace hal
     // Slider Functor Placeholder Type.
     struct SFPT
     {
-        lyo::f64 operator()(lyo::f64 val) const
+        lyo::f64 operator()(lyo::f64 val [[maybe_unused]]) const
         {
             HAL_DEBUG_PANIC("SFPT functor was called");
             return 69.420;
@@ -88,7 +88,7 @@ namespace hal
 
         constexpr slider& operator=(T val)
         {
-            m_value = std::clamp(m_value, m_min, m_max);
+            m_value = std::clamp(val, m_min, m_max);
             return *this;
         }
 
@@ -185,7 +185,7 @@ namespace hal
 
         constexpr static_slider& operator=(T val)
         {
-            m_value = std::clamp(m_value, min(), max());
+            m_value = std::clamp(val, min(), max());
             return *this;
         }
 

@@ -27,6 +27,8 @@ namespace hal
         texture_base() = default;
         texture_base(SDL_Texture* ptr);
 
+        void reset(SDL_Texture* ptr);
+
     private:
         pixel_size internal_size() const;
 

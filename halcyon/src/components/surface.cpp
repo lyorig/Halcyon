@@ -2,7 +2,7 @@
 
 using namespace hal;
 
-surface::surface(const video& sys, pixel_size sz)
+surface::surface(const video& sys [[maybe_unused]], pixel_size sz)
     : surface { sz }
 {
 }

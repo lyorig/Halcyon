@@ -1,8 +1,10 @@
 #pragma once
 
-#include <ecs/entity_manager.hpp>
+#include <ecs/entity.hpp>
+#include <ecs/scene.hpp>
 #include <halcyon/halcyon.hpp>
 #include <lyo/argparse.hpp>
+#include <types.hpp>
 
 namespace hq
 {
@@ -19,7 +21,7 @@ namespace hq
 
         lyo::f64 delta() const;
 
-        using mgr = ECS::static_entity_manager<holder, 128>;
+        using mgr = ECS::static_scene<holder, ECS::static_entity, 128>;
 
         LYO_MAYBE_EMPTY hal::engine m_eng;
         LYO_MAYBE_EMPTY hal::video m_video;

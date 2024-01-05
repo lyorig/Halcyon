@@ -29,7 +29,7 @@ mixer::mixer(audio& sys)
 {
 }
 
-mixer::mixer(audio& sys, lyo::u32 freq, lyo::u8 channels, chunk::quality qual)
+mixer::mixer(audio& sys [[maybe_unused]], lyo::u32 freq, lyo::u8 channels, chunk::quality qual)
     : m_init { freq, channels, qual }
     , music { {} }
 

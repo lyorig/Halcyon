@@ -49,7 +49,7 @@ namespace hal
             : SDL_Color { static_cast<value>((rgb >> 16) & 0xFF),
                 static_cast<value>((rgb >> 8) & 0xFF),
                 static_cast<value>(rgb & 0xFF),
-                static_cast<value>(rgb) }
+                alpha }
         {
         }
 

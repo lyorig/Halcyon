@@ -57,17 +57,19 @@ namespace lyo
         template <typename... Args>
         constexpr void emplace(iterator pos, Args&&... args)
         {
+            assert(this->size() < capacity());
             assert(pos < this->end());
 
-            new (pos) T { std::forward<Args>(args)... };
+            ++m_size;
+
             std::shift_right(pos, this->end(), 1);
+            new (pos) T { std::forward<Args>(args)... };
         }
 
         template <typename... Args>
         constexpr void emplace_back(Args&&... args)
         {
-            assert(this->size() < capacity());
-            this->emplace(this->begin() + m_size++, std::forward<Args>(args)...);
+            this->emplace(this->begin() + m_size, std::forward<Args>(args)...);
         }
 
         constexpr void pop_back()
@@ -120,7 +122,7 @@ namespace lyo
 
         constexpr void erase(iterator begin, iterator end)
         {
-            const std::ptrdiff_t dist { std::distance(begin, end) };
+            const std::size_t dist { std::size_t(std::distance(begin, end)) };
 
             if (dist == 0)
                 return;

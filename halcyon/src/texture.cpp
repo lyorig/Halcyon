@@ -59,6 +59,12 @@ texture_base::texture_base(SDL_Texture* ptr)
     this->set_blend(blend_mode::blend);
 }
 
+void texture_base::reset(SDL_Texture* ptr)
+{
+    sdl_object::reset(ptr);
+    this->set_blend(blend_mode::blend);
+}
+
 pixel_size texture_base::internal_size() const
 {
     point<int> size;
@@ -76,11 +82,12 @@ void texture_base::query(Uint32* format, int* access, int* w, int* h) const
 texture::texture(renderer& wnd, const surface& image)
     : texture_base { create(wnd, image) }
 {
+    this->set_blend(blend_mode::blend);
 }
 
 texture& texture::change(renderer& wnd, const surface& image)
 {
-    sdl_object::reset(create(wnd, image));
+    texture_base::reset(create(wnd, image));
     return *this;
 }
 
@@ -96,7 +103,7 @@ target_texture::target_texture(renderer& rnd, const pixel_size& sz)
 
 void target_texture::resize(renderer& rnd, const pixel_size& sz)
 {
-    sdl_object::reset(create(rnd, sz));
+    texture_base::reset(create(rnd, sz));
 }
 
 SDL_Texture* target_texture::create(renderer& rnd, const pixel_size& sz)

@@ -36,7 +36,7 @@ namespace hal
             system = std::to_underlying(Sys)
         };
 
-        subsystem(const engine& eng)
+        subsystem(const engine& eng [[maybe_unused]])
         {
             HAL_DEBUG_ASSERT_VITAL(::SDL_InitSubSystem(Uint32(Sys)) == 0, ::SDL_GetError());
         }
