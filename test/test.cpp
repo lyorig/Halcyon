@@ -62,6 +62,47 @@ I random_element(I begin, I end)
     return begin;
 }
 
+void sv_fuzz()
+{
+    std::cout << "Starting static_vector fuzzer.\n";
+
+    struct test
+    {
+        ~test()
+        {
+            std::cout << "Test destroyed.\n";
+        }
+    };
+
+    lyo::static_vector<test, 10> ts;
+    assert(ts.size() == 0);
+
+    std::cout << "[Filling up to capacity]\n";
+    for (sz i { 0 }; i < ts.capacity(); ++i)
+    {
+        assert(ts.size() == i);
+        ts.emplace_back();
+    }
+
+    std::cout << "[Cleaing]\n";
+    ts.clear();
+    assert(ts.size() == 0);
+
+    std::cout << "[Resizing to capacity]\n";
+    ts.resize(ts.capacity(), lyo::no_init);
+    assert(ts.size() == ts.capacity());
+
+    std::cout << "[Erasing three elements]\n";
+    ts.erase(ts.begin() + 2, ts.begin() + 5);
+    assert(ts.size() == ts.capacity() - 3);
+
+    std::cout << "[Erasing a single element]\n";
+    ts.erase(ts.begin() + 5);
+    assert(ts.size() == ts.capacity() - 4);
+
+    std::cout << "[Destructor]\n";
+}
+
 void ecs_test(sz iters [[maybe_unused]])
 {
     std::cout << "Commencing ECS test.\n";
@@ -74,37 +115,42 @@ void ecs_test(sz iters [[maybe_unused]])
 
     lyo::precise_timer tmr;
 
-    sem manager;
-
-    // Part one: Entity allocation.
-    std::vector<sem::entity::ID> ids;
-
-    for (sz i { 0 }; i < iters; ++i)
+    if (true)
     {
-        ids.push_back(manager.spawn<t1, t2>());
-        // std::cout << "Spawned ID " << ids.back() << '\n';
+        sem manager;
+
+        // Part one: Entity allocation.
+        std::vector<sem::entity::ID> ids;
+
+        for (sz i { 0 }; i < iters; ++i)
+        {
+            ids.push_back(manager.spawn<t1, t2>());
+            // std::cout << "Spawned ID " << ids.back() << '\n';
+        }
+
+        for (sz i { 0 }; i < iters; ++i)
+        {
+            const auto iter = random_element(ids.begin(), ids.end());
+
+            // std::cout << "Killed ID " << *iter << '\n';
+            manager.kill(manager.find(*iter));
+            ids.erase(iter);
+        }
+
+        // Part two: Guaranteed reallocation.
+        for (sz i { 0 }; i < iters; ++i)
+        {
+            ids.push_back(manager.spawn<t1, t2>());
+            assert(manager.ents() == 1);
+
+            const auto iter = random_element(ids.begin(), ids.end());
+
+            manager.kill(manager.find(*iter));
+            ids.erase(iter);
+        }
     }
 
-    for (sz i { 0 }; i < iters; ++i)
-    {
-        const auto iter = random_element(ids.begin(), ids.end());
-
-        // std::cout << "Killed ID " << *iter << '\n';
-        manager.kill(manager.find(*iter));
-        ids.erase(iter);
-    }
-
-    // Part two: Guaranteed reallocation.
-    for (sz i { 0 }; i < iters; ++i)
-    {
-        ids.push_back(manager.spawn<t1, t2>());
-        assert(manager.ents() == 1);
-
-        const auto iter = random_element(ids.begin(), ids.end());
-
-        manager.kill(manager.find(*iter));
-        ids.erase(iter);
-    }
+    sv_fuzz();
 
     std::cout << "Test concluded, having taken " << tmr() << "s.\n";
 }

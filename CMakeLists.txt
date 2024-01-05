@@ -16,9 +16,6 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug AND NOT MSVC)
   add_link_options(-flto)
 endif()
 
-add_compile_options(-fsanitize=undefined)
-add_link_options(-fsanitize=undefined)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 link_libraries(SDL2 SDL2_image SDL2_ttf SDL2_mixer)
 

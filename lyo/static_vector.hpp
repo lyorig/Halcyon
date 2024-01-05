@@ -37,30 +37,25 @@ namespace lyo
 
         constexpr ~static_vector()
         {
-            if constexpr (!has_trivial_dtor)
-                for (auto& elem : *this)
-                    elem.~T();
+            this->destroy_range(this->begin(), this->end());
         }
 
         constexpr void push_back(const T& value)
         {
-            assert(this->size() < capacity());
-            new (this->begin() + m_size++) T { value };
+            this->emplace_back(value);
         }
 
         constexpr void push_back(T&& value)
         {
-            assert(this->size() < capacity());
-            new (this->begin() + m_size++) T { std::move(value) };
+            this->emplace_back(std::forward(value));
         }
 
         template <typename... Args>
         constexpr void emplace(iterator pos, Args&&... args)
         {
-            assert(this->size() < capacity());
-            assert(pos < this->end());
-
             ++m_size;
+            assert(this->size() <= capacity());
+            assert(pos < this->end());
 
             std::shift_right(pos, this->end(), 1);
             new (pos) T { std::forward<Args>(args)... };
@@ -84,15 +79,16 @@ namespace lyo
             if (sz == this->size()) // Nothing to do.
                 return;
 
-            if (sz < this->size()) // Erase sets the size.
-                this->erase(this->begin() + sz, this->end());
+            if (sz == 0) // Full clear.
+                return this->clear();
 
-            else
-            {
-                const std::size_t old_size { this->size() };
-                m_size = sz;
-                std::fill(this->begin() + old_size, this->end(), obj);
-            }
+            if (sz < this->size()) // Need to remove elements.
+                return this->erase(this->begin() + sz, this->end());
+
+            // (sz > size()) Need to add elements.
+            const std::size_t old_size { this->size() };
+            m_size = sz;
+            std::fill(this->begin() + old_size, this->end(), obj);
         }
 
         // Resize without initializing new objects.
@@ -101,21 +97,23 @@ namespace lyo
             if (sz == this->size()) // Nothing to do.
                 return;
 
-            if (sz < this->size()) // Erase sets the size.
-                this->erase(this->begin() + sz, this->end());
+            if (sz == 0) // Full clear.
+                return this->clear();
 
-            else
-                m_size = sz;
+            if (sz < this->size()) // Need to remove elements.
+                return this->erase(this->begin() + sz, this->end());
+
+            // (sz > size()) Need to add elements.
+            m_size = sz;
         }
 
         constexpr void erase(iterator pos)
         {
             assert(pos >= this->begin() && pos < this->end());
 
-            if constexpr (!has_trivial_dtor)
-                pos->~T();
+            pos->~T();
 
-            std::rotate(pos, pos + 1, this->end());
+            std::shift_left(pos, this->end(), 1);
 
             --m_size;
         }
@@ -129,17 +127,16 @@ namespace lyo
 
             assert(dist <= this->size());
 
-            if constexpr (!has_trivial_dtor)
-                for (auto it = begin; it != end; ++it)
-                    it->~T();
+            this->destroy_range(begin, end);
 
-            std::rotate(begin, begin + dist, this->end());
+            std::shift_left(end, this->end(), dist);
 
             m_size -= dist;
         }
 
         constexpr void clear()
         {
+            this->destroy_range(this->begin(), this->end());
             m_size = 0;
         }
 
@@ -220,6 +217,12 @@ namespace lyo
         }
 
     private:
+        void destroy_range(iterator begin, iterator end)
+        {
+            for (; begin != end; ++begin)
+                begin->~T();
+        }
+
         std::array<std::byte, Size * sizeof(T)> m_array;
 
         std::size_t m_size { 0 };

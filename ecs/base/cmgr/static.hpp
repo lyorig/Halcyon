@@ -26,7 +26,9 @@ namespace ECS
 
         constexpr ~static_component_manager()
         {
-            (this->clear<typename Is::type>(), ...);
+            // Only clear if at least one type isn't trivially destructible.
+            if constexpr (!(std::is_trivially_destructible_v<typename Is::type> || ...))
+                (this->clear<typename Is::type>(), ...);
         }
 
         template <comp::in_infos<Is...> C, typename... Args>
