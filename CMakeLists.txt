@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22.1)
 if(MSVC)
   add_compile_options(/Wall)
 else()
-  add_compile_options(-Wall -Wextra)
+  add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
 if (APPLE)

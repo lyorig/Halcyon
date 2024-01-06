@@ -7,8 +7,8 @@
 
 namespace lyo
 {
-    template <typename T, std::size_t Size>
-        requires(Size > 0)
+    template <typename T, std::size_t Max_Size>
+        requires(Max_Size > 0)
     class static_vector
     {
     public:
@@ -17,11 +17,6 @@ namespace lyo
 
         using reference       = T&;
         using const_reference = const T&;
-
-        enum : bool
-        {
-            has_trivial_dtor = std::is_trivially_destructible_v<T>
-        };
 
         constexpr static_vector() = default;
 
@@ -33,6 +28,12 @@ namespace lyo
         constexpr static_vector(std::size_t sz, no_init_tag)
         {
             this->resize(sz, no_init);
+        }
+
+        constexpr static_vector(std::initializer_list<T> init)
+            : m_size { init.size() }
+        {
+            std::copy(init.begin(), init.end(), this->begin());
         }
 
         constexpr ~static_vector()
@@ -157,7 +158,7 @@ namespace lyo
 
         constexpr static std::size_t capacity()
         {
-            return Size;
+            return Max_Size;
         }
 
         constexpr iterator begin()
@@ -223,7 +224,7 @@ namespace lyo
                 begin->~T();
         }
 
-        std::array<std::byte, Size * sizeof(T)> m_array;
+        std::array<std::byte, Max_Size * sizeof(T)> m_array;
 
         std::size_t m_size { 0 };
     };

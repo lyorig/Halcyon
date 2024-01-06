@@ -134,9 +134,15 @@ namespace hal
         }
     };
 
+    template <lyo::arithmetic T>
+    bool operator==(const point<T>& lhs, const point<T> rhs)
+    {
+        return lhs.x == rhs.x && lhs.y == rhs.y;
+    }
+
     namespace SDL
     {
-        using Point = point<SDL::pixel_type>;
+        using Point  = point<SDL::pixel_type>;
         using FPoint = point<SDL::coord_type>;
     }
 

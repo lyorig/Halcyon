@@ -42,7 +42,7 @@ namespace ECS
 
             assert(idx != end);
 
-            new (type_begin<C>() + rel) C { std::forward(args)... };
+            new (type_begin<C>() + rel) C { std::forward<Args>(args)... };
             m_used.set(idx);
 
             return rel;

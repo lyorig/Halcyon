@@ -8,6 +8,13 @@
 
 using sz = std::size_t;
 
+template <typename I>
+I random_element(I begin, I end)
+{
+    std::advance(begin, std::rand() % std::distance(begin, end));
+    return begin;
+}
+
 constexpr int  draw_iters { 32 };
 constexpr char string[] { "abcdef1234" };
 constexpr char help_text[] {
@@ -55,52 +62,73 @@ void texture_drawing(holder& hld)
     }
 }
 
-template <typename I>
-I random_element(I begin, I end)
-{
-    std::advance(begin, std::rand() % std::distance(begin, end));
-    return begin;
-}
-
 void sv_fuzz()
 {
-    std::cout << "Starting static_vector fuzzer.\n";
+    std::cout << "\nStarting static_vector fuzzer.\n";
 
     struct test
     {
         ~test()
         {
-            std::cout << "Test destroyed.\n";
+            std::cout << "D ";
         }
     };
 
     lyo::static_vector<test, 10> ts;
     assert(ts.size() == 0);
 
-    std::cout << "[Filling up to capacity]\n";
+    std::cout << "[Filling up to capacity]";
     for (sz i { 0 }; i < ts.capacity(); ++i)
     {
         assert(ts.size() == i);
         ts.emplace_back();
     }
 
-    std::cout << "[Cleaing]\n";
+    std::cout << "[Cleaning]";
     ts.clear();
     assert(ts.size() == 0);
 
-    std::cout << "[Resizing to capacity]\n";
+    std::cout << "\n[Resizing to capacity]";
     ts.resize(ts.capacity(), lyo::no_init);
     assert(ts.size() == ts.capacity());
 
-    std::cout << "[Erasing three elements]\n";
+    std::cout << "\n[Erasing three elements]";
     ts.erase(ts.begin() + 2, ts.begin() + 5);
     assert(ts.size() == ts.capacity() - 3);
 
-    std::cout << "[Erasing a single element]\n";
+    std::cout << "\n[Erasing a single element]";
     ts.erase(ts.begin() + 5);
     assert(ts.size() == ts.capacity() - 4);
 
-    std::cout << "[Destructor]\n";
+    std::cout << "\n[Destructor]";
+}
+
+void cmgr_fuzz(sz iters)
+{
+    std::cout << "\nStarting component manager fuzzer.\n";
+    using ECS::comp::info;
+
+    using comp_mgr = ECS::static_component_manager<
+        info<hal::pixel_size, 10>,
+        info<hal::coord, 5>,
+        info<int, 50>>;
+
+    comp_mgr cm;
+
+    // Part one: Allocation and reallocation.
+    for (sz i { 0 }; i < iters; ++i)
+    {
+        // using lim = std::numeric_limits<hal::pixel_type>;
+        using tp = int;
+
+        const tp x { std::rand() };
+
+        const auto id = cm.add<tp>(x);
+        assert(x == cm.get<tp>(id));
+        cm.remove<tp>(id);
+    }
+
+    std::cout << "Component manager fuzzer ended.\n";
 }
 
 void ecs_test(sz iters [[maybe_unused]])
@@ -110,7 +138,10 @@ void ecs_test(sz iters [[maybe_unused]])
     using t1 = hal::pixel_size;
     using t2 = hal::pixel_area;
 
-    using scm = ECS::static_component_manager<ECS::comp::info<t1, 1000>, ECS::comp::info<t2, 1000>>;
+    using ECS::comp::info;
+    using scm = ECS::static_component_manager<
+        info<t1, 1000>,
+        info<t2, 1000>>;
     using sem = ECS::dynamic_scene<scm, ECS::static_entity>;
 
     lyo::precise_timer tmr;
@@ -151,6 +182,7 @@ void ecs_test(sz iters [[maybe_unused]])
     }
 
     sv_fuzz();
+    cmgr_fuzz(iters);
 
     std::cout << "Test concluded, having taken " << tmr() << "s.\n";
 }
