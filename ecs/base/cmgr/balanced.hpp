@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <ecs/base/component.hpp>
 #include <vector>

@@ -70,21 +70,21 @@ void sv_fuzz()
     {
         ~test()
         {
-            std::cout << "D ";
+            std::cout << " D";
         }
     };
 
     lyo::static_vector<test, 10> ts;
     assert(ts.size() == 0);
 
-    std::cout << "[Filling up to capacity]";
+    std::cout << "\n[Filling up to capacity]";
     for (sz i { 0 }; i < ts.capacity(); ++i)
     {
         assert(ts.size() == i);
         ts.emplace_back();
     }
 
-    std::cout << "[Cleaning]";
+    std::cout << "\n[Cleaning]";
     ts.clear();
     assert(ts.size() == 0);
 

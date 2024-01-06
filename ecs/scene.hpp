@@ -2,6 +2,7 @@
 
 #include <ecs/base/atp.hpp>
 #include <ecs/base/scene.hpp>
+#include <vector>
 
 namespace ECS
 {
