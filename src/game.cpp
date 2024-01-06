@@ -134,9 +134,12 @@ void game::start()
     const hal::chunk chk { m_mixer.load_sfx("assets/Button Hover.wav") };
 
     hal::texture tex { m_renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
-       const hal::texture help_text { m_renderer, fnt.render("[WSAD] Move\nClick on the X to exit.").resize(0.5) };
+    hal::coord   pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size());
 
-    hal::coord pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size());
+
+    const hal::texture help_text { m_renderer, fnt.render("[WSAD] Move\nClick on the X to exit.").resize(0.5) };
+    const hal::coord htpos { 0, m_window.size().y - help_text.size().y };
+
     bool held { false };
 
     constexpr hal::SDL::coord_type mod { 400.0 };
@@ -196,7 +199,7 @@ void game::start()
         HAL_DEBUG_DRAW(m_renderer, fnt);
 
         hal::draw(tex).to(pos)(m_renderer);
-        hal::draw(help_text).to({0, 0})(m_renderer);
+        hal::draw(help_text).to(htpos)(m_renderer);
     }
 }
 

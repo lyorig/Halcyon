@@ -18,7 +18,7 @@ namespace hal
         };
 
         template <lyo::arithmetic T>
-        static constexpr point<T> resolve(pos anch, point<T> pos, point<T> size)
+        constexpr static point<T> resolve(pos anch, point<T> pos, point<T> size)
         {
             switch (anch)
             {
