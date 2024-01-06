@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.22.1)
 
+# Create the Halcyon project.
 project(Halcyon VERSION 0.1 LANGUAGES CXX)
 
 # Set appropriate warnings and directories.
@@ -26,6 +27,7 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 	endif()
 endif()
 
+# Link appropriate SDL libraries.
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 link_libraries(SDL2 SDL2main SDL2_image SDL2_ttf SDL2_mixer)
 
@@ -35,7 +37,7 @@ add_executable(Haltest WIN32)
 set_property(TARGET Halcyon PROPERTY CXX_STANDARD 23)
 set_property(TARGET Haltest PROPERTY CXX_STANDARD 23)
 
-list(APPEND Halcyon_sources
+set(HALCYON_SOURCES
 halcyon/src/debug.cpp
 halcyon/src/engine.cpp
 halcyon/src/image_loader.cpp
@@ -55,8 +57,8 @@ halcyon/src/internal/printing.cpp)
 target_sources(Halcyon PRIVATE
 main.cpp
 src/game.cpp
-${Halcyon_sources})
+${HALCYON_SOURCES})
 
 target_sources(Haltest PRIVATE
 test/test.cpp
-${Halcyon_sources})
+${HALCYON_SOURCES})

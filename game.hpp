@@ -21,7 +21,7 @@ namespace hq
 
         lyo::f64 delta() const;
 
-        using mgr = ECS::static_scene<holder, ECS::static_entity, 128>;
+        using scene = ECS::static_scene<holder, ECS::static_entity, 128>;
 
         LYO_MAYBE_EMPTY hal::engine m_eng;
         LYO_MAYBE_EMPTY hal::video m_video;
@@ -29,7 +29,7 @@ namespace hq
         LYO_MAYBE_EMPTY hal::image_loader m_image;
         LYO_MAYBE_EMPTY hal::ttf_engine m_ttf;
 
-        mgr m_entityMgr;
+        scene m_entityMgr;
 
         hal::queued_input_handler m_input;
 
