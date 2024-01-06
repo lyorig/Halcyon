@@ -134,10 +134,9 @@ void game::start()
     const hal::chunk chk { m_mixer.load_sfx("assets/Button Hover.wav") };
 
     hal::texture tex { m_renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
+       const hal::texture help_text { m_renderer, fnt.render("[WSAD] Move\nClick on the X to exit.").resize(0.5) };
 
-    hal::draw dw { tex };
-
-    void(dw.to(hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size())));
+    hal::coord pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size());
     bool held { false };
 
     constexpr hal::SDL::coord_type mod { 400.0 };
@@ -155,19 +154,19 @@ void game::start()
             switch (val)
             {
             case hal::button::W:
-                dw.dest().pos.y -= mod * m_delta();
+                pos.y -= mod * m_delta();
                 break;
 
             case hal::button::S:
-                dw.dest().pos.y += mod * m_delta();
+               pos.y += mod * m_delta();
                 break;
 
             case hal::button::A:
-                dw.dest().pos.x -= mod * m_delta();
+                pos.x -= mod * m_delta();
                 break;
 
             case hal::button::D:
-                dw.dest().pos.x += mod * m_delta();
+                pos.x += mod * m_delta();
                 break;
 
             default:
@@ -175,7 +174,7 @@ void game::start()
             }
         }
 
-        if (hal::SDL::FPoint(m_input.mouse()) | dw.dest())
+        if (hal::coord(m_input.mouse()) | pos.rect(tex.size()))
         {
             if (!held)
             {
@@ -196,7 +195,8 @@ void game::start()
 
         HAL_DEBUG_DRAW(m_renderer, fnt);
 
-        dw(m_renderer);
+        hal::draw(tex).to(pos)(m_renderer);
+        hal::draw(help_text).to({0, 0})(m_renderer);
     }
 }
 

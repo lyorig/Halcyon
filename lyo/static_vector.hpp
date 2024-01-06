@@ -163,12 +163,12 @@ namespace lyo
 
         constexpr iterator begin()
         {
-            return reinterpret_cast<iterator>(m_array.begin());
+            return reinterpret_cast<iterator>(&*m_array.begin());
         }
 
         constexpr const_iterator begin() const
         {
-            return reinterpret_cast<const_iterator>(m_array.begin());
+            return reinterpret_cast<const_iterator>(&*m_array.begin());
         }
 
         constexpr iterator end()

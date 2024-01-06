@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.22.1)
 
 if(MSVC)
-  add_compile_options(/Wall)
+  add_compile_options(/W4)
+  include_directories(C:/dev/include)
+  link_directories(C:/dev/lib)
 else()
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -11,20 +13,23 @@ if (APPLE)
   link_directories(/opt/homebrew/lib)
 endif()
 
-if (NOT CMAKE_BUILD_TYPE MATCHES Debug AND NOT MSVC)
-  add_compile_options(-flto)
-  add_link_options(-flto)
+if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
+	if (MSVC)
+		add_compile_options(/W4 /GL)
+		add_link_options(/LCTG)
+	else()
+		add_compile_options(-flto)
+		add_link_options(-flto)
+	endif()
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-link_libraries(SDL2 SDL2_image SDL2_ttf SDL2_mixer)
+link_libraries(SDL2 SDL2main SDL2_image SDL2_ttf SDL2_mixer)
 
 project(Halcyon VERSION 0.1 LANGUAGES CXX)
 
-find_package(SDL2 REQUIRED)
-
-add_executable(Halcyon)
-add_executable(Haltest)
+add_executable(Halcyon WIN32)
+add_executable(Haltest WIN32)
 
 set_property(TARGET Halcyon PROPERTY CXX_STANDARD 23)
 set_property(TARGET Haltest PROPERTY CXX_STANDARD 23)
