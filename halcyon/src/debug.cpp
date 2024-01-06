@@ -94,7 +94,7 @@ void debug::panic(const char* why, const char* where,
 
     const SDL_MessageBoxData msgbox {
         SDL_MESSAGEBOX_ERROR, nullptr, why, msgbox_info.c_str(),
-        std::size(buttons), buttons, nullptr
+        static_cast<int>(std::size(buttons)), buttons, nullptr
     };
 
     int response { 0 };

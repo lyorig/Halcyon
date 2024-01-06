@@ -83,7 +83,7 @@ void game::intro()
 
             if (m_input.pressed().has(hal::button::esc))
             {
-                i = texts.size() - 1;
+                i = static_cast<lyo::u8>(texts.size() - 1);
                 goto GoDown;
             }
 
@@ -138,7 +138,9 @@ void game::start()
 
 
     const hal::texture help_text { m_renderer, fnt.render("[WSAD] Move\nClick on the X to exit.").resize(0.5) };
-    const hal::coord htpos { 0, m_window.size().y - help_text.size().y };
+    const hal::coord htpos {
+        0,
+        static_cast<hal::coord_type>(m_window.size().y - help_text.size().y) };
 
     bool held { false };
 

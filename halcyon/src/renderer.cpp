@@ -24,7 +24,10 @@ void renderer::clear()
 
 void renderer::draw_line(const coord& from, const coord& to)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), from.x, from.y, to.x, to.y) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<SDL::coord_type>(from.x),
+        static_cast<SDL::coord_type>(from.y),
+        static_cast<SDL::coord_type>(to.x),
+        static_cast<SDL::coord_type>(to.y)) == 0, ::SDL_GetError());
 }
 
 void renderer::draw_rect(const coord_area& area)

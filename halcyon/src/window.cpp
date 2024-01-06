@@ -30,7 +30,7 @@ display::index window::display_index() const
 
     HAL_DEBUG_ASSERT(ret >= 0, ::SDL_GetError());
 
-    return ret;
+    return static_cast<display::index>(ret);
 }
 
 const char* window::title() const

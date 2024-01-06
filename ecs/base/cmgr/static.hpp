@@ -45,7 +45,7 @@ namespace ECS
             new (type_begin<C>() + rel) C { std::forward<Args>(args)... };
             m_used.set(idx);
 
-            return rel;
+            return static_cast<comp::index>(rel);
         }
 
         template <comp::in_infos<Is...> C>

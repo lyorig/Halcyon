@@ -189,7 +189,7 @@ void ecs_test(sz iters [[maybe_unused]])
 
 int main(int argc, char* argv[])
 {
-    std::srand(std::time(nullptr));
+    std::srand(static_cast<int>(std::time(nullptr)));
     std::ios_base::sync_with_stdio(false);
 
     lyo::parser p { argc, argv };
@@ -215,8 +215,7 @@ int main(int argc, char* argv[])
 
     if (arg_t || arg_s)
     {
-        holder   h;
-        lyo::f64 surface_result, texture_result;
+        holder h;
 
         lyo::precise_timer tmr;
 
@@ -225,7 +224,7 @@ int main(int argc, char* argv[])
             for (sz i { 0 }; i < iter; ++i)
                 surface_drawing(h);
 
-            surface_result = tmr();
+            std::cout << "Surface drawing took " << tmr() << "s\n";
         }
 
         tmr.reset();
@@ -235,17 +234,8 @@ int main(int argc, char* argv[])
             for (sz i { 0 }; i < iter; ++i)
                 texture_drawing(h);
 
-            texture_result = tmr();
+            std::cout << "Texture drawing took " << tmr() << "s\n";
         }
-
-        if (arg_s)
-            std::cout << "Surface drawing took " << surface_result << "s\n";
-
-        if (arg_t)
-            std::cout << "Texture drawing took " << texture_result << "s\n";
-
-        if (arg_t && arg_s)
-            std::cout << "Result: Texture drawing is " << surface_result / texture_result << "x faster\n";
     }
 
     return EXIT_SUCCESS;

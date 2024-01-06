@@ -20,7 +20,7 @@ pixel_size display::size() const
 
 display::hz_type display::hz() const
 {
-    return refresh_rate;
+    return static_cast<display::hz_type>(refresh_rate);
 }
 
 const char* display::name() const
@@ -38,7 +38,7 @@ display::index video::num_displays() const
 
     HAL_DEBUG_ASSERT(ret != -1, ::SDL_GetError());
 
-    return ret;
+    return static_cast<display::index>(ret);
 }
 
 display video::display_at(display::index idx) const

@@ -59,16 +59,16 @@ namespace hal
 
         constexpr point& operator*=(lyo::f64 mul)
         {
-            x *= mul;
-            y *= mul;
+            x = lyo::cast<T>(static_cast<lyo::f64>(x) * mul);
+            y = lyo::cast<T>(static_cast<lyo::f64>(y) * mul);
 
             return *this;
         }
 
         constexpr point& operator/=(lyo::f64 div)
         {
-            x /= div;
-            y /= div;
+            x = lyo::cast<T>(static_cast<lyo::f64>(x) / div);
+            y = lyo::cast<T>(static_cast<lyo::f64>(y) / div);
 
             return *this;
         }
