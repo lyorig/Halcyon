@@ -37,8 +37,8 @@ void game::intro()
     };
 
     constexpr std::array<const char[12], 3> words { "efficiency.", "precision.", "Halcyon. " };
-       
-    constexpr lyo::f64 fade_time { 1.0 };
+
+    constexpr lyo::f64        fade_time { 1.0 };
     constexpr hal::coord_type y_offset_base { 100.0 };
 
     // I calculated these bullshit formulas myself!
@@ -63,7 +63,7 @@ void game::intro()
         hal::draw(tx.tex).to(tx.pos)(m_renderer);
     };
 
-    const lyo::f64 scale { hal::scale::resolve(hal::scale::y, m_font.size_text("A"), m_window.size(), 0.15) };
+    const lyo::f64 scale { hal::scale::resolve(hal::scale::y, m_font.render("A").size(), m_window.size(), 0.1) };
     const lyo::f64 y_offset { y_offset_base * scale };
 
     // The "Made with" part.
@@ -124,7 +124,7 @@ void game::intro()
 
 Part2: // Halcyon, by lyorig.
     hal::coord_type des_x { made_with.pos.x },
-                    dist { current.pos.x - des_x };
+        dist { current.pos.x - des_x };
 
     while (this->update())
     {
@@ -193,11 +193,11 @@ void game::start()
     hal::texture tex { m_renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
     hal::coord   pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size());
 
-
     const hal::texture help_text { m_renderer, fnt.render("[WSAD] Move\nClick on the X to exit.").resize(0.5) };
-    const hal::coord htpos {
+    const hal::coord   htpos {
         0,
-        static_cast<hal::coord_type>(m_window.size().y - help_text.size().y) };
+        static_cast<hal::coord_type>(m_window.size().y - help_text.size().y)
+    };
 
     bool held { false };
 
@@ -220,7 +220,7 @@ void game::start()
                 break;
 
             case hal::button::S:
-               pos.y += mod * m_delta();
+                pos.y += mod * m_delta();
                 break;
 
             case hal::button::A:
