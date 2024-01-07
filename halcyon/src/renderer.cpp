@@ -45,6 +45,11 @@ void renderer::fill_target()
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), nullptr) == 0, ::SDL_GetError());
 }
 
+void renderer::set_logical_size(const pixel_size& sz)
+{
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), sz.x, sz.y) == 0, ::SDL_GetError());
+}
+
 pixel_size renderer::output_size() const
 {
     point<int> size;

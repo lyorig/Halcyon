@@ -15,16 +15,11 @@ surface font::render(const std::string_view& text, color color) const
     return ::TTF_RenderUTF8_Blended_Wrapped(this->ptr(), text.data(), color.to_sdl_color(), 0);
 }
 
-pixel_size font::size_text(const char* text) const
+pixel_size font::size_text(const std::string_view& text) const
 {
     point<int> size;
 
-    ::TTF_SizeText(this->ptr(), text, &size.x, &size.y);
+    ::TTF_SizeText(this->ptr(), text.data(), &size.x, &size.y);
 
     return pixel_size(size);
-}
-
-pixel_size font::size_text(const std::string& text) const
-{
-    return this->size_text(text.c_str());
 }

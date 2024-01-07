@@ -25,10 +25,10 @@ namespace hal
     public:
         enum flags : lyo::u8
         {
-            none = 0,
-            software = SDL_RENDERER_SOFTWARE,
+            none        = 0,
+            software    = SDL_RENDERER_SOFTWARE,
             accelerated = SDL_RENDERER_ACCELERATED,
-            vsync = SDL_RENDERER_PRESENTVSYNC
+            vsync       = SDL_RENDERER_PRESENTVSYNC
         };
 
         // Might as well leave the pure bitmask parameter here.
@@ -50,6 +50,8 @@ namespace hal
 
         blend_mode blend() const;
         void       set_blend(blend_mode bm);
+
+        void set_logical_size(const pixel_size& sz);
 
         pixel_size output_size() const;
 

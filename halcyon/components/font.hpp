@@ -5,8 +5,7 @@
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
-#include <lyo/types.hpp>
-#include <string>
+#include <string_view>
 
 #include <halcyon/components/sdl_object.hpp>
 
@@ -22,7 +21,9 @@ namespace hal
 
         surface render(const std::string_view& text, color color = color::white) const;
 
-        pixel_size size_text(const char* text) const;
-        pixel_size size_text(const std::string& text) const;
+        // When sizing text, it's important to know that only the horizontal
+        // size remains identical to the resulting render's size. The vertical
+        // size is around 10% smaller.
+        pixel_size size_text(const std::string_view& text) const;
     };
-} // namespace hal
+}

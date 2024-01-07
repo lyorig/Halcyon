@@ -1,6 +1,5 @@
 #include <array>
 #include <game.hpp>
-#include <halcyon/enums/scale.hpp>
 
 using namespace hq;
 
@@ -17,17 +16,18 @@ game::game(lyo::parser&& args)
     , m_input { m_eng }
     , m_args { std::move(args) }
     , m_mixer { m_audio }
-    , m_window { m_video, "HalodaQuest v0.1", hal::fullscreen_mode }
+    , m_window { m_video, "HalodaQuest", hal::fullscreen_mode }
     , m_renderer { m_window, { hal::renderer::accelerated } }
     , m_font { m_ttf.load("assets/m5x7.ttf", 144) } // 144pt ought to be enough for anybody.
 {
+    m_renderer.set_logical_size(constants::logical_size);
 }
 
 // This is why God left us.
 // TODO: Refactor!
 void game::intro()
 {
-    if (m_args.has("-xi"))
+    if (m_args.has("-nointro"))
         return;
 
     struct text
@@ -38,7 +38,7 @@ void game::intro()
 
     constexpr std::array<const char[12], 3> words { "efficiency.", "precision.", "Halcyon. " };
 
-    constexpr lyo::f64        fade_time { 1.0 };
+    constexpr lyo::f64        fade_time { 0.75 };
     constexpr hal::coord_type y_offset_base { 100.0 };
 
     // I calculated these bullshit formulas myself!
@@ -63,13 +63,13 @@ void game::intro()
         hal::draw(tx.tex).to(tx.pos)(m_renderer);
     };
 
-    const lyo::f64 scale { hal::scale::resolve(hal::scale::y, m_font.render("A").size(), m_window.size(), 0.1) };
-    const lyo::f64 y_offset { y_offset_base * scale };
+    const hal::pixel_size   sz = m_renderer.output_size();
+    const lyo::f64          y_offset { y_offset_base };
 
     // The "Made with" part.
     text made_with {
-        .tex = { m_renderer, m_font.render("Made with ").resize(scale) },
-        .pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, m_font.size_text("Made with efficiency.") * scale)
+        .tex = { m_renderer, m_font.render("Made with ") },
+        .pos = hal::anchor::resolve(hal::anchor::center, sz / 2, m_font.size_text("Made with efficiency."))
     };
     text current {
         .pos = { made_with.pos.x + made_with.tex.size().x }
@@ -82,7 +82,7 @@ void game::intro()
     {
         const bool is_last { iter == words.end() - 1 };
 
-        current.tex.change(m_renderer, m_font.render(*iter, is_last ? hal::color::cyan : hal::color::white).resize(scale));
+        current.tex.change(m_renderer, m_font.render(*iter, is_last ? hal::color::cyan : hal::color::white));
 
         tmr.reset();
 
@@ -130,9 +130,10 @@ Part2: // Halcyon, by lyorig.
     {
         const lyo::f64 time { tmr() };
         const lyo::f64 res { ease_in_out(time / fade_time) };
+        const lyo::f64 ores { ease_in(time / fade_time) };
 
         current.pos.x = des_x + dist * (1 - res);
-        made_with.tex.set_opacity(lyo::cast<hal::color::value>(255.0 * (1.0 - res)));
+        made_with.tex.set_opacity(lyo::cast<hal::color::value>(255.0 * (1.0 - ores)));
 
         if (time >= fade_time)
             break;
@@ -142,9 +143,9 @@ Part2: // Halcyon, by lyorig.
     }
 
     // The "Made with" texture kind of gets hijacked here.
-    made_with.tex.change(m_renderer, m_font.render("by lyorig").resize(scale * 0.75));
+    made_with.tex.change(m_renderer, m_font.render("by lyorig").resize(0.75));
     made_with.tex.set_opacity(hal::color::max);
-    made_with.pos.x = m_window.size().x;
+    made_with.pos.x = sz.x;
     made_with.pos.y += (current.tex.size().y - made_with.tex.size().y) / 1.33;
 
     des_x = current.pos.x + current.tex.size().x;
@@ -172,7 +173,7 @@ Part2: // Halcyon, by lyorig.
 
     while (this->update())
     {
-        const lyo::u8 alpha { lyo::cast<lyo::u8>(255 * (1 - tmr() * 0.75)) };
+        const lyo::u8 alpha { lyo::cast<lyo::u8>(255 * (1 - ease_out(tmr() * fade_time))) };
 
         if (alpha == 0)
             break;

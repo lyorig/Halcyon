@@ -8,22 +8,23 @@
 
 namespace hq
 {
+    namespace constants
+    {
+        constexpr hal::pixel_size logical_size { 1920, 1080 };
+        constexpr lyo::f64        aspect_ratio { logical_size.x / logical_size.y };
+    }
+
     class game
     {
     public:
+        using scene = ECS::static_scene<holder, ECS::static_entity, 128>;
+
         game(lyo::parser&& args);
 
         void intro();
-
         void start();
 
     private:
-        bool update();
-
-        lyo::f64 delta() const;
-
-        using scene = ECS::static_scene<holder, ECS::static_entity, 128>;
-
         LYO_MAYBE_EMPTY hal::engine m_eng;
         LYO_MAYBE_EMPTY hal::video m_video;
         LYO_MAYBE_EMPTY hal::audio m_audio;
@@ -35,13 +36,16 @@ namespace hq
         hal::queued_input_handler m_input;
 
         const lyo::parser m_args;
+        const hal::font   m_font;
 
-        hal::mixer m_mixer;
-
+        hal::mixer      m_mixer;
         hal::window     m_window;
         hal::renderer   m_renderer;
-        const hal::font m_font;
 
         lyo::precise_timer m_delta;
+
+        bool update();
+
+        lyo::f64 delta() const;
     };
 }
