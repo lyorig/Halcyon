@@ -1,4 +1,3 @@
-#include <array>
 #include <game.hpp>
 
 using namespace hq;
@@ -187,7 +186,7 @@ Part2: // Halcyon, by lyorig.
 }
 
 void game::start()
-{
+{ 
     const hal::font  fnt { m_ttf.load("assets/m5x7.ttf", 144) };
     const hal::chunk chk { m_mixer.load_sfx("assets/Button Hover.wav") };
 

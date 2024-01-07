@@ -20,6 +20,7 @@ pixel_size font::size_text(const std::string_view& text) const
     point<int> size;
 
     ::TTF_SizeText(this->ptr(), text.data(), &size.x, &size.y);
+    size.y = lyo::cast<int>(size.y * 1.104025);
 
     return pixel_size(size);
 }
