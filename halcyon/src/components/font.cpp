@@ -10,9 +10,9 @@ font::font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>)
     HAL_DEBUG_PRINT(debug::load, "Loaded font ", path, " with size ", lyo::u32(size));
 }
 
-surface font::render(const std::string& text, color color) const
+surface font::render(const std::string_view& text, color color) const
 {
-    return ::TTF_RenderUTF8_Blended_Wrapped(this->ptr(), text.c_str(), color.to_sdl_color(), 0);
+    return ::TTF_RenderUTF8_Blended_Wrapped(this->ptr(), text.data(), color.to_sdl_color(), 0);
 }
 
 pixel_size font::size_text(const char* text) const

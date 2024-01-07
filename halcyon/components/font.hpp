@@ -20,7 +20,7 @@ namespace hal
     public:
         font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>);
 
-        surface render(const std::string& text, color color = color::white) const;
+        surface render(const std::string_view& text, color color = color::white) const;
 
         pixel_size size_text(const char* text) const;
         pixel_size size_text(const std::string& text) const;

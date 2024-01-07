@@ -14,6 +14,7 @@ namespace hq
         game(lyo::parser&& args);
 
         void intro();
+
         void start();
 
     private:
@@ -35,10 +36,11 @@ namespace hq
 
         const lyo::parser m_args;
 
-        class hal::mixer m_mixer;
+        hal::mixer m_mixer;
 
-        class hal::window   m_window;
-        class hal::renderer m_renderer;
+        hal::window     m_window;
+        hal::renderer   m_renderer;
+        const hal::font m_font;
 
         lyo::precise_timer m_delta;
     };

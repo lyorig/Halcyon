@@ -1,5 +1,6 @@
 #include <array>
 #include <game.hpp>
+#include <halcyon/enums/scale.hpp>
 
 using namespace hq;
 
@@ -18,114 +19,170 @@ game::game(lyo::parser&& args)
     , m_mixer { m_audio }
     , m_window { m_video, "HalodaQuest v0.1", hal::fullscreen_mode }
     , m_renderer { m_window, { hal::renderer::accelerated } }
+    , m_font { m_ttf.load("assets/m5x7.ttf", 144) } // 144pt ought to be enough for anybody.
 {
 }
 
+// This is why God left us.
+// TODO: Refactor!
 void game::intro()
 {
     if (m_args.has("-xi"))
         return;
 
-    using opacity_slider = hal::static_slider<lyo::f64, hal::color::min, hal::color::max, curve>;
-
-    enum state
+    struct text
     {
-        up,
-        middle,
-        down,
+        hal::texture tex;
+        hal::coord   pos;
     };
 
-    struct info
+    constexpr std::array<const char[12], 3> words { "efficiency.", "precision.", "Halcyon. " };
+       
+    constexpr lyo::f64 fade_time { 1.0 };
+    constexpr hal::coord_type y_offset_base { 100.0 };
+
+    // I calculated these bullshit formulas myself!
+    const auto ease_out = [](hal::coord_type x)
     {
-        const char*      text;
-        const lyo::f64   scale { 1.0 }, fade_in { 1.0 }, until, fade_out;
-        const hal::color color { hal::color::white };
+        return x * (x * x - 3 * x + 3);
     };
 
-    // This has to be manually timed. Then again, what other option is there?
-    // Warning: The hold value is relative to the intro's start.
-    constexpr std::array texts {
-        info { .text = "Made with Halcyon", .scale = 1.5, .fade_in = 2.0, .until = 4.8, .fade_out = 0.75 },
-        info { .text = "by lyorig", .until = 9.0, .fade_out = 0.6 },
-        info { .text = "HalodaQuest", .scale = 2.5, .fade_in = 6.0, .until = 20.0, .fade_out = 1.5, .color = hal::color::cyan }
+    const auto ease_in = [](hal::coord_type x)
+    {
+        return x * x * x;
     };
 
-    const hal::font       fnt { m_ttf.load("assets/m5x7.ttf", 144) };
-    const hal::pixel_size winhalf { m_window.size() / 2 };
-
-    if (!m_args.has("-xbgm"))
-        m_mixer.music.load("assets/intro.mp3").fade_in(texts.front().fade_in);
-
-    const lyo::precise_timer timer;
-
-    for (lyo::u8 i { 0 }; i < texts.size(); ++i)
+    const auto ease_in_out = [](hal::coord_type x)
     {
-        const info& part { texts[i] };
+        lyo::f64 sqr = x * x;
+        return sqr / (2.0 * (sqr - x) + 1.0);
+    };
 
-        hal::texture tx { m_renderer, fnt.render(part.text, part.color) };
+    const auto draw = [&](const text& tx)
+    {
+        hal::draw(tx.tex).to(tx.pos)(m_renderer);
+    };
 
-        const hal::coord pos = hal::anchor::resolve(hal::anchor::center, winhalf, tx.size() * part.scale);
+    const lyo::f64 scale { hal::scale::resolve(hal::scale::y, m_font.size_text("A"), m_window.size(), 0.15) };
+    const lyo::f64 y_offset { y_offset_base * scale };
 
-        hal::draw dw { tx };
-        (void)dw.to(pos).scale(part.scale);
+    // The "Made with" part.
+    text made_with {
+        .tex = { m_renderer, m_font.render("Made with ").resize(scale) },
+        .pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, m_font.size_text("Made with efficiency.") * scale)
+    };
+    text current {
+        .pos = { made_with.pos.x + made_with.tex.size().x }
+    };
 
-        opacity_slider alpha { 0.0 };
-        alpha.set_mod(alpha.range() / part.fade_in);
+    lyo::precise_timer tmr;
 
-        state dir { up };
+    // Made with...
+    for (auto iter { words.begin() }; iter != words.end(); ++iter)
+    {
+        const bool is_last { iter == words.end() - 1 };
+
+        current.tex.change(m_renderer, m_font.render(*iter, is_last ? hal::color::cyan : hal::color::white).resize(scale));
+
+        tmr.reset();
 
         while (this->update())
         {
-            tx.set_opacity(lyo::cast<hal::color::value>(alpha.update(this->delta())));
+            const lyo::f64 time { tmr() };
+            const lyo::f64 res { ease_out(time / fade_time) };
 
-            dw(m_renderer);
-            HAL_DEBUG_DRAW(m_renderer, fnt);
+            current.pos.y = made_with.pos.y - (1 - res) * y_offset;
+            current.tex.set_opacity(lyo::cast<hal::color::value>(255 * res));
 
-            if (m_input.pressed().has(hal::button::esc))
-            {
-                i = static_cast<lyo::u8>(texts.size() - 1);
-                goto GoDown;
-            }
-
-            switch (dir)
-            {
-            case up:
-                if (alpha.progress() == 1.0)
-                {
-                    dir = middle;
-                }
-
+            if (time >= fade_time)
                 break;
 
-            case middle:
-                if (timer() >= part.until)
-                {
-                GoDown:
-                    // No clue why this does what I want it to do, honestly...
-                    alpha.set_mod(-alpha.range() / part.fade_out);
-                    dir = down;
-
-                    if (i == texts.size() - 1) // Calculate how fast the audio fade should be.
-                        m_mixer.music.fade_out(texts.back().fade_out);
-                    else
-                        alpha.set_mod(-alpha.range() / part.fade_out);
-                }
-
-                break;
-
-            case down:
-                if (alpha.progress() == 0.0)
-                    goto NextIter;
-
-                break;
-            }
+            draw(made_with);
+            draw(current);
         }
-    NextIter:;
+
+        tmr.reset();
+
+        if (is_last)
+            goto Part2;
+
+        while (this->update())
+        {
+            const lyo::f64 time { tmr() };
+            const lyo::f64 res { ease_in(time / fade_time) };
+
+            current.pos.y = made_with.pos.y + res * y_offset;
+            current.tex.set_opacity(lyo::cast<hal::color::value>(255.0 * (1.0 - res)));
+
+            if (time >= fade_time)
+                break;
+
+            draw(made_with);
+            draw(current);
+        }
     }
 
-    // Mix_FreeMusic blocks until the music has finished fading
-    // out, which requires a headstart in the last iteration.
-    m_mixer.music.release();
+Part2: // Halcyon, by lyorig.
+    hal::coord_type des_x { made_with.pos.x },
+                    dist { current.pos.x - des_x };
+
+    while (this->update())
+    {
+        const lyo::f64 time { tmr() };
+        const lyo::f64 res { ease_in_out(time / fade_time) };
+
+        current.pos.x = des_x + dist * (1 - res);
+        made_with.tex.set_opacity(lyo::cast<hal::color::value>(255.0 * (1.0 - res)));
+
+        if (time >= fade_time)
+            break;
+
+        draw(made_with);
+        draw(current);
+    }
+
+    // The "Made with" texture kind of gets hijacked here.
+    made_with.tex.change(m_renderer, m_font.render("by lyorig").resize(scale * 0.75));
+    made_with.tex.set_opacity(hal::color::max);
+    made_with.pos.x = m_window.size().x;
+    made_with.pos.y += (current.tex.size().y - made_with.tex.size().y) / 1.33;
+
+    des_x = current.pos.x + current.tex.size().x;
+    dist  = made_with.pos.x - des_x;
+
+    tmr.reset();
+
+    while (this->update())
+    {
+        constexpr lyo::f64 mul { 2.0 };
+
+        const lyo::f64 time { tmr() };
+        const lyo::f64 res { ease_out(time / (fade_time * mul)) };
+
+        made_with.pos.x = des_x + dist * (1 - res);
+
+        if (time >= fade_time * mul)
+            break;
+
+        draw(made_with);
+        draw(current);
+    }
+
+    tmr.reset();
+
+    while (this->update())
+    {
+        const lyo::u8 alpha { lyo::cast<lyo::u8>(255 * (1 - tmr() * 0.75)) };
+
+        if (alpha == 0)
+            break;
+
+        made_with.tex.set_opacity(alpha);
+        current.tex.set_opacity(alpha);
+
+        draw(made_with);
+        draw(current);
+    }
 }
 
 void game::start()
