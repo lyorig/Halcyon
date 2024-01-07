@@ -10,8 +10,7 @@ namespace hq
 {
     namespace constants
     {
-        constexpr hal::pixel_size logical_size { 1920, 1080 };
-        constexpr lyo::f64        aspect_ratio { logical_size.x / logical_size.y };
+        constexpr hal::pixel_type logical_width { 1920 };
     }
 
     class game
@@ -38,9 +37,9 @@ namespace hq
         const lyo::parser m_args;
         const hal::font   m_font;
 
-        hal::mixer      m_mixer;
-        hal::window     m_window;
-        hal::renderer   m_renderer;
+        hal::mixer    m_mixer;
+        hal::window   m_window;
+        hal::renderer m_renderer;
 
         lyo::precise_timer m_delta;
 

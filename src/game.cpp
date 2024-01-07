@@ -14,12 +14,17 @@ game::game(lyo::parser&& args)
     , m_ttf { m_video }
     , m_input { m_eng }
     , m_args { std::move(args) }
+    , m_font { m_ttf.load("assets/m5x7.ttf", 144) } // 144pt ought to be enough for anybody.
     , m_mixer { m_audio }
     , m_window { m_video, "HalodaQuest", hal::fullscreen_mode }
     , m_renderer { m_window, { hal::renderer::accelerated } }
-    , m_font { m_ttf.load("assets/m5x7.ttf", 144) } // 144pt ought to be enough for anybody.
 {
-    m_renderer.set_logical_size(constants::logical_size);
+    using namespace constants;
+
+    const hal::pixel_size window_size { m_window.size() };
+    const lyo::f64        aspect_ratio { lyo::f64(window_size.y) / window_size.x };
+
+    m_renderer.set_logical_size({ logical_width, hal::pixel_type(logical_width * aspect_ratio) });
 }
 
 // This is why God left us.
@@ -62,8 +67,8 @@ void game::intro()
         hal::draw(tx.tex).to(tx.pos)(m_renderer);
     };
 
-    const hal::pixel_size   sz = m_renderer.output_size();
-    const lyo::f64          y_offset { y_offset_base };
+    const hal::pixel_size sz = m_renderer.output_size();
+    const lyo::f64        y_offset { y_offset_base };
 
     // The "Made with" part.
     text made_with {
