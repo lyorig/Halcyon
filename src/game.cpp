@@ -35,9 +35,9 @@ void game::intro()
         hal::coord   pos;
     };
 
-    constexpr std::array<const char[12], 3> words { "efficiency.", "precision.", "Halcyon. " };
+    constexpr std::array<const char[12], 5> words { "efficiency.", "precision.", "love.", "care.", "Halcyon. " };
 
-    constexpr lyo::f64        fade_time { 0.75 };
+    constexpr lyo::f64        fade_time { 0.5 };
     constexpr hal::coord_type y_offset_base { 100.0 };
 
     // I calculated these bullshit formulas myself!
@@ -68,7 +68,7 @@ void game::intro()
     // The "Made with" part.
     text made_with {
         .tex = { m_renderer, m_font.render("Made with ") },
-        .pos = hal::anchor::resolve(hal::anchor::center, sz / 2, m_font.size_text("Made with efficiency."))
+        .pos = hal::anchor::resolve(hal::anchor::center, sz / 2, m_font.size_text(std::string("Made with ") + words.front()))
     };
     text current {
         .pos = { made_with.pos.x + made_with.tex.size().x }
@@ -172,7 +172,9 @@ Part2: // Halcyon, by lyorig.
 
     while (this->update())
     {
-        const lyo::u8 alpha { lyo::cast<lyo::u8>(255 * (1 - ease_out(tmr() * fade_time))) };
+        constexpr lyo::f64 mul { 2.0 };
+
+        const lyo::u8 alpha { lyo::cast<lyo::u8>(255 * (1 - ease_out(tmr() / (fade_time * mul)))) };
 
         if (alpha == 0)
             break;
