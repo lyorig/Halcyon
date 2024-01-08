@@ -1,5 +1,13 @@
-# Made with precision.<br>Made with elegance.<br>Made with Halcyon.<br>
-Or, at least, that's the vision.
+# HalodaQuest
 
-This is nothing more than a hobby project of mine, on which I intend to practice
-various OOP idioms and good coding practices in general. Don't expect anything exceptional.
+This is nothing more than a hobby project of mine, on which I intend to practice various C++ idioms and good coding practices in general, along with CMake and Git.
+
+## Made with Halcyon
+
+Included are several independent libraries.
+- **Halcyon**  
+A C++ SDL wrapper, focused on speed and ease of usage.
+- **lyoSTL**  
+Various classes and types that enhance and simplify coding.
+- **lyoECS**  
+An Entity-Component System, features both static and dynamic variants.
