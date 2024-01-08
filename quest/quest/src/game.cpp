@@ -195,7 +195,7 @@ void game::intro()
 
         const lyo::f64 rel_time { timer() / fade_time };
 
-        fmod.object->set_opacity(fmod.get(rel_time));
+        fmod.object->set_opacity(static_cast<hal::color::value>(fmod.get(rel_time)));
         *mmod.object = mmod.get(rel_time);
 
         draw(made_with);

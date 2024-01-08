@@ -1,6 +1,7 @@
 #pragma once
 #include <halcyon/enums/anchor.hpp>
 #include <halcyon/types/render.hpp>
+#include <limits>
 
 namespace hal
 {

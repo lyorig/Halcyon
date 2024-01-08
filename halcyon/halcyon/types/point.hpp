@@ -56,9 +56,10 @@ namespace hal
         {
             return point { lyo::cast<T>(x / div), lyo::cast<T>(y / div) };
         }
-
+        
         constexpr point& operator*=(lyo::f64 mul)
         {
+            // Bit verbose, but MSVC won't shut up otherwise.
             x = lyo::cast<T>(static_cast<lyo::f64>(x) * mul);
             y = lyo::cast<T>(static_cast<lyo::f64>(y) * mul);
 
@@ -67,6 +68,7 @@ namespace hal
 
         constexpr point& operator/=(lyo::f64 div)
         {
+            // Ditto.
             x = lyo::cast<T>(static_cast<lyo::f64>(x) / div);
             y = lyo::cast<T>(static_cast<lyo::f64>(y) / div);
 
