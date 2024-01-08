@@ -21,6 +21,8 @@ namespace hq
         game(lyo::parser&& args);
 
         void intro();
+        void intro_rewrite();
+
         void start();
 
     private:

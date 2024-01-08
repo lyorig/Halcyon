@@ -2,10 +2,18 @@
 
 #include <SDL2/SDL_error.h>
 #include <halcyon/debug.hpp>
-#include <lyo/capsule.hpp>
 
 namespace hal
 {
+    template <typename Type, lyo::func_ptr<void, Type*> Deleter>
+    struct sdl_deleter
+    {
+        void operator()(Type* ptr)
+        {
+            Deleter(ptr);
+        }
+    };
+
     template <typename Type, lyo::func_ptr<void, Type*> Deleter>
     class sdl_object
     {
@@ -41,10 +49,11 @@ namespace hal
     protected:
         void reset(Type* object)
         {
-            HAL_DEBUG_ASSERT_VITAL((m_object.reset(object)).get() != nullptr, ::SDL_GetError());
+            m_object.reset(object);
+            HAL_DEBUG_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
         }
 
     private:
-        lyo::capsule<Type, Deleter> m_object;
+        std::unique_ptr<Type, sdl_deleter<Type, Deleter>> m_object;
     };
 } // namespace hal

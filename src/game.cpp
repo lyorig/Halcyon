@@ -1,3 +1,5 @@
+#include <array>
+#include <easing.hpp>
 #include <game.hpp>
 
 using namespace hq;
@@ -27,9 +29,22 @@ game::game(lyo::parser&& args)
     m_renderer.set_logical_size({ logical_width, hal::pixel_type(logical_width * aspect_ratio) });
 }
 
-// This is why God left us.
-// TODO: Refactor!
-void game::intro()
+template <typename T, typename Distance>
+struct modifier
+{
+    T*       object;
+    Distance dist;
+    Distance base;
+
+    lyo::func_ptr<lyo::f64, lyo::f64> func;
+
+    Distance get(lyo::f64 x) const
+    {
+        return lyo::cast<Distance>(base + func(x) * dist);
+    }
+};
+
+void game::intro_rewrite()
 {
     if (m_args.has("-nointro"))
         return;
@@ -40,26 +55,13 @@ void game::intro()
         hal::coord   pos;
     };
 
-    constexpr std::array<const char[12], 5> words { "efficiency.", "precision.", "love.", "care.", "Halcyon. " };
-
-    constexpr lyo::f64        fade_time { 0.5 };
-    constexpr hal::coord_type y_offset_base { 100.0 };
-
-    // I calculated these bullshit formulas myself!
-    const auto ease_out = [](hal::coord_type x)
+    enum phase : lyo::u8
     {
-        return x * (x * x - 3 * x + 3);
-    };
-
-    const auto ease_in = [](hal::coord_type x)
-    {
-        return x * x * x;
-    };
-
-    const auto ease_in_out = [](hal::coord_type x)
-    {
-        lyo::f64 sqr = x * x;
-        return sqr / (2.0 * (sqr - x) + 1.0);
+        mw_rotation_in,
+        mw_rotation_out,
+        halcyon_shift,
+        by_lyorig,
+        fade_out
     };
 
     const auto draw = [&](const text& tx)
@@ -67,8 +69,12 @@ void game::intro()
         hal::draw(tx.tex).to(tx.pos)(m_renderer);
     };
 
+    constexpr std::array<const char[12], 3> words { "efficiency.", "precision.", "Halcyon. " };
+
+    constexpr lyo::f64        fade_time { 1.0 };
+    constexpr hal::coord_type fly_dist { 200.0 };
+
     const hal::pixel_size sz = m_renderer.output_size();
-    const lyo::f64        y_offset { y_offset_base };
 
     // The "Made with" part.
     text made_with {
@@ -76,120 +82,120 @@ void game::intro()
         .pos = hal::anchor::resolve(hal::anchor::center, sz / 2, m_font.size_text(std::string("Made with ") + words.front()))
     };
     text current {
-        .pos = { made_with.pos.x + made_with.tex.size().x }
+        .tex = { m_renderer, m_font.render(words.front()) },
+        .pos = { made_with.pos.x + made_with.tex.size().x, made_with.pos.y - fly_dist }
     };
 
-    lyo::precise_timer tmr;
+    modifier<hal::texture, lyo::i16> fmod {
+        &current.tex,
+        lyo::cast<lyo::i16>(hal::color::max / fade_time),
+        hal::color::min,
+        &ease::in
+    };
 
-    // Made with...
-    for (auto iter { words.begin() }; iter != words.end(); ++iter)
+    modifier<hal::coord_type, hal::coord_type> mmod {
+        &current.pos.y,
+        fly_dist,
+        made_with.pos.y - fly_dist,
+        &ease::in
+    };
+
+    lyo::u8 phase { mw_rotation_in };
+    lyo::u8 index { 0 };
+
+    lyo::precise_timer timer;
+
+    while (this->update())
     {
-        const bool is_last { iter == words.end() - 1 };
-
-        current.tex.change(m_renderer, m_font.render(*iter, is_last ? hal::color::cyan : hal::color::white));
-
-        tmr.reset();
-
-        while (this->update())
+        switch (phase)
         {
-            const lyo::f64 time { tmr() };
-            const lyo::f64 res { ease_out(time / fade_time) };
+        case mw_rotation_in:
+            if (timer() >= fade_time)
+            {
+                if (index == words.size() - 1)
+                {
+                    phase = halcyon_shift;
 
-            current.pos.y = made_with.pos.y - (1 - res) * y_offset;
-            current.tex.set_opacity(lyo::cast<hal::color::value>(255 * res));
+                    current.pos.y = made_with.pos.y;
 
-            if (time >= fade_time)
-                break;
+                    fmod.object = &made_with.tex;
+                    fmod.base   = hal::color::max;
+                    fmod.dist   = -fmod.dist;
 
-            draw(made_with);
-            draw(current);
+                    mmod.object = &current.pos.x;
+                    mmod.dist   = -made_with.tex.size().x;
+                    mmod.base   = made_with.pos.x + made_with.tex.size().x;
+                    mmod.func   = &ease::quad;
+                }
+
+                else
+                {
+                    phase = mw_rotation_out;
+
+                    mmod.base = made_with.pos.y;
+                    mmod.func = &ease::in;
+
+                    fmod.dist = -fmod.dist;
+                    fmod.base = hal::color::max;
+                    fmod.func = &ease::in;
+                }
+
+                timer -= fade_time;
+            }
+            break;
+
+        case mw_rotation_out:
+            if (timer() >= fade_time)
+            {
+                phase = mw_rotation_in;
+
+                fmod.func = &ease::out;
+                fmod.dist = -fmod.dist;
+                fmod.base = hal::color::min;
+
+                mmod.base = made_with.pos.y - fly_dist;
+                mmod.func = &ease::out;
+
+                ++index;
+                current.tex.change(m_renderer, m_font.render(words[index], index == words.size() - 1 ? hal::color::cyan : hal::color::white));
+
+                timer -= fade_time;
+            }
+            break;
+
+        case halcyon_shift:
+            if (timer() >= fade_time)
+            {
+                phase = by_lyorig;
+
+                made_with.tex.change(m_renderer, m_font.render("by lyorig").resize(0.75));
+                made_with.pos.y += current.tex.size().y - made_with.tex.size().y;
+
+                mmod.object = &made_with.pos.x;
+                mmod.base   = sz.x;
+                mmod.dist   = -sz.x + current.pos.x + current.tex.size().x;
+                mmod.func   = &ease::out;
+
+                fmod.base = hal::color::max;
+                fmod.dist = 0;
+
+                timer -= fade_time;
+            }
+            break;
+
+        case by_lyorig:
+            if (timer() >= fade_time)
+                goto Hell;
+            break;
         }
 
-        tmr.reset();
-
-        if (is_last)
-            goto Part2;
-
-        while (this->update())
-        {
-            const lyo::f64 time { tmr() };
-            const lyo::f64 res { ease_in(time / fade_time) };
-
-            current.pos.y = made_with.pos.y + res * y_offset;
-            current.tex.set_opacity(lyo::cast<hal::color::value>(255.0 * (1.0 - res)));
-
-            if (time >= fade_time)
-                break;
-
-            draw(made_with);
-            draw(current);
-        }
-    }
-
-Part2: // Halcyon, by lyorig.
-    hal::coord_type des_x { made_with.pos.x },
-        dist { current.pos.x - des_x };
-
-    while (this->update())
-    {
-        const lyo::f64 time { tmr() };
-        const lyo::f64 res { ease_in_out(time / fade_time) };
-        const lyo::f64 ores { ease_in(time / fade_time) };
-
-        current.pos.x = des_x + dist * (1 - res);
-        made_with.tex.set_opacity(lyo::cast<hal::color::value>(255.0 * (1.0 - ores)));
-
-        if (time >= fade_time)
-            break;
+        fmod.object->set_opacity(fmod.get(timer()));
+        *mmod.object = mmod.get(timer());
 
         draw(made_with);
         draw(current);
     }
-
-    // The "Made with" texture kind of gets hijacked here.
-    made_with.tex.change(m_renderer, m_font.render("by lyorig").resize(0.75));
-    made_with.tex.set_opacity(hal::color::max);
-    made_with.pos.x = sz.x;
-    made_with.pos.y += (current.tex.size().y - made_with.tex.size().y) / 1.33;
-
-    des_x = current.pos.x + current.tex.size().x;
-    dist  = made_with.pos.x - des_x;
-
-    tmr.reset();
-
-    while (this->update())
-    {
-        constexpr lyo::f64 mul { 2.0 };
-
-        const lyo::f64 time { tmr() };
-        const lyo::f64 res { ease_out(time / (fade_time * mul)) };
-
-        made_with.pos.x = des_x + dist * (1 - res);
-
-        if (time >= fade_time * mul)
-            break;
-
-        draw(made_with);
-        draw(current);
-    }
-
-    tmr.reset();
-
-    while (this->update())
-    {
-        constexpr lyo::f64 mul { 2.0 };
-
-        const lyo::u8 alpha { lyo::cast<lyo::u8>(255 * (1 - ease_out(tmr() / (fade_time * mul)))) };
-
-        if (alpha == 0)
-            break;
-
-        made_with.tex.set_opacity(alpha);
-        current.tex.set_opacity(alpha);
-
-        draw(made_with);
-        draw(current);
-    }
+Hell:;
 }
 
 void game::start()
