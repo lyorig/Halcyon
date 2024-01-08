@@ -1,9 +1,9 @@
-#include <ecs/component_manager.hpp>
-#include <ecs/entity.hpp>
-#include <ecs/scene.hpp>
 #include <halcyon/halcyon.hpp>
 #include <iostream>
-#include <lyo/argparse.hpp>
+#include <lyoECS/component_manager.hpp>
+#include <lyoECS/entity.hpp>
+#include <lyoECS/scene.hpp>
+#include <lyoSTL/argparse.hpp>
 #include <vector>
 
 using sz = std::size_t;
@@ -29,9 +29,9 @@ constexpr char help_text[] {
 
 struct holder
 {
-    LYO_MAYBE_EMPTY hal::engine eng;
-    LYO_MAYBE_EMPTY hal::video vid { eng };
-    LYO_MAYBE_EMPTY hal::ttf_engine ttf { vid };
+    LYOSTL_NOSIZE hal::engine eng;
+    LYOSTL_NOSIZE hal::video vid { eng };
+    LYOSTL_NOSIZE hal::ttf_engine ttf { vid };
 
     hal::input_handler inp { eng };
     hal::window        wnd { vid, "Renderer proxy", {}, { 100, 100 }, {} };
@@ -106,9 +106,9 @@ void sv_fuzz()
 void cmgr_fuzz(sz iters)
 {
     std::cout << "\nStarting component manager fuzzer.\n";
-    using ECS::comp::info;
+    using lyo::ECS::info;
 
-    using comp_mgr = ECS::static_component_manager<
+    using comp_mgr = lyo::ECS::static_component_manager<
         info<hal::pixel_size, 10>,
         info<hal::coord, 5>,
         info<int, 50>>;
@@ -138,20 +138,20 @@ void ecs_test(sz iters [[maybe_unused]])
     using t1 = hal::pixel_size;
     using t2 = hal::pixel_area;
 
-    using ECS::comp::info;
-    using scm = ECS::static_component_manager<
+    using namespace lyo::ECS;
+    using scm = static_component_manager<
         info<t1, 1000>,
         info<t2, 1000>>;
-    using sem = ECS::dynamic_scene<scm, ECS::static_entity>;
+    using scene = dynamic_scene<scm, static_entity>;
 
     lyo::precise_timer tmr;
 
     if (true)
     {
-        sem manager;
+        scene manager;
 
         // Part one: Entity allocation.
-        std::vector<sem::entity::ID> ids;
+        std::vector<scene::entity::ID> ids;
 
         for (sz i { 0 }; i < iters; ++i)
         {
