@@ -7,7 +7,7 @@
 // components.hpp:
 // All components used in the HalQ project.
 
-namespace hq
+namespace quest
 {
     struct position : public hal::coord
     {

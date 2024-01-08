@@ -6,7 +6,7 @@
 #include <lyoSTL/argparse.hpp>
 #include <quest/types.hpp>
 
-namespace hq
+namespace quest
 {
     namespace constants
     {

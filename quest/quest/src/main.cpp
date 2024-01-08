@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[])
 {
-    hq::game game { { argc, argv } };
+    quest::game game { { argc, argv } };
 
     game.intro();
     game.start();

@@ -8,8 +8,8 @@
 
 using sz = std::size_t;
 
-template <typename I>
-I random_element(I begin, I end)
+template <typename Iter>
+Iter random_element(Iter begin, Iter end)
 {
     std::advance(begin, std::rand() % std::distance(begin, end));
     return begin;

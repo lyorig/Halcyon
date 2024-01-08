@@ -5,7 +5,7 @@
 // easing.hpp:
 // Easing functions for animations etc.
 
-namespace hq
+namespace quest
 {
     namespace bezier
     {

@@ -2,7 +2,7 @@
 #include <quest/easing.hpp>
 #include <quest/game.hpp>
 
-using namespace hq;
+using namespace quest;
 
 constexpr lyo::f64 curve(lyo::f64 t)
 {
