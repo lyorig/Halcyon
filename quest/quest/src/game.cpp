@@ -90,14 +90,14 @@ void game::intro()
         &current.tex,
         lyo::cast<lyo::i16>(hal::color::max),
         hal::color::min,
-        &bezier::ease_in
+        &bezier::ease_out
     };
 
     modifier<hal::coord_t, hal::coord_t> mmod {
         &current.pos.y,
         fly_dist,
         made_with.pos.y - fly_dist,
-        &bezier::ease_in
+        &bezier::ease_out
     };
 
     lyo::u8 phase { mw_rotation_in };

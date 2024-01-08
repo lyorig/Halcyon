@@ -23,7 +23,7 @@ namespace hal
 
         // When sizing text, it's important to know that only the horizontal
         // size remains identical to the resulting render's size. The vertical
-        // size is around 10% smaller.
+        // size is around 10% smaller (in my testing, the avg. multiplier is ~1.104025).
         pixel_size size_text(const std::string_view& text) const;
     };
 }
