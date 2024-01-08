@@ -5,55 +5,58 @@
 
 namespace hal
 {
-    template <typename Type, lyo::func_ptr<void, Type*> Deleter>
-    struct sdl_deleter
+    namespace SDL
     {
-        void operator()(Type* ptr)
+        template <typename Type, lyo::func_ptr<void, Type*> Deleter>
+        struct deleter
         {
-            Deleter(ptr);
-        }
-    };
+            void operator()(Type* ptr)
+            {
+                Deleter(ptr);
+            }
+        };
 
-    template <typename Type, lyo::func_ptr<void, Type*> Deleter>
-    class sdl_object
-    {
-    public:
-        // A default constructor that doesn't check for null.
-        sdl_object() = default;
-
-        sdl_object(Type* object)
-            : m_object { object }
+        template <typename Type, lyo::func_ptr<void, Type*> Deleter>
+        class object
         {
-            HAL_DEBUG_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
-        }
+        public:
+            // A default constructor that doesn't check for null.
+            object() = default;
 
-        // Return the underlying pointer to the object. This is only for
-        // when you want to interface with SDL to use functions not yet
-        // implemented in Halcyon.
-        Type* ptr() const
-        {
-            return m_object.get();
-        }
+            object(Type* object)
+                : m_object { object }
+            {
+                HAL_DEBUG_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
+            }
 
-        bool exists() const
-        {
-            return m_object.get() != nullptr;
-        }
+            // Return the underlying pointer to the object. This is only for
+            // when you want to interface with SDL to use functions not yet
+            // implemented in Halcyon.
+            Type* ptr() const
+            {
+                return m_object.get();
+            }
 
-        // Release (reset) the object.
-        void release()
-        {
-            m_object.reset();
-        }
+            bool exists() const
+            {
+                return m_object.get() != nullptr;
+            }
 
-    protected:
-        void reset(Type* object)
-        {
-            m_object.reset(object);
-            HAL_DEBUG_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
-        }
+            // Release (reset) the object.
+            void release()
+            {
+                m_object.reset();
+            }
 
-    private:
-        std::unique_ptr<Type, sdl_deleter<Type, Deleter>> m_object;
-    };
-} // namespace hal
+        protected:
+            void reset(Type* object)
+            {
+                m_object.reset(object);
+                HAL_DEBUG_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
+            }
+
+        private:
+            std::unique_ptr<Type, deleter<Type, Deleter>> m_object;
+        };
+    }
+}

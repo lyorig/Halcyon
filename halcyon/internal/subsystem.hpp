@@ -16,12 +16,12 @@ namespace hal
 
     enum class system : lyo::u16
     {
-        video = SDL_INIT_VIDEO,
-        audio = SDL_INIT_AUDIO,
+        video      = SDL_INIT_VIDEO,
+        audio      = SDL_INIT_AUDIO,
         controller = SDL_INIT_GAMECONTROLLER,
-        haptic = SDL_INIT_HAPTIC,
-        sensor = SDL_INIT_SENSOR,
-        all = SDL_INIT_EVERYTHING
+        haptic     = SDL_INIT_HAPTIC,
+        sensor     = SDL_INIT_SENSOR,
+        all        = SDL_INIT_EVERYTHING
     };
 
     // A base for SDL subsystem proxies.
@@ -52,7 +52,7 @@ namespace hal
     class display : SDL_DisplayMode
     {
     public:
-        using index = lyo::u8;
+        using index   = lyo::u8;
         using hz_type = lyo::u16;
 
         display(index idx, lyo::pass_key<video>);

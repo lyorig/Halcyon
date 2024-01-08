@@ -7,7 +7,7 @@
 #include <halcyon/types/color.hpp>
 #include <lyo/pass_key.hpp>
 
-#include <halcyon/components/sdl_object.hpp>
+#include <halcyon/components/SDL_object.hpp>
 
 /* surface.hpp:
    A "software surface" used by SDL. The user should never
@@ -25,7 +25,7 @@ namespace hal
     class font;
     class surface;
 
-    class surface : public sdl_object<SDL_Surface, &::SDL_FreeSurface>
+    class surface : public SDL::object<SDL_Surface, &::SDL_FreeSurface>
     {
     public:
         // Create a sized surface.
@@ -65,9 +65,9 @@ namespace hal
         Uint32 pixel_at(const pixel_pos& pos) const;
     };
 
-    LYO_TAG_TYPE(keep_dest);
+    LYO_TAG_TYPE(keep_dst);
 
-    class blit : public drawer<surface, SDL::pixel_type, blit>
+    class blit : public drawer<surface, SDL::pixel_t, blit>
     {
     public:
         using drawer::drawer;
@@ -76,7 +76,7 @@ namespace hal
 
         // SDL's blitting function overwrites the destination rectangle.
         // This overload creates a copy to ensure it remains unchanged.
-        void operator()(const surface& dst, keep_dest_tag) const;
+        void operator()(const surface& dst, keep_dst_tag) const;
     };
 
     template <typename T>

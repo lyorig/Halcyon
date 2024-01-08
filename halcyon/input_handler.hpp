@@ -17,8 +17,6 @@ namespace hal
     class input_base
     {
     public:
-        using key_storage = std::bitset<SDL_NUM_SCANCODES + (SDL_BUTTON_X2 - SDL_BUTTON_LEFT) + 1>;
-
         input_base(engine& eng [[maybe_unused]])
         {
             HAL_DEBUG_PRINT(debug::init, "Initialized input handler");
@@ -75,6 +73,8 @@ namespace hal
     class input_handler : public input_base<input_handler>
     {
     public:
+        using key_storage = std::bitset<SDL_NUM_SCANCODES + (SDL_BUTTON_X2 - SDL_BUTTON_LEFT) + 1>;
+
         using input_base::input_base;
 
         bool update();

@@ -87,16 +87,16 @@ namespace hal
             };
         }
 
-        constexpr SDL::rect_type<T>* addr()
-            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::coord_type>)
+        constexpr SDL::rect_t<T>* addr()
+            requires(lyo::is_present_v<T, SDL::pixel_t, SDL::coord_t>)
         {
-            return reinterpret_cast<SDL::rect_type<T>*>(this);
+            return reinterpret_cast<SDL::rect_t<T>*>(this);
         }
 
-        constexpr const SDL::rect_type<T>* addr() const
-            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::coord_type>)
+        constexpr const SDL::rect_t<T>* addr() const
+            requires(lyo::is_present_v<T, SDL::pixel_t, SDL::coord_t>)
         {
-            return reinterpret_cast<const SDL::rect_type<T>*>(this);
+            return reinterpret_cast<const SDL::rect_t<T>*>(this);
         }
     };
 
@@ -120,7 +120,7 @@ namespace hal
 
     namespace SDL
     {
-        using Rect  = rectangle<SDL::pixel_type>;
-        using FRect = rectangle<SDL::coord_type>;
+        using Rect  = rectangle<SDL::pixel_t>;
+        using FRect = rectangle<SDL::coord_t>;
     }
 }

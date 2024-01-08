@@ -7,14 +7,14 @@
 #include <lyo/pass_key.hpp>
 #include <string_view>
 
-#include <halcyon/components/sdl_object.hpp>
+#include <halcyon/components/SDL_object.hpp>
 
 namespace hal
 {
     class ttf_engine;
     class surface;
 
-    class font : public sdl_object<TTF_Font, &::TTF_CloseFont>
+    class font : public SDL::object<TTF_Font, &::TTF_CloseFont>
     {
     public:
         font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>);

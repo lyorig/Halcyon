@@ -5,7 +5,7 @@
 using namespace hal;
 
 chunk::chunk(const char* path, lyo::pass_key<mixer>)
-    : sdl_object { ::Mix_LoadWAV(path) }
+    : object { ::Mix_LoadWAV(path) }
 {
     HAL_DEBUG_PRINT(debug::load, "Loaded SFX ", path);
 }

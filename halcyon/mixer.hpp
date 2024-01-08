@@ -14,13 +14,6 @@ namespace hal
     // the various mixer libraries to be initialized.
     class mixer
     {
-    public:
-        mixer(audio& sys);
-        mixer(audio& sys, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
-
-        chunk load_sfx(const char* path) &;
-
-    private:
         LYO_MAYBE_EMPTY class init
         {
         public:
@@ -29,6 +22,11 @@ namespace hal
         } m_init;
 
     public:
+        mixer(audio& sys);
+        mixer(audio& sys, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
+
+        chunk load_sfx(const char* path) &;
+
         class music music;
     };
 } // namespace hal

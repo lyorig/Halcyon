@@ -11,20 +11,20 @@ namespace hal
     // Designed to be used as an rvalue - all functions should only be called once.
     // It's possible to store it, but this is only recommended for:
     // a) constant textures, and
-    // b) people who know what they're doing. That's you!
+    // b) those who know what they're doing. I'm sure you do, though.
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
-    template <typename T, lyo::one_of<SDL::pixel_type, SDL::coord_type> Dest_type, typename This = void>
+    template <typename T, lyo::one_of<SDL::pixel_t, SDL::coord_t> Dst_type, typename This = void>
     class drawer
     {
     protected:
-        using st = SDL::pixel_type;
-        using dt = Dest_type;
+        using src_t = SDL::pixel_t;
+        using dst_t = Dst_type;
 
-        using spoint = point<st>;
-        using srect = rectangle<st>;
+        using src_point = point<src_t>;
+        using src_rect  = rectangle<src_t>;
 
-        using dpoint = point<dt>;
-        using drect = rectangle<dt>;
+        using dst_point = point<dst_t>;
+        using dst_rect  = rectangle<dst_t>;
 
         using this_ref = std::conditional_t<std::is_void_v<This>, drawer, This>&;
 
@@ -33,12 +33,12 @@ namespace hal
             : m_this { src }
             , m_dst { src.size() }
         {
-            m_src.pos.x = unset<st>;
+            m_src.pos.x = unset<src_t>;
         }
 
         // Set where to draw.
         // Discards any previous scaling and anchoring.
-        [[nodiscard]] this_ref to(const dpoint& pos)
+        [[nodiscard]] this_ref to(const dst_point& pos)
         {
             m_dst.pos = pos;
             return get_this();
@@ -46,7 +46,7 @@ namespace hal
 
         // Set the destination rectangle.
         // Discards any previous scaling and anchoring.
-        [[nodiscard]] this_ref to(const drect& area)
+        [[nodiscard]] this_ref to(const dst_rect& area)
         {
             m_dst = area;
             return get_this();
@@ -56,7 +56,7 @@ namespace hal
         // Do not use with scaling and anchoring.
         [[nodiscard]] this_ref to(fill_tag)
         {
-            m_dst.pos.x = unset<dt>;
+            m_dst.pos.x = unset<dst_t>;
             return get_this();
         }
 
@@ -72,7 +72,7 @@ namespace hal
         // Call after setting the destination and before anchoring.
         [[nodiscard]] this_ref scale(lyo::f64 mul)
         {
-            if (m_dst.pos.x != unset<dt>)
+            if (m_dst.pos.x != unset<dst_t>)
                 m_dst.size *= mul;
             return get_this();
         }
@@ -81,31 +81,31 @@ namespace hal
         // Call after setting the destination and scaling.
         [[nodiscard]] this_ref anchor(anchor::pos anch)
         {
-            if (m_dst.pos.x != unset<dt>)
+            if (m_dst.pos.x != unset<dst_t>)
                 m_dst.pos = anchor::resolve(anch, m_dst.pos, m_dst.size);
             return get_this();
         }
 
         // Access the source rectangle.
-        srect& src()
+        src_rect& src()
         {
             return m_src;
         }
 
         // Get the source rectangle.
-        const srect& src() const
+        const src_rect& src() const
         {
             return m_src;
         }
 
         // Access the destination rectangle.
-        drect& dest()
+        dst_rect& dst()
         {
             return m_dst;
         }
 
         // Get the destination rectangle.
-        const drect& dest() const
+        const dst_rect& dst() const
         {
             return m_dst;
         }
@@ -118,7 +118,7 @@ namespace hal
 
         const T& m_this;
 
-        drect m_dst;
-        srect m_src;
+        dst_rect m_dst;
+        src_rect m_src;
     };
 }

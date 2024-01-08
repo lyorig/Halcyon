@@ -105,7 +105,7 @@ music& music::jump(lyo::f64 time)
 
 music& music::internal_load(const char* path)
 {
-    sdl_object::reset(::Mix_LoadMUS(path));
+    object::reset(::Mix_LoadMUS(path));
     HAL_DEBUG_PRINT(debug::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
 
     return *this;

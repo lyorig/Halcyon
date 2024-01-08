@@ -19,7 +19,7 @@ namespace hal
         // Warning: If loading from an rvalue TTF engine, only
         // use the font as an rvalue. Do not assign it to a variable
         // or anything like that, because its usage after this class'
-        // destructor runs is a one-way trip to seg-fault land.
+        // destructor runs is a one-way trip to segfault land.
         font load(const char* path, lyo::u8 size) const;
     };
 } // namespace hal

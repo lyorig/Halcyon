@@ -6,13 +6,13 @@
 #include <lyo/pass_key.hpp>
 #include <lyo/timer.hpp>
 
-#include <halcyon/components/sdl_object.hpp>
+#include <halcyon/components/SDL_object.hpp>
 
 namespace hal
 {
     class mixer;
 
-    class music : public sdl_object<Mix_Music, &::Mix_FreeMusic>
+    class music : public SDL::object<Mix_Music, &::Mix_FreeMusic>
     {
     public:
         music(lyo::pass_key<mixer>);

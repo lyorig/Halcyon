@@ -3,13 +3,13 @@
 #include <halcyon/components/surface.hpp>
 
 // texture.cpp:
-// Proper textures that can be drawn to a window (or another texture).
+// Proper textures that can be drawn to a window (or a target texture).
 
 namespace hal
 {
     class renderer;
 
-    class texture_base : public sdl_object<SDL_Texture, &::SDL_DestroyTexture>
+    class texture_base : public SDL::object<SDL_Texture, &::SDL_DestroyTexture>
     {
     public:
         pixel_size size() const;
@@ -63,7 +63,7 @@ namespace hal
         static SDL_Texture* create(renderer& rnd, const pixel_size& sz);
     };
 
-    class draw final : public drawer<texture_base, SDL::coord_type, draw>
+    class draw final : public drawer<texture_base, SDL::coord_t, draw>
     {
     public:
         using drawer::drawer;

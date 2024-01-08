@@ -1,8 +1,8 @@
 #pragma once
 
-/* debug.hpp:
-   Various debugging functions. Also hopefully the only
-   part of Halcyon that uses preprocessor #defines. */
+// debug.hpp:
+// Various debugging functions. Also hopefully the only
+// part of Halcyon that extensively uses preprocessor defines.
 
 #ifndef NDEBUG
     #define HAL_DEBUG_ENABLED

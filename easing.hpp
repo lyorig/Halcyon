@@ -7,25 +7,35 @@
 
 namespace hq
 {
-    namespace ease
+    namespace bezier
     {
-        // Bezier ease-out (control points [0,1], [1,1]).
-        constexpr lyo::f64 out(hal::coord_type x)
+        // Linear curve (y = x).
+        template <std::floating_point T>
+        constexpr T linear(T x)
         {
-            return x * (x * x - 3 * x + 3);
+            return x;
+        }
+
+        // Bezier ease-out (y = x^3 - 3x^2 + 3x).
+        template <std::floating_point T>
+        constexpr T ease_out(T x)
+        {
+            return x * (x * (x - T(3)) + T(3));
         };
 
-        // Bezier ease-in (control points [0,0], [0,1]).
-        constexpr lyo::f64 in(hal::coord_type x)
+        // Bezier ease-in (y = x^3).
+        template <std::floating_point T>
+        constexpr T ease_in(T x)
         {
             return x * x * x;
         };
 
-        // Quadratic ease-in-out.
-        constexpr lyo::f64 quad(hal::coord_type x)
+        // Quadratic ease-in-out (weird formula, google it).
+        template <std::floating_point T>
+        constexpr T quadratic(T x)
         {
-            lyo::f64 sqr = x * x;
-            return sqr / (2.0 * (sqr - x) + 1.0);
+            const T sqr { x * x };
+            return sqr / (T(2.0) * (sqr - x) + T(1.0));
         };
     }
 }

@@ -121,16 +121,16 @@ namespace hal
             };
         }
 
-        constexpr SDL::point_type<T>* addr()
-            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::coord_type>)
+        constexpr SDL::point_t<T>* addr()
+            requires(lyo::is_present_v<T, SDL::pixel_t, SDL::coord_t>)
         {
-            return reinterpret_cast<SDL::point_type<T>*>(this);
+            return reinterpret_cast<SDL::point_t<T>*>(this);
         }
 
-        constexpr const SDL::point_type<T>* addr() const
-            requires(lyo::is_present_v<T, SDL::pixel_type, SDL::coord_type>)
+        constexpr const SDL::point_t<T>* addr() const
+            requires(lyo::is_present_v<T, SDL::pixel_t, SDL::coord_t>)
         {
-            return reinterpret_cast<const SDL::point_type<T>*>(this);
+            return reinterpret_cast<const SDL::point_t<T>*>(this);
         }
     };
 
@@ -142,8 +142,8 @@ namespace hal
 
     namespace SDL
     {
-        using Point  = point<SDL::pixel_type>;
-        using FPoint = point<SDL::coord_type>;
+        using Point  = point<SDL::pixel_t>;
+        using FPoint = point<SDL::coord_t>;
     }
 
 } // namespace hal

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SDL2/SDL_image.h>
-
-#include <halcyon/types/other.hpp>
+#include <initializer_list>
+#include <lyo/types.hpp>
 
 namespace hal
 {
@@ -16,13 +16,13 @@ namespace hal
     public:
         enum image_type : lyo::u8 // Image types, adapted from SDL.
         {
-            jpg = IMG_INIT_JPG,
-            png = IMG_INIT_PNG,
-            tif = IMG_INIT_TIF,
+            jpg  = IMG_INIT_JPG,
+            png  = IMG_INIT_PNG,
+            tif  = IMG_INIT_TIF,
             webp = IMG_INIT_WEBP
         };
 
-        image_loader(video& sys, il<image_type> types);
+        image_loader(video& sys, std::initializer_list<image_type> types);
         ~image_loader();
 
         surface load(const char* file) const;

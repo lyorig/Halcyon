@@ -1,6 +1,5 @@
 #pragma once
 
-#include "halcyon/types/other.hpp"
 #include <SDL2/SDL_render.h>
 
 #include <halcyon/enums/anchor.hpp>
@@ -9,7 +8,7 @@
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
 
-#include <halcyon/components/sdl_object.hpp>
+#include <halcyon/components/SDL_object.hpp>
 
 namespace hal
 {
@@ -20,7 +19,7 @@ namespace hal
     class texture_base;
     class target_texture;
 
-    class renderer : public sdl_object<SDL_Renderer, &::SDL_DestroyRenderer>
+    class renderer : public SDL::object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
     public:
         enum flags : lyo::u8
@@ -32,7 +31,7 @@ namespace hal
         };
 
         // Might as well leave the pure bitmask parameter here.
-        renderer(window& wnd, il<flags> flags);
+        renderer(window& wnd, std::initializer_list<flags> flags);
 
         void present();
 

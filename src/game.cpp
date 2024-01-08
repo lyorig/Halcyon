@@ -26,7 +26,7 @@ game::game(lyo::parser&& args)
     const hal::pixel_size window_size { m_window.size() };
     const lyo::f64        aspect_ratio { lyo::f64(window_size.y) / window_size.x };
 
-    m_renderer.set_logical_size({ logical_width, hal::pixel_type(logical_width * aspect_ratio) });
+    m_renderer.set_logical_size({ logical_width, hal::pixel_t(logical_width * aspect_ratio) });
 }
 
 template <typename T, typename Distance>
@@ -71,8 +71,8 @@ void game::intro_rewrite()
 
     constexpr std::array<const char[12], 3> words { "efficiency.", "precision.", "Halcyon. " };
 
-    constexpr lyo::f64        fade_time { 1.0 };
-    constexpr hal::coord_type fly_dist { 200.0 };
+    constexpr lyo::f64     fade_time { 0.75 };
+    constexpr hal::coord_t fly_dist { 200.0 };
 
     const hal::pixel_size sz = m_renderer.output_size();
 
@@ -88,16 +88,16 @@ void game::intro_rewrite()
 
     modifier<hal::texture, lyo::i16> fmod {
         &current.tex,
-        lyo::cast<lyo::i16>(hal::color::max / fade_time),
+        lyo::cast<lyo::i16>(hal::color::max),
         hal::color::min,
-        &ease::in
+        &bezier::ease_in
     };
 
-    modifier<hal::coord_type, hal::coord_type> mmod {
+    modifier<hal::coord_t, hal::coord_t> mmod {
         &current.pos.y,
         fly_dist,
         made_with.pos.y - fly_dist,
-        &ease::in
+        &bezier::ease_in
     };
 
     lyo::u8 phase { mw_rotation_in };
@@ -121,11 +121,12 @@ void game::intro_rewrite()
                     fmod.object = &made_with.tex;
                     fmod.base   = hal::color::max;
                     fmod.dist   = -fmod.dist;
+                    fmod.func   = &bezier::ease_out;
 
                     mmod.object = &current.pos.x;
                     mmod.dist   = -made_with.tex.size().x;
                     mmod.base   = made_with.pos.x + made_with.tex.size().x;
-                    mmod.func   = &ease::quad;
+                    mmod.func   = &bezier::quadratic;
                 }
 
                 else
@@ -133,11 +134,11 @@ void game::intro_rewrite()
                     phase = mw_rotation_out;
 
                     mmod.base = made_with.pos.y;
-                    mmod.func = &ease::in;
+                    mmod.func = &bezier::ease_in;
 
                     fmod.dist = -fmod.dist;
                     fmod.base = hal::color::max;
-                    fmod.func = &ease::in;
+                    fmod.func = &bezier::ease_in;
                 }
 
                 timer -= fade_time;
@@ -149,12 +150,12 @@ void game::intro_rewrite()
             {
                 phase = mw_rotation_in;
 
-                fmod.func = &ease::out;
+                fmod.func = &bezier::ease_out;
                 fmod.dist = -fmod.dist;
                 fmod.base = hal::color::min;
 
                 mmod.base = made_with.pos.y - fly_dist;
-                mmod.func = &ease::out;
+                mmod.func = &bezier::ease_out;
 
                 ++index;
                 current.tex.change(m_renderer, m_font.render(words[index], index == words.size() - 1 ? hal::color::cyan : hal::color::white));
@@ -174,12 +175,15 @@ void game::intro_rewrite()
                 mmod.object = &made_with.pos.x;
                 mmod.base   = sz.x;
                 mmod.dist   = -sz.x + current.pos.x + current.tex.size().x;
-                mmod.func   = &ease::out;
+                mmod.func   = &bezier::ease_out;
 
                 fmod.base = hal::color::max;
                 fmod.dist = 0;
+                fmod.func = &bezier::ease_out;
 
                 timer -= fade_time;
+
+                timer.reset();
             }
             break;
 
@@ -189,8 +193,10 @@ void game::intro_rewrite()
             break;
         }
 
-        fmod.object->set_opacity(fmod.get(timer()));
-        *mmod.object = mmod.get(timer());
+        const lyo::f64 rel_time { timer() / fade_time };
+
+        fmod.object->set_opacity(fmod.get(rel_time));
+        *mmod.object = mmod.get(rel_time);
 
         draw(made_with);
         draw(current);
@@ -199,7 +205,7 @@ Hell:;
 }
 
 void game::start()
-{ 
+{
     const hal::font  fnt { m_ttf.load("assets/m5x7.ttf", 144) };
     const hal::chunk chk { m_mixer.load_sfx("assets/Button Hover.wav") };
 
@@ -209,13 +215,13 @@ void game::start()
     const hal::texture help_text { m_renderer, fnt.render("[WSAD] Move\nClick on the X to exit.").resize(0.5) };
     const hal::coord   htpos {
         0,
-        static_cast<hal::coord_type>(m_window.size().y - help_text.size().y)
+        static_cast<hal::coord_t>(m_window.size().y - help_text.size().y)
     };
 
     bool held { false };
 
-    constexpr hal::SDL::coord_type mod { 400.0 };
-    const lyo::precise_timer       tmr;
+    constexpr hal::SDL::coord_t mod { 400.0 };
+    const lyo::precise_timer    tmr;
 
     if (!m_args.has("-xbgm"))
         m_mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop);
@@ -258,7 +264,7 @@ void game::start()
                 held = true;
             }
 
-            if (m_input.pressed().has(hal::button::lmb))
+            if (m_input.pressed().has(hal::button::left_mouse))
                 m_input.quit();
         }
 

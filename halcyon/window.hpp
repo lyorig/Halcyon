@@ -1,6 +1,5 @@
 #pragma once
 
-#include <halcyon/types/other.hpp>
 #include <lyo/timer.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
@@ -10,7 +9,7 @@ namespace hal
 {
     LYO_TAG_TYPE(fullscreen_mode);
 
-    class window : public sdl_object<SDL_Window, &::SDL_DestroyWindow>
+    class window : public SDL::object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
         enum flags : Uint32
@@ -24,7 +23,7 @@ namespace hal
             maximized           = SDL_WINDOW_MAXIMIZED
         };
 
-        window(video& sys, const char* title, const pixel_size& pos, const pixel_size& size, il<flags> flags);
+        window(video& sys, const char* title, const pixel_size& pos, const pixel_size& size, std::initializer_list<flags> flags);
         window(video& sys, const char* title, fullscreen_mode_tag);
 
         pixel_size size() const;

@@ -5,6 +5,10 @@
 
 #include <lyo/types.hpp>
 
+// buttons.hpp:
+// A map of SDL's scancodes for use with Halcyon's
+// input handlers.
+
 namespace hal
 {
     enum class button : lyo::u16
@@ -73,10 +77,10 @@ namespace hal
         left_alt  = SDL_SCANCODE_LALT,
         right_alt = SDL_SCANCODE_RALT,
 
-        lmb = SDL_NUM_SCANCODES + SDL_BUTTON_LEFT - 1,
-        mmb = SDL_NUM_SCANCODES + SDL_BUTTON_MIDDLE - 1,
-        rmb = SDL_NUM_SCANCODES + SDL_BUTTON_RIGHT - 1,
-        mx1 = SDL_NUM_SCANCODES + SDL_BUTTON_X1 - 1,
-        mx2 = SDL_NUM_SCANCODES + SDL_BUTTON_X2 - 1
+        left_mouse    = SDL_NUM_SCANCODES + SDL_BUTTON_LEFT - 1,
+        middle_moouse = SDL_NUM_SCANCODES + SDL_BUTTON_MIDDLE - 1,
+        right_mouse   = SDL_NUM_SCANCODES + SDL_BUTTON_RIGHT - 1,
+        mouse_x1      = SDL_NUM_SCANCODES + SDL_BUTTON_X1 - 1,
+        mouse_x2      = SDL_NUM_SCANCODES + SDL_BUTTON_X2 - 1
     };
 } // namespace hal

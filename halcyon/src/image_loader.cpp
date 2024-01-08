@@ -5,7 +5,7 @@
 
 using namespace hal;
 
-image_loader::image_loader(video& sys [[maybe_unused]], il<image_type> types)
+image_loader::image_loader(video& sys [[maybe_unused]], std::initializer_list<image_type> types)
 {
     HAL_DEBUG_ASSERT_VITAL(::IMG_Init(il2bm<int>(types)) == il2bm<int>(types),
         ::IMG_GetError());

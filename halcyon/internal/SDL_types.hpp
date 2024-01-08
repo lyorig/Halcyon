@@ -7,13 +7,13 @@ namespace hal
 {
     namespace SDL
     {
-        using pixel_type = decltype(SDL_Rect::x);
-        using coord_type = decltype(SDL_FRect::x);
+        using pixel_t = decltype(SDL_Rect::x);
+        using coord_t = decltype(SDL_FRect::x);
 
         template <lyo::arithmetic T>
-        using rect_type = std::conditional_t<std::is_same_v<T, pixel_type>, SDL_Rect, SDL_FRect>;
+        using rect_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Rect, SDL_FRect>;
 
         template <lyo::arithmetic T>
-        using point_type = std::conditional_t<std::is_same_v<T, pixel_type>, SDL_Point, SDL_FPoint>;
+        using point_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Point, SDL_FPoint>;
     }
 }

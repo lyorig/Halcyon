@@ -5,7 +5,7 @@
 using namespace hal;
 
 font::font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>)
-    : sdl_object { ::TTF_OpenFont(path, size) }
+    : object { ::TTF_OpenFont(path, size) }
 {
     HAL_DEBUG_PRINT(debug::load, "Loaded font ", path, " with size ", lyo::u32(size));
 }

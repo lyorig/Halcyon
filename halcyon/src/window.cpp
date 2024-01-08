@@ -4,8 +4,8 @@
 
 using namespace hal;
 
-window::window(video& sys [[maybe_unused]], const char* title, const pixel_size& pos, const pixel_size& size, il<flags> flags)
-    : sdl_object { ::SDL_CreateWindow(title, pos.x, pos.y, size.x, size.y, il2bm<Uint32>(flags)) }
+window::window(video& sys [[maybe_unused]], const char* title, const pixel_size& pos, const pixel_size& size, std::initializer_list<flags> flags)
+    : object { ::SDL_CreateWindow(title, pos.x, pos.y, size.x, size.y, il2bm<Uint32>(flags)) }
 {
     HAL_DEBUG_PRINT(debug::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at ", sys.display_at(this->display_index()));
 }

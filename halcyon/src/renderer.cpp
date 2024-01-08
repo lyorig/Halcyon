@@ -5,8 +5,8 @@
 
 using namespace hal;
 
-renderer::renderer(window& wnd, il<flags> flags)
-    : sdl_object { ::SDL_CreateRenderer(wnd.ptr(), -1, il2bm<Uint32>(flags)) }
+renderer::renderer(window& wnd, std::initializer_list<flags> flags)
+    : object { ::SDL_CreateRenderer(wnd.ptr(), -1, il2bm<Uint32>(flags)) }
 {
     this->set_blend(blend_mode::blend);
 }
@@ -24,10 +24,12 @@ void renderer::clear()
 
 void renderer::draw_line(const coord& from, const coord& to)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<SDL::coord_type>(from.x),
-        static_cast<SDL::coord_type>(from.y),
-        static_cast<SDL::coord_type>(to.x),
-        static_cast<SDL::coord_type>(to.y)) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<SDL::coord_t>(from.x),
+                               static_cast<SDL::coord_t>(from.y),
+                               static_cast<SDL::coord_t>(to.x),
+                               static_cast<SDL::coord_t>(to.y))
+            == 0,
+        ::SDL_GetError());
 }
 
 void renderer::draw_rect(const coord_area& area)

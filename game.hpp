@@ -10,7 +10,7 @@ namespace hq
 {
     namespace constants
     {
-        constexpr hal::pixel_type logical_width { 1920 };
+        constexpr hal::pixel_t logical_width { 1920 };
     }
 
     class game

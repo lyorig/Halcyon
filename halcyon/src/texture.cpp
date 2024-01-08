@@ -54,14 +54,14 @@ lyo::u8 texture_base::opacity() const
 }
 
 texture_base::texture_base(SDL_Texture* ptr)
-    : sdl_object { ptr }
+    : object { ptr }
 {
     this->set_blend(blend_mode::blend);
 }
 
 void texture_base::reset(SDL_Texture* ptr)
 {
-    sdl_object::reset(ptr);
+    object::reset(ptr);
     this->set_blend(blend_mode::blend);
 }
 
@@ -136,8 +136,8 @@ void draw::operator()(renderer& rnd) const
 {
     rnd.internal_render_copy(
         m_this,
-        m_src.pos.x == unset<st> ? nullptr : m_src.addr(),
-        m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr(),
+        m_src.pos.x == unset<src_t> ? nullptr : m_src.addr(),
+        m_dst.pos.x == unset<dst_t> ? nullptr : m_dst.addr(),
         m_angle,
         m_flip,
         {});

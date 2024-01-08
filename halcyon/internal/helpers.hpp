@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/types/other.hpp>
+#include <initializer_list>
 #include <lyo/concepts.hpp>
 
 // helpers.hpp:
@@ -11,7 +11,7 @@ namespace hal
     // OR together a set of values.
     // The name stands for "initializer list to bit mask".
     template <typename Cvt, typename T>
-    constexpr Cvt il2bm(il<T> list)
+    constexpr Cvt il2bm(std::initializer_list<T> list)
     {
         Cvt mask { 0 };
 

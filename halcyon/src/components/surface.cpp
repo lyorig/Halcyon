@@ -13,7 +13,7 @@ surface::surface(pixel_size sz)
 }
 
 surface::surface(SDL_Surface* surf)
-    : sdl_object { surf }
+    : object { surf }
 {
     this->set_blend(blend_mode::blend);
 }
@@ -36,8 +36,8 @@ surface surface::resize(lyo::f64 scale)
 pixel_size surface::size() const
 {
     return {
-        pixel_type(this->ptr()->w),
-        pixel_type(this->ptr()->h)
+        pixel_t(this->ptr()->w),
+        pixel_t(this->ptr()->h)
     };
 }
 
@@ -111,14 +111,14 @@ void blit::operator()(const surface& dst)
 {
     m_this.internal_blit(
         dst,
-        m_src.pos.x == unset<st> ? nullptr : m_src.addr(),
-        m_dst.pos.x == unset<dt> ? nullptr : m_dst.addr(),
+        m_src.pos.x == unset<src_t> ? nullptr : m_src.addr(),
+        m_dst.pos.x == unset<dst_t> ? nullptr : m_dst.addr(),
         {});
 }
 
-void blit::operator()(const surface& dst, keep_dest_tag) const
+void blit::operator()(const surface& dst, keep_dst_tag) const
 {
-    constexpr st us { unset<st> };
+    constexpr src_t us { unset<src_t> };
 
     SDL::Rect copy { m_dst };
 

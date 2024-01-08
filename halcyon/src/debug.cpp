@@ -33,22 +33,22 @@ void debug::draw(renderer& rnd, const font& fnt)
 
     if (m_repaint)
     {
-        static pixel_type y_size { fnt.render(".").size().y };
+        static pixel_t y_size { fnt.render(".").size().y };
 
-        pixel_size csz { .y = pixel_type(y_size * m_entries) }; // Canvas size.
+        pixel_size csz { .y = pixel_t(y_size * m_entries) }; // Canvas size.
 
         // "Calculate" canvas size.
         for (count_type i { 0 }; i < m_entries; ++i)
         {
-            const pixel_type x_size { fnt.size_text(m_queue[i].first).x };
+            const pixel_t x_size { fnt.size_text(m_queue[i].first).x };
             if (x_size > csz.x)
                 csz.x = x_size;
         }
 
         if (csz.x != 0) [[likely]]
         {
-            const lyo::f64   scale { rnd.output_size().y * vhm / y_size };
-            const pixel_type y_scaled = lyo::cast<pixel_type>(y_size * scale);
+            const lyo::f64 scale { rnd.output_size().y * vhm / y_size };
+            const pixel_t  y_scaled = lyo::cast<pixel_t>(y_size * scale);
 
             tx.resize(rnd, csz * scale);
 
@@ -62,7 +62,7 @@ void debug::draw(renderer& rnd, const font& fnt)
                 if (!entry.first.empty()) [[likely]]
                 {
                     const hal::texture text { rnd, fnt.render(entry.first, entry.second) };
-                    const pixel_pos    pos { 0, pixel_type(i * y_scaled) };
+                    const pixel_pos    pos { 0, pixel_t(i * y_scaled) };
 
                     hal::draw(text).to(pos).scale(scale)(rnd);
                 }
