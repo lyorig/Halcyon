@@ -6,7 +6,7 @@
 
 namespace lyo
 {
-    namespace ECS
+    namespace ecs
     {
         template <template <typename...> typename Container, typename Comp_Mgr, template <typename> typename Entity>
         class scene

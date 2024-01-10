@@ -23,8 +23,8 @@ bool debug::m_repaint { false };
 void debug::draw(renderer& rnd, const font& fnt)
 {
     // Render settings.
-    constexpr coord    offset { 20.0, 10.0 };
-    constexpr lyo::f64 vhm { 4.0 / 100.0 }; // View-height multiplier (only edit the lhs).
+    constexpr coord_point offset { 20.0, 10.0 };
+    constexpr lyo::f64    vhm { 4.0 / 100.0 }; // View-height multiplier (only edit the lhs).
 
     // I am not 100% sure whether it's safe to create a static
     // SDL object, as the destructor will run after de-initialization.
@@ -35,7 +35,7 @@ void debug::draw(renderer& rnd, const font& fnt)
     {
         static pixel_t y_size { fnt.render(".").size().y };
 
-        pixel_size csz { .y = pixel_t(y_size * m_entries) }; // Canvas size.
+        pixel_point csz { .y = pixel_t(y_size * m_entries) }; // Canvas size.
 
         // "Calculate" canvas size.
         for (count_type i { 0 }; i < m_entries; ++i)
@@ -62,7 +62,7 @@ void debug::draw(renderer& rnd, const font& fnt)
                 if (!entry.first.empty()) [[likely]]
                 {
                     const hal::texture text { rnd, fnt.render(entry.first, entry.second) };
-                    const pixel_pos    pos { 0, pixel_t(i * y_scaled) };
+                    const pixel_point    pos { 0, pixel_t(i * y_scaled) };
 
                     hal::draw(text).to(pos).scale(scale)(rnd);
                 }

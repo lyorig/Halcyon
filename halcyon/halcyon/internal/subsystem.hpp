@@ -58,7 +58,7 @@ namespace hal
         display(index idx, lyo::pass_key<video>);
 
         index       idx() const;
-        pixel_size  size() const;
+        pixel_point size() const;
         const char* name() const;
         hz_type     hz() const;
 

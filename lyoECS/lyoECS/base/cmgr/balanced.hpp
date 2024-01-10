@@ -7,7 +7,7 @@
 
 namespace lyo
 {
-    namespace ECS
+    namespace ecs
     {
         // A fully stack-based component manager.
         // For template parameters, use a pack of comp::info structs.

@@ -14,11 +14,11 @@ namespace hal
     // a) constant textures, and
     // b) those who know what they're doing. I'm sure you do, though.
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
-    template <typename T, lyo::one_of<SDL::pixel_t, SDL::coord_t> Dst_type, typename This = void>
+    template <typename T, lyo::one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename This = void>
     class drawer
     {
     protected:
-        using src_t = SDL::pixel_t;
+        using src_t = sdl::pixel_t;
         using dst_t = Dst_type;
 
         using src_point = point<src_t>;
@@ -63,7 +63,7 @@ namespace hal
 
         // Set the source rectangle.
         // Can be called at any time.
-        [[nodiscard]] this_ref from(const pixel_area& src)
+        [[nodiscard]] this_ref from(const pixel_rect& src)
         {
             m_src = src;
             return get_this();

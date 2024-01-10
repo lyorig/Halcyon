@@ -4,7 +4,7 @@
 
 namespace lyo
 {
-    namespace ECS
+    namespace ecs
     {
         template <template <typename...> typename Container>
         class entity_base

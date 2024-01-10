@@ -2,12 +2,12 @@
 
 using namespace hal;
 
-surface::surface(const video& sys [[maybe_unused]], pixel_size sz)
+surface::surface(const video& sys [[maybe_unused]], pixel_point sz)
     : surface { sz }
 {
 }
 
-surface::surface(pixel_size sz)
+surface::surface(pixel_point sz)
     : surface { ::SDL_CreateRGBSurface(0, sz.x, sz.y, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF) }
 {
 }
@@ -18,7 +18,7 @@ surface::surface(SDL_Surface* surf)
     this->set_blend(blend_mode::blend);
 }
 
-surface surface::resize(pixel_size sz)
+surface surface::resize(pixel_point sz)
 {
     surface    ret { sz };
     blend_lock bl { *this, blend_mode::none };
@@ -33,7 +33,17 @@ surface surface::resize(lyo::f64 scale)
     return this->resize(this->size() * scale);
 }
 
-pixel_size surface::size() const
+surface surface::clip(pixel_rect area)
+{
+    surface    ret { area.size };
+    blend_lock bl { *this, blend_mode::none };
+
+    hal::blit(*this).from(area)(ret);
+
+    return ret;
+}
+
+pixel_point surface::size() const
 {
     return {
         pixel_t(this->ptr()->w),
@@ -41,7 +51,7 @@ pixel_size surface::size() const
     };
 }
 
-color surface::operator[](const pixel_pos& pos) const
+color surface::operator[](const pixel_point& pos) const
 {
     HAL_DEBUG_ASSERT(pos.x < ptr()->w, "Out-of-range width");
     HAL_DEBUG_ASSERT(pos.y < ptr()->h, "Out-of-range height");
@@ -77,7 +87,7 @@ void surface::set_blend(blend_mode bm)
     HAL_DEBUG_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
-Uint32 surface::pixel_at(const pixel_pos& pos) const
+Uint32 surface::pixel_at(const pixel_point& pos) const
 {
     const auto   bpp { ptr()->format->BytesPerPixel };
     const Uint8* p { static_cast<Uint8*>(ptr()->pixels) + pos.y * ptr()->pitch + pos.x * bpp };
@@ -120,7 +130,7 @@ void blit::operator()(const surface& dst, keep_dst_tag) const
 {
     constexpr src_t us { unset<src_t> };
 
-    SDL::Rect copy { m_dst };
+    sdl::pixel_rect copy { m_dst };
 
     m_this.internal_blit(
         dst,

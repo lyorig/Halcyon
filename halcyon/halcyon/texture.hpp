@@ -9,10 +9,10 @@ namespace hal
 {
     class renderer;
 
-    class texture_base : public SDL::object<SDL_Texture, &::SDL_DestroyTexture>
+    class texture_base : public sdl::object<SDL_Texture, &::SDL_DestroyTexture>
     {
     public:
-        pixel_size size() const;
+        pixel_point size() const;
 
         color::value opacity() const;
         void         set_opacity(color::value value);
@@ -30,7 +30,7 @@ namespace hal
         void reset(SDL_Texture* ptr);
 
     private:
-        pixel_size internal_size() const;
+        pixel_point internal_size() const;
 
         void query(Uint32* format, int* access, int* w, int* h) const;
     };
@@ -54,16 +54,16 @@ namespace hal
     {
     public:
         target_texture() = default;
-        target_texture(renderer& rnd, const pixel_size& size);
+        target_texture(renderer& rnd, const pixel_point& size);
 
-        void resize(renderer& rnd, const pixel_size& sz);
+        void resize(renderer& rnd, pixel_point sz);
 
     private:
         // Multiple things can fail here on top of it being a convenience function.
-        static SDL_Texture* create(renderer& rnd, const pixel_size& sz);
+        static SDL_Texture* create(renderer& rnd, const pixel_point& sz);
     };
 
-    class draw final : public drawer<texture_base, SDL::coord_t, draw>
+    class draw final : public drawer<texture_base, sdl::coord_t, draw>
     {
     public:
         using drawer::drawer;

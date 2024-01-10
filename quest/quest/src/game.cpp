@@ -16,15 +16,15 @@ game::game(lyo::parser&& args)
     , m_ttf { m_video }
     , m_input { m_eng }
     , m_args { std::move(args) }
-    , m_font { m_ttf.load("assets/m5x7.ttf", 144) } // 144pt ought to be enough for anybody.
+    , m_font { m_ttf.load("assets/m5x7.ttf", 128) } // 144pt ought to be enough for anybody.
     , m_mixer { m_audio }
     , m_window { m_video, "HalodaQuest", hal::fullscreen_mode }
     , m_renderer { m_window, { hal::renderer::accelerated } }
 {
     using namespace constants;
 
-    const hal::pixel_size window_size { m_window.size() };
-    const lyo::f64        aspect_ratio { lyo::f64(window_size.y) / window_size.x };
+    const hal::pixel_point window_size { m_window.size() };
+    const lyo::f64         aspect_ratio { lyo::f64(window_size.y) / window_size.x };
 
     m_renderer.set_logical_size({ logical_width, hal::pixel_t(logical_width * aspect_ratio) });
 }
@@ -51,8 +51,8 @@ void game::intro()
 
     struct text
     {
-        hal::texture tex;
-        hal::coord   pos;
+        hal::texture     tex;
+        hal::coord_point pos;
     };
 
     enum phase : lyo::u8
@@ -74,7 +74,7 @@ void game::intro()
     constexpr lyo::f64     fade_time { 0.75 };
     constexpr hal::coord_t fly_dist { 200.0 };
 
-    const hal::pixel_size sz = m_renderer.output_size();
+    const hal::pixel_point sz = m_renderer.output_size();
 
     // The "Made with" part.
     text made_with {
@@ -206,21 +206,23 @@ Hell:;
 
 void game::start()
 {
-    const hal::font  fnt { m_ttf.load("assets/m5x7.ttf", 144) };
+    if (m_args.has("-nogame"))
+        return;
+
     const hal::chunk chk { m_mixer.load_sfx("assets/Button Hover.wav") };
 
-    hal::texture tex { m_renderer, fnt.render("[X]", hal::color::red).resize({ 100, 100 }) };
-    hal::coord   pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size());
+    hal::texture     tex { m_renderer, m_font.render("[X]", hal::color::red) };
+    hal::coord_point pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size());
 
-    const hal::texture help_text { m_renderer, fnt.render("[WSAD] Move\nClick on the X to exit.").resize(0.5) };
-    const hal::coord   htpos {
+    const hal::texture     help_text { m_renderer, m_font.render(hal::wrapped, "[WSAD] Move\nClick on the X to exit.").resize(0.5) };
+    const hal::coord_point htpos {
         0,
         static_cast<hal::coord_t>(m_window.size().y - help_text.size().y)
     };
 
     bool held { false };
 
-    constexpr hal::SDL::coord_t mod { 400.0 };
+    constexpr hal::sdl::coord_t mod { 400.0 };
     const lyo::precise_timer    tmr;
 
     if (!m_args.has("-xbgm"))
@@ -255,7 +257,7 @@ void game::start()
             }
         }
 
-        if (hal::coord(m_input.mouse()) | pos.rect(tex.size()))
+        if (hal::coord_point(m_input.mouse()) | pos.rect(tex.size()))
         {
             if (!held)
             {
@@ -274,7 +276,7 @@ void game::start()
             held = false;
         }
 
-        HAL_DEBUG_DRAW(m_renderer, fnt);
+        HAL_DEBUG_DRAW(m_renderer, m_font);
 
         hal::draw(tex).to(pos)(m_renderer);
         hal::draw(help_text).to(htpos)(m_renderer);

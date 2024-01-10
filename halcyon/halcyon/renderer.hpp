@@ -19,7 +19,7 @@ namespace hal
     class texture_base;
     class target_texture;
 
-    class renderer : public SDL::object<SDL_Renderer, &::SDL_DestroyRenderer>
+    class renderer : public sdl::object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
     public:
         enum flags : lyo::u8
@@ -35,10 +35,10 @@ namespace hal
 
         void present();
 
-        void draw_line(const coord& from, const coord& to);
-        void draw_rect(const coord_area& area);
+        void draw_line(const coord_point& from, const coord_point& to);
+        void draw_rect(const coord_rect& area);
 
-        void fill_rect(const SDL::FRect& area);
+        void fill_rect(const sdl::coord_rect& area);
         void fill_target();
 
         void set_target(target_texture& tx);
@@ -50,9 +50,9 @@ namespace hal
         blend_mode blend() const;
         void       set_blend(blend_mode bm);
 
-        void set_logical_size(const pixel_size& sz);
+        void set_logical_size(const pixel_point& sz);
 
-        pixel_size output_size() const;
+        pixel_point output_size() const;
 
         // Public, but only accessible to the draw class.
         void internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>);

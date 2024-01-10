@@ -13,10 +13,10 @@
 
 namespace lyo
 {
-    namespace ECS
+    namespace ecs
     {
         // A fully stack-based component manager.
-        // For template parameters, use a pack of ECS::comp::info structs.
+        // For template parameters, use a pack of ecs::comp::info structs.
         template <typename... Is>
             requires(sizeof...(Is) > 0 && sizeof...(Is) <= std::numeric_limits<comp::ID>::max())
         class static_component_manager

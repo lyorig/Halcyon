@@ -87,16 +87,16 @@ namespace hal
             };
         }
 
-        constexpr SDL::rect_t<T>* addr()
-            requires(lyo::is_present_v<T, SDL::pixel_t, SDL::coord_t>)
+        constexpr sdl::rect_t<T>* addr()
+            requires(lyo::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
-            return reinterpret_cast<SDL::rect_t<T>*>(this);
+            return reinterpret_cast<sdl::rect_t<T>*>(this);
         }
 
-        constexpr const SDL::rect_t<T>* addr() const
-            requires(lyo::is_present_v<T, SDL::pixel_t, SDL::coord_t>)
+        constexpr const sdl::rect_t<T>* addr() const
+            requires(lyo::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
-            return reinterpret_cast<const SDL::rect_t<T>*>(this);
+            return reinterpret_cast<const sdl::rect_t<T>*>(this);
         }
     };
 
@@ -118,9 +118,10 @@ namespace hal
         return pt.x >= rect.pos.x && pt.x <= rect.pos.x + rect.size.x && pt.y >= rect.pos.y && pt.y <= rect.pos.y + rect.size.y;
     }
 
-    namespace SDL
+    // Wrappers for native SDL types.
+    namespace sdl
     {
-        using Rect  = rectangle<SDL::pixel_t>;
-        using FRect = rectangle<SDL::coord_t>;
+        using pixel_rect = rectangle<sdl::pixel_t>;
+        using coord_rect = rectangle<sdl::coord_t>;
     }
 }

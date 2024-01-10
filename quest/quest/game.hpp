@@ -16,7 +16,7 @@ namespace quest
     class game
     {
     public:
-        using scene = lyo::ECS::static_scene<holder, lyo::ECS::static_entity, 128>;
+        using scene = lyo::ecs::static_scene<holder, lyo::ecs::static_entity, 128>;
 
         game(lyo::parser&& args);
 

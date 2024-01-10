@@ -5,7 +5,7 @@
 
 using namespace hal;
 
-pixel_size texture_base::size() const
+pixel_point texture_base::size() const
 {
     return this->internal_size();
 }
@@ -65,7 +65,7 @@ void texture_base::reset(SDL_Texture* ptr)
     this->set_blend(blend_mode::blend);
 }
 
-pixel_size texture_base::internal_size() const
+pixel_point texture_base::internal_size() const
 {
     point<int> size;
 
@@ -96,17 +96,17 @@ SDL_Texture* texture::create(renderer& rnd, const surface& image)
     return ::SDL_CreateTextureFromSurface(rnd.ptr(), image.ptr());
 }
 
-target_texture::target_texture(renderer& rnd, const pixel_size& sz)
+target_texture::target_texture(renderer& rnd, const pixel_point& sz)
     : texture_base { create(rnd, sz) }
 {
 }
 
-void target_texture::resize(renderer& rnd, const pixel_size& sz)
+void target_texture::resize(renderer& rnd, pixel_point sz)
 {
     texture_base::reset(create(rnd, sz));
 }
 
-SDL_Texture* target_texture::create(renderer& rnd, const pixel_size& sz)
+SDL_Texture* target_texture::create(renderer& rnd, const pixel_point& sz)
 {
     SDL_Window* wnd { ::SDL_RenderGetWindow(rnd.ptr()) };
     HAL_DEBUG_ASSERT(wnd != nullptr, ::SDL_GetError());

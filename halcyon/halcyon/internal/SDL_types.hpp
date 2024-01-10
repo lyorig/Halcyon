@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    namespace SDL
+    namespace sdl
     {
         using pixel_t = decltype(SDL_Rect::x);
         using coord_t = decltype(SDL_FRect::x);

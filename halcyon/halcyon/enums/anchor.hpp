@@ -50,8 +50,8 @@ namespace hal
     enum class flip : lyo::u8
     {
         none = SDL_FLIP_NONE,
-        x = SDL_FLIP_HORIZONTAL,
-        y = SDL_FLIP_VERTICAL,
+        x    = SDL_FLIP_HORIZONTAL,
+        y    = SDL_FLIP_VERTICAL,
         both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
     };
 }

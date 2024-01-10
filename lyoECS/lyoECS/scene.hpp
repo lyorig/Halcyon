@@ -6,7 +6,7 @@
 
 namespace lyo
 {
-    namespace ECS
+    namespace ecs
     {
         template <typename Comp_Mgr, template <typename> typename Entity, std::size_t Max_Ents>
         using static_scene = scene<array_template_proxy<Max_Ents>::template type, Comp_Mgr, Entity>;

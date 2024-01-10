@@ -4,7 +4,7 @@
 
 namespace lyo
 {
-    namespace ECS
+    namespace ecs
     {
         template <std::size_t Size>
         struct array_template_proxy

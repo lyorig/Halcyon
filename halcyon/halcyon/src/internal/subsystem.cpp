@@ -13,7 +13,7 @@ display::index display::idx() const
     return m_index;
 }
 
-pixel_size display::size() const
+pixel_point display::size() const
 {
     return { pixel_t(w), pixel_t(h) };
 }

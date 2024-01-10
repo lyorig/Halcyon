@@ -9,17 +9,17 @@
 
 namespace quest
 {
-    struct position : public hal::coord
+    struct position : public hal::coord_point
     {
     };
 
-    struct velocity : public hal::coord
+    struct velocity : public hal::coord_point
     {
     };
 
     using timer = lyo::precise_timer;
 
-    using holder = lyo::ECS::static_component_manager<lyo::ECS::info<position, 20>,
-        lyo::ECS::info<velocity, 20>,
-        lyo::ECS::info<timer, 10>>;
+    using holder = lyo::ecs::static_component_manager<lyo::ecs::info<position, 20>,
+        lyo::ecs::info<velocity, 20>,
+        lyo::ecs::info<timer, 10>>;
 }

@@ -12,7 +12,7 @@ namespace hal
     class engine;
     class mixer;
 
-    class chunk : public SDL::object<Mix_Chunk, &::Mix_FreeChunk>
+    class chunk : public sdl::object<Mix_Chunk, &::Mix_FreeChunk>
     {
     public:
         enum class quality : lyo::u16

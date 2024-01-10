@@ -9,7 +9,7 @@ namespace hal
 {
     LYOSTL_TAG(fullscreen_mode);
 
-    class window : public SDL::object<SDL_Window, &::SDL_DestroyWindow>
+    class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
         enum flags : Uint32
@@ -23,10 +23,10 @@ namespace hal
             maximized           = SDL_WINDOW_MAXIMIZED
         };
 
-        window(video& sys, const char* title, const pixel_size& pos, const pixel_size& size, std::initializer_list<flags> flags);
+        window(video& sys, const char* title, const pixel_point& pos, const pixel_point& size, std::initializer_list<flags> flags);
         window(video& sys, const char* title, fullscreen_mode_tag);
 
-        pixel_size size() const;
+        pixel_point size() const;
 
         display::index display_index() const;
 

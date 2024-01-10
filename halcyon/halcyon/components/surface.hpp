@@ -3,6 +3,7 @@
 #include <SDL2/SDL_surface.h>
 
 #include <halcyon/enums/blend.hpp>
+#include <halcyon/enums/scaler.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/types/color.hpp>
 #include <lyoSTL/pass_key.hpp>
@@ -25,26 +26,26 @@ namespace hal
     class font;
     class surface;
 
-    class surface : public SDL::object<SDL_Surface, &::SDL_FreeSurface>
+    class surface : public sdl::object<SDL_Surface, &::SDL_FreeSurface>
     {
     public:
         // Create a sized surface.
-        surface(const video& sys, pixel_size sz);
+        surface(const video& sys, pixel_point sz);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
-        surface resize(pixel_size sz);
-
-        // Get a scaled copy of the surface. Useful for saving
-        // memory after converting to a texture.
+        surface resize(pixel_point sz);
         surface resize(lyo::f64 scale);
 
-        pixel_size size() const;
+        // Get an area of the surface.
+        surface clip(pixel_rect area);
+
+        pixel_point size() const;
 
         // Get pixel at position.
         // This functionality is exclusive to surfaces, as textures
         // are extremely slow to retrieve pixel information.
-        color operator[](const pixel_pos& pos) const;
+        color operator[](const pixel_point& pos) const;
 
         blend_mode blend() const;
         void       set_blend(blend_mode bm);
@@ -60,14 +61,14 @@ namespace hal
         surface(SDL_Surface* surf);
 
         // Special c-tor for resizing.
-        surface(pixel_size sz);
+        surface(pixel_point sz);
 
-        Uint32 pixel_at(const pixel_pos& pos) const;
+        Uint32 pixel_at(const pixel_point& pos) const;
     };
 
     LYOSTL_TAG(keep_dst);
 
-    class blit : public drawer<surface, SDL::pixel_t, blit>
+    class blit : public drawer<surface, sdl::pixel_t, blit>
     {
     public:
         using drawer::drawer;

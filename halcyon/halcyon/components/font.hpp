@@ -14,16 +14,25 @@ namespace hal
     class ttf_engine;
     class surface;
 
-    class font : public SDL::object<TTF_Font, &::TTF_CloseFont>
+    LYOSTL_TAG(wrapped);
+
+    class font : public sdl::object<TTF_Font, &::TTF_CloseFont>
     {
     public:
         font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>);
 
+        // Render a one-line string.
         surface render(const std::string_view& text, color color = color::white) const;
+
+        // Render a multi-line string.
+        surface render(wrapped_tag, const std::string_view& text, color color = color::white) const;
 
         // When sizing text, it's important to know that only the horizontal
         // size remains identical to the resulting render's size. The vertical
-        // size is around 10% smaller (in my testing, the avg. multiplier is ~1.104025).
-        pixel_size size_text(const std::string_view& text) const;
+        // size is around 10% smaller.
+        pixel_point size_text(const std::string_view& text) const;
+
+        pixel_t height() const;
+        pixel_t skip() const;
     };
 }

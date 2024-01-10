@@ -106,11 +106,11 @@ void sv_fuzz()
 void cmgr_fuzz(sz iters)
 {
     std::cout << "\nStarting component manager fuzzer.\n";
-    using lyo::ECS::info;
+    using lyo::ecs::info;
 
-    using comp_mgr = lyo::ECS::static_component_manager<
-        info<hal::pixel_size, 10>,
-        info<hal::coord, 5>,
+    using comp_mgr = lyo::ecs::static_component_manager<
+        info<hal::pixel_point, 10>,
+        info<hal::coord_point, 5>,
         info<int, 50>>;
 
     comp_mgr cm;
@@ -135,10 +135,10 @@ void ecs_test(sz iters [[maybe_unused]])
 {
     std::cout << "Commencing ECS test.\n";
 
-    using t1 = hal::pixel_size;
-    using t2 = hal::pixel_area;
+    using t1 = hal::pixel_point;
+    using t2 = hal::pixel_rect;
 
-    using namespace lyo::ECS;
+    using namespace lyo::ecs;
     using scm = static_component_manager<
         info<t1, 1000>,
         info<t2, 1000>>;

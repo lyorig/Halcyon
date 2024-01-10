@@ -5,7 +5,7 @@
 
 namespace lyo
 {
-    namespace ECS
+    namespace ecs
     {
         template <lyo::arithmetic T>
         constexpr inline T invalid = std::numeric_limits<T>::max();

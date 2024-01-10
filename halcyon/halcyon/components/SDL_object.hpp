@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    namespace SDL
+    namespace sdl
     {
         template <typename Type, lyo::func_ptr<void, Type*> Deleter>
         struct deleter

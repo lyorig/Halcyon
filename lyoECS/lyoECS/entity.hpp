@@ -5,7 +5,7 @@
 
 namespace lyo
 {
-    namespace ECS
+    namespace ecs
     {
         template <typename Comp_Mgr>
         using static_entity = entity_base<array_template_proxy<Comp_Mgr::components()>::template type>;

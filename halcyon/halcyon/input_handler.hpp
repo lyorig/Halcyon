@@ -51,13 +51,13 @@ namespace hal
                 return SDL_BUTTON(std::to_underlying(btn) - SDL_NUM_SCANCODES) & ::SDL_GetMouseState(nullptr, nullptr);
         }
 
-        pixel_pos mouse() const
+        pixel_point mouse() const
         {
             point<int> pos;
 
             ::SDL_GetMouseState(&pos.x, &pos.y);
 
-            return pixel_pos(pos);
+            return pixel_point(pos);
         }
 
     protected:

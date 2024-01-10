@@ -22,22 +22,22 @@ void renderer::clear()
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
 }
 
-void renderer::draw_line(const coord& from, const coord& to)
+void renderer::draw_line(const coord_point& from, const coord_point& to)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<SDL::coord_t>(from.x),
-                               static_cast<SDL::coord_t>(from.y),
-                               static_cast<SDL::coord_t>(to.x),
-                               static_cast<SDL::coord_t>(to.y))
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<sdl::coord_t>(from.x),
+                               static_cast<sdl::coord_t>(from.y),
+                               static_cast<sdl::coord_t>(to.x),
+                               static_cast<sdl::coord_t>(to.y))
             == 0,
         ::SDL_GetError());
 }
 
-void renderer::draw_rect(const coord_area& area)
+void renderer::draw_rect(const coord_rect& area)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), SDL::FRect(area).addr()) == 0, ::SDL_GetError());
+    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), sdl::coord_rect(area).addr()) == 0, ::SDL_GetError());
 }
 
-void renderer::fill_rect(const SDL::FRect& area)
+void renderer::fill_rect(const sdl::coord_rect& area)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), area.addr()) == 0, ::SDL_GetError());
 }
@@ -47,12 +47,12 @@ void renderer::fill_target()
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), nullptr) == 0, ::SDL_GetError());
 }
 
-void renderer::set_logical_size(const pixel_size& sz)
+void renderer::set_logical_size(const pixel_point& sz)
 {
     HAL_DEBUG_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), sz.x, sz.y) == 0, ::SDL_GetError());
 }
 
-pixel_size renderer::output_size() const
+pixel_point renderer::output_size() const
 {
     point<int> size;
 

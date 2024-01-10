@@ -9,6 +9,12 @@ namespace quest
 {
     namespace bezier
     {
+        template <lyo::f64 x1, lyo::f64 y1, lyo::f64 x2, lyo::f64 y2>
+        lyo::f64 curve()
+        {
+            
+        }
+
         // Linear curve (y = x).
         template <std::floating_point T>
         constexpr T linear(T x)

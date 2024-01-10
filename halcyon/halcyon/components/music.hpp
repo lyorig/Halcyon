@@ -12,7 +12,7 @@ namespace hal
 {
     class mixer;
 
-    class music : public SDL::object<Mix_Music, &::Mix_FreeMusic>
+    class music : public sdl::object<Mix_Music, &::Mix_FreeMusic>
     {
     public:
         music(lyo::pass_key<mixer>);
