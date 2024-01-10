@@ -8,7 +8,7 @@
 #include <halcyon/types/color.hpp>
 #include <lyoSTL/pass_key.hpp>
 
-#include <halcyon/components/SDL_object.hpp>
+#include <halcyon/components/sdl_object.hpp>
 
 /* surface.hpp:
    A "software surface" used by SDL. The user should never

@@ -33,6 +33,10 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 	endif()
 
 	# add_compile_definitions(LYO_USE_FAST_TYPES)
+else()
+	# We're in Debug mode. Enable extra checks.
+	add_compile_options(-fsanitize=address -fsanitize=undefined)
+	add_link_options(-fsanitize=address -fsanitize=undefined)
 endif()
 
 add_executable(HalodaQuest WIN32)

@@ -7,7 +7,7 @@
 #include <lyoSTL/pass_key.hpp>
 #include <string_view>
 
-#include <halcyon/components/SDL_object.hpp>
+#include <halcyon/components/sdl_object.hpp>
 
 namespace hal
 {
@@ -27,9 +27,8 @@ namespace hal
         // Render a multi-line string.
         surface render(wrapped_tag, const std::string_view& text, color color = color::white) const;
 
-        // When sizing text, it's important to know that only the horizontal
-        // size remains identical to the resulting render's size. The vertical
-        // size is around 10% smaller.
+        // When sizing text, it's important to know that the vertical size
+        // doesn't necessarily have to match that of the rendered surface.
         pixel_point size_text(const std::string_view& text) const;
 
         pixel_t height() const;
