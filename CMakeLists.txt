@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.22.1)
 project(HalodaQuest VERSION 0.1 LANGUAGES CXX)
 
 include(lyoSTL/config.cmake)
-include(lyoECS/config.cmake)
 include(halcyon/config.cmake)
 include(quest/config.cmake)
 
@@ -46,6 +45,7 @@ set_property(TARGET HalodaQuest PROPERTY CXX_STANDARD 23)
 set_property(TARGET HQtest PROPERTY CXX_STANDARD 23)
 
 target_sources(HalodaQuest PRIVATE
+main.cpp
 ${QUEST_SOURCES}
 ${HALCYON_SOURCES})
 

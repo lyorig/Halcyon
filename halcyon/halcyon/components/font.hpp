@@ -4,7 +4,7 @@
 
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
-#include <lyoSTL/pass_key.hpp>
+#include <lyo/pass_key.hpp>
 #include <string_view>
 
 #include <halcyon/components/sdl_object.hpp>
@@ -14,18 +14,12 @@ namespace hal
     class ttf_engine;
     class surface;
 
-    LYOSTL_TAG(wrapped);
-
     class font : public sdl::object<TTF_Font, &::TTF_CloseFont>
     {
     public:
         font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>);
 
-        // Render a one-line string.
         surface render(const std::string_view& text, color color = color::white) const;
-
-        // Render a multi-line string.
-        surface render(wrapped_tag, const std::string_view& text, color color = color::white) const;
 
         // When sizing text, it's important to know that the vertical size
         // doesn't necessarily have to match that of the rendered surface.

@@ -1,9 +1,6 @@
 #include <halcyon/halcyon.hpp>
 #include <iostream>
-#include <lyoECS/component_manager.hpp>
-#include <lyoECS/entity.hpp>
-#include <lyoECS/scene.hpp>
-#include <lyoSTL/argparse.hpp>
+#include <lyo/argparse.hpp>
 #include <vector>
 
 using sz = std::size_t;
@@ -29,9 +26,9 @@ constexpr char help_text[] {
 
 struct holder
 {
-    LYOSTL_NOSIZE hal::engine eng;
-    LYOSTL_NOSIZE hal::video vid { eng };
-    LYOSTL_NOSIZE hal::ttf_engine ttf { vid };
+    LYO_NOSIZE hal::engine eng;
+    LYO_NOSIZE hal::video vid { eng };
+    LYO_NOSIZE hal::ttf_engine ttf { vid };
 
     hal::input_handler inp { eng };
     hal::window        wnd { vid, "Renderer proxy", {}, { 100, 100 }, {} };
@@ -103,30 +100,9 @@ void sv_fuzz()
     std::cout << "\n[Destructor]";
 }
 
-void cmgr_fuzz(sz iters)
+void cmgr_fuzz(sz iters [[maybe_unused]])
 {
     std::cout << "\nStarting component manager fuzzer.\n";
-    using lyo::ecs::info;
-
-    using comp_mgr = lyo::ecs::static_component_manager<
-        info<hal::pixel_point, 10>,
-        info<hal::coord_point, 5>,
-        info<int, 50>>;
-
-    comp_mgr cm;
-
-    // Part one: Allocation and reallocation.
-    for (sz i { 0 }; i < iters; ++i)
-    {
-        // using lim = std::numeric_limits<hal::pixel_type>;
-        using tp = int;
-
-        const tp x { std::rand() };
-
-        const auto id = cm.add<tp>(x);
-        assert(x == cm.get<tp>(id));
-        cm.remove<tp>(id);
-    }
 
     std::cout << "Component manager fuzzer ended.\n";
 }
@@ -135,51 +111,49 @@ void ecs_test(sz iters [[maybe_unused]])
 {
     std::cout << "Commencing ECS test.\n";
 
-    using t1 = hal::pixel_point;
-    using t2 = hal::pixel_rect;
+    // using t1 = hal::pixel_point;
+    // using t2 = hal::pixel_rect;
 
-    using namespace lyo::ecs;
-    using scm = static_component_manager<
-        info<t1, 1000>,
-        info<t2, 1000>>;
-    using scene = dynamic_scene<scm, static_entity>;
+    // using namespace lyo::ecs;
+    // using scm   = archetype_component_manager<t1, t2>;
+    // using scene = dynamic_scene<scm, static_entity>;
 
     lyo::precise_timer tmr;
 
-    if (true)
-    {
-        scene manager;
+    // if (true)
+    // {
+    //     scene manager;
 
-        // Part one: Entity allocation.
-        std::vector<scene::entity::ID> ids;
+    //     // Part one: Entity allocation.
+    //     std::vector<scene::entity::ID> ids;
 
-        for (sz i { 0 }; i < iters; ++i)
-        {
-            ids.push_back(manager.spawn<t1, t2>());
-            // std::cout << "Spawned ID " << ids.back() << '\n';
-        }
+    //     for (sz i { 0 }; i < iters; ++i)
+    //     {
+    //         ids.push_back(manager.spawn<t1, t2>());
+    //         // std::cout << "Spawned ID " << ids.back() << '\n';
+    //     }
 
-        for (sz i { 0 }; i < iters; ++i)
-        {
-            const auto iter = random_element(ids.begin(), ids.end());
+    //     for (sz i { 0 }; i < iters; ++i)
+    //     {
+    //         const auto iter = random_element(ids.begin(), ids.end());
 
-            // std::cout << "Killed ID " << *iter << '\n';
-            manager.kill(manager.find(*iter));
-            ids.erase(iter);
-        }
+    //         // std::cout << "Killed ID " << *iter << '\n';
+    //         manager.kill(manager.find(*iter));
+    //         ids.erase(iter);
+    //     }
 
-        // Part two: Guaranteed reallocation.
-        for (sz i { 0 }; i < iters; ++i)
-        {
-            ids.push_back(manager.spawn<t1, t2>());
-            assert(manager.ents() == 1);
+    //     // Part two: Guaranteed reallocation.
+    //     for (sz i { 0 }; i < iters; ++i)
+    //     {
+    //         ids.push_back(manager.spawn<t1, t2>());
+    //         assert(manager.ents() == 1);
 
-            const auto iter = random_element(ids.begin(), ids.end());
+    //         const auto iter = random_element(ids.begin(), ids.end());
 
-            manager.kill(manager.find(*iter));
-            ids.erase(iter);
-        }
-    }
+    //         manager.kill(manager.find(*iter));
+    //         ids.erase(iter);
+    //     }
+    // }
 
     sv_fuzz();
     cmgr_fuzz(iters);

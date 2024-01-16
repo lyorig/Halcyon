@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <halcyon/types/render.hpp>
 
 // easing.hpp:
@@ -9,39 +10,36 @@ namespace quest
 {
     namespace bezier
     {
-        template <lyo::f64 x1, lyo::f64 y1, lyo::f64 x2, lyo::f64 y2>
-        lyo::f64 curve()
+        // Define your own Bezier curve. Implicitly, y0 == 0 and y3 == 1.
+        constexpr lyo::f64 curve(lyo::f64 y1, lyo::f64 y2, lyo::f64 t)
         {
-            
+            const lyo::f64 par { 1.0 - t }; // (1 - t)
+            return 3.0 * std::pow(par, 2) * t * y1 + 3.0 * par * std::pow(t, 2) * y2 + std::pow(t, 3);
         }
 
-        // Linear curve (y = x).
-        template <std::floating_point T>
-        constexpr T linear(T x)
+        // y = x
+        constexpr lyo::f64 linear(lyo::f64 t)
         {
-            return x;
+            return t;
         }
 
-        // Bezier ease-out (y = x^3 - 3x^2 + 3x).
-        template <std::floating_point T>
-        constexpr T ease_out(T x)
+        // y = x^3 - 3x^2 + 3x
+        constexpr lyo::f64 ease_out(lyo::f64 t)
         {
-            return x * (x * (x - T(3)) + T(3));
+            return curve(1.0, 1.0, t);
         };
 
-        // Bezier ease-in (y = x^3).
-        template <std::floating_point T>
-        constexpr T ease_in(T x)
+        // y = x^3
+        constexpr lyo::f64 ease_in(lyo::f64 t)
         {
-            return x * x * x;
+            return curve(0.0, 1.0, t);
         };
 
         // Quadratic ease-in-out (weird formula, google it).
-        template <std::floating_point T>
-        constexpr T quadratic(T x)
+        constexpr lyo::f64 quadratic(lyo::f64 t)
         {
-            const T sqr { x * x };
-            return sqr / (T(2.0) * (sqr - x) + T(1.0));
+            const lyo::f64 sqr { t * t };
+            return sqr / (2.0 * (sqr - t) + 1.0);
         };
     }
 }

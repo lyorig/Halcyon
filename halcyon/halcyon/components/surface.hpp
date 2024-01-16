@@ -6,7 +6,7 @@
 #include <halcyon/enums/scaler.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/types/color.hpp>
-#include <lyoSTL/pass_key.hpp>
+#include <lyo/pass_key.hpp>
 
 #include <halcyon/components/sdl_object.hpp>
 
@@ -30,15 +30,12 @@ namespace hal
     {
     public:
         // Create a sized surface.
-        surface(const video& sys, pixel_point sz);
+        surface(video& sys, pixel_point sz);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
         surface resize(pixel_point sz);
         surface resize(lyo::f64 scale);
-
-        // Get an area of the surface.
-        surface clip(pixel_rect area);
 
         pixel_point size() const;
 
@@ -57,7 +54,7 @@ namespace hal
         friend class image_loader;
         friend class font;
 
-        // Special c-tor for factory classes.
+        // Special c-tor for factory classes (also the one delegated to).
         surface(SDL_Surface* surf);
 
         // Special c-tor for resizing.
@@ -66,7 +63,7 @@ namespace hal
         Uint32 pixel_at(const pixel_point& pos) const;
     };
 
-    LYOSTL_TAG(keep_dst);
+    LYO_TAG(keep_dst);
 
     class blit : public drawer<surface, sdl::pixel_t, blit>
     {

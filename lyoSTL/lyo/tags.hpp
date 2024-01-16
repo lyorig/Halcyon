@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lyoSTL/types.hpp>
+#include <lyo/types.hpp>
 
 // tags.hpp:
 // A file required to fix circular dependencies for
@@ -8,5 +8,5 @@
 
 namespace lyo
 {
-    LYOSTL_TAG(no_init);
+    LYO_TAG(no_init);
 }

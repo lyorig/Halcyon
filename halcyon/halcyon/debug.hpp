@@ -20,8 +20,8 @@
 
     #include <halcyon/internal/printing.hpp>
     #include <halcyon/types/color.hpp>
-    #include <lyoSTL/timer.hpp>
-    #include <lyoSTL/utility.hpp>
+    #include <lyo/timer.hpp>
+    #include <lyo/utility.hpp>
 
     #include <array>
     #include <fstream>
@@ -133,26 +133,26 @@ namespace hal
     };
 } // namespace hal
 
-    #define HAL_DEBUG(...)       __VA_ARGS__
-    #define HAL_DEBUG_PRINT      hal::debug::print
-    #define HAL_DEBUG_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
+    #define HAL_DEBUG(...) __VA_ARGS__
+    #define HAL_PRINT      hal::debug::print
+    #define HAL_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
 
-    #define HAL_DEBUG_ASSERT(cond, if_false) HAL_DEBUG_ASSERT_VITAL(cond, if_false)
-    #define HAL_DEBUG_ASSERT_VITAL(cond, if_false) \
+    #define HAL_ASSERT(cond, if_false) HAL_ASSERT_VITAL(cond, if_false)
+    #define HAL_ASSERT_VITAL(cond, if_false) \
         hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
 
-    #define HAL_DEBUG_DRAW hal::debug::draw
+    #define HAL_DRAW_CONSOLE hal::debug::draw
 
 #else
 
     #define HAL_DEBUG(...)
 
-    #define HAL_DEBUG_PRINT(...)
-    #define HAL_DEBUG_PANIC(...)
+    #define HAL_PRINT(...)
+    #define HAL_PANIC(...)
 
-    #define HAL_DEBUG_ASSERT(...)
-    #define HAL_DEBUG_ASSERT_VITAL(condition, ...) (void(condition))
+    #define HAL_ASSERT(...)
+    #define HAL_ASSERT_VITAL(condition, ...) (void(condition))
 
-    #define HAL_DEBUG_DRAW(...)
+    #define HAL_DRAW_CONSOLE(...)
 
 #endif

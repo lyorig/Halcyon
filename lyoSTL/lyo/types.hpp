@@ -4,11 +4,11 @@
 #include <cstdint>
 #include <type_traits>
 
-#define LYOSTL_NOSIZE [[no_unique_address]]
+#define LYO_NOSIZE [[no_unique_address]]
 
-#define LYOSTL_TAG(name) \
-    struct name##_tag    \
-    {                    \
+#define LYO_TAG(name) \
+    struct name##_tag \
+    {                 \
     } inline constexpr name
 
 /* types.hpp:
@@ -20,7 +20,7 @@ namespace lyo
     // I say potentially, because some platforms (for example macOS on ARM)
     // have no difference between fixed-size and fast types.
     constexpr bool fast_types {
-#ifdef LYOSTL_USE_FAST_TYPES
+#ifdef LYO_USE_FAST_TYPES
         true
 #else
         false

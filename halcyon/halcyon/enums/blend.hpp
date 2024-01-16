@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL_blendmode.h>
-#include <lyoSTL/types.hpp>
+#include <lyo/types.hpp>
 
 namespace hal
 {

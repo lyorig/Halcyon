@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lyoSTL/types.hpp>
+#include <lyo/types.hpp>
 
 // tags.hpp:
 // For internal use only. This file is required to fix
@@ -8,9 +8,9 @@
 
 namespace hal
 {
-    LYOSTL_TAG(as_size);
+    LYO_TAG(as_size);
 
-    LYOSTL_TAG(infinite_loop);
+    LYO_TAG(infinite_loop);
 
-    LYOSTL_TAG(fill);
+    LYO_TAG(fill);
 }

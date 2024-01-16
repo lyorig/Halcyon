@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL_rect.h>
-#include <lyoSTL/concepts.hpp>
+#include <lyo/concepts.hpp>
 
 namespace hal
 {

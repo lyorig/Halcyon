@@ -2,20 +2,19 @@
 
 using namespace hal;
 
-surface::surface(const video& sys [[maybe_unused]], pixel_point sz)
+surface::surface([[maybe_unused]] video& sys, pixel_point sz)
     : surface { sz }
 {
 }
 
 surface::surface(pixel_point sz)
-    : surface { ::SDL_CreateRGBSurface(0, sz.x, sz.y, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF) }
+    : surface { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, 32, SDL_PIXELFORMAT_RGBA32) }
 {
 }
 
 surface::surface(SDL_Surface* surf)
     : object { surf }
 {
-    this->set_blend(blend_mode::blend);
 }
 
 surface surface::resize(pixel_point sz)
@@ -33,16 +32,6 @@ surface surface::resize(lyo::f64 scale)
     return this->resize(this->size() * scale);
 }
 
-surface surface::clip(pixel_rect area)
-{
-    surface    ret { area.size };
-    blend_lock bl { *this, blend_mode::none };
-
-    hal::blit(*this).from(area)(ret);
-
-    return ret;
-}
-
 pixel_point surface::size() const
 {
     return {
@@ -53,8 +42,8 @@ pixel_point surface::size() const
 
 color surface::operator[](const pixel_point& pos) const
 {
-    HAL_DEBUG_ASSERT(pos.x < ptr()->w, "Out-of-range width");
-    HAL_DEBUG_ASSERT(pos.y < ptr()->h, "Out-of-range height");
+    HAL_ASSERT(pos.x < ptr()->w, "Out-of-range width");
+    HAL_ASSERT(pos.y < ptr()->h, "Out-of-range height");
 
     color ret;
 
@@ -67,24 +56,24 @@ color surface::operator[](const pixel_point& pos) const
 
 void surface::internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* dst, lyo::pass_key<blit>) const
 {
-    HAL_DEBUG_ASSERT(this->exists(), "Drawing null surface");
-    HAL_DEBUG_ASSERT(to.exists(), "Drawing to null surface");
+    HAL_ASSERT(this->exists(), "Drawing null surface");
+    HAL_ASSERT(to.exists(), "Drawing to null surface");
 
-    ::SDL_BlitScaled(this->ptr(), src, to.ptr(), dst);
+    HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), src, to.ptr(), dst) == 0, ::SDL_GetError());
 }
 
 blend_mode surface::blend() const
 {
     SDL_BlendMode bm;
 
-    HAL_DEBUG_ASSERT_VITAL(::SDL_GetSurfaceBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_GetSurfaceBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
 
     return blend_mode(bm);
 }
 
 void surface::set_blend(blend_mode bm)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
 Uint32 surface::pixel_at(const pixel_point& pos) const
@@ -111,7 +100,7 @@ Uint32 surface::pixel_at(const pixel_point& pos) const
         return *reinterpret_cast<const Uint32*>(p);
 
     default: // Intentionally panic.
-        HAL_DEBUG_PANIC("Unknown bytes-per-pixel value while getting pixel from surface");
+        HAL_PANIC("Unknown bytes-per-pixel value while getting pixel from surface");
 
         return 0;
     }

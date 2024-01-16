@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL_image.h>
 #include <initializer_list>
-#include <lyoSTL/types.hpp>
+#include <lyo/types.hpp>
 
 namespace hal
 {

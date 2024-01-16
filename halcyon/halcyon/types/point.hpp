@@ -1,7 +1,7 @@
 #pragma once
 
-#include <halcyon/internal/SDL_types.hpp>
-#include <lyoSTL/cast.hpp>
+#include <halcyon/internal/sdl_types.hpp>
+#include <lyo/cast.hpp>
 
 #include <halcyon/internal/tags.hpp>
 
@@ -56,7 +56,7 @@ namespace hal
         {
             return point { lyo::cast<T>(x / div), lyo::cast<T>(y / div) };
         }
-        
+
         constexpr point& operator*=(lyo::f64 mul)
         {
             // Bit verbose, but MSVC won't shut up otherwise.

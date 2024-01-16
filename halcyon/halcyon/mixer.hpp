@@ -14,7 +14,7 @@ namespace hal
     // the various mixer libraries to be initialized.
     class mixer
     {
-        LYOSTL_NOSIZE class init
+        LYO_NOSIZE class init
         {
         public:
             init(lyo::u32 freq, lyo::u8 channels, chunk::quality qual);

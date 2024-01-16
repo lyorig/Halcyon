@@ -3,8 +3,8 @@
 #include <SDL2/SDL_pixels.h>
 
 #include <algorithm>
-#include <lyoSTL/cast.hpp>
-#include <lyoSTL/types.hpp>
+#include <lyo/cast.hpp>
+#include <lyo/types.hpp>
 
 // color.hpp:
 // An extension of SDL_Color with custom constructors,

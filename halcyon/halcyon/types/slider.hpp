@@ -2,8 +2,8 @@
 
 #include <algorithm>
 #include <halcyon/debug.hpp>
-#include <lyoSTL/cast.hpp>
-#include <lyoSTL/types.hpp>
+#include <lyo/cast.hpp>
+#include <lyo/types.hpp>
 
 // slider.hpp:
 // A bounded "sliding value" with a modifier.
@@ -15,7 +15,7 @@ namespace hal
     {
         lyo::f64 operator()(lyo::f64 val [[maybe_unused]]) const
         {
-            HAL_DEBUG_PANIC("SFPT functor was called");
+            HAL_PANIC("SFPT functor was called");
             return 69.420;
         }
     };
@@ -31,7 +31,7 @@ namespace hal
             , m_max { max }
             , m_value { min }
         {
-            HAL_DEBUG_ASSERT(min < max, "Slider min is >= max");
+            HAL_ASSERT(min < max, "Slider min is >= max");
         }
 
         // Adds the modifier and returns the new value.

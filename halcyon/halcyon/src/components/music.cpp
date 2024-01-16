@@ -1,6 +1,6 @@
 #include <halcyon/components/music.hpp>
 
-#include <lyoSTL/cast.hpp>
+#include <lyo/cast.hpp>
 
 using namespace hal;
 
@@ -36,7 +36,7 @@ void music::fade_in(lyo::f64 time, infinite_loop_tag)
 void music::fade_out(lyo::f64 time)
 {
     if (this->exists())
-        HAL_DEBUG_ASSERT_VITAL(::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0)) != 0, ::SDL_GetError());
+        HAL_ASSERT_VITAL(::Mix_FadeOutMusic(lyo::cast<int>(time * 1000.0)) != 0, ::SDL_GetError());
 }
 
 music& music::pause()
@@ -71,7 +71,7 @@ lyo::f64 music::position() const
 {
     const auto ret = this->ptr() == nullptr ? 0.0 : ::Mix_GetMusicPosition(this->ptr());
 
-    HAL_DEBUG_ASSERT(ret != -1.0, ::Mix_GetError());
+    HAL_ASSERT(ret != -1.0, ::Mix_GetError());
 
     return ret;
 }
@@ -80,14 +80,14 @@ lyo::f64 music::duration() const
 {
     const auto ret = this->ptr() == nullptr ? 0.0 : ::Mix_MusicDuration(this->ptr());
 
-    HAL_DEBUG_ASSERT(ret != -1.0, ::Mix_GetError());
+    HAL_ASSERT(ret != -1.0, ::Mix_GetError());
 
     return ret;
 }
 
 music& music::set_volume(lyo::u8 volume)
 {
-    HAL_DEBUG_ASSERT(this->exists(), "Tried to set volume of null music");
+    HAL_ASSERT(this->exists(), "Tried to set volume of null music");
 
     ::Mix_VolumeMusic(volume);
 
@@ -98,7 +98,7 @@ music& music::jump(lyo::f64 time)
 {
     this->rewind();
 
-    HAL_DEBUG_ASSERT_VITAL(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
+    HAL_ASSERT_VITAL(::Mix_SetMusicPosition(time) == 0, ::Mix_GetError());
 
     return *this;
 }
@@ -106,17 +106,17 @@ music& music::jump(lyo::f64 time)
 music& music::internal_load(const char* path)
 {
     object::reset(::Mix_LoadMUS(path));
-    HAL_DEBUG_PRINT(debug::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
+    HAL_PRINT(debug::load, "Loaded music ", path, " (appx. ", lyo::cast<lyo::u32>(this->duration()), "s)");
 
     return *this;
 }
 
 void music::internal_play(int loops)
 {
-    HAL_DEBUG_ASSERT_VITAL(::Mix_PlayMusic(this->ptr(), loops) == 0, ::Mix_GetError());
+    HAL_ASSERT_VITAL(::Mix_PlayMusic(this->ptr(), loops) == 0, ::Mix_GetError());
 }
 
 void music::internal_fade(lyo::f64 time, int loops)
 {
-    HAL_DEBUG_ASSERT_VITAL(::Mix_FadeInMusic(this->ptr(), loops, lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
+    HAL_ASSERT_VITAL(::Mix_FadeInMusic(this->ptr(), loops, lyo::cast<int>(time * 1000.0)) == 0, ::Mix_GetError());
 }

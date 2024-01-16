@@ -27,7 +27,7 @@ namespace hal
             object(Type* object)
                 : m_object { object }
             {
-                HAL_DEBUG_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
+                HAL_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
             }
 
             // Return the underlying pointer to the object. This is only for
@@ -53,7 +53,7 @@ namespace hal
             void reset(Type* object)
             {
                 m_object.reset(object);
-                HAL_DEBUG_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
+                HAL_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
             }
 
         private:

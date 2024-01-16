@@ -3,7 +3,7 @@
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_scancode.h>
 
-#include <lyoSTL/types.hpp>
+#include <lyo/types.hpp>
 
 // buttons.hpp:
 // A map of SDL's scancodes for use with Halcyon's

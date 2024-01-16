@@ -1,13 +1,13 @@
 #pragma once
 
-#include <lyoSTL/timer.hpp>
+#include <lyo/timer.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
 #include <halcyon/texture.hpp>
 
 namespace hal
 {
-    LYOSTL_TAG(fullscreen_mode);
+    LYO_TAG(fullscreen_mode);
 
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {

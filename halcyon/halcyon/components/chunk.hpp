@@ -3,7 +3,7 @@
 #include <SDL2/SDL_mixer.h>
 
 #include <halcyon/internal/tags.hpp>
-#include <lyoSTL/pass_key.hpp>
+#include <lyo/pass_key.hpp>
 
 #include <halcyon/components/sdl_object.hpp>
 

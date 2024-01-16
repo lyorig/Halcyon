@@ -1,7 +1,7 @@
 #pragma once
 
 #include <halcyon/types/point.hpp>
-#include <lyoSTL/concepts.hpp>
+#include <lyo/concepts.hpp>
 
 namespace hal
 {

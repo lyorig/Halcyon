@@ -6,7 +6,7 @@
 #include <halcyon/debug.hpp>
 #include <halcyon/enums/buttons.hpp>
 #include <halcyon/types/render.hpp>
-#include <lyoSTL/static_vector.hpp>
+#include <lyo/static_vector.hpp>
 #include <utility>
 
 namespace hal
@@ -19,7 +19,7 @@ namespace hal
     public:
         input_base(engine& eng [[maybe_unused]])
         {
-            HAL_DEBUG_PRINT(debug::init, "Initialized input handler");
+            HAL_PRINT(debug::init, "Initialized input handler");
         }
 
         // Automatic polling. If you want finer control (or use

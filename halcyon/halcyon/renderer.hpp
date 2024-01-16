@@ -6,7 +6,7 @@
 #include <halcyon/enums/blend.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
-#include <lyoSTL/pass_key.hpp>
+#include <lyo/pass_key.hpp>
 
 #include <halcyon/components/sdl_object.hpp>
 
@@ -44,15 +44,17 @@ namespace hal
         void set_target(target_texture& tx);
         void reset_target();
 
+        // Get the color with which line/rect/fill drawing operations happen.
         color draw_color() const;
         void  set_draw_color(color clr);
 
+        // Set the way blending happens with line/rect/fill operations.
         blend_mode blend() const;
         void       set_blend(blend_mode bm);
 
-        void set_logical_size(const pixel_point& sz);
-
-        pixel_point output_size() const;
+        // Get the size of the "drawing board."
+        pixel_point size() const;
+        void        set_size(const pixel_point& sz);
 
         // Public, but only accessible to the draw class.
         void internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>);

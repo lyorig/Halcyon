@@ -1,13 +1,10 @@
 #include <array>
+#include <quest/constants.hpp>
 #include <quest/easing.hpp>
 #include <quest/game.hpp>
+#include <thread>
 
 using namespace quest;
-
-constexpr lyo::f64 curve(lyo::f64 t)
-{
-    return t * (2.0 - t);
-}
 
 game::game(lyo::parser&& args)
     : m_video { m_eng }
@@ -16,23 +13,29 @@ game::game(lyo::parser&& args)
     , m_ttf { m_video }
     , m_input { m_eng }
     , m_args { std::move(args) }
-    , m_font { m_ttf.load("assets/m5x7.ttf", 128) } // 144pt ought to be enough for anybody.
+    , m_font { this->load_appx_font("assets/VCR.ttf", 2.5) }
     , m_mixer { m_audio }
     , m_window { m_video, "HalodaQuest", hal::fullscreen_mode }
     , m_renderer { m_window, { hal::renderer::accelerated } }
+    , m_canvas { m_renderer, apx_size() }
 {
     using namespace constants;
 
-    const hal::pixel_point window_size { m_window.size() };
-    const lyo::f64         aspect_ratio { lyo::f64(window_size.y) / window_size.x };
+    const hal::pixel_point dsz {
+        m_video.display_at(m_window.display_index()).size()
+    };
+    const lyo::f64 aspect_ratio { lyo::f64(dsz.x) / dsz.y };
+    m_renderer.set_size({ lyo::cast<hal::pixel_t>(render_height * aspect_ratio), render_height });
 
-    m_renderer.set_logical_size({ logical_width, hal::pixel_t(logical_width * aspect_ratio) });
+    HAL_PRINT("Render size set at ", m_renderer.size());
+    HAL_PRINT("Art canvas size set at ", m_canvas.size());
 }
 
 template <typename T, typename Distance>
 struct modifier
 {
-    T*       object;
+    T* object;
+
     Distance dist;
     Distance base;
 
@@ -71,18 +74,20 @@ void game::intro()
 
     constexpr std::array<const char[12], 3> words { "efficiency.", "precision.", "Halcyon. " };
 
-    constexpr lyo::f64     fade_time { 0.75 };
-    constexpr hal::coord_t fly_dist { 200.0 };
+    constexpr lyo::f64 fade_time { 1.0 };
 
-    const hal::pixel_point sz = m_renderer.output_size();
+    const hal::font        font { this->load_appx_font("assets/m5x7.ttf", "Made with Halcyon", 60.0) };
+    const hal::pixel_point sz = m_renderer.size();
+    const hal::coord_t     fly_dist { sz.y / 4.0 };
 
     // The "Made with" part.
     text made_with {
-        .tex = { m_renderer, m_font.render("Made with ") },
-        .pos = hal::anchor::resolve(hal::anchor::center, sz / 2, m_font.size_text(std::string("Made with ") + words.front()))
+        .tex = this->load_pixel_art(font.render("Made with ")),
+        .pos = hal::anchor::resolve(hal::anchor::center, sz / 2, font.size_text(std::string { "Made with " } + words.front()))
     };
+
     text current {
-        .tex = { m_renderer, m_font.render(words.front()) },
+        .tex = this->load_pixel_art(font.render(words.front())),
         .pos = { made_with.pos.x + made_with.tex.size().x, made_with.pos.y - fly_dist }
     };
 
@@ -158,7 +163,7 @@ void game::intro()
                 mmod.func = &bezier::ease_out;
 
                 ++index;
-                current.tex.change(m_renderer, m_font.render(words[index], index == words.size() - 1 ? hal::color::cyan : hal::color::white));
+                current.tex.change(m_renderer, font.render(words[index], index == words.size() - 1 ? hal::color::cyan : hal::color::white));
 
                 timer -= fade_time;
             }
@@ -169,7 +174,7 @@ void game::intro()
             {
                 phase = by_lyorig;
 
-                made_with.tex.change(m_renderer, m_font.render("by lyorig").resize(0.75));
+                made_with.tex.change(m_renderer, font.render("by lyorig"));
                 made_with.pos.y += current.tex.size().y - made_with.tex.size().y;
 
                 mmod.object = &made_with.pos.x;
@@ -200,6 +205,7 @@ void game::intro()
 
         draw(made_with);
         draw(current);
+        HAL_DRAW_CONSOLE(m_renderer, m_font);
     }
 Hell:;
 }
@@ -209,77 +215,37 @@ void game::start()
     if (m_args.has("-nogame"))
         return;
 
-    const hal::chunk chk { m_mixer.load_sfx("assets/Button Hover.wav") };
+    hal::texture     tex { m_renderer, m_image.load("assets/test_sprite.png").resize(constants::apx_scale) };
+    hal::coord_point pos = m_renderer.size() / 2;
 
-    hal::texture     tex { m_renderer, m_font.render("[X]", hal::color::red) };
-    hal::coord_point pos = hal::anchor::resolve(hal::anchor::center, m_window.size() / 2, tex.size());
-
-    const hal::texture     help_text { m_renderer, m_font.render(hal::wrapped, "[WSAD] Move\nClick on the X to exit.").resize(0.5) };
-    const hal::coord_point htpos {
-        0,
-        static_cast<hal::coord_t>(m_window.size().y - help_text.size().y)
-    };
-
-    bool held { false };
-
-    constexpr hal::sdl::coord_t mod { 400.0 };
-    const lyo::precise_timer    tmr;
-
-    if (!m_args.has("-xbgm"))
-        m_mixer.music.load("assets/Magic Spear.mp3").play(hal::infinite_loop);
-
-    m_renderer.set_draw_color(0x04015c);
+    constexpr hal::coord_t incr { 50.0 * constants::apx_scale };
 
     while (this->update())
     {
-        for (auto val : m_input.held())
+        for (auto btn : m_input.held())
         {
-            switch (val)
+            using enum hal::button;
+
+            switch (btn)
             {
-            case hal::button::W:
-                pos.y -= mod * m_delta();
+            case W:
+                pos.y -= incr * this->delta();
                 break;
-
-            case hal::button::S:
-                pos.y += mod * m_delta();
+            case S:
+                pos.y += incr * this->delta();
                 break;
-
-            case hal::button::A:
-                pos.x -= mod * m_delta();
+            case A:
+                pos.x -= incr * this->delta();
                 break;
-
-            case hal::button::D:
-                pos.x += mod * m_delta();
+            case D:
+                pos.x += incr * this->delta();
                 break;
-
             default:
                 break;
             }
         }
-
-        if (hal::coord_point(m_input.mouse()) | pos.rect(tex.size()))
-        {
-            if (!held)
-            {
-                tex.set_color_mod(0x808080);
-                chk.play();
-                held = true;
-            }
-
-            if (m_input.pressed().has(hal::button::left_mouse))
-                m_input.quit();
-        }
-
-        else if (held)
-        {
-            tex.set_color_mod(0xFFFFFF);
-            held = false;
-        }
-
-        HAL_DEBUG_DRAW(m_renderer, m_font);
-
-        hal::draw(tex).to(pos)(m_renderer);
-        hal::draw(help_text).to(htpos)(m_renderer);
+        hal::draw { tex }.to(pos)(m_renderer);
+        HAL_DRAW_CONSOLE(m_renderer, m_font);
     }
 }
 
@@ -294,4 +260,51 @@ bool game::update()
 lyo::f64 game::delta() const
 {
     return m_delta();
+}
+
+hal::texture game::load_pixel_art(const hal::surface& surf)
+{
+    return { m_renderer, surf };
+}
+
+hal::font game::load_appx_font(const char* path, lyo::f64 screen_height_percentage)
+{
+    // Desired height.
+    const hal::pixel_t dh { lyo::cast<hal::pixel_t>(constants::render_height * (screen_height_percentage / 100.0)) };
+
+    lyo::u8   pt { 0 };
+    hal::font fnt { m_ttf.load(path, pt) };
+
+    for (; fnt.size_text(" ").y < dh; fnt = m_ttf.load(path, ++pt))
+    {
+        HAL_ASSERT(pt != std::numeric_limits<lyo::u8>::max(), "Couldn't size font to desired height");
+    }
+
+    return fnt;
+}
+
+hal::font game::load_appx_font(const char* path, const char* example_text, lyo::f64 screen_width_percentage)
+{
+    // Desired width.
+    const hal::pixel_t dw { lyo::cast<hal::pixel_t>(m_renderer.size().x * (screen_width_percentage / 100.0)) };
+
+    lyo::u8   pt { 0 };
+    hal::font fnt { m_ttf.load(path, pt) };
+
+    for (; fnt.size_text(example_text).x < dw; fnt = m_ttf.load(path, ++pt))
+    {
+        HAL_ASSERT(pt != std::numeric_limits<lyo::u8>::max(), "Couldn't size font to desired width");
+    }
+
+    return fnt;
+}
+
+hal::pixel_point game::apx_size()
+{
+    using namespace constants;
+
+    const hal::pixel_point dsz { m_video.display_at(m_window.display_index()).size() };
+    const lyo::f64         aspect_ratio { lyo::f64(dsz.x) / dsz.y };
+
+    return { lyo::cast<hal::pixel_t>(apx_height * aspect_ratio), apx_height };
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <chrono>
-#include <lyoSTL/tags.hpp>
+#include <lyo/tags.hpp>
 #include <variant>
 
 /* timer.hpp:

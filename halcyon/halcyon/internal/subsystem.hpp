@@ -4,7 +4,7 @@
 
 #include <halcyon/debug.hpp>
 #include <halcyon/types/render.hpp>
-#include <lyoSTL/pass_key.hpp>
+#include <lyo/pass_key.hpp>
 #include <utility>
 
 // subsystem.hpp:
@@ -38,7 +38,7 @@ namespace hal
 
         subsystem(const engine& eng [[maybe_unused]])
         {
-            HAL_DEBUG_ASSERT_VITAL(::SDL_InitSubSystem(Uint32(Sys)) == 0, ::SDL_GetError());
+            HAL_ASSERT_VITAL(::SDL_InitSubSystem(Uint32(Sys)) == 0, ::SDL_GetError());
         }
 
         ~subsystem()
@@ -55,7 +55,13 @@ namespace hal
         using index   = lyo::u8;
         using hz_type = lyo::u16;
 
-        display(index idx, lyo::pass_key<video>);
+        display(index disp_idx, lyo::pass_key<video>);
+
+        index num_modes() const;
+
+        display mode_at(index mode_idx) const;
+
+        std::vector<display> modes() const;
 
         index       idx() const;
         pixel_point size() const;
@@ -63,6 +69,8 @@ namespace hal
         hz_type     hz() const;
 
     private:
+        display(index disp_idx, index mode_idx);
+
         const index m_index;
     };
 

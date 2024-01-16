@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <lyoSTL/tags.hpp>
+#include <lyo/tags.hpp>
 
 namespace lyo
 {
@@ -18,41 +18,41 @@ namespace lyo
         using reference       = T&;
         using const_reference = const T&;
 
-        constexpr static_vector() = default;
+        constexpr static_vector() noexcept = default;
 
-        constexpr static_vector(std::size_t sz)
+        constexpr static_vector(std::size_t sz) noexcept
         {
             this->resize(sz);
         }
 
-        constexpr static_vector(std::size_t sz, no_init_tag)
+        constexpr static_vector(std::size_t sz, no_init_tag) noexcept
         {
             this->resize(sz, no_init);
         }
 
-        constexpr static_vector(std::initializer_list<T> init)
+        constexpr static_vector(std::initializer_list<T> init) noexcept
             : m_size { init.size() }
         {
             std::copy(init.begin(), init.end(), this->begin());
         }
 
-        constexpr ~static_vector()
+        constexpr ~static_vector() noexcept
         {
             this->destroy_range(this->begin(), this->end());
         }
 
-        constexpr void push_back(const T& value)
+        constexpr void push_back(const T& value) noexcept
         {
             this->emplace_back(value);
         }
 
-        constexpr void push_back(T&& value)
+        constexpr void push_back(T&& value) noexcept
         {
-            this->emplace_back(std::forward(value));
+            this->emplace_back(std::forward<T>(value));
         }
 
         template <typename... Args>
-        constexpr void emplace(iterator pos, Args&&... args)
+        constexpr void emplace(iterator pos, Args&&... args) noexcept
         {
             ++m_size;
             assert(this->size() <= capacity());
@@ -63,19 +63,19 @@ namespace lyo
         }
 
         template <typename... Args>
-        constexpr void emplace_back(Args&&... args)
+        constexpr void emplace_back(Args&&... args) noexcept
         {
             this->emplace(this->begin() + m_size, std::forward<Args>(args)...);
         }
 
-        constexpr void pop_back()
+        constexpr void pop_back() noexcept
         {
             assert(m_size > 0);
             this->erase(this->end() - 1);
         }
 
         // Resize with a specified object.
-        constexpr void resize(std::size_t sz, const T& obj = T {})
+        constexpr void resize(std::size_t sz, const T& obj = T {}) noexcept
         {
             if (sz == this->size()) // Nothing to do.
                 return;
@@ -93,7 +93,7 @@ namespace lyo
         }
 
         // Resize without initializing new objects.
-        constexpr void resize(std::size_t sz, no_init_tag)
+        constexpr void resize(std::size_t sz, no_init_tag) noexcept
         {
             if (sz == this->size()) // Nothing to do.
                 return;
@@ -108,7 +108,7 @@ namespace lyo
             m_size = sz;
         }
 
-        constexpr void erase(iterator pos)
+        constexpr void erase(iterator pos) noexcept
         {
             assert(pos >= this->begin() && pos < this->end());
 
@@ -119,7 +119,7 @@ namespace lyo
             --m_size;
         }
 
-        constexpr void erase(iterator begin, iterator end)
+        constexpr void erase(iterator begin, iterator end) noexcept
         {
             const std::size_t dist { std::size_t(std::distance(begin, end)) };
 
@@ -135,90 +135,90 @@ namespace lyo
             m_size -= dist;
         }
 
-        constexpr void clear()
+        constexpr void clear() noexcept
         {
             this->destroy_range(this->begin(), this->end());
             m_size = 0;
         }
 
-        constexpr bool has(const T& value) const
+        constexpr bool has(const T& value) const noexcept
         {
             return std::find(this->begin(), this->end(), value) != this->end();
         }
 
-        constexpr bool empty() const
+        constexpr bool empty() const noexcept
         {
             return m_size == 0;
         }
 
-        constexpr std::size_t size() const
+        constexpr std::size_t size() const noexcept
         {
             return m_size;
         }
 
-        constexpr static std::size_t capacity()
+        constexpr static std::size_t capacity() noexcept
         {
             return Max_Size;
         }
 
-        constexpr iterator begin()
+        constexpr iterator begin() noexcept
         {
             return reinterpret_cast<iterator>(&*m_array.begin());
         }
 
-        constexpr const_iterator begin() const
+        constexpr const_iterator begin() const noexcept
         {
             return reinterpret_cast<const_iterator>(&*m_array.begin());
         }
 
-        constexpr iterator end()
+        constexpr iterator end() noexcept
         {
             return this->begin() + m_size;
         }
 
-        constexpr const_iterator end() const
+        constexpr const_iterator end() const noexcept
         {
             return this->begin() + m_size;
         }
 
-        constexpr reference front()
+        constexpr reference front() noexcept
         {
             assert(m_size > 0);
             return *this->begin();
         }
 
-        constexpr const_reference front() const
+        constexpr const_reference front() const noexcept
         {
             assert(m_size > 0);
             return *this->begin();
         }
 
-        constexpr reference back()
+        constexpr reference back() noexcept
         {
             assert(m_size > 0);
             return *(this->end() - 1);
         }
 
-        constexpr const_reference back() const
+        constexpr const_reference back() const noexcept
         {
             assert(m_size > 0);
             return *(this->end() - 1);
         }
 
-        constexpr reference operator[](std::size_t idx)
+        constexpr reference operator[](std::size_t idx) noexcept
         {
             assert(idx < m_size);
             return *(this->begin() + idx);
         }
 
-        constexpr const_reference operator[](std::size_t idx) const
+        constexpr const_reference operator[](std::size_t idx) const noexcept
         {
             assert(idx < m_size);
             return *(this->begin() + idx);
         }
 
     private:
-        void destroy_range(iterator begin, iterator end)
+        void destroy_range(iterator begin, iterator end) noexcept
         {
             for (; begin != end; ++begin)
                 begin->~T();

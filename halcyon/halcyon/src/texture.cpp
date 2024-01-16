@@ -12,42 +12,42 @@ pixel_point texture_base::size() const
 
 void texture_base::set_opacity(color::value value)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
 }
 
 color texture_base::color_mod() const
 {
     color c;
 
-    HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureColorMod(this->ptr(), &c.r, &c.g, &c.b) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_GetTextureColorMod(this->ptr(), &c.r, &c.g, &c.b) == 0, ::SDL_GetError());
 
     return c;
 }
 
 void texture_base::set_color_mod(color clr)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, ::SDL_GetError());
 }
 
 blend_mode texture_base::blend() const
 {
     SDL_BlendMode bm;
 
-    HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_GetTextureBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
 
     return blend_mode(bm);
 }
 
 void texture_base::set_blend(blend_mode bm)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetTextureBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_SetTextureBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
 lyo::u8 texture_base::opacity() const
 {
     Uint8 alpha;
 
-    HAL_DEBUG_ASSERT_VITAL(::SDL_GetTextureAlphaMod(this->ptr(), &alpha) == 0,
+    HAL_ASSERT_VITAL(::SDL_GetTextureAlphaMod(this->ptr(), &alpha) == 0,
         ::SDL_GetError());
 
     return alpha;
@@ -76,7 +76,7 @@ pixel_point texture_base::internal_size() const
 
 void texture_base::query(Uint32* format, int* access, int* w, int* h) const
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, ::SDL_GetError());
 }
 
 texture::texture(renderer& wnd, const surface& image)
@@ -109,13 +109,13 @@ void target_texture::resize(renderer& rnd, pixel_point sz)
 SDL_Texture* target_texture::create(renderer& rnd, const pixel_point& sz)
 {
     SDL_Window* wnd { ::SDL_RenderGetWindow(rnd.ptr()) };
-    HAL_DEBUG_ASSERT(wnd != nullptr, ::SDL_GetError());
+    HAL_ASSERT(wnd != nullptr, ::SDL_GetError());
 
     const Uint32 pixel_format { ::SDL_GetWindowPixelFormat(wnd) };
-    HAL_DEBUG_ASSERT(pixel_format != SDL_PIXELFORMAT_UNKNOWN, ::SDL_GetError());
+    HAL_ASSERT(pixel_format != SDL_PIXELFORMAT_UNKNOWN, ::SDL_GetError());
 
     SDL_Texture* tex { ::SDL_CreateTexture(rnd.ptr(), pixel_format, SDL_TEXTUREACCESS_TARGET, sz.x, sz.y) };
-    HAL_DEBUG_ASSERT(tex != nullptr, ::SDL_GetError());
+    HAL_ASSERT(tex != nullptr, ::SDL_GetError());
 
     return tex;
 }

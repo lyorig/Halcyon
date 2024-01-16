@@ -7,7 +7,7 @@
     #include <halcyon/internal/printing.hpp>
     #include <halcyon/renderer.hpp>
     #include <halcyon/texture.hpp>
-    #include <lyoSTL/utility.hpp>
+    #include <lyo/utility.hpp>
 
 using namespace hal;
 
@@ -24,7 +24,6 @@ void debug::draw(renderer& rnd, const font& fnt)
 {
     // Render settings.
     constexpr coord_point offset { 20.0, 10.0 };
-    constexpr lyo::f64    vhm { 4.0 / 100.0 }; // View-height multiplier (only edit the lhs).
 
     // I am not 100% sure whether it's safe to create a static
     // SDL object, as the destructor will run after de-initialization.
@@ -47,10 +46,7 @@ void debug::draw(renderer& rnd, const font& fnt)
 
         if (csz.x != 0) [[likely]]
         {
-            const lyo::f64 scale { rnd.output_size().y * vhm / y_size };
-            const pixel_t  y_scaled = lyo::cast<pixel_t>(y_size * scale);
-
-            tx.resize(rnd, csz * scale);
+            tx.resize(rnd, csz);
 
             hal::target_lock lock { rnd, tx };
 
@@ -62,9 +58,9 @@ void debug::draw(renderer& rnd, const font& fnt)
                 if (!entry.first.empty()) [[likely]]
                 {
                     const hal::texture text { rnd, fnt.render(entry.first, entry.second) };
-                    const pixel_point    pos { 0, pixel_t(i * y_scaled) };
+                    const pixel_point  pos { 0, pixel_t(i * y_size) };
 
-                    hal::draw(text).to(pos).scale(scale)(rnd);
+                    hal::draw(text).to(pos)(rnd);
                 }
             }
         }

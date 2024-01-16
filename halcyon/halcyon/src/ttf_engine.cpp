@@ -4,9 +4,9 @@ using namespace hal;
 
 ttf_engine::ttf_engine(video& sys [[maybe_unused]])
 {
-    HAL_DEBUG_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
+    HAL_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
 
-    HAL_DEBUG_PRINT(debug::init, "Initialized TTF engine");
+    HAL_PRINT(debug::init, "Initialized TTF engine");
 }
 
 ttf_engine::~ttf_engine() { ::TTF_Quit(); }

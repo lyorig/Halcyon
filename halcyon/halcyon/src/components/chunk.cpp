@@ -7,7 +7,7 @@ using namespace hal;
 chunk::chunk(const char* path, lyo::pass_key<mixer>)
     : object { ::Mix_LoadWAV(path) }
 {
-    HAL_DEBUG_PRINT(debug::load, "Loaded SFX ", path);
+    HAL_PRINT(debug::load, "Loaded SFX ", path);
 }
 
 void chunk::play(lyo::u16 loops) const
@@ -22,6 +22,6 @@ void chunk::play(infinite_loop_tag) const
 
 void chunk::internal_play(int loops) const
 {
-    HAL_DEBUG_ASSERT_VITAL(::Mix_PlayChannel(-1, this->ptr(), loops) != -1,
+    HAL_ASSERT_VITAL(::Mix_PlayChannel(-1, this->ptr(), loops) != -1,
         ::Mix_GetError());
 }

@@ -19,46 +19,48 @@ void renderer::present()
 
 void renderer::clear()
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
 }
 
 void renderer::draw_line(const coord_point& from, const coord_point& to)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<sdl::coord_t>(from.x),
-                               static_cast<sdl::coord_t>(from.y),
-                               static_cast<sdl::coord_t>(to.x),
-                               static_cast<sdl::coord_t>(to.y))
+    HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<sdl::coord_t>(from.x),
+                         static_cast<sdl::coord_t>(from.y),
+                         static_cast<sdl::coord_t>(to.x),
+                         static_cast<sdl::coord_t>(to.y))
             == 0,
         ::SDL_GetError());
 }
 
 void renderer::draw_rect(const coord_rect& area)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), sdl::coord_rect(area).addr()) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), sdl::coord_rect(area).addr()) == 0, ::SDL_GetError());
 }
 
 void renderer::fill_rect(const sdl::coord_rect& area)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), area.addr()) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), area.addr()) == 0, ::SDL_GetError());
 }
 
 void renderer::fill_target()
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), nullptr) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), nullptr) == 0, ::SDL_GetError());
 }
 
-void renderer::set_logical_size(const pixel_point& sz)
+pixel_point renderer::size() const
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), sz.x, sz.y) == 0, ::SDL_GetError());
+    point<int> sz;
+    ::SDL_RenderGetLogicalSize(this->ptr(), &sz.x, &sz.y);
+
+    if (sz.x == 0)
+        ::SDL_GetRendererOutputSize(this->ptr(), &sz.x, &sz.y);
+
+    return sz;
 }
 
-pixel_point renderer::output_size() const
+void renderer::set_size(const pixel_point& sz)
 {
-    point<int> size;
-
-    HAL_DEBUG_ASSERT_VITAL(::SDL_GetRendererOutputSize(this->ptr(), &size.x, &size.y) == 0, ::SDL_GetError());
-
-    return size;
+    HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), sz.x, sz.y) == 0, ::SDL_GetError());
 }
 
 void renderer::set_target(target_texture& tx)
@@ -75,40 +77,40 @@ color renderer::draw_color() const
 {
     color ret;
 
-    HAL_DEBUG_ASSERT_VITAL(::SDL_GetRenderDrawColor(this->ptr(), &ret.r, &ret.g, &ret.b, &ret.a) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_GetRenderDrawColor(this->ptr(), &ret.r, &ret.g, &ret.b, &ret.a) == 0, ::SDL_GetError());
 
     return ret;
 }
 
 void renderer::set_draw_color(color clr)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, ::SDL_GetError());
 }
 
 blend_mode renderer::blend() const
 {
     SDL_BlendMode bm;
 
-    HAL_DEBUG_ASSERT_VITAL(::SDL_GetRenderDrawBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_GetRenderDrawBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
 
     return blend_mode(bm);
 }
 
 void renderer::set_blend(blend_mode bm)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
 void renderer::internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>)
 {
-    HAL_DEBUG_ASSERT(tex.ptr() != nullptr, "Drawing null texture");
+    HAL_ASSERT(tex.ptr() != nullptr, "Drawing null texture");
 
-    HAL_DEBUG_ASSERT_VITAL(::SDL_RenderCopyExF(this->ptr(), tex.ptr(), src, dst, angle, NULL, SDL_RendererFlip(f)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_RenderCopyExF(this->ptr(), tex.ptr(), src, dst, angle, NULL, SDL_RendererFlip(f)) == 0, ::SDL_GetError());
 }
 
 void renderer::internal_set_target(SDL_Texture* target)
 {
-    HAL_DEBUG_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), target) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), target) == 0, ::SDL_GetError());
 }
 
 color_lock::color_lock(renderer& rnd, color new_clr)
