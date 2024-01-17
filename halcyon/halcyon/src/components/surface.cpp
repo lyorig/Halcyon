@@ -2,24 +2,37 @@
 
 using namespace hal;
 
-surface::surface([[maybe_unused]] video& sys, pixel_point sz)
-    : surface { sz }
-{
-}
+// Set the depth accordingly upon changing this value.
+constexpr SDL_PixelFormatEnum default_format { SDL_PIXELFORMAT_RGBA32 };
 
-surface::surface(pixel_point sz)
-    : surface { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, 32, SDL_PIXELFORMAT_RGBA32) }
-{
-}
-
-surface::surface(SDL_Surface* surf)
+surface::surface(SDL_Surface* surf, lyo::pass_key<image_loader>)
     : object { surf }
+{
+}
+
+surface::surface(SDL_Surface* surf, lyo::pass_key<font>)
+    : object { surf }
+{
+}
+
+surface::surface(pixel_point sz, int depth, Uint32 fmt)
+    : object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, depth, fmt) }
+{
+}
+
+surface::surface([[maybe_unused]] video& sys, pixel_point sz)
+    : surface { sz, CHAR_BIT * 4, default_format }
+{
+}
+
+surface::surface(pixel_point sz, const SDL_PixelFormat* fmt)
+    : surface { sz, fmt->BitsPerPixel * 4, fmt->format }
 {
 }
 
 surface surface::resize(pixel_point sz)
 {
-    surface    ret { sz };
+    surface    ret { sz, ptr()->format };
     blend_lock bl { *this, blend_mode::none };
 
     hal::blit { *this }.to(hal::fill)(ret);

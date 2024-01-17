@@ -3,19 +3,18 @@
 #include <SDL2/SDL_surface.h>
 
 #include <halcyon/enums/blend.hpp>
-#include <halcyon/enums/scaler.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/types/color.hpp>
 #include <lyo/pass_key.hpp>
 
 #include <halcyon/components/sdl_object.hpp>
 
-/* surface.hpp:
-   A "software surface" used by SDL. The user should never
-   directly create a surface, but instead use various loading
-   functions of other classes, which are responsible for providing
-   a valid SDL_Surface pointer. On top of staying true to the SDL object
-   structure, another upside comes in the form of early error handling. */
+// surface.hpp:
+// A "software surface" used by SDL. The user should never
+// directly create a surface, but instead use various loading
+// functions of other classes, which are responsible for providing
+// a valid SDL_Surface pointer. On top of staying true to the SDL object
+// structure, another upside comes in the form of early error handling.
 
 namespace hal
 {
@@ -24,13 +23,16 @@ namespace hal
     class image_loader;
     class video;
     class font;
-    class surface;
 
     class surface : public sdl::object<SDL_Surface, &::SDL_FreeSurface>
     {
     public:
         // Create a sized surface.
         surface(video& sys, pixel_point sz);
+
+        // Special c-tor for factory classes.
+        surface(SDL_Surface* surf, lyo::pass_key<image_loader>);
+        surface(SDL_Surface* surf, lyo::pass_key<font>);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
@@ -51,14 +53,13 @@ namespace hal
         void internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* dst, lyo::pass_key<blit>) const;
 
     private:
-        friend class image_loader;
-        friend class font;
+        // I'd rather use the pixel format enum, but SDL uses an integer
+        // in every API function (AFAIK), so I'll save myself the hassle.
+        surface(pixel_point sz, int depth, Uint32 format);
 
-        // Special c-tor for factory classes (also the one delegated to).
-        surface(SDL_Surface* surf);
-
-        // Special c-tor for resizing.
-        surface(pixel_point sz);
+        // Construct a new surface from an existing one's pixel format.
+        // Used for resizing.
+        surface(pixel_point sz, const SDL_PixelFormat* fmt);
 
         Uint32 pixel_at(const pixel_point& pos) const;
     };

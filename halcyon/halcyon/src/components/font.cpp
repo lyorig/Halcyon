@@ -11,7 +11,7 @@ font::font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>)
 
 surface font::render(const std::string_view& text, color color) const
 {
-    return ::TTF_RenderUTF8_LCD_Wrapped(this->ptr(), text.data(), color.to_sdl_color(), {}, 0);
+    return { ::TTF_RenderUTF8_LCD_Wrapped(this->ptr(), text.data(), color.to_sdl_color(), {}, 0), lyo::pass_key<font> {} };
 }
 
 pixel_point font::size_text(const std::string_view& text) const

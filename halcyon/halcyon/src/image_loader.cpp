@@ -19,5 +19,5 @@ surface image_loader::load(const char* path) const
 {
     HAL_PRINT("Loading image ", path);
 
-    return ::IMG_Load(path);
+    return { ::IMG_Load(path), lyo::pass_key<image_loader> {} };
 }

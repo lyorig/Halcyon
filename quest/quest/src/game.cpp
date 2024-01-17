@@ -215,10 +215,10 @@ void game::start()
     if (m_args.has("-nogame"))
         return;
 
-    hal::texture     tex { m_renderer, m_image.load("assets/test_sprite.png").resize(constants::apx_scale) };
+    hal::texture     tex { m_renderer, m_image.load("assets/test_sprite.png").resize(constants::art_scale) };
     hal::coord_point pos = m_renderer.size() / 2;
 
-    constexpr hal::coord_t incr { 50.0 * constants::apx_scale };
+    constexpr hal::coord_t incr { 50.0 * constants::art_scale };
 
     while (this->update())
     {
@@ -306,5 +306,5 @@ hal::pixel_point game::apx_size()
     const hal::pixel_point dsz { m_video.display_at(m_window.display_index()).size() };
     const lyo::f64         aspect_ratio { lyo::f64(dsz.x) / dsz.y };
 
-    return { lyo::cast<hal::pixel_t>(apx_height * aspect_ratio), apx_height };
+    return { lyo::cast<hal::pixel_t>(art_height * aspect_ratio), art_height };
 }

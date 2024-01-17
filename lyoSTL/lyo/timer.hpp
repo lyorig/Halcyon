@@ -4,8 +4,8 @@
 #include <lyo/tags.hpp>
 #include <variant>
 
-/* timer.hpp:
-   Timing facilities. */
+// timer.hpp:
+//  Timing facilities.
 
 namespace lyo
 {
