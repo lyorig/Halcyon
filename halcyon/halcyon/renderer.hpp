@@ -71,8 +71,9 @@ namespace hal
     {
     public:
         color_lock(renderer& rnd, color new_clr);
-
         ~color_lock();
+
+        void set(color clr);
 
     private:
         renderer&   m_rnd;
@@ -85,8 +86,9 @@ namespace hal
     {
     public:
         target_lock(renderer& rnd, target_texture& tgt);
-
         ~target_lock();
+
+        void set(target_texture& tgt);
 
     private:
         renderer& m_rnd;

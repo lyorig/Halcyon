@@ -9,8 +9,6 @@ Included are several independent libraries.
 A C++ SDL wrapper, focused on speed and ease of use.
 - **lyoSTL**  
 Various classes and types that enhance and simplify coding.
-- **lyoECS**  
-An Entity-Component System, features both static and dynamic variants.
 
 ## The rendering system
 There are a few steps to rendering the game.

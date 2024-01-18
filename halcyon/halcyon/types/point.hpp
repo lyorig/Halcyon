@@ -15,20 +15,18 @@ namespace hal
     {
         T x {}, y {};
 
-        constexpr point<T> operator+(const point& pt) const
+        constexpr point operator+(const point& pt) const
         {
-            return point<T> {
-                lyo::cast<T>(x + pt.x),
-                lyo::cast<T>(y + pt.y)
-            };
+            point ret { *this };
+            ret += pt;
+            return ret;
         }
 
         constexpr point<T> operator-(const point& pt) const
         {
-            return point<T> {
-                lyo::cast<T>(x - pt.x),
-                lyo::cast<T>(y - pt.y)
-            };
+            point ret { *this };
+            ret -= pt;
+            return ret;
         }
 
         constexpr point& operator+=(const point& pt)
@@ -47,14 +45,34 @@ namespace hal
             return *this;
         }
 
-        constexpr point operator*(lyo::f64 mul) const
+        template <lyo::arithmetic M>
+        constexpr auto operator*(M mul) const -> point<decltype(x * mul)>
         {
-            return point { lyo::cast<T>(x * mul), lyo::cast<T>(y * mul) };
+            point<decltype(x * mul)> ret = *this;
+            ret *= mul;
+            return ret;
         }
 
-        constexpr point operator/(lyo::f64 div) const
+        constexpr point operator*(const point& mul) const
         {
-            return point { lyo::cast<T>(x / div), lyo::cast<T>(y / div) };
+            point ret { *this };
+            ret *= mul;
+            return ret;
+        }
+
+        template <lyo::arithmetic D>
+        constexpr auto operator/(D div) const -> point<decltype(x / div)>
+        {
+            point<decltype(x / div)> ret = *this;
+            ret /= div;
+            return ret;
+        }
+
+        constexpr point operator/(const point& div) const
+        {
+            point ret { *this };
+            ret /= div;
+            return ret;
         }
 
         constexpr point& operator*=(lyo::f64 mul)
@@ -66,11 +84,27 @@ namespace hal
             return *this;
         }
 
+        constexpr point& operator*=(const point& mul)
+        {
+            x *= mul.x;
+            y *= mul.y;
+
+            return *this;
+        }
+
         constexpr point& operator/=(lyo::f64 div)
         {
-            // Ditto.
+            // Same problem as in operator*=.
             x = lyo::cast<T>(static_cast<lyo::f64>(x) / div);
             y = lyo::cast<T>(static_cast<lyo::f64>(y) / div);
+
+            return *this;
+        }
+
+        constexpr point& operator/=(const point& div)
+        {
+            x /= div.x;
+            y /= div.y;
 
             return *this;
         }

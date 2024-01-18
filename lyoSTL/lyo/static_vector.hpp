@@ -141,7 +141,7 @@ namespace lyo
             m_size = 0;
         }
 
-        constexpr bool has(const T& value) const noexcept
+        constexpr bool contains(const T& value) const noexcept
         {
             return std::find(this->begin(), this->end(), value) != this->end();
         }

@@ -18,13 +18,11 @@ namespace quest
     {
         // The Halcyon renderer's height. Changing this value should not change
         // the relative scale of any visuals, but rather the fluidity of motion.
-        // The width is calculated upon startup.
         constexpr hal::pixel_t render_height { 1080 };
 
         // How many art pixels fit into the height (default scale).
         // It has a direct impact on the scale of visuals, so it should be
         // set in stone at a reasonable point in developement.
-        // The width is calculated upon startup.
         constexpr hal::pixel_t art_height { 196 };
 
         // The scale with which to multiply pixel-art graphics at zero distance.

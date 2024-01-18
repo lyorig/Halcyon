@@ -2,6 +2,11 @@
 
 #include <halcyon/halcyon.hpp>
 #include <lyo/argparse.hpp>
+#include <lyo/stack_polymorphism.hpp>
+#include <quest/states/intro.hpp>
+#include <quest/states/menu.hpp>
+#include <quest/states/paused.hpp>
+#include <quest/states/playing.hpp>
 
 namespace quest
 {
@@ -15,6 +20,7 @@ namespace quest
 
     private:
         bool update();
+        void dispatch_event(state::type nt);
 
         lyo::f64 delta() const;
 
@@ -28,6 +34,7 @@ namespace quest
 
         hal::pixel_point apx_size();
 
+        // Systems.
         LYO_NOSIZE hal::engine m_eng;
         LYO_NOSIZE hal::video m_video;
         LYO_NOSIZE hal::audio m_audio;
@@ -36,15 +43,22 @@ namespace quest
 
         hal::queued_input_handler m_input;
 
+        // Constants.
         const lyo::parser m_args;
         const hal::font   m_font;
 
+        // Rendering & audio.
         hal::mixer    m_mixer;
         hal::window   m_window;
         hal::renderer m_renderer;
 
-        lyo::precise_timer m_delta;
+        // Game states.
+        state::base* m_state;
 
-        hal::target_texture m_canvas;
+        state::menu    m_menuState;
+        state::paused  m_pausedState;
+        state::playing m_playingState;
+
+        lyo::precise_timer m_delta;
     };
 }

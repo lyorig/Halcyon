@@ -39,6 +39,9 @@ namespace hal
         surface resize(pixel_point sz);
         surface resize(lyo::f64 scale);
 
+        void fill(color clr);
+        void fill_rect(const sdl::pixel_rect& area, color clr);
+
         pixel_point size() const;
 
         // Get pixel at position.

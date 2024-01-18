@@ -2,10 +2,9 @@
 
 int main(int argc, char* argv[])
 {
-    quest::game game { { argc, argv } };
+    quest::game HalodaQuest { { argc, argv } };
 
-    game.intro();
-    game.start();
+    HalodaQuest.start();
 
     return EXIT_SUCCESS;
 }

@@ -18,6 +18,29 @@ namespace hal
 
     using coord_point = point<coord_t>;
     using coord_rect  = rectangle<coord_t>;
+
+    namespace literals
+    {
+        constexpr pixel_t operator""_px(unsigned long long v)
+        {
+            return lyo::cast<pixel_t>(v);
+        }
+
+        constexpr pixel_t operator""_px(long double v)
+        {
+            return lyo::cast<pixel_t>(v);
+        }
+
+        constexpr coord_t operator""_crd(unsigned long long v)
+        {
+            return lyo::cast<coord_t>(v);
+        }
+
+        constexpr coord_t operator""_crd(long double v)
+        {
+            return lyo::cast<coord_t>(v);
+        }
+    }
 }
 
 // Paranoia.

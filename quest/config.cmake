@@ -1,6 +1,12 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-list(APPEND QUEST_SOURCES
-src/game.cpp)
+set(QUEST_SOURCES
+game.cpp
+sprite.cpp
+states/base.cpp
+states/intro.cpp
+states/menu.cpp
+states/playing.cpp
+states/paused.cpp)
 
-list(TRANSFORM QUEST_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/quest/)
+list(TRANSFORM QUEST_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/quest/src/)

@@ -17,7 +17,7 @@ game::game(lyo::parser&& args)
     , m_mixer { m_audio }
     , m_window { m_video, "HalodaQuest", hal::fullscreen_mode }
     , m_renderer { m_window, { hal::renderer::accelerated } }
-    , m_canvas { m_renderer, apx_size() }
+    , m_state { new state::intro }
 {
     using namespace constants;
 
@@ -28,7 +28,6 @@ game::game(lyo::parser&& args)
     m_renderer.set_size({ lyo::cast<hal::pixel_t>(render_height * aspect_ratio), render_height });
 
     HAL_PRINT("Render size set at ", m_renderer.size());
-    HAL_PRINT("Art canvas size set at ", m_canvas.size());
 }
 
 template <typename T, typename Distance>
@@ -83,7 +82,7 @@ void game::intro()
     // The "Made with" part.
     text made_with {
         .tex = this->load_pixel_art(font.render("Made with ")),
-        .pos = hal::anchor::resolve(hal::anchor::center, sz / 2, font.size_text(std::string { "Made with " } + words.front()))
+        .pos = hal::anchor::resolve(hal::anchor::center, hal::pixel_point(sz / 2.0), font.size_text(std::string { "Made with " } + words.front()))
     };
 
     text current {
@@ -215,36 +214,9 @@ void game::start()
     if (m_args.has("-nogame"))
         return;
 
-    hal::texture     tex { m_renderer, m_image.load("assets/test_sprite.png").resize(constants::art_scale) };
-    hal::coord_point pos = m_renderer.size() / 2;
-
-    constexpr hal::coord_t incr { 50.0 * constants::art_scale };
-
     while (this->update())
     {
-        for (auto btn : m_input.held())
-        {
-            using enum hal::button;
-
-            switch (btn)
-            {
-            case W:
-                pos.y -= incr * this->delta();
-                break;
-            case S:
-                pos.y += incr * this->delta();
-                break;
-            case A:
-                pos.x -= incr * this->delta();
-                break;
-            case D:
-                pos.x += incr * this->delta();
-                break;
-            default:
-                break;
-            }
-        }
-        hal::draw { tex }.to(pos)(m_renderer);
+        this->dispatch_event(m_state->update(m_input, this->delta()));
         HAL_DRAW_CONSOLE(m_renderer, m_font);
     }
 }
@@ -255,6 +227,30 @@ bool game::update()
     m_renderer.present();
 
     return m_input.update();
+}
+
+void game::dispatch_event(state::type tp)
+{
+    using enum state::type;
+
+    if (tp == none) [[likely]]
+        return;
+
+    switch (tp)
+    {
+    case menu:
+        m_state = &m_menuState;
+        break;
+    case playing:
+        m_state = &m_playingState;
+        break;
+    case paused:
+        m_state = &m_pausedState;
+
+        break;
+    case none:
+        HAL_PANIC("Dispatching received \"none\" event");
+    }
 }
 
 lyo::f64 game::delta() const

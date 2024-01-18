@@ -2,26 +2,26 @@ cmake_minimum_required(VERSION 3.12)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
-list(APPEND HALCYON_SOURCES
-src/debug.cpp
-src/engine.cpp
-src/image_loader.cpp
-src/input_handler.cpp
-src/mixer.cpp
-src/renderer.cpp
-src/texture.cpp
-src/ttf_engine.cpp
-src/window.cpp
-src/components/chunk.cpp
-src/components/font.cpp
-src/components/music.cpp
-src/components/surface.cpp
-src/internal/subsystem.cpp
-src/internal/printing.cpp)
+set(HALCYON_SOURCES
+debug.cpp
+engine.cpp
+image_loader.cpp
+input_handler.cpp
+mixer.cpp
+renderer.cpp
+texture.cpp
+ttf_engine.cpp
+window.cpp
+components/chunk.cpp
+components/font.cpp
+components/music.cpp
+components/surface.cpp
+internal/subsystem.cpp
+internal/printing.cpp)
 
-list(TRANSFORM HALCYON_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/halcyon/)
+list(TRANSFORM HALCYON_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/halcyon/src/)
 
-list(APPEND HALCYON_LIBRARIES
+set(HALCYON_LIBRARIES
 SDL2
 SDL2main
 SDL2_image

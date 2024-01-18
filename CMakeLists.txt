@@ -53,6 +53,5 @@ target_sources(HQtest PRIVATE
 test/test.cpp
 ${HALCYON_SOURCES})
 
-# Link appropriate SDL libraries.
 target_link_libraries(HalodaQuest ${HALCYON_LIBRARIES})
 target_link_libraries(HQtest ${HALCYON_LIBRARIES})

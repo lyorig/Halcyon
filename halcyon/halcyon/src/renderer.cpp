@@ -117,7 +117,7 @@ color_lock::color_lock(renderer& rnd, color new_clr)
     : m_rnd { rnd }
     , m_old { rnd.draw_color() }
 {
-    m_rnd.set_draw_color(new_clr);
+    set(new_clr);
 }
 
 color_lock::~color_lock()
@@ -125,13 +125,23 @@ color_lock::~color_lock()
     m_rnd.set_draw_color(m_old);
 }
 
+void color_lock::set(color clr)
+{
+    m_rnd.set_draw_color(clr);
+}
+
 target_lock::target_lock(renderer& rnd, target_texture& tgt)
     : m_rnd { rnd }
 {
-    m_rnd.set_target(tgt);
+    set(tgt);
 }
 
 target_lock::~target_lock()
 {
     m_rnd.reset_target();
+}
+
+void target_lock::set(target_texture& tgt)
+{
+    m_rnd.set_target(tgt);
 }

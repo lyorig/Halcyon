@@ -45,6 +45,18 @@ surface surface::resize(lyo::f64 scale)
     return this->resize(this->size() * scale);
 }
 
+void surface::fill(color clr)
+{
+    const Uint32 mapped { ::SDL_MapRGBA(ptr()->format, clr.r, clr.g, clr.b, clr.a) };
+    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), nullptr, mapped) == 0, ::SDL_GetError());
+}
+
+void surface::fill_rect(const sdl::pixel_rect& area, color clr)
+{
+    const Uint32 mapped { ::SDL_MapRGBA(ptr()->format, clr.r, clr.g, clr.b, clr.a) };
+    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), area.addr(), mapped) == 0, ::SDL_GetError());
+}
+
 pixel_point surface::size() const
 {
     return {

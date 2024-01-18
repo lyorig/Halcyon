@@ -91,10 +91,10 @@ namespace hal
     // A basic input handler which queues its inputs.
     class queued_input_handler : public input_base<queued_input_handler>
     {
+    public:
         // N-key rollover, basically.
         using holder = lyo::static_vector<hal::button, 6>;
 
-    public:
         using input_base::input_base;
 
         bool update();
