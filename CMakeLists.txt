@@ -21,7 +21,7 @@ else()
 	add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# Enable link-time optimisation.
+# Enable link-time optimisation in release.
 if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 	if (MSVC)
 		add_compile_options(/GL)
@@ -32,8 +32,8 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 	endif()
 
 	# add_compile_definitions(LYO_USE_FAST_TYPES)
-else()
-	# We're in Debug mode. Enable extra checks.
+# We're in Debug mode. Enable extra checks.
+elseif(NOT MSVC)
 	add_compile_options(-fsanitize=address -fsanitize=undefined)
 	add_link_options(-fsanitize=address -fsanitize=undefined)
 endif()

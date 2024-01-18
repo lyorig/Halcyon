@@ -14,7 +14,7 @@ namespace quest
         constexpr lyo::f64 curve(lyo::f64 y1, lyo::f64 y2, lyo::f64 t)
         {
             const lyo::f64 par { 1.0 - t }; // (1 - t)
-            return 3.0 * std::pow(par, 2) * t * y1 + 3.0 * par * std::pow(t, 2) * y2 + std::pow(t, 3);
+            return 3.0 * par * par * t * y1 + 3.0 * par * t * t * y2 + t * t * t;
         }
 
         // y = x

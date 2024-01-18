@@ -23,7 +23,7 @@ namespace hal
             maximized           = SDL_WINDOW_MAXIMIZED
         };
 
-        window(video& sys, const char* title, const pixel_point& pos, const pixel_point& size, std::initializer_list<flags> flags);
+        window(video& sys, const char* title, const pixel_point& size, std::initializer_list<flags> flags);
         window(video& sys, const char* title, fullscreen_mode_tag);
 
         pixel_point size() const;

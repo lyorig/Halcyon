@@ -20,7 +20,7 @@ public:
 
     game(hal::pixel_t tile_size)
         : tile_size { tile_size }
-        , wnd { vid, "Šachy", {}, { hal::pixel_t(tile_size * 10), hal::pixel_t(tile_size * 8) }, {} }
+        , wnd { vid, "Šachy", { hal::pixel_t(tile_size * 10), hal::pixel_t(tile_size * 8) }, {} }
     {
         rnd.set_draw_color(hal::color::weezer_blue);
     }
@@ -71,4 +71,6 @@ int main(int argc, char* argv[])
     {
         hal::draw { tx }(g.rnd);
     }
+
+    return EXIT_SUCCESS;
 }
