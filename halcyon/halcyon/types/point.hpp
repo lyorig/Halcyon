@@ -1,9 +1,9 @@
 #pragma once
 
+#include <compare>
 #include <halcyon/internal/sdl_types.hpp>
-#include <lyo/cast.hpp>
-
 #include <halcyon/internal/tags.hpp>
+#include <lyo/cast.hpp>
 
 namespace hal
 {
@@ -75,6 +75,13 @@ namespace hal
             return ret;
         }
 
+        constexpr point operator%(const point& mod) const
+        {
+            point ret { *this };
+            ret %= mod;
+            return ret;
+        }
+
         constexpr point& operator*=(lyo::f64 mul)
         {
             // Bit verbose, but MSVC won't shut up otherwise.
@@ -109,6 +116,14 @@ namespace hal
             return *this;
         }
 
+        constexpr point& operator%=(const point& mod)
+        {
+            x %= mod.x;
+            y %= mod.y;
+
+            return *this;
+        }
+
         constexpr point operator-() const
             requires std::is_signed_v<T>
         {
@@ -117,6 +132,8 @@ namespace hal
                 -y
             };
         }
+
+        constexpr auto operator<=>(const point& cmp) const = default;
 
         // Create a new rectangle with this point acting as the size.
         constexpr rectangle<T> rect() const
@@ -175,6 +192,7 @@ namespace hal
     {
         return lhs.x == rhs.x && lhs.y == rhs.y;
     }
+
     // Wrappers for native SDL types.
     namespace sdl
     {

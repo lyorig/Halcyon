@@ -47,14 +47,17 @@ surface surface::resize(lyo::f64 scale)
 
 void surface::fill(color clr)
 {
-    const Uint32 mapped { ::SDL_MapRGBA(ptr()->format, clr.r, clr.g, clr.b, clr.a) };
-    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), nullptr, mapped) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), nullptr, mapped(clr)) == 0, ::SDL_GetError());
 }
 
 void surface::fill_rect(const sdl::pixel_rect& area, color clr)
 {
-    const Uint32 mapped { ::SDL_MapRGBA(ptr()->format, clr.r, clr.g, clr.b, clr.a) };
-    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), area.addr(), mapped) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), area.addr(), mapped(clr)) == 0, ::SDL_GetError());
+}
+
+void surface::fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr)
+{
+    HAL_ASSERT_VITAL(::SDL_FillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), areas.size(), mapped(clr)) == 0, ::SDL_GetError());
 }
 
 pixel_point surface::size() const
@@ -99,6 +102,11 @@ blend_mode surface::blend() const
 void surface::set_blend(blend_mode bm)
 {
     HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
+}
+
+Uint32 surface::mapped(color clr) const
+{
+    return ::SDL_MapRGBA(ptr()->format, clr.r, clr.g, clr.b, clr.a);
 }
 
 Uint32 surface::pixel_at(const pixel_point& pos) const

@@ -31,7 +31,6 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 		add_link_options(-flto)
 	endif()
 
-	# add_compile_definitions(LYO_USE_FAST_TYPES)
 # We're in Debug mode. Enable extra checks.
 elseif(NOT MSVC)
 	add_compile_options(-fsanitize=address -fsanitize=undefined)

@@ -6,6 +6,7 @@
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/types/color.hpp>
 #include <lyo/pass_key.hpp>
+#include <span>
 
 #include <halcyon/components/sdl_object.hpp>
 
@@ -41,6 +42,7 @@ namespace hal
 
         void fill(color clr);
         void fill_rect(const sdl::pixel_rect& area, color clr);
+        void fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr);
 
         pixel_point size() const;
 
@@ -64,6 +66,7 @@ namespace hal
         // Used for resizing.
         surface(pixel_point sz, const SDL_PixelFormat* fmt);
 
+        Uint32 mapped(color clr) const;
         Uint32 pixel_at(const pixel_point& pos) const;
     };
 

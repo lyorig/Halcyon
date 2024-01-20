@@ -7,6 +7,7 @@
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
+#include <span>
 
 #include <halcyon/components/sdl_object.hpp>
 
@@ -35,10 +36,11 @@ namespace hal
 
         void present();
 
-        void draw_line(const coord_point& from, const coord_point& to);
-        void draw_rect(const coord_rect& area);
+        void draw_line(const sdl::coord_point& from, const sdl::coord_point& to);
+        void draw_rect(const sdl::coord_rect& area);
 
         void fill_rect(const sdl::coord_rect& area);
+        void fill_rects(const std::span<const sdl::coord_rect>& areas);
         void fill_target();
 
         void set_target(target_texture& tx);

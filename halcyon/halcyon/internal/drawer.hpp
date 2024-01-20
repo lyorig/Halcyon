@@ -65,7 +65,8 @@ namespace hal
         // Can be called at any time.
         [[nodiscard]] this_ref from(const pixel_rect& src)
         {
-            m_src = src;
+            m_src      = src;
+            m_dst.size = dst_point(src.size);
             return get_this();
         }
 

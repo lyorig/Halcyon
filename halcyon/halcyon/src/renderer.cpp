@@ -22,29 +22,70 @@ void renderer::clear()
     HAL_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
 }
 
-void renderer::draw_line(const coord_point& from, const coord_point& to)
+void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& to)
 {
-    HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<sdl::coord_t>(from.x),
-                         static_cast<sdl::coord_t>(from.y),
-                         static_cast<sdl::coord_t>(to.x),
-                         static_cast<sdl::coord_t>(to.y))
-            == 0,
-        ::SDL_GetError());
+    if constexpr (hal::sdl::integral_coord)
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderDrawLine(this->ptr(), static_cast<sdl::coord_t>(from.x),
+                             static_cast<sdl::coord_t>(from.y),
+                             static_cast<sdl::coord_t>(to.x),
+                             static_cast<sdl::coord_t>(to.y))
+                == 0,
+            ::SDL_GetError());
+    }
+
+    else
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<sdl::coord_t>(from.x),
+                             static_cast<sdl::coord_t>(from.y),
+                             static_cast<sdl::coord_t>(to.x),
+                             static_cast<sdl::coord_t>(to.y))
+                == 0,
+            ::SDL_GetError());
+    }
 }
 
-void renderer::draw_rect(const coord_rect& area)
+void renderer::draw_rect(const sdl::coord_rect& area)
 {
-    HAL_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), sdl::coord_rect(area).addr()) == 0, ::SDL_GetError());
+    if constexpr (hal::sdl::integral_coord)
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderDrawRect(this->ptr(), reinterpret_cast<const SDL_Rect*>(area.addr())) == 0, ::SDL_GetError());
+    }
+
+    else
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), reinterpret_cast<const SDL_FRect*>(area.addr())) == 0, ::SDL_GetError());
+    }
 }
 
 void renderer::fill_rect(const sdl::coord_rect& area)
 {
-    HAL_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), area.addr()) == 0, ::SDL_GetError());
+    if constexpr (hal::sdl::integral_coord)
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderFillRect(this->ptr(), reinterpret_cast<const SDL_Rect*>(area.addr())) == 0, ::SDL_GetError());
+    }
+    else
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), reinterpret_cast<const SDL_FRect*>(area.addr())) == 0, ::SDL_GetError());
+    }
+}
+
+void renderer::fill_rects(const std::span<const sdl::coord_rect>& areas)
+{
+    if constexpr (hal::sdl::integral_coord)
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderFillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), areas.size()) == 0, ::SDL_GetError());
+    }
+    else
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderFillRectsF(ptr(), reinterpret_cast<const SDL_FRect*>(areas.data()), areas.size()) == 0, ::SDL_GetError());
+    }
 }
 
 void renderer::fill_target()
 {
-    HAL_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), nullptr) == 0, ::SDL_GetError());
+    // Coord types aren't relevant here.
+    HAL_ASSERT_VITAL(::SDL_RenderFillRect(this->ptr(), nullptr) == 0, ::SDL_GetError());
 }
 
 pixel_point renderer::size() const
