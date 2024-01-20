@@ -30,7 +30,7 @@ class chess
         };
 
         constexpr piece()
-            : tp { invalid } {
+            : tp { invalid }, tm {} {
 
             };
 
@@ -42,7 +42,7 @@ class chess
         {
         }
 
-        constexpr piece(piece&& mv)
+        constexpr piece(piece&& mv) noexcept
             : tp { mv.tp }
             , tm { mv.tm }
         {
@@ -54,7 +54,7 @@ class chess
 
         constexpr piece& operator=(const piece&) = default;
 
-        constexpr void operator=(piece&& mv)
+        constexpr void operator=(piece&& mv) noexcept
         {
             if (this == &mv)
                 return;
@@ -96,19 +96,19 @@ public:
         , m_board { m_rnd, this->compose() }
         , m_pieces { m_rnd, m_image.load("assets/pieces.png") }
         , m_nowChosen { piece::invalid_pos() }
-        , m_turn { piece::white }
+        , m_whoseTurn { piece::white }
         , m_isMoving { false }
     {
-        this->reset_pieces();
-        m_rnd.set_draw_color(hal::color::weezer_blue);
+        reset_pieces();
+        set_team(piece::white);
     }
 
     bool update()
     {
         hal::draw { m_board }(m_rnd);
 
-        this->process_click();
-        this->draw_pieces();
+        process_click();
+        draw_pieces();
 
         m_rnd.present();
         return m_input.update();
@@ -143,10 +143,10 @@ private:
     {
         const auto add = [this](piece::pos p) -> void
         {
-            m_canMoveTo.emplace_back(p.x * m_tileSize, p.y * m_tileSize, m_tileSize, m_tileSize);
+            m_canMoveTo.emplace_back(hal::coord_t(p.x * m_tileSize), hal::coord_t(p.y * m_tileSize), hal::coord_t(m_tileSize), hal::coord_t(m_tileSize));
         };
 
-        add(p);
+        m_canMoveTo.clear();
 
         switch (pc.tp)
         {
@@ -157,10 +157,17 @@ private:
             constexpr piece::pos dir[] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
             for (auto mod : dir)
             {
-                for (auto curr = p + mod; vloc(curr, pc.tm); curr += mod)
+                for (auto curr = p + mod; vloc(curr); curr += mod)
                 {
-                    HAL_PRINT("Found valid mvmt @ ", curr);
+                    const piece here { piece_at(curr) };
+
+                    if (friendly(here, pc.tm))
+                        break;
+
                     add(curr);
+
+                    if (takeable(here, pc.tm))
+                        break;
                 }
             }
             break;
@@ -170,8 +177,10 @@ private:
             constexpr piece::pos dir[] { { 2, 1 }, { 2, -1 }, { -2, 1 }, { -2, -1 }, { 1, 2 }, { -1, 2 }, { 1, -2 }, { -1, -2 } };
             for (auto mod : dir)
             {
-                if (auto curr = p + mod; vloc(mod, pc.tm))
+                if (auto curr = p + mod; vloc(curr) && !friendly(piece_at(curr), pc.tm))
+                {
                     add(curr);
+                }
             }
             break;
         }
@@ -180,8 +189,18 @@ private:
             constexpr piece::pos dir[] { { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } };
             for (auto mod : dir)
             {
-                for (auto curr = p + mod; vloc(curr, pc.tm); curr += mod)
+                for (auto curr = p + mod; vloc(curr); curr += mod)
+                {
+                    const piece here { piece_at(curr) };
+
+                    if (friendly(here, pc.tm))
+                        break;
+
                     add(curr);
+
+                    if (takeable(here, pc.tm))
+                        break;
+                }
             }
             break;
         }
@@ -190,18 +209,27 @@ private:
             constexpr piece::pos dir[] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } };
             for (auto mod : dir)
             {
-                p += mod;
-                for (auto curr = p + mod; vloc(curr, pc.tm); curr += mod)
+                for (auto curr = p + mod; vloc(curr); curr += mod)
+                {
+                    const piece here { piece_at(curr) };
+
+                    if (friendly(here, pc.tm))
+                        break;
+
                     add(curr);
+
+                    if (takeable(here, pc.tm))
+                        break;
+                }
             }
             break;
         }
         case king:
         {
-            constexpr piece::pos dir[] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+            constexpr piece::pos dir[] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } };
             for (auto mod : dir)
             {
-                if (auto curr = p + mod; vloc(curr, pc.tm))
+                if (auto curr = p + mod; vloc(curr) && !friendly(piece_at(curr), pc.tm))
                     add(curr);
             }
             break;
@@ -217,13 +245,13 @@ private:
             if (pc.tm == piece::white) // can only go down
             {
                 steps += p.y == 1;
-                ydir = -1;
+                ydir = 1;
             }
 
             else // can only go up
             {
                 steps += p.y == 6;
-                ydir = 1;
+                ydir = -1;
             }
 
             // Check the standard movement path
@@ -239,7 +267,7 @@ private:
             for (auto dir : adir)
             {
                 p.x += dir;
-                if (vloc(p, pc.tm))
+                if (vloc(p) && takeable(piece_at(p), pc.tm))
                     add(p);
             }
 
@@ -254,34 +282,54 @@ private:
     {
         const hal::pixel_point pt { m_input.mouse() };
 
+        if (m_input.pressed(hal::button::right_mouse) && m_isMoving)
+        {
+            m_canMoveTo.clear();
+            m_nowChosen.x = piece::invalid_pos();
+            m_isMoving    = false;
+        }
+
         if (m_input.pressed(hal::button::left_mouse) && pt < m_board.size())
         {
             HAL_PRINT("Got click at ", m_input.mouse());
 
             if (m_isMoving)
             {
-                assert(m_nowChosen.x != piece::invalid_pos());
+                const piece::pos npos = pt / m_tilePoint;
+                piece&           here { piece_at(npos) };
 
-                for (const auto pos : m_canMoveTo)
+                for (const auto& pos : m_canMoveTo)
                 {
                     if (hal::sdl::coord_point(pt) | pos)
                     {
-                        m_isMoving = false;
+                        if (takeable(here, m_whoseTurn))
+                        {
+                            m_dead.push_back(std::move(here));
+                        }
 
-                        piece::pos npos = pos.pos / m_tilePoint;
-                        piece_at(npos)  = std::move(piece_at(m_nowChosen));
-
-                        m_nowChosen.x = piece::invalid_pos();
-                        m_canMoveTo.clear();
+                        here = std::move(piece_at(m_nowChosen));
 
                         HAL_PRINT("Moving to ", npos);
 
-                        break;
+                        set_team(piece::team(!m_whoseTurn));
+
+                        goto Clear;
                     }
                 }
 
-                // Switch the playing team.
-                m_turn = piece::team(!m_turn);
+                if (friendly(here, m_whoseTurn))
+                {
+                    m_nowChosen = npos;
+                    set_moveables(npos, here);
+                }
+
+                else
+                {
+                    Clear:
+                    m_canMoveTo.clear();
+                    m_nowChosen.x = piece::invalid_pos();
+                    m_isMoving    = false;
+                }
             }
 
             else // Not moving.
@@ -289,15 +337,14 @@ private:
                 assert(m_nowChosen.x == piece::invalid_pos());
 
                 const piece::pos chosen = pt / m_tilePoint;
-
-                m_nowChosen     = chosen;
                 const piece& pc = piece_at(chosen);
 
-                HAL_PRINT("Selected piece at ", chosen, ", type ", hal::to_printable_int(pc.tp), ", team ", pc.tm);
-
-                if (pc.valid())
+                if (friendly(pc, m_whoseTurn))
                 {
                     m_isMoving = true;
+                    m_nowChosen = chosen;
+
+                    HAL_PRINT("Selected piece at ", chosen, ", type ", hal::to_printable_int(pc.tp), ", team ", pc.tm);
 
                     set_moveables(chosen, pc);
                 }
@@ -366,10 +413,16 @@ private:
             }
         }
 
-        hal::color_lock cl { m_rnd, { 0x00FF00, 128 } };
+        hal::color_lock cl { m_rnd, { 0x00FF00, 100 } };
 
         if (m_isMoving)
             m_rnd.fill_rects(m_canMoveTo);
+    }
+
+    void set_team(piece::team tm)
+    {
+        m_whoseTurn = tm;
+        m_rnd.set_draw_color(0xFFFFFF * !tm);
     }
 
     constexpr hal::pixel_point tile_at(piece::pos p) const
@@ -392,33 +445,38 @@ private:
 
     constexpr piece& piece_at(piece::pos pos)
     {
-        return m_boardState[pos.y * 8 + pos.x];
+        return m_boardState[std::size_t(pos.y) * 8 + pos.x];
     }
 
     constexpr const piece& piece_at(piece::pos pos) const
     {
-        return m_boardState[pos.y * 8 + pos.x];
-    }
-
-    // Valid location.
-    constexpr bool vloc(piece::pos p, piece::team tm) const
-    {
-        const piece& pc { piece_at(p) };
-        return vloc_checkpos(p) && (!pc.valid() || pc.tm != tm);
+        return m_boardState[std::size_t(pos.y) * 8 + pos.x];
     }
 
     // Valid location for a pawn's frontal move.
     constexpr bool vloc_pawn(piece::pos p) const
     {
-        return vloc_checkpos(p) && !piece_at(p).valid();
+        return vloc(p) && !piece_at(p).valid();
     }
 
-    constexpr bool vloc_checkpos(piece::pos p) const
+    constexpr bool vloc(piece::pos p) const
     {
-        return p.x >= 0 && p.x && p.x < 8 && p.y >= 0 && p.y < 8;
+        return p.x >= 0 && p.x < 8 && p.y >= 0 && p.y < 8;
+    }
+
+    constexpr bool friendly(piece pc, piece::team tm) const
+    {
+        return pc.valid() && pc.tm == tm;
+    }
+
+    constexpr bool takeable(piece pc, piece::team tm) const
+    {
+        return pc.valid() && pc.tm != tm;
     }
 
     std::array<piece, 64>             m_boardState;
+    lyo::static_vector<piece, 31>     m_dead;
+
     std::vector<hal::sdl::coord_rect> m_canMoveTo;
 
     LYO_NOSIZE hal::engine m_engine;
@@ -438,7 +496,7 @@ private:
 
     piece::pos m_nowChosen;
 
-    piece::team m_turn;
+    piece::team m_whoseTurn;
     bool        m_isMoving;
 };
 
