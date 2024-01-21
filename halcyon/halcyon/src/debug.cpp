@@ -22,8 +22,10 @@ bool debug::m_repaint { false };
 
 void debug::draw(renderer& rnd, const font& fnt)
 {
+    using namespace literals;
+
     // Render settings.
-    constexpr coord_point offset { 20.0, 10.0 };
+    constexpr coord_point offset { 20.0_crd, 20.0_crd };
 
     // I am not 100% sure whether it's safe to create a static
     // SDL object, as the destructor will run after de-initialization.

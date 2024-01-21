@@ -45,6 +45,5 @@ namespace hal
 
 // Paranoia.
 static_assert(std::is_signed_v<hal::pixel_t>, "Pixel type must be signed");
-static_assert(std::is_floating_point_v<hal::coord_t>, "Position type must be floating point");
 
 static_assert(sizeof(hal::sdl::pixel_point) == sizeof(SDL_Point) && sizeof(hal::sdl::coord_point) == sizeof(SDL_FPoint) && sizeof(hal::sdl::pixel_rect) == sizeof(SDL_Rect) && sizeof(hal::sdl::coord_rect) == sizeof(SDL_FRect), "Incompatible memory layout between SDL structs and their wrappers");

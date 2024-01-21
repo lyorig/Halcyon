@@ -44,7 +44,6 @@ set_property(TARGET HalodaQuest PROPERTY CXX_STANDARD 23)
 set_property(TARGET HQtest PROPERTY CXX_STANDARD 23)
 
 target_sources(HalodaQuest PRIVATE
-main.cpp
 ${QUEST_SOURCES}
 ${HALCYON_SOURCES})
 
@@ -54,3 +53,5 @@ ${HALCYON_SOURCES})
 
 target_link_libraries(HalodaQuest ${HALCYON_LIBRARIES})
 target_link_libraries(HQtest ${HALCYON_LIBRARIES})
+
+target_compile_definitions(HQtest PRIVATE HAL_INTEGRAL_COORD)

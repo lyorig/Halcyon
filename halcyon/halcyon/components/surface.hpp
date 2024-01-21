@@ -55,17 +55,18 @@ namespace hal
         void       set_blend(blend_mode bm);
 
         // Public, but only available to the blit class.
-        void internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* dst, lyo::pass_key<blit>) const;
+        void internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blit>) const;
 
     private:
         // I'd rather use the pixel format enum, but SDL uses an integer
-        // in every API function (AFAIK), so I'll save myself the hassle.
+        // in pretty much every API function, so I'll save myself the hassle.
         surface(pixel_point sz, int depth, Uint32 format);
 
         // Construct a new surface from an existing one's pixel format.
         // Used for resizing.
         surface(pixel_point sz, const SDL_PixelFormat* fmt);
 
+        // Get a color value corresponding to this surface's format.
         Uint32 mapped(color clr) const;
         Uint32 pixel_at(const pixel_point& pos) const;
     };

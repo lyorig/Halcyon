@@ -20,7 +20,7 @@ namespace lyo
     // I say potentially, because some platforms (for example macOS on ARM)
     // have no difference between fixed-size and fast types.
     constexpr bool fast_types {
-#ifdef LYO_USE_FAST_TYPES
+#ifdef LYO_FAST_TYPES
         true
 #else
         false

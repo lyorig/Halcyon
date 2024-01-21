@@ -1,6 +1,7 @@
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 set(QUEST_SOURCES
+main.cpp
 game.cpp
 sprite.cpp
 states/base.cpp

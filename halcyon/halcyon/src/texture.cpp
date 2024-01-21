@@ -136,8 +136,8 @@ void draw::operator()(renderer& rnd) const
 {
     rnd.internal_render_copy(
         m_this,
-        m_src.pos.x == unset<src_t> ? nullptr : m_src.addr(),
-        m_dst.pos.x == unset<dst_t> ? nullptr : m_dst.addr(),
+        m_src.pos.x == unset<src_t> ? nullptr : &m_src,
+        m_dst.pos.x == unset<dst_t> ? nullptr : &m_dst,
         m_angle,
         m_flip,
         {});

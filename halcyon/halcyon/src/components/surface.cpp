@@ -82,12 +82,12 @@ color surface::operator[](const pixel_point& pos) const
     return ret;
 }
 
-void surface::internal_blit(const surface& to, const SDL_Rect* src, SDL_Rect* dst, lyo::pass_key<blit>) const
+void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blit>) const
 {
     HAL_ASSERT(this->exists(), "Drawing null surface");
     HAL_ASSERT(to.exists(), "Drawing to null surface");
 
-    HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), src, to.ptr(), dst) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), reinterpret_cast<const SDL_Rect*>(src), to.ptr(), reinterpret_cast<SDL_Rect*>(dst)) == 0, ::SDL_GetError());
 }
 
 blend_mode surface::blend() const
@@ -143,8 +143,8 @@ void blit::operator()(const surface& dst)
 {
     m_this.internal_blit(
         dst,
-        m_src.pos.x == unset<src_t> ? nullptr : m_src.addr(),
-        m_dst.pos.x == unset<dst_t> ? nullptr : m_dst.addr(),
+        m_src.pos.x == unset<src_t> ? nullptr : &m_src,
+        m_dst.pos.x == unset<dst_t> ? nullptr : &m_dst,
         {});
 }
 
@@ -156,7 +156,7 @@ void blit::operator()(const surface& dst, keep_dst_tag) const
 
     m_this.internal_blit(
         dst,
-        m_src.pos.x == us ? nullptr : m_src.addr(),
-        copy.pos.x == us ? nullptr : copy.addr(),
+        m_src.pos.x == us ? nullptr : &m_src,
+        copy.pos.x == us ? nullptr : &copy,
         {});
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <lyo/timer.hpp>
 #include <quest/states/base.hpp>
 
 namespace quest

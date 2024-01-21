@@ -75,9 +75,10 @@ void game::intro()
 
     constexpr lyo::f64 fade_time { 1.0 };
 
-    const hal::font        font { this->load_appx_font("assets/m5x7.ttf", "Made with Halcyon", 60.0) };
-    const hal::pixel_point sz = m_renderer.size();
-    const hal::coord_t     fly_dist { sz.y / 4.0 };
+    const hal::font font { this->load_appx_font("assets/m5x7.ttf", "Made with Halcyon", 60.0) };
+
+    const hal::pixel_point sz       = m_renderer.size();
+    const hal::coord_t     fly_dist = sz.y / 4.0;
 
     // The "Made with" part.
     text made_with {

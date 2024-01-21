@@ -59,7 +59,7 @@ namespace hal
         void        set_size(const pixel_point& sz);
 
         // Public, but only accessible to the draw class.
-        void internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>);
+        void internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>);
 
     private:
         void clear();

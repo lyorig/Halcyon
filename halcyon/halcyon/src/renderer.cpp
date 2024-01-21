@@ -24,7 +24,7 @@ void renderer::clear()
 
 void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& to)
 {
-    if constexpr (hal::sdl::integral_coord)
+    if constexpr (sdl::integral_coord)
     {
         HAL_ASSERT_VITAL(::SDL_RenderDrawLine(this->ptr(), static_cast<sdl::coord_t>(from.x),
                              static_cast<sdl::coord_t>(from.y),
@@ -47,7 +47,7 @@ void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& t
 
 void renderer::draw_rect(const sdl::coord_rect& area)
 {
-    if constexpr (hal::sdl::integral_coord)
+    if constexpr (sdl::integral_coord)
     {
         HAL_ASSERT_VITAL(::SDL_RenderDrawRect(this->ptr(), reinterpret_cast<const SDL_Rect*>(area.addr())) == 0, ::SDL_GetError());
     }
@@ -60,7 +60,7 @@ void renderer::draw_rect(const sdl::coord_rect& area)
 
 void renderer::fill_rect(const sdl::coord_rect& area)
 {
-    if constexpr (hal::sdl::integral_coord)
+    if constexpr (sdl::integral_coord)
     {
         HAL_ASSERT_VITAL(::SDL_RenderFillRect(this->ptr(), reinterpret_cast<const SDL_Rect*>(area.addr())) == 0, ::SDL_GetError());
     }
@@ -72,7 +72,7 @@ void renderer::fill_rect(const sdl::coord_rect& area)
 
 void renderer::fill_rects(const std::span<const sdl::coord_rect>& areas)
 {
-    if constexpr (hal::sdl::integral_coord)
+    if constexpr (sdl::integral_coord)
     {
         HAL_ASSERT_VITAL(::SDL_RenderFillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), areas.size()) == 0, ::SDL_GetError());
     }
@@ -142,11 +142,18 @@ void renderer::set_blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
-void renderer::internal_render_copy(const texture_base& tex, const SDL_Rect* src, const SDL_FRect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>)
+void renderer::internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>)
 {
-    HAL_ASSERT(tex.ptr() != nullptr, "Drawing null texture");
+    HAL_ASSERT(tex.exists(), "Drawing null texture");
 
-    HAL_ASSERT_VITAL(::SDL_RenderCopyExF(this->ptr(), tex.ptr(), src, dst, angle, NULL, SDL_RendererFlip(f)) == 0, ::SDL_GetError());
+    if constexpr (sdl::integral_coord)
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderCopyEx(this->ptr(), tex.ptr(), reinterpret_cast<const SDL_Rect*>(src), reinterpret_cast<const SDL_Rect*>(dst), angle, NULL, SDL_RendererFlip(f)) == 0, ::SDL_GetError());
+    }
+    else
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderCopyExF(this->ptr(), tex.ptr(), reinterpret_cast<const SDL_Rect*>(src), reinterpret_cast<const SDL_FRect*>(dst), angle, NULL, SDL_RendererFlip(f)) == 0, ::SDL_GetError());
+    }
 }
 
 void renderer::internal_set_target(SDL_Texture* target)
