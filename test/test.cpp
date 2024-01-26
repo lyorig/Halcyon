@@ -12,6 +12,10 @@ HAL_DEBUG(
 namespace cnst
 {
     constexpr preprocessed_moves moves;
+       
+    // How many milliseconds to wait until pumping events. Should be balanced
+    // between CPU usage and responsiveness
+    constexpr std::chrono::duration<std::int32_t, std::milli> ms_sync { 50 };
 
     constexpr hal::pixel_point psz { 32, 32 }; // Piece size
 
@@ -55,7 +59,6 @@ public:
         , m_wnd { m_video, "HalChess", { hal::pixel_t(cnst::wbsz.x * 1.2), cnst::wbsz.y }, {} }
         , m_rnd { m_wnd, { hal::renderer::accelerated } }
         , m_pieces { m_rnd, m_image.load("assets/pieces.png") }
-        , m_syncInterval { 1.0 / m_video.display_at(m_wnd.display_index()).hz() }
         , m_canvas { m_rnd, cnst::bsz }
         , m_nowChosen { piece::invalid_pos(), piece::invalid_pos() }
         , m_whoseTurn { piece::white }
@@ -63,14 +66,12 @@ public:
         reset_pieces();
         set_team(piece::white);
 
-        m_rnd.clear();
-
         this->draw_canvas();
     }
 
     bool update()
     {
-        const auto tp = std::chrono::steady_clock::now() + m_syncInterval;
+        const auto tp = std::chrono::steady_clock::now() + cnst::ms_sync;
 
         this->events();
 
@@ -181,7 +182,6 @@ private:
     {
         m_whoseTurn = tm;
         m_rnd.set_draw_color(0xFFFFFF * !tm);
-        m_rnd.clear();
     }
 
     void switch_team()
@@ -279,7 +279,7 @@ private:
                 if (!pc.valid())
                     continue;
 
-                draw_piece(pc, { hal::pixel_t(p.x * cnst::tsz.x), hal::pixel_t(p.y * cnst::tsz.y) });
+                draw_piece(pc, { hal::sdl::coord_t(p.x * cnst::tsz.x), hal::sdl::coord_t(p.y * cnst::tsz.y) });
             }
         }
     }
@@ -381,19 +381,14 @@ private:
 
     const hal::texture m_pieces;
 
-    // second interval
-    using tp = std::chrono::duration<lyo::f64>;
-
-    const tp m_syncInterval;
-
     hal::target_texture m_canvas;
 
-    piece::pos m_nowChosen {};
+    piece::pos m_nowChosen;
 
-    piece::team m_whoseTurn { piece::white };
+    piece::team m_whoseTurn;
 };
 
-int main()
+int main(int argc, char* argv[])
 {
     chess g;
 

@@ -6,6 +6,7 @@
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
 #include <utility>
+#include <vector>
 
 // subsystem.hpp:
 // A RAII way of initializing SDL subsystems.

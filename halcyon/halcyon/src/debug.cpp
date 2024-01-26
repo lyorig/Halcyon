@@ -127,7 +127,9 @@ void debug::log(severity type, const std::string& msg)
     if (m_entries == m_queue.size()) [[likely]]
     {
         std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
-        m_queue.back() = { msg, type };
+
+        m_queue.back().first = msg;
+        m_queue.back().second = type;
     }
 
     else

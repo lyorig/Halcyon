@@ -34,7 +34,7 @@ class preprocessed_moves
 
         for (piece::pos curr(from.x + step.x, from.y + step.y);
              n != 0 && vloc(curr);
-             --n, ++r, curr.x += step.x, curr.y += step.y)
+             --n, ++r, curr.x = piece::dir_t(curr.x) + step.x, curr.y = piece::dir_t(curr.y) + step.y)
             *r = curr;
 
         return std::distance(res, r);
@@ -55,7 +55,7 @@ class preprocessed_moves
         for (auto s : steps)
             r += traverse_n(from, s, 1, r);
 
-        return std::distance(res, r);
+        return piece::pos_t(std::distance(res, r));
     }
 
     template <typename Iter>
@@ -66,7 +66,7 @@ class preprocessed_moves
         for (auto step : directions)
             r += traverse(from, step, r);
 
-        return std::distance(res, r);
+        return piece::pos_t(std::distance(res, r));
     }
 
     // Get the tiles to which a piece can move.
