@@ -142,7 +142,12 @@ void renderer::set_blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
 
-void renderer::internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>)
+copyer renderer::draw(const texture_base& tex)
+{
+    return { *this, tex, {} };
+}
+
+void renderer::internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>)
 {
     HAL_ASSERT(tex.exists(), "Drawing null texture");
 
@@ -161,9 +166,14 @@ void renderer::internal_set_target(SDL_Texture* target)
     HAL_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), target) == 0, ::SDL_GetError());
 }
 
-color_lock::color_lock(renderer& rnd, color new_clr)
+color_lock::color_lock(renderer& rnd)
     : m_rnd { rnd }
     , m_old { rnd.draw_color() }
+{
+}
+
+color_lock::color_lock(renderer& rnd, color new_clr)
+    : color_lock { rnd }
 {
     set(new_clr);
 }

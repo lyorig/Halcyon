@@ -8,6 +8,7 @@
 namespace hal
 {
     class renderer;
+    class copyer;
 
     class texture_base : public sdl::object<SDL_Texture, &::SDL_DestroyTexture>
     {
@@ -63,19 +64,20 @@ namespace hal
         static SDL_Texture* create(renderer& rnd, const pixel_point& sz);
     };
 
-    class draw final : public drawer<texture_base, sdl::coord_t, draw>
+    class copyer final : public drawer<texture_base, sdl::coord_t, renderer, copyer>
     {
     public:
         using drawer::drawer;
+
         // Set the texture's rotation.
         // Can be called at any time.
-        [[nodiscard]] draw& rotate(lyo::f64 angle);
+        [[nodiscard]] copyer& rotate(lyo::f64 angle);
 
         // Set the texture's flip.
         // Can be called at any time.
-        [[nodiscard]] draw& flip(enum flip f);
+        [[nodiscard]] copyer& flip(enum flip f);
 
-        void operator()(renderer& rnd) const;
+        void operator()();
 
     private:
         lyo::f64 m_angle { 0.0 };

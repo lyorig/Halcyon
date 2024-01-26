@@ -2,6 +2,7 @@
 #include <halcyon/enums/anchor.hpp>
 #include <halcyon/types/render.hpp>
 #include <limits>
+#include <lyo/pass_key.hpp>
 
 namespace hal
 {
@@ -14,7 +15,7 @@ namespace hal
     // a) constant textures, and
     // b) those who know what they're doing. I'm sure you do, though.
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
-    template <typename T, lyo::one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename This = void>
+    template <typename T, lyo::one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename Pass, typename This>
     class drawer
     {
     protected:
@@ -30,8 +31,9 @@ namespace hal
         using this_ref = std::conditional_t<std::is_void_v<This>, drawer, This>&;
 
     public:
-        [[nodiscard]] drawer(const T& src)
-            : m_this { src }
+        [[nodiscard]] drawer(Pass& ths, const T& src, lyo::pass_key<Pass>)
+            : m_pass { ths }
+            , m_this { src }
             , m_dst { src.size() }
         {
             m_src.pos.x = unset<src_t>;
@@ -118,6 +120,7 @@ namespace hal
             return static_cast<this_ref>(*this);
         }
 
+        Pass&    m_pass;
         const T& m_this;
 
         dst_rect m_dst;

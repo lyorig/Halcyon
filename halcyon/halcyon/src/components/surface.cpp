@@ -35,7 +35,7 @@ surface surface::resize(pixel_point sz)
     surface    ret { sz, ptr()->format };
     blend_lock bl { *this, blend_mode::none };
 
-    hal::blit { *this }.to(hal::fill)(ret);
+    this->blit(ret).to(hal::fill)();
 
     return ret;
 }
@@ -82,14 +82,6 @@ color surface::operator[](const pixel_point& pos) const
     return ret;
 }
 
-void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blit>) const
-{
-    HAL_ASSERT(this->exists(), "Drawing null surface");
-    HAL_ASSERT(to.exists(), "Drawing to null surface");
-
-    HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), reinterpret_cast<const SDL_Rect*>(src), to.ptr(), reinterpret_cast<SDL_Rect*>(dst)) == 0, ::SDL_GetError());
-}
-
 blend_mode surface::blend() const
 {
     SDL_BlendMode bm;
@@ -102,6 +94,19 @@ blend_mode surface::blend() const
 void surface::set_blend(blend_mode bm)
 {
     HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
+}
+
+blitter surface::blit(surface& dst) const
+{
+    return { *this, dst, {} };
+}
+
+void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blitter>) const
+{
+    HAL_ASSERT(this->exists(), "Drawing null surface");
+    HAL_ASSERT(to.exists(), "Drawing to null surface");
+
+    HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), reinterpret_cast<const SDL_Rect*>(src), to.ptr(), reinterpret_cast<SDL_Rect*>(dst)) == 0, ::SDL_GetError());
 }
 
 Uint32 surface::mapped(color clr) const
@@ -139,23 +144,23 @@ Uint32 surface::pixel_at(const pixel_point& pos) const
     }
 }
 
-void blit::operator()(const surface& dst)
+void blitter::operator()()
 {
-    m_this.internal_blit(
-        dst,
+    m_pass.internal_blit(
+        m_this,
         m_src.pos.x == unset<src_t> ? nullptr : &m_src,
         m_dst.pos.x == unset<dst_t> ? nullptr : &m_dst,
         {});
 }
 
-void blit::operator()(const surface& dst, keep_dst_tag) const
+void blitter::operator()(keep_dst_tag) const
 {
     constexpr src_t us { unset<src_t> };
 
     sdl::pixel_rect copy { m_dst };
 
-    m_this.internal_blit(
-        dst,
+    m_pass.internal_blit(
+        m_this,
         m_src.pos.x == us ? nullptr : &m_src,
         copy.pos.x == us ? nullptr : &copy,
         {});

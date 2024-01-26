@@ -7,25 +7,31 @@
 
 namespace lyo
 {
-    template <typename T, std::size_t Max_Size>
-        requires(Max_Size > 0)
+    template <typename T, std::size_t Max_Size, typename Size_Type = std::size_t>
+        requires(Max_Size > 0 && Max_Size <= std::numeric_limits<Size_Type>::max())
     class static_vector
     {
     public:
-        using iterator       = T*;
-        using const_iterator = const T*;
+        using value_type = T;
+        using size_type  = Size_Type;
+
+        using pointer       = T*;
+        using const_pointer = const T*;
 
         using reference       = T&;
         using const_reference = const T&;
 
+        using iterator       = T*;
+        using const_iterator = const T*;
+
         constexpr static_vector() noexcept = default;
 
-        constexpr static_vector(std::size_t sz) noexcept
+        constexpr static_vector(size_type sz) noexcept
         {
             this->resize(sz);
         }
 
-        constexpr static_vector(std::size_t sz, no_init_tag) noexcept
+        constexpr static_vector(size_type sz, no_init_tag) noexcept
         {
             this->resize(sz, no_init);
         }
@@ -75,7 +81,7 @@ namespace lyo
         }
 
         // Resize with a specified object.
-        constexpr void resize(std::size_t sz, const T& obj = T {}) noexcept
+        constexpr void resize(size_type sz, const T& obj = T {}) noexcept
         {
             if (sz == this->size()) // Nothing to do.
                 return;
@@ -87,13 +93,13 @@ namespace lyo
                 return this->erase(this->begin() + sz, this->end());
 
             // (sz > size()) Need to add elements.
-            const std::size_t old_size { this->size() };
+            const size_type old_size { this->size() };
             m_size = sz;
             std::fill(this->begin() + old_size, this->end(), obj);
         }
 
         // Resize without initializing new objects.
-        constexpr void resize(std::size_t sz, no_init_tag) noexcept
+        constexpr void resize(size_type sz, no_init_tag) noexcept
         {
             if (sz == this->size()) // Nothing to do.
                 return;
@@ -121,7 +127,7 @@ namespace lyo
 
         constexpr void erase(iterator begin, iterator end) noexcept
         {
-            const std::size_t dist { std::size_t(std::distance(begin, end)) };
+            const size_type dist { size_type(std::distance(begin, end)) };
 
             if (dist == 0)
                 return;
@@ -151,24 +157,24 @@ namespace lyo
             return m_size == 0;
         }
 
-        constexpr std::size_t size() const noexcept
+        constexpr size_type size() const noexcept
         {
             return m_size;
         }
 
-        constexpr static std::size_t capacity() noexcept
+        constexpr static size_type capacity() noexcept
         {
             return Max_Size;
         }
 
         constexpr iterator begin() noexcept
         {
-            return reinterpret_cast<iterator>(&*m_array.begin());
+            return reinterpret_cast<iterator>(m_array.data());
         }
 
         constexpr const_iterator begin() const noexcept
         {
-            return reinterpret_cast<const_iterator>(&*m_array.begin());
+            return reinterpret_cast<const_iterator>(m_array.data());
         }
 
         constexpr iterator end() noexcept
@@ -205,13 +211,13 @@ namespace lyo
             return *(this->end() - 1);
         }
 
-        constexpr reference operator[](std::size_t idx) noexcept
+        constexpr reference operator[](size_type idx) noexcept
         {
             assert(idx < m_size);
             return *(this->begin() + idx);
         }
 
-        constexpr const_reference operator[](std::size_t idx) const noexcept
+        constexpr const_reference operator[](size_type idx) const noexcept
         {
             assert(idx < m_size);
             return *(this->begin() + idx);
@@ -226,6 +232,6 @@ namespace lyo
 
         std::array<std::byte, Max_Size * sizeof(T)> m_array;
 
-        std::size_t m_size { 0 };
+        size_type m_size { 0 };
     };
 }

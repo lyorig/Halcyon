@@ -13,12 +13,12 @@
 
 namespace hal
 {
-    class draw;
-
     class window;
 
     class texture_base;
     class target_texture;
+
+    class copyer;
 
     class renderer : public sdl::object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
@@ -34,6 +34,7 @@ namespace hal
         // Might as well leave the pure bitmask parameter here.
         renderer(window& wnd, std::initializer_list<flags> flags);
 
+        void clear();
         void present();
 
         void draw_line(const sdl::coord_point& from, const sdl::coord_point& to);
@@ -58,12 +59,12 @@ namespace hal
         pixel_point size() const;
         void        set_size(const pixel_point& sz);
 
+        [[nodiscard]] copyer draw(const texture_base& tex);
+
         // Public, but only accessible to the draw class.
-        void internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<draw>);
+        void internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>);
 
     private:
-        void clear();
-
         void internal_set_target(SDL_Texture* target);
     };
 
@@ -72,6 +73,7 @@ namespace hal
     class color_lock
     {
     public:
+        color_lock(renderer& rnd);
         color_lock(renderer& rnd, color new_clr);
         ~color_lock();
 

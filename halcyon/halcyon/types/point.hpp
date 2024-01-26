@@ -1,5 +1,6 @@
 #pragma once
 
+#include <climits>
 #include <compare>
 #include <halcyon/internal/sdl_types.hpp>
 #include <halcyon/internal/tags.hpp>

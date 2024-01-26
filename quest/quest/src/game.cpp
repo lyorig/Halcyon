@@ -66,9 +66,9 @@ void game::intro()
         fade_out
     };
 
-    const auto draw = [&](const text& tx)
+    const auto draw = [this](const text& tx)
     {
-        hal::draw(tx.tex).to(tx.pos)(m_renderer);
+        m_renderer.draw(tx.tex).to(tx.pos)();
     };
 
     constexpr std::array<const char[12], 3> words { "efficiency.", "precision.", "Halcyon. " };

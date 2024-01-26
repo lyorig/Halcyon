@@ -19,11 +19,13 @@
 
 namespace hal
 {
-    class blit;
-
     class image_loader;
     class video;
     class font;
+
+    class blitter;
+
+    LYO_TAG(keep_dst);
 
     class surface : public sdl::object<SDL_Surface, &::SDL_FreeSurface>
     {
@@ -54,8 +56,10 @@ namespace hal
         blend_mode blend() const;
         void       set_blend(blend_mode bm);
 
+        [[nodiscard]] blitter blit(surface& dst) const;
+
         // Public, but only available to the blit class.
-        void internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blit>) const;
+        void internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blitter>) const;
 
     private:
         // I'd rather use the pixel format enum, but SDL uses an integer
@@ -71,18 +75,16 @@ namespace hal
         Uint32 pixel_at(const pixel_point& pos) const;
     };
 
-    LYO_TAG(keep_dst);
-
-    class blit : public drawer<surface, sdl::pixel_t, blit>
+    class blitter : public drawer<surface, sdl::pixel_t, const surface, blitter>
     {
     public:
         using drawer::drawer;
 
-        void operator()(const surface& dst);
+        void operator()();
 
         // SDL's blitting function overwrites the destination rectangle.
         // This overload creates a copy to ensure it remains unchanged.
-        void operator()(const surface& dst, keep_dst_tag) const;
+        void operator()(keep_dst_tag) const;
     };
 
     template <typename T>

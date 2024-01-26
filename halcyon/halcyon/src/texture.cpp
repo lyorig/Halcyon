@@ -120,21 +120,21 @@ SDL_Texture* target_texture::create(renderer& rnd, const pixel_point& sz)
     return tex;
 }
 
-draw& draw::rotate(lyo::f64 angle)
+copyer& copyer::rotate(lyo::f64 angle)
 {
     m_angle = angle;
     return *this;
 }
 
-draw& draw::flip(enum flip f)
+copyer& copyer::flip(enum flip f)
 {
     m_flip = f;
     return *this;
 }
 
-void draw::operator()(renderer& rnd) const
+void copyer::operator()()
 {
-    rnd.internal_render_copy(
+    m_pass.internal_render_copy(
         m_this,
         m_src.pos.x == unset<src_t> ? nullptr : &m_src,
         m_dst.pos.x == unset<dst_t> ? nullptr : &m_dst,
