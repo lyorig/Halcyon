@@ -16,16 +16,16 @@ namespace hal
     {
         T x {}, y {};
 
-        constexpr point operator+(const point& pt) const
+        constexpr auto operator+(const point& pt) const -> point<decltype(x + pt.x)>
         {
-            point ret { *this };
+            point<decltype(x + pt.x)> ret { *this };
             ret += pt;
             return ret;
         }
 
-        constexpr point<T> operator-(const point& pt) const
+        constexpr auto operator-(const point& pt) const -> point<decltype(x + pt.x)>
         {
-            point ret { *this };
+            point<decltype(x + pt.x)> ret { *this };
             ret -= pt;
             return ret;
         }

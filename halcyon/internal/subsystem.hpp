@@ -85,7 +85,7 @@ namespace hal
         display display_at(display::index idx) const;
     };
 
-    class audio : subsystem<system::audio>
+    class listener : subsystem<system::audio>
     {
         using subsystem::subsystem;
     };

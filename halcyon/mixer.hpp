@@ -22,8 +22,8 @@ namespace hal
         } m_init;
 
     public:
-        mixer(audio& sys);
-        mixer(audio& sys, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
+        mixer(listener& sys);
+        mixer(listener& sys, lyo::u32 freq, lyo::u8 channels, chunk::quality qual);
 
         chunk load_sfx(const char* path) &;
 

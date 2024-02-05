@@ -12,8 +12,8 @@ HAL_DEBUG(
 namespace cnst
 {
     constexpr preprocessed_moves moves;
-       
-    // How many milliseconds to wait until pumping events. Should be balanced
+
+    // How many milliseconds to wait until pumping events. Should provide a balance
     // between CPU usage and responsiveness
     constexpr std::chrono::duration<std::int32_t, std::milli> ms_sync { 50 };
 
@@ -181,7 +181,9 @@ private:
     void set_team(piece::team tm)
     {
         m_whoseTurn = tm;
+
         m_rnd.set_draw_color(0xFFFFFF * !tm);
+        m_rnd.clear();
     }
 
     void switch_team()
@@ -228,6 +230,8 @@ private:
     // Drawing functions
     void compose_board()
     {
+        using c = hal::sdl::coord_t;
+
         std::array<hal::sdl::coord_rect, 32> m_rects;
 
         lyo::u8 idx { 0 };
@@ -236,7 +240,7 @@ private:
         {
             for (lyo::u8 x = y % 2; x < 8; x += 2, ++idx)
             {
-                m_rects[idx] = { x * cnst::tsz.x, y * cnst::tsz.y, cnst::tsz.x, cnst::tsz.y };
+                m_rects[idx] = { c(x * cnst::tsz.x), c(y * cnst::tsz.y), cnst::tsz.x, cnst::tsz.y };
             }
         }
 
@@ -248,7 +252,7 @@ private:
         {
             for (lyo::u8 x { !(y % 2) }; x < 8; x += 2, ++idx)
             {
-                m_rects[idx] = { x * cnst::tsz.x, y * cnst::tsz.y, cnst::tsz.x, cnst::tsz.y };
+                m_rects[idx] = { c(x * cnst::tsz.x), c(y * cnst::tsz.y), cnst::tsz.x, cnst::tsz.y };
             }
         }
 
@@ -388,7 +392,7 @@ private:
     piece::team m_whoseTurn;
 };
 
-int main(int argc, char* argv[])
+int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
     chess g;
 

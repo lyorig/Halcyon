@@ -70,5 +70,7 @@
         "memory": "cpp",
         "type_traits": "cpp",
         "algorithm": "cpp"
-    }
+    },
+    "mesonbuild.configureOnOpen": true,
+    "C_Cpp.default.compileCommands": "/Users/lyorig/Documents/Programming/HalodaQuest/builddir/compile_commands.json"
 }

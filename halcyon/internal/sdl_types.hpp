@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL_rect.h>
-#include <lyo/concepts.hpp>
+#include <lyo/cast.hpp>
 
 namespace hal
 {
@@ -23,5 +23,28 @@ namespace hal
 
         template <lyo::arithmetic T>
         using rect_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Rect, SDL_FRect>;
+    }
+
+    namespace literals
+    {
+        constexpr sdl::pixel_t operator""_spx(unsigned long long v)
+        {
+            return lyo::cast<sdl::pixel_t>(v);
+        }
+
+        constexpr sdl::pixel_t operator""_spx(long double v)
+        {
+            return lyo::cast<sdl::pixel_t>(v);
+        }
+
+        constexpr sdl::coord_t operator""_scrd(unsigned long long v)
+        {
+            return lyo::cast<sdl::coord_t>(v);
+        }
+
+        constexpr sdl::coord_t operator""_scrd(long double v)
+        {
+            return lyo::cast<sdl::coord_t>(v);
+        }
     }
 }

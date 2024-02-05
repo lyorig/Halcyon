@@ -37,7 +37,7 @@ namespace quest
         // Systems.
         LYO_NOSIZE hal::engine m_eng;
         LYO_NOSIZE hal::video m_video;
-        LYO_NOSIZE hal::audio m_audio;
+        LYO_NOSIZE hal::listener m_audio;
         LYO_NOSIZE hal::image_loader m_image;
         LYO_NOSIZE hal::ttf_engine m_ttf;
 
