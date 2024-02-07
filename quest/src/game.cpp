@@ -14,7 +14,6 @@ game::game(lyo::parser&& args)
     , m_input { m_eng }
     , m_args { std::move(args) }
     , m_font { this->load_appx_font("assets/VCR.ttf", 2.5) }
-    , m_mixer { m_audio }
     , m_window { m_video, "HalodaQuest", hal::fullscreen_mode }
     , m_renderer { m_window, { hal::renderer::accelerated } }
     , m_state { new state::intro }

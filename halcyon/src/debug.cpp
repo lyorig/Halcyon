@@ -73,53 +73,11 @@ void debug::draw(renderer& rnd, const font& fnt)
     rnd.draw(tx).to(offset)();
 }
 
-void debug::panic(const char* why, const char* where,
-    const char* message)
-{
-    const char* sanitized_msg { message && !lyo::is_c_string_empty(message) ? message : "None provided." };
-
-    debug::print_severity(error, __func__, ": ", why, " in ", where, ": ",
-        sanitized_msg);
-
-    constexpr SDL_MessageBoxButtonData buttons[] {
-        { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "Exit" },
-        { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Run anyway" }
-    };
-
-    const std::string msgbox_info {
-        lyo::string_from_pack("Function: ", where, "\nInfo: ", sanitized_msg)
-    };
-
-    const SDL_MessageBoxData msgbox {
-        SDL_MESSAGEBOX_ERROR, nullptr, why, msgbox_info.c_str(),
-        static_cast<int>(std::size(buttons)), buttons, nullptr
-    };
-
-    int response { 0 };
-
-    if (::SDL_ShowMessageBox(&msgbox, &response) < 0) [[unlikely]]
-    {
-        debug::print_severity(error, __func__,
-            ": Message box creation failed, exiting");
-        goto Exit;
-    }
-
-    else
-        debug::print_severity(info, __func__, ": User chose to ",
-            response == 0 ? "exit" : "continue execution");
-
-    if (response == 0) [[likely]]
-    {
-    Exit:
-        std::exit(EXIT_FAILURE);
-    }
-}
-
 void debug::verify(bool condition, const char* cond_string, const char* func,
     const char* extra_info)
 {
     if (!condition) [[unlikely]]
-        debug::panic(cond_string, func, extra_info);
+        debug::panic(func, cond_string, extra_info);
 }
 
 void debug::log(severity type, const std::string& msg)
@@ -128,7 +86,7 @@ void debug::log(severity type, const std::string& msg)
     {
         std::rotate(m_queue.begin(), m_queue.begin() + 1, m_queue.end());
 
-        m_queue.back().first = msg;
+        m_queue.back().first  = msg;
         m_queue.back().second = type;
     }
 

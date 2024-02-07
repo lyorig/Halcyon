@@ -28,10 +28,20 @@
     #include <iostream>
     #include <sstream>
 
+    #include <SDL2/SDL_messagebox.h>
+
 namespace hal
 {
     class renderer;
     class font;
+
+    constexpr bool debug_enabled {
+    #ifdef HAL_DEBUG_ENABLED
+        true
+    #else
+        false
+    #endif
+    };
 
     class debug
     {
@@ -53,7 +63,7 @@ namespace hal
         }
 
         // Output any amount of arguments to stdout/stderr, the console and an output file.
-        // This overload additionally specifies the type of message to output..
+        // This overload additionally specifies the type of message to output.
         template <typename... Args>
         static void print(severity sev, Args&&... args)
         {
@@ -61,8 +71,48 @@ namespace hal
         }
 
         // Show a message box with an error message.
-        static void panic(const char* why, const char* where,
-            const char* message = nullptr);
+        template <typename... Args>
+        static void panic(const char* where, std::string why,
+            Args&&... args)
+        {
+            const std::string constructed { lyo::string_from_pack(std::forward<Args>(args)...) };
+
+            debug::print_severity(error, __func__, ": ", why, " in ", where, ": ",
+                constructed);
+
+            constexpr SDL_MessageBoxButtonData buttons[] {
+                { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "Exit" },
+                { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Run anyway" }
+            };
+
+            const std::string msgbox_info {
+                lyo::string_from_pack("Function: ", where, "\nInfo: ", constructed)
+            };
+
+            const SDL_MessageBoxData msgbox {
+                SDL_MESSAGEBOX_ERROR, nullptr, why.c_str(), msgbox_info.c_str(),
+                static_cast<int>(std::size(buttons)), buttons, nullptr
+            };
+
+            int response { 0 };
+
+            if (::SDL_ShowMessageBox(&msgbox, &response) < 0) [[unlikely]]
+            {
+                debug::print_severity(error, __func__,
+                    ": Message box creation failed, exiting");
+                goto Exit;
+            }
+
+            else
+                debug::print_severity(info, __func__, ": User chose to ",
+                    response == 0 ? "exit" : "continue execution");
+
+            if (response == 0) [[likely]]
+            {
+            Exit:
+                std::exit(EXIT_FAILURE);
+            }
+        }
 
         // Check a condition, and panic if it's false.
         static void verify(bool condition, const char* cond_string, const char* func,
@@ -135,7 +185,7 @@ namespace hal
 
     #define HAL_DEBUG(...) __VA_ARGS__
     #define HAL_PRINT      hal::debug::print
-    #define HAL_PANIC(why) hal::debug::panic(why, __PRETTY_FUNCTION__)
+    #define HAL_PANIC(...) hal::debug::panic(__PRETTY_FUNCTION__, __VA_ARGS__)
 
     #define HAL_ASSERT(cond, if_false) HAL_ASSERT_VITAL(cond, if_false)
     #define HAL_ASSERT_VITAL(cond, if_false) \

@@ -47,8 +47,10 @@ namespace quest
         const lyo::parser m_args;
         const hal::font   m_font;
 
-        // Rendering & audio.
-        hal::mixer    m_mixer;
+        // Audio.
+        hal::audio::listener m_list;
+
+        // Rendering. [audio is currently WIP]
         hal::window   m_window;
         hal::renderer m_renderer;
 

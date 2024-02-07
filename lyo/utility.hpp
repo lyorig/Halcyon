@@ -15,10 +15,10 @@ namespace lyo
         requires(lyo::is_present_v<T, char, wchar_t>)
     constexpr bool streq(const T* first, const T* second) noexcept
     {
-        if (std::is_same_v<T, char>)
+        if constexpr (std::is_same_v<T, char>)
             return std::strcmp(first, second) == 0;
 
-        else if (std::is_same_v<T, char*>)
+        else if constexpr (std::is_same_v<T, wchar_t>)
             return std::wcscmp(first, second) == 0;
     }
 
@@ -33,12 +33,19 @@ namespace lyo
     template <typename... Args>
     std::string string_from_pack(Args... args) noexcept
     {
-        std::stringstream stream;
+        // Warning suppression.
+        if constexpr (sizeof...(Args) == 0)
+            return {};
 
-        stream << std::fixed;
+        else
+        {
+            std::stringstream stream;
 
-        (stream << ... << args);
+            stream << std::fixed;
 
-        return stream.str();
+            (stream << ... << args);
+
+            return stream.str();
+        }
     }
 } // namespace lyo

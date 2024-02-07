@@ -4,7 +4,7 @@ halcyon_deps = [
     dependency('sdl2'),
     dependency('sdl2_image'),
     dependency('sdl2_ttf'),
-    dependency('sdl2_mixer')
+    dependency('OpenAL')
 ]
 
 halcyon_inc = [
@@ -15,8 +15,8 @@ halcyon_inc = [
 quest_inc = include_directories('quest')
 
 halcyon_rawsrc = [
-    'debug.cpp', 'engine.cpp', 'image_loader.cpp', 'input_handler.cpp', 'mixer.cpp', 'renderer.cpp', 'texture.cpp', 'ttf_engine.cpp', 'window.cpp',
-    'components/chunk.cpp', 'components/font.cpp', 'components/music.cpp', 'components/surface.cpp', 'internal/printing.cpp', 'internal/subsystem.cpp'
+    'debug.cpp', 'engine.cpp', 'image_loader.cpp', 'input_handler.cpp', 'renderer.cpp', 'texture.cpp', 'ttf_engine.cpp', 'window.cpp',
+    'components/font.cpp', 'components/surface.cpp', 'audio/base.cpp', 'audio/listener.cpp', 'audio/source.cpp','audio/buffer.cpp','audio/decoder.cpp', 'internal/printing.cpp', 'internal/subsystem.cpp'
 ]
 
 quest_rawsrc = [
@@ -42,3 +42,5 @@ include_directories: [halcyon_inc, quest_inc], sources: ['quest/main.cpp', halcy
 
 executable('HalChess', win_subsystem: 'windows', dependencies: halcyon_deps,
 include_directories: [halcyon_inc], sources: ['chess/main.cpp', halcyon_src, quest_src])
+
+executable('HalTest', win_subsystem: 'windows', dependencies: halcyon_deps, include_directories: halcyon_inc, sources: ['test/main.cpp', halcyon_src])
