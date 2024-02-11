@@ -16,7 +16,7 @@ quest_inc = include_directories('quest')
 
 halcyon_rawsrc = [
     'debug.cpp', 'engine.cpp', 'image_loader.cpp', 'input_handler.cpp', 'renderer.cpp', 'texture.cpp', 'ttf_engine.cpp', 'window.cpp',
-    'components/font.cpp', 'components/surface.cpp', 'audio/base.cpp', 'audio/listener.cpp', 'audio/source.cpp','audio/buffer.cpp','audio/decoder.cpp', 'internal/printing.cpp', 'internal/subsystem.cpp'
+    'components/font.cpp', 'components/surface.cpp', 'audio/base.cpp', 'audio/listener.cpp','audio/source.cpp', 'audio/buffer.cpp', 'audio/decoder.cpp', 'internal/printing.cpp', 'internal/subsystem.cpp'
 ]
 
 quest_rawsrc = [

@@ -1,13 +1,22 @@
 #include <halcyon/halcyon.hpp>
+#include <lyo/argparse.hpp>
 
 int main(int argc, char* argv[])
 {
+    using enum hal::audio::property;
+    lyo::parser p { argc, argv };
+
     hal::audio::listener l;
+    hal::audio::buffer   b { hal::audio::decoder::wav(p.parse("-file=", "assets/cantina.wav")) };
     hal::audio::source   s;
-    hal::audio::buffer   b = hal::audio::decoder::wav("assets/cantina.wav");
 
-    s.set<hal::audio::buffer_id>(b.id());
+    s.set<position>({
+        p.parse<hal::audio::float_t>("-x=", 0),
+        p.parse<hal::audio::float_t>("-y=", 0),
+        p.parse<hal::audio::float_t>("-z=", 0),
+    });
 
+    s.attach(b);
     s.play();
 
     while (s.playing())

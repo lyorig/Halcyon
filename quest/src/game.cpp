@@ -8,7 +8,6 @@ using namespace quest;
 
 game::game(lyo::parser&& args)
     : m_video { m_eng }
-    , m_audio { m_eng }
     , m_image { m_video, { hal::image_loader::png } }
     , m_ttf { m_video }
     , m_input { m_eng }

@@ -73,13 +73,6 @@ void debug::draw(renderer& rnd, const font& fnt)
     rnd.draw(tx).to(offset)();
 }
 
-void debug::verify(bool condition, const char* cond_string, const char* func,
-    const char* extra_info)
-{
-    if (!condition) [[unlikely]]
-        debug::panic(func, cond_string, extra_info);
-}
-
 void debug::log(severity type, const std::string& msg)
 {
     if (m_entries == m_queue.size()) [[likely]]

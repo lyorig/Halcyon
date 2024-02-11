@@ -72,12 +72,12 @@ namespace hal
 
         // Show a message box with an error message.
         template <typename... Args>
-        static void panic(const char* where, std::string why,
+        static void panic(const char* where, std::string what,
             Args&&... args)
         {
             const std::string constructed { lyo::string_from_pack(std::forward<Args>(args)...) };
 
-            debug::print_severity(error, __func__, ": ", why, " in ", where, ": ",
+            debug::print_severity(error, __func__, ": ", what, " failed in ", where, ": ",
                 constructed);
 
             constexpr SDL_MessageBoxButtonData buttons[] {
@@ -90,7 +90,7 @@ namespace hal
             };
 
             const SDL_MessageBoxData msgbox {
-                SDL_MESSAGEBOX_ERROR, nullptr, why.c_str(), msgbox_info.c_str(),
+                SDL_MESSAGEBOX_ERROR, nullptr, what.c_str(), msgbox_info.c_str(),
                 static_cast<int>(std::size(buttons)), buttons, nullptr
             };
 
@@ -115,8 +115,13 @@ namespace hal
         }
 
         // Check a condition, and panic if it's false.
+        template <typename... Args>
         static void verify(bool condition, const char* cond_string, const char* func,
-            const char* extra_info);
+            Args&&... extra_info)
+        {
+            if (!condition) [[unlikely]]
+                debug::panic(func, cond_string, std::forward<Args>(extra_info)...);
+        }
 
         static void draw(renderer& rnd, const font& fnt);
 
@@ -187,9 +192,9 @@ namespace hal
     #define HAL_PRINT      hal::debug::print
     #define HAL_PANIC(...) hal::debug::panic(__PRETTY_FUNCTION__, __VA_ARGS__)
 
-    #define HAL_ASSERT(cond, if_false) HAL_ASSERT_VITAL(cond, if_false)
-    #define HAL_ASSERT_VITAL(cond, if_false) \
-        hal::debug::verify(cond, #cond " failed", __PRETTY_FUNCTION__, if_false)
+    #define HAL_ASSERT(cond, ...) HAL_ASSERT_VITAL(cond, __VA_ARGS__)
+    #define HAL_ASSERT_VITAL(cond, ...) \
+        hal::debug::verify(cond, #cond, __PRETTY_FUNCTION__, __VA_ARGS__)
 
     #define HAL_DRAW_CONSOLE hal::debug::draw
 

@@ -24,27 +24,18 @@ struct wave_header
     std::int32_t data_size;
 };
 
-format wav2fmt(std::int16_t fmt)
+format get_format(lyo::u8 channels, lyo::u16 bits_per_sample)
 {
-    switch (fmt)
-    {
-    case 1:
-        return mono8;
-    case 2:
-        return stereo8;
-    case 4:
-        return stereo16;
-    default:
-        std::unreachable();
-    }
+    constexpr std::array l { mono8, mono16, stereo8, stereo16 };
+    return l[2 * (channels - 1) + (bits_per_sample / 16)];
 }
 
 buffer decoder::wav(const std::string_view& path)
 {
     wave_header hdr;
 
-    std::ifstream i { path };
-    HAL_ASSERT(i.is_open(), "Couldn't open file");
+    std::ifstream i { path, std::ios::binary };
+    HAL_ASSERT(i.is_open(), "Couldn't open ", path);
 
     i.read(hdr.riff, 4);
     HAL_ASSERT(std::strncmp(hdr.riff, "RIFF", 4) == 0, "RIFF not found");
@@ -70,10 +61,8 @@ buffer decoder::wav(const std::string_view& path)
 
     i.read((char*)&hdr.data_size, sizeof(hdr.data_size));
 
-    HAL_PRINT("Size: ", hdr.total_size, ", ", hdr.channels, " channel(s), sample rate ", hdr.sample_rate, " data size ", hdr.data_size);
-
     std::unique_ptr<char[]> alloc { std::make_unique<char[]>(hdr.data_size) };
     i.read(alloc.get(), hdr.data_size);
 
-    return { { alloc.get(), std::size_t(hdr.data_size) }, wav2fmt(hdr.format), hdr.sample_rate, {} };
+    return { { alloc.get(), std::size_t(hdr.data_size) }, get_format(hdr.channels, hdr.bits_per_sample), hdr.sample_rate, {} };
 }

@@ -10,14 +10,14 @@ listener::listener()
     HAL_ASSERT(m_dev != nullptr, "Couldn't open audio device");
     HAL_ASSERT(m_ctx != nullptr, "Couldn't create audio context");
 
-    HAL_ASSERT_VITAL(::alcMakeContextCurrent(m_ctx) == AL_TRUE, "Couldn't set active context");
+    HAL_ALC_CALL(m_dev, ::alcMakeContextCurrent, m_ctx);
 
     HAL_PRINT(hal::debug::load, "Audio device opened at ", m_dev, ", context at ", m_ctx);
 }
 
 listener::~listener()
 {
-    HAL_ASSERT_VITAL(::alcMakeContextCurrent(nullptr) == AL_TRUE, "Couldn't detach context");
-    ::alcDestroyContext(m_ctx);
-    HAL_ASSERT_VITAL(::alcCloseDevice(m_dev) == AL_TRUE, "Couldn't close device");
+    HAL_ALC_CALL(m_dev, ::alcMakeContextCurrent, nullptr);
+    HAL_ALC_CALL(m_dev, ::alcDestroyContext, m_ctx);
+    HAL_ALC_CALL(m_dev, ::alcCloseDevice, m_dev);
 }

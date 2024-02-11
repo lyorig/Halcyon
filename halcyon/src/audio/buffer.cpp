@@ -18,5 +18,3 @@ buffer::~buffer()
 {
     HAL_AL_CALL(::alDeleteBuffers, 1, &m_id);
 }
-
-uint_t buffer::id() const { return m_id; }
