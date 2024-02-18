@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstring>
-#include <optional>
 #include <sstream>
 
 /* argparse.hpp:
@@ -29,33 +28,6 @@ namespace lyo
             }
 
             return false;
-        }
-
-        template <typename T = const char*>
-        std::optional<T> parse(const char* prefix) const noexcept
-        {
-            const char* tok { nullptr };
-
-            for (int i { 0 }; i < m_argc; ++i)
-            {
-                if ((tok = strstr(m_argv[i], prefix)) != nullptr)
-                    break;
-            }
-
-            if (!tok) // Nothing found, GTFO.
-                return std::nullopt;
-
-            if constexpr (std::is_same_v<T, const char*>)
-                return tok ? std::optional<T>(tok + std::strlen(prefix)) : std::nullopt;
-
-            else
-            {
-                T ret;
-
-                std::istringstream s { tok + std::strlen(prefix) };
-
-                return (s >> ret) ? ret : std::nullopt;
-            };
         }
 
         template <typename T = const char*>

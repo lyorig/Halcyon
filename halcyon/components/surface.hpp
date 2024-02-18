@@ -1,9 +1,9 @@
 #pragma once
 
-#include <SDL2/SDL_surface.h>
+#include <SDL_surface.h>
 
 #include <halcyon/enums/blend.hpp>
-#include <halcyon/internal/drawer.hpp>
+#include <halcyon/other/drawer.hpp>
 #include <halcyon/types/color.hpp>
 #include <lyo/pass_key.hpp>
 #include <span>
@@ -31,7 +31,7 @@ namespace hal
     {
     public:
         // Create a sized surface.
-        surface(video& sys, pixel_point sz);
+        surface(pixel_point sz);
 
         // Special c-tor for factory classes.
         surface(SDL_Surface* surf, lyo::pass_key<image_loader>);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL_pixels.h>
+#include <SDL_pixels.h>
 
 #include <algorithm>
 #include <lyo/cast.hpp>

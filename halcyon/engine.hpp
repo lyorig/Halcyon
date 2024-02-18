@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 // engine.hpp:
 // The core of Halcyon, without which nothing can be initialized.

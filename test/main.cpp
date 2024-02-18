@@ -1,26 +1,38 @@
-#include <halcyon/halcyon.hpp>
-#include <lyo/argparse.hpp>
+#include <future>
+#include <iostream>
+#include <thread>
 
-int main(int argc, char* argv[])
+// I'm just trying some concurrency here, that's it
+
+void modifyMessage(std::promise<std::string>&& prms, std::string message)
 {
-    using enum hal::audio::property;
-    lyo::parser p { argc, argv };
+    std::this_thread::sleep_for(std::chrono::milliseconds(4000)); // simulate work
+    std::string modifiedMessage = message + " has been modified";
+    prms.set_value(modifiedMessage);
+}
 
-    hal::audio::listener l;
-    hal::audio::buffer   b { hal::audio::decoder::wav(p.parse("-file=", "assets/cantina.wav")) };
-    hal::audio::source   s;
+int main()
+{
+    // define message
+    std::string messageToThread = "My Message";
 
-    s.set<position>({
-        p.parse<hal::audio::float_t>("-x=", 0),
-        p.parse<hal::audio::float_t>("-y=", 0),
-        p.parse<hal::audio::float_t>("-z=", 0),
-    });
+    // create promise and future
+    std::promise<std::string> prms;
+    std::future<std::string>  ftr = prms.get_future();
 
-    s.attach(b);
-    s.play();
+    // start thread and pass promise as argument
+    std::thread t(modifyMessage, std::move(prms), messageToThread);
 
-    while (s.playing())
-        ;
+    // print original message to console
+    std::cout << "Original message from main(): " << messageToThread << std::endl;
 
-    return EXIT_SUCCESS;
+    // retrieve modified message via future and print to console
+    std::string messageFromThread = ftr.get();
+    std::cout << "Modified message from thread(): " << messageFromThread << std::endl;
+
+    // thread barrier
+    t.join();
+    t.native_handle();
+
+    return 0;
 }

@@ -19,6 +19,9 @@ namespace lyo
     concept character = one_of<T, char, signed char, unsigned char, wchar_t,
         char8_t, char16_t, char32_t>;
 
+    template <typename From, typename To>
+    concept static_castable = requires(From val) { static_cast<To>(val); };
+
     template <typename T, typename... Ts>
     struct index;
 
@@ -37,11 +40,4 @@ namespace lyo
 
     template <std::size_t Index, typename... Args>
     using type_at_index = std::tuple_element_t<Index, std::tuple<Args...>>;
-
-    template <typename... Args>
-    struct type_list
-    {
-        template <template <typename...> typename T>
-        using type = T<Args...>;
-    };
 }

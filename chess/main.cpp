@@ -54,7 +54,7 @@ class chess
 public:
     chess()
         : m_video { m_engine }
-        , m_image { m_video, { hal::image_loader::png } }
+        , m_image { hal::image_loader::png }
         , m_input { m_engine }
         , m_wnd { m_video, "HalChess", { hal::pixel_t(cnst::wbsz.x * 1.2), cnst::wbsz.y }, {} }
         , m_rnd { m_wnd, { hal::renderer::accelerated } }

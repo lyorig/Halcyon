@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/internal/sdl_types.hpp>
+#include <halcyon/types/sdl.hpp>
 
 #include <halcyon/types/point.hpp>
 #include <iosfwd>

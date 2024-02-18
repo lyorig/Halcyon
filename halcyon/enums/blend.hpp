@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL_blendmode.h>
+#include <SDL_blendmode.h>
 #include <lyo/types.hpp>
 
 namespace hal

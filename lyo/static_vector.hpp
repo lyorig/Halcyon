@@ -39,6 +39,7 @@ namespace lyo
         constexpr static_vector(std::initializer_list<T> init) noexcept
             : m_size { init.size() }
         {
+            assert(init.size() <= Max_Size);
             std::copy(init.begin(), init.end(), this->begin());
         }
 

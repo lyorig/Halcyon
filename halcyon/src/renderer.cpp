@@ -1,6 +1,6 @@
 #include <halcyon/renderer.hpp>
 
-#include <halcyon/internal/helpers.hpp>
+#include <halcyon/other/helpers.hpp>
 #include <halcyon/window.hpp>
 
 using namespace hal;

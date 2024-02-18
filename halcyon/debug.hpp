@@ -4,12 +4,10 @@
 // Various debugging functions. Also hopefully the only
 // part of Halcyon that extensively uses preprocessor defines.
 
+// If the application is in debug mode, so is Halcyon.
 #ifndef NDEBUG
     #define HAL_DEBUG_ENABLED
 #endif
-
-// Manual debug switch.
-// #define HAL_DEBUG_ENABLED
 
 #ifdef HAL_DEBUG_ENABLED
 
@@ -18,8 +16,7 @@
         #define __PRETTY_FUNCTION__ __FUNCSIG__
     #endif
 
-    #include <halcyon/internal/printing.hpp>
-    #include <halcyon/types/color.hpp>
+    #include <halcyon/other/printing.hpp>
     #include <lyo/timer.hpp>
     #include <lyo/utility.hpp>
 
@@ -27,8 +24,6 @@
     #include <fstream>
     #include <iostream>
     #include <sstream>
-
-    #include <SDL2/SDL_messagebox.h>
 
 namespace hal
 {
@@ -48,15 +43,15 @@ namespace hal
     public:
         enum severity
         {
-            info    = color::white,
-            warning = color::orange,
-            error   = color::red,
-            init    = color::green,
-            load    = color::cyan
+            info,
+            warning,
+            error,
+            init,
+            load
         };
 
         // Output any amount of arguments to stdout/stderr, the console and an output file.
-        template <typename... Args>
+        template <printable... Args>
         static void print(Args&&... args)
         {
             debug::print_severity(info, std::forward<Args>(args)...);
@@ -64,69 +59,41 @@ namespace hal
 
         // Output any amount of arguments to stdout/stderr, the console and an output file.
         // This overload additionally specifies the type of message to output.
-        template <typename... Args>
+        template <printable... Args>
         static void print(severity sev, Args&&... args)
         {
             debug::print_severity(sev, std::forward<Args>(args)...);
         }
 
         // Show a message box with an error message.
-        template <typename... Args>
-        static void panic(const char* where, std::string what,
-            Args&&... args)
+        template <printable... Args>
+        static void panic(const char* what, const char* where, Args&&... args)
         {
-            const std::string constructed { lyo::string_from_pack(std::forward<Args>(args)...) };
+            debug::print_severity(error, what, " in ", where, ": ", lyo::string_from_pack(std::forward<Args>(args)...));
 
-            debug::print_severity(error, __func__, ": ", what, " failed in ", where, ": ",
-                constructed);
+            std::exit(EXIT_FAILURE);
+        }
 
-            constexpr SDL_MessageBoxButtonData buttons[] {
-                { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "Exit" },
-                { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Run anyway" }
-            };
-
-            const std::string msgbox_info {
-                lyo::string_from_pack("Function: ", where, "\nInfo: ", constructed)
-            };
-
-            const SDL_MessageBoxData msgbox {
-                SDL_MESSAGEBOX_ERROR, nullptr, what.c_str(), msgbox_info.c_str(),
-                static_cast<int>(std::size(buttons)), buttons, nullptr
-            };
-
-            int response { 0 };
-
-            if (::SDL_ShowMessageBox(&msgbox, &response) < 0) [[unlikely]]
-            {
-                debug::print_severity(error, __func__,
-                    ": Message box creation failed, exiting");
-                goto Exit;
-            }
-
-            else
-                debug::print_severity(info, __func__, ": User chose to ",
-                    response == 0 ? "exit" : "continue execution");
-
-            if (response == 0) [[likely]]
-            {
-            Exit:
-                std::exit(EXIT_FAILURE);
-            }
+        template <printable... Args>
+        static void warn_if(bool condition, Args&&... extra_info)
+        {
+            if (condition) [[unlikely]]
+                debug::print(warning, std::forward<Args>(extra_info)...);
         }
 
         // Check a condition, and panic if it's false.
-        template <typename... Args>
+        template <printable... Args>
         static void verify(bool condition, const char* cond_string, const char* func,
             Args&&... extra_info)
         {
             if (!condition) [[unlikely]]
-                debug::panic(func, cond_string, std::forward<Args>(extra_info)...);
+                debug::panic(cond_string, func, std::forward<Args>(extra_info)...);
         }
 
         static void draw(renderer& rnd, const font& fnt);
 
     private:
-        template <typename... Args>
+        template <printable... Args>
         static void print_severity(severity type, Args&&... args)
         {
             std::stringstream fwd_info, message;
@@ -163,28 +130,14 @@ namespace hal
 
             const std::string msg { lyo::string_from_pack(args...) };
 
-            debug::log(type, msg);
-
             const std::string with_info { fwd_info.str() + msg };
 
             m_output << with_info << std::endl;
             (type == error ? std::cerr : std::cout) << with_info << std::endl;
         }
 
-        static void log(severity type, const std::string& msg);
-
         static std::ofstream            m_output;
         static const lyo::precise_timer m_timer;
-
-        using count_type = lyo::u8;
-
-        using value_pair = std::pair<std::string, severity>;
-        using queue_type = std::array<value_pair, 10>; // The size acts as the maximum amount of entries.
-
-        static queue_type m_queue;
-        static count_type m_entries;
-
-        static bool m_repaint; // Whether to recreate the texture.
     };
 } // namespace hal
 
@@ -192,11 +145,11 @@ namespace hal
     #define HAL_PRINT      hal::debug::print
     #define HAL_PANIC(...) hal::debug::panic(__PRETTY_FUNCTION__, __VA_ARGS__)
 
+    #define HAL_WARN_IF(cond, ...) hal::debug::warn_if(cond, __VA_ARGS__)
+
     #define HAL_ASSERT(cond, ...) HAL_ASSERT_VITAL(cond, __VA_ARGS__)
     #define HAL_ASSERT_VITAL(cond, ...) \
         hal::debug::verify(cond, #cond, __PRETTY_FUNCTION__, __VA_ARGS__)
-
-    #define HAL_DRAW_CONSOLE hal::debug::draw
 
 #else
 
@@ -205,9 +158,9 @@ namespace hal
     #define HAL_PRINT(...)
     #define HAL_PANIC(...)
 
+    #define HAL_WARN_IF(...)
+
     #define HAL_ASSERT(...)
     #define HAL_ASSERT_VITAL(condition, ...) (void(condition))
-
-    #define HAL_DRAW_CONSOLE(...)
 
 #endif

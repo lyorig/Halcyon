@@ -1,12 +1,13 @@
 #pragma once
 
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 #include <initializer_list>
 #include <lyo/types.hpp>
+#include <string_view>
 
 namespace hal
 {
-    class video;
+    class engine;
     class surface;
 
     // For loading images, obviously. This class doesn't need to
@@ -22,9 +23,9 @@ namespace hal
             webp = IMG_INIT_WEBP
         };
 
-        image_loader(video& sys, std::initializer_list<image_type> types);
+        image_loader(std::initializer_list<image_type> types);
         ~image_loader();
 
-        surface load(const char* file) const;
+        surface load(std::string_view file) const;
     };
 } // namespace hal

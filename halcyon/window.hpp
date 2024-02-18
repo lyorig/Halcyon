@@ -2,7 +2,7 @@
 
 #include <lyo/timer.hpp>
 
-#include <halcyon/internal/subsystem.hpp>
+#include <halcyon/other/subsystem.hpp>
 #include <halcyon/texture.hpp>
 
 namespace hal
@@ -28,7 +28,7 @@ namespace hal
 
         pixel_point size() const;
 
-        display::index display_index() const;
+        display::index_t display_index() const;
 
         const char* title() const;
     };

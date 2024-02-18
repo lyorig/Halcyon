@@ -13,7 +13,7 @@ namespace hal
     class ttf_engine
     {
     public:
-        ttf_engine(video& sys [[maybe_unused]]);
+        ttf_engine();
         ~ttf_engine();
 
         // Warning: If loading from an rvalue TTF engine, only

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL_events.h>
+#include <SDL_events.h>
 
 #include <bitset>
 #include <halcyon/debug.hpp>
@@ -17,9 +17,8 @@ namespace hal
     class input_base
     {
     public:
-        input_base(engine& eng [[maybe_unused]])
+        input_base([[maybe_unused]] engine& eng)
         {
-            HAL_PRINT(debug::init, "Initialized input handler");
         }
 
         // Automatic polling. If you want finer control (or use
@@ -60,12 +59,12 @@ namespace hal
             return pixel_point(pos);
         }
 
-    protected:
         bool poll(SDL_Event& event) const
         {
             return ::SDL_PollEvent(&event);
         }
 
+    protected:
         bool m_ok { true };
     };
 

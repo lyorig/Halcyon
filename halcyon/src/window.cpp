@@ -1,6 +1,6 @@
 #include <halcyon/window.hpp>
 
-#include <halcyon/internal/helpers.hpp>
+#include <halcyon/other/helpers.hpp>
 
 using namespace hal;
 
@@ -24,13 +24,13 @@ pixel_point window::size() const
     return size;
 }
 
-display::index window::display_index() const
+display::index_t window::display_index() const
 {
     const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
 
     HAL_ASSERT(ret >= 0, ::SDL_GetError());
 
-    return static_cast<display::index>(ret);
+    return static_cast<display::index_t>(ret);
 }
 
 const char* window::title() const

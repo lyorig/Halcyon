@@ -20,7 +20,7 @@ surface::surface(pixel_point sz, int depth, Uint32 fmt)
 {
 }
 
-surface::surface([[maybe_unused]] video& sys, pixel_point sz)
+surface::surface(pixel_point sz)
     : surface { sz, CHAR_BIT * 4, default_format }
 {
 }
