@@ -31,8 +31,6 @@ namespace hal
         void reset(SDL_Texture* ptr);
 
     private:
-        pixel_point internal_size() const;
-
         void query(Uint32* format, int* access, int* w, int* h) const;
     };
 

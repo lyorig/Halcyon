@@ -1,38 +1,12 @@
-#include <future>
-#include <iostream>
-#include <thread>
-
-// I'm just trying some concurrency here, that's it
-
-void modifyMessage(std::promise<std::string>&& prms, std::string message)
-{
-    std::this_thread::sleep_for(std::chrono::milliseconds(4000)); // simulate work
-    std::string modifiedMessage = message + " has been modified";
-    prms.set_value(modifiedMessage);
-}
+#include <halcyon/halcyon.hpp>
 
 int main()
 {
-    // define message
-    std::string messageToThread = "My Message";
+    // hal::ttf_engine e;
 
-    // create promise and future
-    std::promise<std::string> prms;
-    std::future<std::string>  ftr = prms.get_future();
+    hal::font f { "assets/m5x7.ttf", 42 };
 
-    // start thread and pass promise as argument
-    std::thread t(modifyMessage, std::move(prms), messageToThread);
-
-    // print original message to console
-    std::cout << "Original message from main(): " << messageToThread << std::endl;
-
-    // retrieve modified message via future and print to console
-    std::string messageFromThread = ftr.get();
-    std::cout << "Modified message from thread(): " << messageFromThread << std::endl;
-
-    // thread barrier
-    t.join();
-    t.native_handle();
+    hal::surface s { f.render("fff") };
 
     return 0;
 }

@@ -53,12 +53,9 @@ class chess
 
 public:
     chess()
-        : m_video { m_engine }
-        , m_image { hal::image_loader::png }
-        , m_input { m_engine }
-        , m_wnd { m_video, "HalChess", { hal::pixel_t(cnst::wbsz.x * 1.2), cnst::wbsz.y }, {} }
+        : m_wnd { m_video, "HalChess", { hal::pixel_t(cnst::wbsz.x * 1.2), cnst::wbsz.y }, {} }
         , m_rnd { m_wnd, { hal::renderer::accelerated } }
-        , m_pieces { m_rnd, m_image.load("assets/pieces.png") }
+        , m_pieces { m_rnd, hal::image_loader::load("assets/pieces.png") }
         , m_canvas { m_rnd, cnst::bsz }
         , m_nowChosen { piece::invalid_pos(), piece::invalid_pos() }
         , m_whoseTurn { piece::white }
@@ -376,7 +373,6 @@ private:
 
     LYO_NOSIZE hal::engine m_engine;
     LYO_NOSIZE hal::video m_video;
-    LYO_NOSIZE hal::image_loader m_image;
 
     hal::input_handler m_input;
 

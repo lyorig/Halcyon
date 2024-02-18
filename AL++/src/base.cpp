@@ -1,5 +1,7 @@
 #include <AL++/base.hpp>
 
+#ifdef HAL_DEBUG_ENABLED
+
 using namespace alpp;
 
 std::string al::error_string(ALenum err)
@@ -55,3 +57,5 @@ void alc::check_errors([[maybe_unused]] const char* func, [[maybe_unused]] const
     const ALenum err { ::alcGetError(dev) };
     HAL_ASSERT(err == ALC_NO_ERROR, al_func, " returned ", error_string(err), " in ", func);
 }
+
+#endif

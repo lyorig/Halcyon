@@ -4,8 +4,8 @@
 
 using namespace hal;
 
-font::font(const char* path, lyo::u8 size, lyo::pass_key<ttf_engine>)
-    : object { ::TTF_OpenFont(path, size) }
+font::font(std::string_view path, lyo::u8 size)
+    : object { ::TTF_OpenFont(path.data(), size) }
 {
 }
 

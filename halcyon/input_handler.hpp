@@ -17,10 +17,6 @@ namespace hal
     class input_base
     {
     public:
-        input_base([[maybe_unused]] engine& eng)
-        {
-        }
-
         // Automatic polling. If you want finer control (or use
         // functions not yet implemented), use the poll() function.
         bool update()
@@ -74,8 +70,6 @@ namespace hal
     public:
         using key_storage = std::bitset<SDL_NUM_SCANCODES + (SDL_BUTTON_X2 - SDL_BUTTON_LEFT) + 1>;
 
-        using input_base::input_base;
-
         bool update();
 
         bool pressed(hal::button btn) const;
@@ -93,8 +87,6 @@ namespace hal
     public:
         // N-key rollover, basically.
         using holder = lyo::static_vector<hal::button, 6>;
-
-        using input_base::input_base;
 
         bool update();
 

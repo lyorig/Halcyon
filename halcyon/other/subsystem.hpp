@@ -36,7 +36,7 @@ namespace hal
             system = std::to_underlying(Sys)
         };
 
-        subsystem(const engine& eng [[maybe_unused]])
+        subsystem()
         {
             HAL_ASSERT_VITAL(::SDL_InitSubSystem(Uint32(Sys)) == 0, ::SDL_GetError());
         }
@@ -52,21 +52,23 @@ namespace hal
     class display : SDL_DisplayMode
     {
     public:
-        using index_t   = lyo::u8;
-        using hz_type_t = lyo::u16;
+        using index_t = lyo::u8;
+        using hz_t    = lyo::u16;
 
-        display(index_t disp_idx, lyo::pass_key<video>);
+        display(index_t disp_idx);
+
+        static index_t amount();
 
         index_t num_modes() const;
 
-        display mode_at(index_t mode_idx) const;
+        display mode(index_t mode_idx) const;
 
         std::vector<display> modes() const;
 
         index_t     idx() const;
         pixel_point size() const;
         const char* name() const;
-        hz_type_t   hz() const;
+        hz_t        hz() const;
 
     private:
         display(index_t disp_idx, index_t mode_idx);
@@ -78,9 +80,5 @@ namespace hal
     {
     public:
         using subsystem::subsystem;
-
-        display::index_t num_displays() const;
-
-        display display_at(display::index_t idx) const;
     };
 }

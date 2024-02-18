@@ -150,6 +150,7 @@ namespace alpp
     using prop_t = std::conditional_t<contains(int_props, P),
         int_t, std::conditional_t<contains(float_props, P), float_t, std::conditional_t<contains(float3_props, P), coordf, void>>>;
 
+#ifdef HAL_DEBUG_ENABLED
     namespace al
     {
         std::string error_string(ALenum err);
@@ -209,4 +210,6 @@ namespace alpp
             }
         }
     }
+
+#endif
 }

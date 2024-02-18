@@ -7,7 +7,11 @@ using namespace hal;
 
 pixel_point texture_base::size() const
 {
-    return this->internal_size();
+    point<int> size;
+
+    this->query(nullptr, nullptr, &size.x, &size.y);
+
+    return size;
 }
 
 void texture_base::set_opacity(color::value value)
@@ -63,15 +67,6 @@ void texture_base::reset(SDL_Texture* ptr)
 {
     object::reset(ptr);
     this->set_blend(blend_mode::blend);
-}
-
-pixel_point texture_base::internal_size() const
-{
-    point<int> size;
-
-    this->query(nullptr, nullptr, &size.x, &size.y);
-
-    return size;
 }
 
 void texture_base::query(Uint32* format, int* access, int* w, int* h) const

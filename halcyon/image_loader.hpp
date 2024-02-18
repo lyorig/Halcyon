@@ -26,6 +26,8 @@ namespace hal
         image_loader(std::initializer_list<image_type> types);
         ~image_loader();
 
-        surface load(std::string_view file) const;
+        static surface load(std::string_view file);
+
+        static bool initialized();
     };
 } // namespace hal

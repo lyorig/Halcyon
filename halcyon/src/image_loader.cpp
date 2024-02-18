@@ -14,9 +14,14 @@ image_loader::image_loader(std::initializer_list<image_type> types)
 
 image_loader::~image_loader() { ::IMG_Quit(); }
 
-surface image_loader::load(std::string_view path) const
+surface image_loader::load(std::string_view path)
 {
     HAL_PRINT("Loading image ", path);
 
     return { ::IMG_Load(path.data()), lyo::pass_key<image_loader> {} };
+}
+
+bool image_loader::initialized()
+{
+    return ::IMG_Init(0) > 0;
 }
