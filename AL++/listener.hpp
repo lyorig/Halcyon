@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AL++/get_set.hpp>
+#include <string_view>
 
 namespace alpp
 {

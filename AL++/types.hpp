@@ -6,18 +6,7 @@
 #include <alc.h>
 #include <algorithm>
 #include <array>
-#include <halcyon/debug.hpp>
 #include <lyo/concepts.hpp>
-#include <lyo/types.hpp>
-#include <string>
-
-#ifdef HAL_DEBUG_ENABLED
-    #define ALPP_AL_CALL(func, ...)       alpp::al::call(__PRETTY_FUNCTION__, #func, func, __VA_ARGS__)
-    #define ALPP_ALC_CALL(dev, func, ...) alpp::alc::call(__PRETTY_FUNCTION__, #func, dev, func, __VA_ARGS__)
-#else
-    #define ALPP_AL_CALL(func, ...)       func(__VA_ARGS__)
-    #define ALPP_ALC_CALL(dev, func, ...) func(__VA_ARGS__)
-#endif
 
 namespace alpp
 {
@@ -80,7 +69,12 @@ namespace alpp
         size      = AL_SIZE,   // int
 
         processed_buffers = AL_BUFFERS_PROCESSED, // int
-        queued_buffers    = AL_BUFFERS_QUEUED     // int
+        queued_buffers    = AL_BUFFERS_QUEUED,    // int
+
+        // state variables
+        doppler_factor = AL_DOPPLER_FACTOR, // float
+        speed_of_sound = AL_SPEED_OF_SOUND, // float
+        distance_model = AL_DISTANCE_MODEL  // enum (int)
     };
 
     enum distance_model : enum_t
@@ -117,7 +111,8 @@ namespace alpp
         byte_offset,
         frequency,
         bit_depth,
-        channels
+        channels,
+        distance_model
     };
 
     constexpr std::array float_props {
@@ -131,7 +126,9 @@ namespace alpp
         rolloff_factor,
         reference_distance,
         cone_outer_gain,
-        second_offset
+        second_offset,
+        doppler_factor,
+        speed_of_sound
     };
 
     constexpr std::array float3_props {
@@ -149,67 +146,4 @@ namespace alpp
     template <property P>
     using prop_t = std::conditional_t<contains(int_props, P),
         int_t, std::conditional_t<contains(float_props, P), float_t, std::conditional_t<contains(float3_props, P), coordf, void>>>;
-
-#ifdef HAL_DEBUG_ENABLED
-    namespace al
-    {
-        std::string error_string(ALenum err);
-        void        check_errors(const char* func, const char* al_func);
-
-        template <typename Ret, typename... FuncArgs, typename... GivenArgs>
-        Ret call(const char* func_name, const char* al_func_name, lyo::func_ptr<Ret, FuncArgs...> func, GivenArgs&&... args)
-            requires(sizeof...(FuncArgs) == sizeof...(GivenArgs) && (lyo::static_castable<GivenArgs, FuncArgs> && ...))
-        {
-            ::alGetError(); // Reset error state.
-
-            if constexpr (std::is_void_v<Ret>)
-            {
-                func(static_cast<FuncArgs>(args)...);
-                check_errors(func_name, al_func_name);
-            }
-
-            else
-            {
-                const Ret rv { func(static_cast<FuncArgs>(args)...) };
-                check_errors(func_name, al_func_name);
-                return rv;
-            }
-        }
-    }
-
-    namespace alc
-    {
-        std::string error_string(ALenum err);
-        void        check_errors(const char* func, const char* al_func, ALCdevice* dev);
-
-        // Boolean-returning ALC functions get processed inside this function.
-        template <typename T>
-        using call_ret_type = std::conditional_t<lyo::is_present_v<T, void, bool_t>, void, T>;
-
-        template <typename Ret, typename... FuncArgs, typename... GivenArgs>
-        call_ret_type<Ret> call(const char* func_name, const char* al_func_name, ALCdevice* dev, lyo::func_ptr<Ret, FuncArgs...> func, GivenArgs&&... args)
-            requires(sizeof...(FuncArgs) == sizeof...(GivenArgs) && (lyo::static_castable<GivenArgs, FuncArgs> && ...))
-        {
-            ::alcGetError(dev); // Reset error state.
-
-            if constexpr (std::is_void_v<Ret>)
-            {
-                func(static_cast<FuncArgs>(args)...);
-                check_errors(func_name, al_func_name, dev);
-            }
-
-            else if constexpr (std::is_same_v<Ret, bool_t>)
-            {
-                if (!func(static_cast<FuncArgs>(args)...))
-                    HAL_PANIC(func_name, " failed");
-            }
-
-            else
-            {
-                return func(static_cast<FuncArgs>(args)...);
-            }
-        }
-    }
-
-#endif
 }

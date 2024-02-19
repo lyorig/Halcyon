@@ -1,9 +1,10 @@
 #define MINIMP3_IMPLEMENTATION
 
 #include <AL++/decoder.hpp>
-#include <AL++/minimp3_ex.h>
+#include <AL++/external/minimp3_ex.h>
 #include <filesystem>
 #include <fstream>
+#include <lyo/types.hpp>
 #include <vector>
 
 using namespace alpp;

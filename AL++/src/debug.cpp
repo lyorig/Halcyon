@@ -1,10 +1,9 @@
-#include <AL++/base.hpp>
+#include <AL++/debug.hpp>
 
 #ifdef HAL_DEBUG_ENABLED
-
 using namespace alpp;
 
-std::string al::error_string(ALenum err)
+std::string al::error_string(enum_t err)
 {
     switch (err)
     {
@@ -25,13 +24,13 @@ std::string al::error_string(ALenum err)
     }
 }
 
-void al::check_errors([[maybe_unused]] const char* func, [[maybe_unused]] const char* al_func)
+void al::check_errors(const char* func, const char* al_func)
 {
     const ALenum err { ::alGetError() };
-    HAL_ASSERT(err == AL_NO_ERROR, al_func, " returned ", error_string(err), " in ", func);
+    HAL_ASSERT(err == no_error, al_func, " returned ", error_string(err), " in ", func);
 }
 
-std::string alc::error_string(ALenum err)
+std::string alc::error_string(enum_t err)
 {
     switch (err)
     {
@@ -52,10 +51,10 @@ std::string alc::error_string(ALenum err)
     }
 }
 
-void alc::check_errors([[maybe_unused]] const char* func, [[maybe_unused]] const char* al_func, ALCdevice* dev)
+void alc::check_errors(const char* func, const char* al_func, ALCdevice* dev)
 {
     const ALenum err { ::alcGetError(dev) };
-    HAL_ASSERT(err == ALC_NO_ERROR, al_func, " returned ", error_string(err), " in ", func);
+    HAL_ASSERT(err == no_error, al_func, " returned ", error_string(err), " in ", func);
 }
 
 #endif

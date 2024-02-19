@@ -1,6 +1,7 @@
 #pragma once
 
-#include <AL++/base.hpp>
+#include <AL++/debug.hpp>
+#include <AL++/types.hpp>
 
 namespace alpp
 {
@@ -8,7 +9,7 @@ namespace alpp
     struct get_set
     {
         template <property P, typename... Args>
-        prop_t<P> get(Args&&... args) const
+        static prop_t<P> get(Args&&... args)
             requires(contains(Derived::properties(), P))
         {
             using tp = prop_t<P>;
@@ -39,7 +40,7 @@ namespace alpp
         }
 
         template <property P, typename... Args>
-        void set(const prop_t<P>& value, Args&&... args)
+        static void set(const prop_t<P>& value, Args&&... args)
             requires(contains(Derived::properties(), P))
         {
             using tp = prop_t<P>;

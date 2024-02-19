@@ -1,9 +1,11 @@
 set(ALPP_SOURCES
-base.cpp
+debug.cpp
 buffer.cpp
 decoder.cpp
 listener.cpp
-source.cpp)
+source.cpp
+state.cpp
+)
 
 list(TRANSFORM ALPP_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/)
 

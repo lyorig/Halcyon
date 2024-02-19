@@ -141,8 +141,8 @@ namespace hal
 
             const std::string with_info { fwd_info.str() + msg };
 
-            m_output << with_info << std::endl;
-            (type == error ? std::cerr : std::cout) << with_info << std::endl;
+            m_output << with_info << '\n';
+            (type == error ? std::cerr : std::cout) << with_info << '\n';
         }
 
         static std::ofstream            m_output;
