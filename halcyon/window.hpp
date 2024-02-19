@@ -2,7 +2,7 @@
 
 #include <lyo/timer.hpp>
 
-#include <halcyon/other/subsystem.hpp>
+#include <halcyon/other/display.hpp>
 #include <halcyon/texture.hpp>
 
 namespace hal
@@ -23,13 +23,13 @@ namespace hal
             maximized           = SDL_WINDOW_MAXIMIZED
         };
 
-        window(video& sys, const char* title, const pixel_point& size, std::initializer_list<flags> flags);
-        window(video& sys, const char* title, fullscreen_mode_tag);
+        window(std::string_view title, const pixel_point& size, std::initializer_list<flags> flags);
+        window(std::string_view title, fullscreen_mode_tag);
 
         pixel_point size() const;
 
         display::index_t display_index() const;
 
-        const char* title() const;
+        std::string_view title() const;
     };
 } // namespace hal

@@ -1,5 +1,5 @@
 #include <halcyon/other/printing.hpp>
-#include <halcyon/other/subsystem.hpp>
+#include <halcyon/other/display.hpp>
 
 using namespace hal;
 

@@ -27,10 +27,10 @@ namespace alpp
         };
 
         std::string error_string(enum_t err);
-        void        check_errors(const char* func, const char* al_func);
+        void        check_errors(std::string_view func, std::string_view al_func);
 
         template <typename Ret, typename... FuncArgs, typename... GivenArgs>
-        Ret call(const char* func_name, const char* al_func_name, lyo::func_ptr<Ret, FuncArgs...> func, GivenArgs&&... args)
+        Ret call(std::string_view func_name, std::string_view al_func_name, lyo::func_ptr<Ret, FuncArgs...> func, GivenArgs&&... args)
             requires(sizeof...(FuncArgs) == sizeof...(GivenArgs) && (lyo::static_castable<GivenArgs, FuncArgs> && ...))
         {
             ::alGetError(); // Reset error state.
@@ -63,14 +63,14 @@ namespace alpp
         };
 
         std::string error_string(enum_t err);
-        void        check_errors(const char* func, const char* al_func, ALCdevice* dev);
+        void        check_errors(std::string_view func, std::string_view al_func, ALCdevice* dev);
 
         // Boolean-returning ALC functions get processed inside this function.
         template <typename T>
         using call_ret_type = std::conditional_t<lyo::is_present_v<T, void, bool_t>, void, T>;
 
         template <typename Ret, typename... FuncArgs, typename... GivenArgs>
-        call_ret_type<Ret> call(const char* func_name, const char* al_func_name, ALCdevice* dev, lyo::func_ptr<Ret, FuncArgs...> func, GivenArgs&&... args)
+        call_ret_type<Ret> call(std::string_view func_name, std::string_view al_func_name, ALCdevice* dev, lyo::func_ptr<Ret, FuncArgs...> func, GivenArgs&&... args)
             requires(sizeof...(FuncArgs) == sizeof...(GivenArgs) && (lyo::static_castable<GivenArgs, FuncArgs> && ...))
         {
             ::alcGetError(dev); // Reset error state.

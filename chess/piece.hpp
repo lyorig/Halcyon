@@ -43,12 +43,12 @@ struct piece
         black
     };
 
-    static constexpr const char* strteam(team tm)
+    static constexpr std::string_view strteam(team tm)
     {
         return tm == white ? "White" : "Black";
     }
 
-    static constexpr const char* strtype(type tp)
+    static constexpr std::string_view strtype(type tp)
     {
         switch (tp)
         {
@@ -120,7 +120,7 @@ struct piece
 
     constexpr std::string id() const
     {
-        return std::string { strteam(tm) } + strtype(tp);
+        return std::string { strteam(tm) } + strtype(tp).data();
     }
 
     constexpr bool valid() const

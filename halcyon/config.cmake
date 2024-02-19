@@ -10,8 +10,9 @@ ttf_engine.cpp
 window.cpp
 components/font.cpp
 components/surface.cpp
+other/display.cpp
+other/driver.cpp
 other/printing.cpp
-other/subsystem.cpp
 )
 
 list(TRANSFORM HALCYON_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/)

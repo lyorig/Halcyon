@@ -31,7 +31,6 @@ namespace hal
             vsync       = SDL_RENDERER_PRESENTVSYNC
         };
 
-        // Might as well leave the pure bitmask parameter here.
         renderer(window& wnd, std::initializer_list<flags> flags);
 
         void clear();

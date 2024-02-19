@@ -24,7 +24,7 @@ std::string al::error_string(enum_t err)
     }
 }
 
-void al::check_errors(const char* func, const char* al_func)
+void al::check_errors(std::string_view func, std::string_view al_func)
 {
     const ALenum err { ::alGetError() };
     HAL_ASSERT(err == no_error, al_func, " returned ", error_string(err), " in ", func);
@@ -51,7 +51,7 @@ std::string alc::error_string(enum_t err)
     }
 }
 
-void alc::check_errors(const char* func, const char* al_func, ALCdevice* dev)
+void alc::check_errors(std::string_view func, std::string_view al_func, ALCdevice* dev)
 {
     const ALenum err { ::alcGetError(dev) };
     HAL_ASSERT(err == no_error, al_func, " returned ", error_string(err), " in ", func);

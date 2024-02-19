@@ -22,11 +22,11 @@ namespace lyo
             return std::wcscmp(first, second) == 0;
     }
 
-    // Checks if the string is null or if the first character is a null terminator.
+    // Checks if the first character of a string is a null terminator.
     template <character T>
     constexpr bool is_c_string_empty(const T* string) noexcept
     {
-        return !string || *string == static_cast<T>('\0');
+        return *string == static_cast<T>('\0');
     }
 
     // Input all arguments into a stringstream and return them as a string.

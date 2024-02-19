@@ -9,6 +9,7 @@ renderer::renderer(window& wnd, std::initializer_list<flags> flags)
     : object { ::SDL_CreateRenderer(wnd.ptr(), -1, il2bm<Uint32>(flags)) }
 {
     this->set_blend(blend_mode::blend);
+    this->clear();
 }
 
 void renderer::present()

@@ -53,7 +53,7 @@ class chess
 
 public:
     chess()
-        : m_wnd { m_video, "HalChess", { hal::pixel_t(cnst::wbsz.x * 1.2), cnst::wbsz.y }, {} }
+        : m_wnd { "HalChess", { hal::pixel_t(cnst::wbsz.x * 1.2), cnst::wbsz.y }, {} }
         , m_rnd { m_wnd, { hal::renderer::accelerated } }
         , m_pieces { m_rnd, hal::image_loader::load("assets/pieces.png") }
         , m_canvas { m_rnd, cnst::bsz }
@@ -372,7 +372,6 @@ private:
     lyo::static_vector<piece::pos, 28> m_highlighted;
 
     LYO_NOSIZE hal::engine m_engine;
-    LYO_NOSIZE hal::video m_video;
 
     hal::input_handler m_input;
 
