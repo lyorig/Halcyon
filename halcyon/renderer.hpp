@@ -4,6 +4,7 @@
 
 #include <halcyon/enums/anchor.hpp>
 #include <halcyon/enums/blend.hpp>
+#include <halcyon/other/drawer.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
@@ -65,6 +66,30 @@ namespace hal
 
     private:
         void internal_set_target(SDL_Texture* target);
+    };
+
+    class copyer final : public drawer<texture_base, sdl::coord_t, renderer, copyer>
+    {
+    public:
+        using drawer::drawer;
+
+        // Set the texture's rotation.
+        // Can be called at any time.
+        [[nodiscard]] copyer& rotate(lyo::f64 angle);
+
+        // Set the texture's flip.
+        // Can be called at any time.
+        [[nodiscard]] copyer& flip(enum flip f);
+
+        void operator()();
+
+    private:
+        lyo::f64 m_angle { 0.0 };
+
+        enum flip m_flip
+        {
+            flip::none
+        };
     };
 
     // C-tor: Sets the renderer's draw color.

@@ -61,28 +61,4 @@ namespace hal
         // Multiple things can fail here on top of it being a convenience function.
         static SDL_Texture* create(renderer& rnd, const pixel_point& sz);
     };
-
-    class copyer final : public drawer<texture_base, sdl::coord_t, renderer, copyer>
-    {
-    public:
-        using drawer::drawer;
-
-        // Set the texture's rotation.
-        // Can be called at any time.
-        [[nodiscard]] copyer& rotate(lyo::f64 angle);
-
-        // Set the texture's flip.
-        // Can be called at any time.
-        [[nodiscard]] copyer& flip(enum flip f);
-
-        void operator()();
-
-    private:
-        lyo::f64 m_angle { 0.0 };
-
-        enum flip m_flip
-        {
-            flip::none
-        };
-    };
 } // namespace hal
