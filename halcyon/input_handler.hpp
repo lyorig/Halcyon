@@ -11,7 +11,7 @@
 
 namespace hal
 {
-    class engine;
+    class cleanup;
 
     template <typename Derived>
     class input_base

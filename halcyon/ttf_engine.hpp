@@ -4,8 +4,6 @@
 
 namespace hal
 {
-    class video;
-
     // A class that makes sure everything TTF-related is loaded and
     // ready to use. This includes not only loading fonts, but also
     // their features - for example, font::render() will fail if a

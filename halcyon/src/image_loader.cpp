@@ -5,7 +5,7 @@
 
 using namespace hal;
 
-image_loader::image_loader(std::initializer_list<image_type> types)
+image_loader::image_loader(std::initializer_list<format> types)
 {
     HAL_ASSERT_VITAL(::IMG_Init(il2bm<int>(types)) == il2bm<int>(types), ::IMG_GetError());
 

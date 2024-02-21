@@ -20,7 +20,6 @@
 namespace hal
 {
     class image_loader;
-    class video;
     class font;
 
     class blitter;

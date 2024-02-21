@@ -58,6 +58,8 @@ namespace hal
             load
         };
 
+        static std::string_view last_error();
+
         // Output any amount of arguments to stdout/stderr and an output file.
         template <printable... Args>
         static void print(Args&&... extra_info)

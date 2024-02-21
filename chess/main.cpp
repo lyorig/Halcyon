@@ -371,7 +371,7 @@ private:
     // The current highlighted moves
     lyo::static_vector<piece::pos, 28> m_highlighted;
 
-    LYO_NOSIZE hal::engine m_engine;
+    LYO_NOSIZE hal::cleanup m_engine;
 
     hal::input_handler m_input;
 

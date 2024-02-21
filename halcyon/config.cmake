@@ -1,10 +1,11 @@
 
 set(HALCYON_SOURCES
+cleanup.cpp
 debug.cpp
-engine.cpp
 image_loader.cpp
 input_handler.cpp
 renderer.cpp
+system.cpp
 texture.cpp
 ttf_engine.cpp
 window.cpp

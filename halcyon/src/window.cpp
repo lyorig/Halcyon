@@ -1,3 +1,4 @@
+#include <halcyon/system.hpp>
 #include <halcyon/window.hpp>
 
 #include <halcyon/other/helpers.hpp>
@@ -11,7 +12,7 @@ window::window(std::string_view title, const pixel_point& size, std::initializer
 }
 
 window::window(std::string_view title, fullscreen_mode_tag)
-    : window { title, display { 0 }.size(), { fullscreen_windowed } }
+    : window { title, display { 0 }.size(), { fullscreen } }
 {
 }
 
@@ -22,6 +23,11 @@ pixel_point window::size() const
     ::SDL_GetWindowSize(this->ptr(), &size.x, &size.y);
 
     return size;
+}
+
+void window::set_size(pixel_point sz)
+{
+    ::SDL_SetWindowSize(this->ptr(), sz.x, sz.y);
 }
 
 display::index_t window::display_index() const
