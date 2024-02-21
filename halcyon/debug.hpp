@@ -77,7 +77,7 @@ namespace hal
 
         // Show a message box with an error message.
         template <printable... Args>
-        static void panic(std::string_view function, std::string_view file, lyo::u32 line, Args&&... extra_info)
+        [[noreturn]] static void panic(std::string_view function, std::string_view file, lyo::u32 line, Args&&... extra_info)
         {
             debug::print_severity(error, "In file ", file, ", line ", line, ", function ", function);
             debug::print_severity(error, lyo::string_from_pack(std::forward<Args>(extra_info)...));
