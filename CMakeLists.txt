@@ -5,7 +5,8 @@ project(HalodaQuest VERSION 0.1 LANGUAGES CXX)
 
 include(lyo/config.cmake)
 include(halcyon/config.cmake)
-include(AL++/config.cmake)
+
+# include(AL++/config.cmake)
 
 # Set appropriate warnings and directories.
 if(MSVC)
@@ -30,21 +31,11 @@ elseif(NOT MSVC)
 	add_link_options(-fsanitize=address -fsanitize=undefined)
 endif()
 
-add_executable(HalChess WIN32)
 add_executable(HalTest WIN32)
 
-set_property(TARGET HalChess PROPERTY CXX_STANDARD 23)
 set_property(TARGET HalTest PROPERTY CXX_STANDARD 23)
-
-target_sources(HalChess PRIVATE
-chess/main.cpp
-${HALCYON_SOURCES}
-)
 
 target_sources(HalTest PRIVATE
 test/main.cpp
 ${HALCYON_SOURCES}
-${ALPP_SOURCES}
 )
-
-target_compile_definitions(HalChess PRIVATE HAL_INTEGRAL_COORD)

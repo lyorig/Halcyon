@@ -57,7 +57,7 @@ void surface::fill_rect(const sdl::pixel_rect& area, color clr)
 
 void surface::fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr)
 {
-    HAL_ASSERT_VITAL(::SDL_FillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), areas.size(), mapped(clr)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_FillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, ::SDL_GetError());
 }
 
 pixel_point surface::size() const

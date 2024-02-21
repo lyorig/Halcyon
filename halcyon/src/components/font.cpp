@@ -25,10 +25,10 @@ pixel_point font::size_text(const std::string_view& text) const
 
 pixel_t font::height() const
 {
-    return ::TTF_FontHeight(this->ptr());
+    return static_cast<pixel_t>(::TTF_FontHeight(this->ptr()));
 }
 
 pixel_t font::skip() const
 {
-    return ::TTF_FontLineSkip(this->ptr());
+    return static_cast<pixel_t>(::TTF_FontLineSkip(this->ptr()));
 }

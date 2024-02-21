@@ -10,10 +10,10 @@ display::display(index_t disp_idx)
 
     HAL_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(disp_idx, &dm) == 0, ::SDL_GetError());
 
-    m_size.x = dm.w;
-    m_size.y = dm.h;
+    m_size.x = static_cast<pixel_t>(dm.w);
+    m_size.y = static_cast<pixel_t>(dm.h);
 
-    m_hz = dm.refresh_rate;
+    m_hz = static_cast<hz_t>(dm.refresh_rate);
 }
 
 display::display(index_t disp_idx, index_t mode_idx)
@@ -23,10 +23,10 @@ display::display(index_t disp_idx, index_t mode_idx)
 
     HAL_ASSERT_VITAL(::SDL_GetDisplayMode(disp_idx, mode_idx, &dm) == 0, ::SDL_GetError());
 
-    m_size.x = dm.w;
-    m_size.y = dm.h;
+    m_size.x = static_cast<pixel_t>(dm.w);
+    m_size.y = static_cast<pixel_t>(dm.h);
 
-    m_hz = dm.refresh_rate;
+    m_hz = static_cast<hz_t>(dm.refresh_rate);
 }
 
 display::index_t display::amount()
@@ -35,7 +35,7 @@ display::index_t display::amount()
 
     HAL_ASSERT(ret >= 1, ::SDL_GetError());
 
-    return ret;
+    return static_cast<index_t>(ret);
 }
 
 display::index_t display::num_modes() const
@@ -44,7 +44,7 @@ display::index_t display::num_modes() const
 
     HAL_ASSERT(ret >= 1, ::SDL_GetError());
 
-    return static_cast<display::index_t>(ret);
+    return static_cast<index_t>(ret);
 }
 
 display::index_t display::idx() const

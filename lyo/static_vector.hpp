@@ -231,7 +231,7 @@ namespace lyo
                 begin->~T();
         }
 
-        std::array<std::byte, Max_Size * sizeof(T)> m_array;
+        std::array<std::byte, Max_Size * sizeof(T)> m_array {};
 
         size_type m_size { 0 };
     };

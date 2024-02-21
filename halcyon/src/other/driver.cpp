@@ -11,7 +11,7 @@ driver::index_t driver::amount()
 
     HAL_ASSERT(ret >= 1, ::SDL_GetError());
 
-    return ret;
+    return static_cast<index_t>(ret);
 }
 
 std::string_view driver::name()
