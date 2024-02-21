@@ -6,8 +6,8 @@ int main(int argc, char* argv[])
     (void)argc;
     (void)argv;
 
-    hal::cleanup    _;
-    hal::ttf_engine __;
+    hal::cleanup    cln;
+    hal::ttf_engine ttfeng;
 
     hal::window   w { "Halcyon", { 640, 480 }, {} };
     hal::renderer r { w, { hal::renderer::accelerated } };
