@@ -31,19 +31,18 @@ namespace alpp
 
         template <typename Ret, typename... FuncArgs, typename... GivenArgs>
         Ret call(std::string_view func_name, std::string_view al_func_name, lyo::func_ptr<Ret, FuncArgs...> func, GivenArgs&&... args)
-            requires(sizeof...(FuncArgs) == sizeof...(GivenArgs) && (lyo::static_castable<GivenArgs, FuncArgs> && ...))
         {
             ::alGetError(); // Reset error state.
 
             if constexpr (std::is_void_v<Ret>)
             {
-                func(static_cast<FuncArgs>(args)...);
+                func(static_cast<GivenArgs>(args)...);
                 check_errors(func_name, al_func_name);
             }
 
             else
             {
-                const Ret rv { func(static_cast<FuncArgs>(args)...) };
+                const Ret rv { func(static_cast<GivenArgs>(args)...) };
                 check_errors(func_name, al_func_name);
                 return rv;
             }
@@ -52,6 +51,18 @@ namespace alpp
 
     namespace alc
     {
+        using int_t  = ALCint;
+        using uint_t = ALCuint;
+        using enum_t = ALCenum;
+
+        using size_t = ALCsizei;
+
+        using bool_t  = ALCboolean;
+        using byte_t  = ALCbyte;
+        using ubyte_t = ALCubyte;
+
+        using float_t = ALCfloat;
+
         enum error
         {
             no_error        = ALC_NO_ERROR,
@@ -71,25 +82,44 @@ namespace alpp
 
         template <typename Ret, typename... FuncArgs, typename... GivenArgs>
         call_ret_type<Ret> call(std::string_view func_name, std::string_view al_func_name, ALCdevice* dev, lyo::func_ptr<Ret, FuncArgs...> func, GivenArgs&&... args)
-            requires(sizeof...(FuncArgs) == sizeof...(GivenArgs) && (lyo::static_castable<GivenArgs, FuncArgs> && ...))
         {
             ::alcGetError(dev); // Reset error state.
 
             if constexpr (std::is_void_v<Ret>)
             {
-                func(static_cast<FuncArgs>(args)...);
+                func(std::forward<GivenArgs>(args)...);
                 check_errors(func_name, al_func_name, dev);
             }
 
             else if constexpr (std::is_same_v<Ret, bool_t>)
             {
-                if (!func(static_cast<FuncArgs>(args)...))
-                    HAL_PANIC(func_name, " failed");
+                if constexpr (std::is_same_v<decltype(func), decltype(&::alcCloseDevice)>)
+                {
+                    if (func == ::alcCloseDevice)
+                    {
+                        if (!func(std::forward<GivenArgs>(args)...))
+                            HAL_PANIC(func_name, " failed");
+                    }
+
+                    else
+                    {
+                        func(std::forward<GivenArgs>(args)...);
+                        check_errors(func_name, al_func_name, dev);
+                    }
+                }
+
+                else
+                {
+                    func(std::forward<GivenArgs>(args)...);
+                    check_errors(func_name, al_func_name, dev);
+                }
             }
 
             else
             {
-                return func(static_cast<FuncArgs>(args)...);
+                const Ret r { func(std::forward<GivenArgs>(args)...) };
+                check_errors(func_name, al_func_name, dev);
+                return r;
             }
         }
     }

@@ -2,8 +2,8 @@
 set(HALCYON_SOURCES
 cleanup.cpp
 debug.cpp
+events.cpp
 image_loader.cpp
-input_handler.cpp
 renderer.cpp
 system.cpp
 texture.cpp

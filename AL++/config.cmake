@@ -9,7 +9,9 @@ state.cpp
 
 list(TRANSFORM ALPP_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/)
 
-find_package(OpenAL REQUIRED)
+# Config mode ensures Apple's OpenAL implementation
+# isn't chosen on macOS.
+find_package(OpenAL REQUIRED CONFIG)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/..)
 link_libraries(OpenAL::OpenAL)

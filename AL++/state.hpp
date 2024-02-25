@@ -9,15 +9,14 @@
 
 namespace alpp
 {
-    class state
+    namespace state
     {
-    public:
-        consteval static auto properties()
+        consteval auto properties()
         {
             return std::array { doppler_factor, speed_of_sound, distance_model };
         }
 
-        enum query_enum
+        enum query_type
         {
             vendor     = AL_VENDOR,
             version    = AL_VERSION,
@@ -25,8 +24,14 @@ namespace alpp
             extensions = AL_EXTENSIONS
         };
 
+        enum null_alc_query_type
+        {
+            all_outputs = ALC_DEVICE_SPECIFIER,
+            all_inputs  = ALC_CAPTURE_DEVICE_SPECIFIER
+        };
+
         template <property P>
-        static prop_t<P> get()
+        prop_t<P> get()
         {
             using tp = prop_t<P>;
 
@@ -38,7 +43,7 @@ namespace alpp
         }
 
         template <property P>
-        static void set(const prop_t<P>& val)
+        void set(const prop_t<P>& val)
         {
             if constexpr (P == doppler_factor)
                 return ALPP_AL_CALL(::alDopplerFactor, val);
@@ -50,6 +55,7 @@ namespace alpp
                 return ALPP_AL_CALL(::alDistanceModel, val);
         }
 
-        static std::string_view query(query_enum what);
+        std::string_view query(query_type what);
+        std::string      query(null_alc_query_type what);
     };
 }

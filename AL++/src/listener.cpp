@@ -14,8 +14,8 @@ listener::listener()
     ALPP_ALC_CALL(m_dev, ::alcMakeContextCurrent, m_ctx);
 
     HAL_PRINT(hal::debug::load, "Audio device opened at ", m_dev, ", context at ", m_ctx);
-    HAL_PRINT("OpenAL v", state::query(state::version), " provided by ", state::query(state::vendor));
-    HAL_PRINT("Input: ", query(input_device_name), ", output: ", query(output_device_name));
+    HAL_PRINT("OpenAL version [", state::query(state::version), "] provided by [", state::query(state::vendor), ']');
+    HAL_PRINT("Outputting to [", query(device_name), ']');
 }
 
 listener::~listener()
@@ -25,7 +25,7 @@ listener::~listener()
     ALPP_ALC_CALL(m_dev, ::alcCloseDevice, m_dev);
 }
 
-std::string_view listener::query(context_query what) const
+std::string_view listener::query(query_type what) const
 {
     return ALPP_ALC_CALL(m_dev, ::alcGetString, m_dev, what);
 }

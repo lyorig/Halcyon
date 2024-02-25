@@ -5,8 +5,7 @@ project(HalodaQuest VERSION 0.1 LANGUAGES CXX)
 
 include(lyo/config.cmake)
 include(halcyon/config.cmake)
-
-# include(AL++/config.cmake)
+include(AL++/config.cmake)
 
 # Set appropriate warnings and directories.
 if(MSVC)
@@ -27,8 +26,8 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 
 # We're in Debug mode. Enable extra checks.
 elseif(NOT MSVC)
-	add_compile_options(-fsanitize=address -fsanitize=undefined)
-	add_link_options(-fsanitize=address -fsanitize=undefined)
+	# add_compile_options(-fsanitize=address -fsanitize=undefined)
+	# add_link_options(-fsanitize=address -fsanitize=undefined)
 endif()
 
 add_executable(HalTest WIN32)
@@ -38,4 +37,5 @@ set_property(TARGET HalTest PROPERTY CXX_STANDARD 23)
 target_sources(HalTest PRIVATE
 test/main.cpp
 ${HALCYON_SOURCES}
+${ALPP_SOURCES}
 )

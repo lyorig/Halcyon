@@ -34,7 +34,6 @@ namespace hal
 
         renderer(window& wnd, std::initializer_list<flags> flags);
 
-        void clear();
         void present();
 
         void draw_line(const sdl::coord_point& from, const sdl::coord_point& to);
@@ -65,6 +64,8 @@ namespace hal
         void internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>);
 
     private:
+        void clear();
+
         void internal_set_target(SDL_Texture* target);
     };
 

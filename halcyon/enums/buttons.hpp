@@ -6,7 +6,7 @@
 #include <lyo/types.hpp>
 
 // buttons.hpp:
-// A map of SDL's scancodes for use with Halcyon's input handlers.
+// A map of SDL's scancodes for use with Halcyon's event wrapper.
 
 namespace hal
 {
@@ -82,4 +82,4 @@ namespace hal
         mouse_x1      = SDL_NUM_SCANCODES + SDL_BUTTON_X1 - 1,
         mouse_x2      = SDL_NUM_SCANCODES + SDL_BUTTON_X2 - 1
     };
-} // namespace hal
+}

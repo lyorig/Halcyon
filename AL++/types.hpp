@@ -1,7 +1,5 @@
 #pragma once
 
-#define OPENAL_DEPRECATED // It ain't for me, at least not yet!!!
-
 #include <al.h>
 #include <alc.h>
 #include <algorithm>
