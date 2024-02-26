@@ -1,7 +1,9 @@
 #pragma once
 
 #include <SDL_events.h>
+#include <SDL_keyboard.h>
 #include <halcyon/enums/buttons.hpp>
+#include <span>
 
 // events.hpp:
 // A thin wrapper of SDL's event handling system.
@@ -15,11 +17,38 @@ namespace hal
     public:
         enum type
         {
-            key_press   = SDL_KEYDOWN,
-            key_release = SDL_KEYUP,
+            quit_requested = SDL_QUIT,
+            termination    = SDL_APP_TERMINATING,
 
-            quit_request = SDL_QUIT
+            low_memory = SDL_APP_LOWMEMORY,
+
+            will_enter_background = SDL_APP_WILLENTERBACKGROUND,
+            entered_background    = SDL_APP_DIDENTERBACKGROUND,
+
+            will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
+            entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
+
+            locale_changed = SDL_LOCALECHANGED,
+
+            display_event = SDL_DISPLAYEVENT,
+            window_event  = SDL_WINDOWEVENT,
+
+            key_pressed  = SDL_KEYDOWN,
+            key_released = SDL_KEYUP,
+
+            text_editing   = SDL_TEXTEDITING,
+            text_input     = SDL_TEXTINPUT,
+            keymap_changed = SDL_KEYMAPCHANGED,
+
+            mouse_motion  = SDL_MOUSEMOTION,
+            mouse_press   = SDL_MOUSEBUTTONDOWN,
+            mouse_release = SDL_MOUSEBUTTONUP,
+            mouse_wheel   = SDL_MOUSEWHEEL,
+
+            user_event = SDL_USEREVENT
         };
+
+        using filter_t = SDL_EventFilter;
 
         // Get an event from the event queue.
         bool poll();
@@ -29,6 +58,8 @@ namespace hal
 
         // Check whether there are any pending events in the event queue.
         static bool pending();
+
+        static std::span<const Uint8> keyboard_state();
 
         SDL_Event data;
     };

@@ -51,18 +51,6 @@ namespace alpp
 
     namespace alc
     {
-        using int_t  = ALCint;
-        using uint_t = ALCuint;
-        using enum_t = ALCenum;
-
-        using size_t = ALCsizei;
-
-        using bool_t  = ALCboolean;
-        using byte_t  = ALCbyte;
-        using ubyte_t = ALCubyte;
-
-        using float_t = ALCfloat;
-
         enum error
         {
             no_error        = ALC_NO_ERROR,

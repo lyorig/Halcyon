@@ -17,3 +17,12 @@ bool event::pending()
 {
     return ::SDL_PollEvent(nullptr) == 1;
 }
+
+std::span<const Uint8> event::keyboard_state()
+{
+    int size;
+
+    const auto ptr = ::SDL_GetKeyboardState(&size);
+
+    return { ptr, static_cast<std::size_t>(size) };
+}

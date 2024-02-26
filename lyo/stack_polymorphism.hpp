@@ -25,6 +25,20 @@ namespace lyo
             invalidate();
         };
 
+        template <one_of<Base, Derived...> D>
+        constexpr stack_pmr(const D& d)
+            : stack_pmr {}
+        {
+            emplace<D>(d);
+        }
+
+        template <one_of<Base, Derived...> D>
+        constexpr stack_pmr(D&& d)
+            : stack_pmr {}
+        {
+            emplace<D>(std::move(d));
+        }
+
         template <one_of<Derived...> D, typename... Args>
         constexpr stack_pmr([[maybe_unused]] init_with<D> tag, Args&&... args)
         {
@@ -47,10 +61,24 @@ namespace lyo
         }
 
         template <one_of<Base, Derived...> D, typename... Args>
-        constexpr void reset(Args&&... args)
+        constexpr void emplace(Args&&... args)
         {
             reset();
             new (reinterpret_cast<D*>(m_data.data())) D { std::forward<Args>(args)... };
+        }
+
+        template <one_of<Base, Derived...> D>
+        constexpr stack_pmr& operator=(const D& d)
+        {
+            emplace<D>(d);
+            return *this;
+        }
+
+        template <one_of<Base, Derived...> D>
+        constexpr stack_pmr& operator=(D&& d)
+        {
+            emplace<D>(std::move(d));
+            return *this;
         }
 
         constexpr Base* get()
@@ -83,15 +111,15 @@ namespace lyo
             return *get();
         }
 
+        constexpr bool valid() const
+        {
+            return reinterpret_cast<const void*>(m_data.front()) != nullptr;
+        }
+
     private:
         constexpr void invalidate()
         {
-            reinterpret_cast<void*&>(m_data.front()) = 0;
-        }
-
-        constexpr bool valid() const
-        {
-            return reinterpret_cast<const void*>(m_data.front()) != 0;
+            reinterpret_cast<void*&>(m_data.front()) = nullptr;
         }
 
         std::array<std::byte, std::max({ std::size_t { 0 }, sizeof(Derived)... })> m_data;

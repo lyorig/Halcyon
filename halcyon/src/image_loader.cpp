@@ -9,7 +9,7 @@ image_loader::image_loader(std::initializer_list<format> types)
 {
     HAL_ASSERT_VITAL(::IMG_Init(il2bm<int>(types)) == il2bm<int>(types), ::IMG_GetError());
 
-    HAL_PRINT(hal::debug::init, "Initialized image loader with flags ", il2bm<int>(types));
+    HAL_PRINT(hal::debug::init, "Initialized image loader, flags = 0x", std::hex, il2bm<int>(types));
 }
 
 image_loader::~image_loader() { ::IMG_Quit(); }

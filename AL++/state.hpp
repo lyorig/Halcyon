@@ -2,6 +2,7 @@
 
 #include <AL++/debug.hpp>
 #include <AL++/types.hpp>
+#include <string>
 #include <string_view>
 
 // state.hpp:
