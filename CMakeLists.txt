@@ -20,7 +20,7 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 		add_compile_options(/GL)
 		add_link_options(/LCTG)
 	else()
-		add_compile_options(-flto)
+		add_compile_options(-flto -march=native)
 		add_link_options(-flto)
 	endif()
 
@@ -30,12 +30,12 @@ elseif(NOT MSVC)
 	# add_link_options(-fsanitize=address -fsanitize=undefined)
 endif()
 
-add_executable(HalTest WIN32)
+add_executable(HQuest WIN32)
 
-set_property(TARGET HalTest PROPERTY CXX_STANDARD 23)
+set_property(TARGET HQuest PROPERTY CXX_STANDARD 23)
 
-target_sources(HalTest PRIVATE
-test/main.cpp
+target_sources(HQuest PRIVATE
+quest/main.cpp
 ${HALCYON_SOURCES}
 ${ALPP_SOURCES}
 )

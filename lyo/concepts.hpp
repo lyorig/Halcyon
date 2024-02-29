@@ -1,8 +1,9 @@
 #pragma once
 
 #include <tuple>
-/* concepts.hpp:
-   An extension of STL concepts. */
+
+// concepts.hpp:
+// An extension of STL concepts.
 
 namespace lyo
 {
@@ -22,6 +23,9 @@ namespace lyo
     template <typename From, typename To>
     concept static_castable = requires(From val) { static_cast<To>(val); };
 
+    template <typename T>
+    concept non_cv = !std::is_const_v<T> && !std::is_volatile_v<T>;
+
     template <typename T, typename... Ts>
     struct index;
 
@@ -36,8 +40,10 @@ namespace lyo
     };
 
     template <typename T, typename... Ts>
+        requires is_present_v<T, Ts...>
     constexpr inline std::size_t index_v = index<T, Ts...>::value;
 
     template <std::size_t Index, typename... Args>
+        requires(Index < sizeof...(Args))
     using type_at_index = std::tuple_element_t<Index, std::tuple<Args...>>;
 }
