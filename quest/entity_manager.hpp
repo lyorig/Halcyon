@@ -120,12 +120,12 @@ namespace quest
 
             constexpr pointer operator->()
             {
-                return &std::get<lyo::index_v<value_type, Types...>>(*m_ptr);
+                return std::get_if<lyo::index_v<value_type, Types...>>(m_ptr);
             }
 
             constexpr pointer operator->() const
             {
-                return &std::get<lyo::index_v<value_type, Types...>>(*m_ptr);
+                return std::get_if<lyo::index_v<value_type, Types...>>(m_ptr);
             }
 
             constexpr reference operator[](std::size_t i)
@@ -138,11 +138,16 @@ namespace quest
                 return std::get<lyo::index_v<value_type, Types...>>(m_ptr[i]);
             }
 
-            constexpr auto operator<=>(const iterator& other) const = default;
+            constexpr auto operator<=>(const iterator&) const = default;
 
         private:
             holder* m_ptr;
         };
+
+        constexpr entity_manager(hal::renderer& rnd)
+            : player { m_id++, { rnd, hal::image_loader::load("assets/test_sprite.png") } }
+        {
+        }
 
         template <lyo::one_of<Types...> Ent_Type, typename... Args>
         constexpr void spawn(Args&&... args)
@@ -157,6 +162,8 @@ namespace quest
         template <typename Visitor>
         constexpr void visit(Visitor&& v)
         {
+            v(player);
+
             ([this, v]()
                 {
                     // Suppress warnings about unused captures.
@@ -175,7 +182,7 @@ namespace quest
         constexpr std::span<Ent_Type> view()
         {
             std::vector<holder>& hld { m_vectors[lyo::index_v<Ent_Type, Types...>] };
-            return { iterator<Ent_Type>(&*hld.begin()), hld.size() };
+            return { iterator<Ent_Type>(hld.data()), hld.size() };
         }
 
         // Directly access the vector holding a specific entity type.
@@ -189,5 +196,8 @@ namespace quest
         std::array<std::vector<holder>, sizeof...(Types)> m_vectors;
 
         entity::ID m_id { 0 };
+
+    public:
+        class player player;
     };
 }

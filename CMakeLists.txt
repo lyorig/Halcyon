@@ -30,12 +30,14 @@ elseif(NOT MSVC)
 	# add_link_options(-fsanitize=address -fsanitize=undefined)
 endif()
 
-add_executable(HQuest WIN32)
+add_executable(HalQuest WIN32)
 
-set_property(TARGET HQuest PROPERTY CXX_STANDARD 23)
+set_property(TARGET HalQuest PROPERTY CXX_STANDARD 23)
 
-target_sources(HQuest PRIVATE
+target_sources(HalQuest PRIVATE
 quest/main.cpp
+quest/src/entities.cpp
+quest/src/game.cpp
 ${HALCYON_SOURCES}
 ${ALPP_SOURCES}
 )
