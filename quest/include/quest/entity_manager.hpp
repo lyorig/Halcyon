@@ -16,7 +16,8 @@ namespace quest
     concept manager_compatible = std::derived_from<T, entity> && lyo::non_cv<T>;
 
     template <manager_compatible... Types>
-    class entity_manager
+        requires(sizeof...(Types) > 0)
+    class entity_manager_tmpl
     {
     public:
         using holder = std::variant<Types...>;
@@ -144,10 +145,7 @@ namespace quest
             holder* m_ptr;
         };
 
-        constexpr entity_manager(hal::renderer& rnd)
-            : player { m_id++, { rnd, hal::image_loader::load("assets/test_sprite.png") } }
-        {
-        }
+        constexpr entity_manager_tmpl() = default;
 
         template <lyo::one_of<Types...> Ent_Type, typename... Args>
         constexpr void spawn(Args&&... args)
@@ -162,18 +160,13 @@ namespace quest
         template <typename Visitor>
         constexpr void visit(Visitor&& v)
         {
-            v(player);
-
             ([this, v]()
                 {
                     // Suppress warnings about unused captures.
                     (void)this, (void)v;
 
-                    if constexpr (std::is_invocable_v<decltype(v), Types>)
-                    {
                         for (auto& ent : view<Types>())
-                            v(ent);
-                    } }(),
+                            v(ent); }(),
                 ...);
         }
 
@@ -196,8 +189,7 @@ namespace quest
         std::array<std::vector<holder>, sizeof...(Types)> m_vectors;
 
         entity::ID m_id { 0 };
-
-    public:
-        class player player;
     };
+
+    using entity_manager = entity_manager_tmpl<character>;
 }

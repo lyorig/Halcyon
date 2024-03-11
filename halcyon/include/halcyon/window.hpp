@@ -29,7 +29,7 @@ namespace hal
         pixel_point size() const;
         void        set_size(pixel_point sz);
 
-        display::index_t display_index() const;
+        display display_info() const;
 
         std::string_view title() const;
     };

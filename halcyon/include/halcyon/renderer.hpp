@@ -69,7 +69,7 @@ namespace hal
         void internal_set_target(SDL_Texture* target);
     };
 
-    class copyer final : public drawer<texture_base, sdl::coord_t, renderer, copyer>
+    class copyer : public drawer<texture_base, sdl::coord_t, renderer, copyer>
     {
     public:
         using drawer::drawer;

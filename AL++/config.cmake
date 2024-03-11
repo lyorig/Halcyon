@@ -13,5 +13,5 @@ list(TRANSFORM ALPP_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/)
 # isn't chosen on macOS.
 find_package(OpenAL REQUIRED CONFIG)
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/..)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 link_libraries(OpenAL::OpenAL)

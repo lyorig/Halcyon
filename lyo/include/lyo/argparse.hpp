@@ -57,12 +57,12 @@ namespace lyo
             };
         }
 
-        constified_argv begin() const noexcept
+        const char* const* begin() const noexcept
         {
             return m_argv;
         }
 
-        constified_argv end() const noexcept
+        const char* const* end() const noexcept
         {
             return m_argv + m_argc;
         }

@@ -1,77 +1,53 @@
+#include <quest/constants.hpp>
 #include <quest/entities.hpp>
-#include <utility>
 
 using namespace quest;
 
-player::player(ID id, hal::texture&& tex)
+entity::entity(ID id)
+    : m_id { id }
+{
+}
+
+entity::ID entity::id() const
+{
+    return m_id;
+}
+
+character::character(ID id, hal::texture&& tex, coord spawn_point)
     : entity { id }
-    , m_tex { std::move(tex) }
+    , pos { spawn_point }
+    , tex { std::move(tex) }
 {
 }
 
-void player::update(lyo::f64 elapsed)
+void character::update(delta_t elapsed)
 {
-    constexpr lyo::f64 move_speed { 40.0 }, drag_speed { 30.0 }, drift_mul { 2.0 };
+    constexpr meter_t Acceleration { 40.0 }, MaxSpeed { 5.0 }, Friction { 20.0 }, DriftMul { 2.0 };
 
-    if (m_moving)
-        m_vel.x += move_speed * elapsed * m_dir;
-
-    if (m_dir == dir::right)
+    // If moving, increase velocity.
+    if (moving)
     {
-        if (m_vel.x < 0.0)
-        {
-            m_vel.x += drag_speed * elapsed * drift_mul;
-        }
-
-        else
-            m_vel.x = std::max(m_vel.x - drag_speed * elapsed, 0.0);
+        vel.x += Acceleration * elapsed * std::to_underlying(dir);
     }
 
-    else // left
-    {
-        if (m_vel.x > 0.0)
-        {
-            m_vel.x -= drag_speed * elapsed * drift_mul;
-        }
+    // Apply velocity.
+    pos += vel;
 
-        else
-            m_vel.x = std::min(m_vel.x + drag_speed * elapsed, 0.0);
-    }
-
-    m_pos += m_vel;
+    if (vel.x * std::to_underlying(dir) < 0.0)
+        vel.x = std::min(-std::abs(vel.x) + Friction * elapsed * DriftMul, 0.0) * std::to_underlying(dir);
+    else // Apply friction.
+        vel.x = std::clamp<meter_t>(std::abs(vel.x) - Friction * elapsed, 0.0, MaxSpeed) * std::to_underlying(dir);
 }
 
-void player::set_direction(dir d)
+void character::draw(hal::renderer& rnd, const camera& cam) const
 {
-    m_dir = d;
+    rnd.draw(tex)
+        .to(cam.transform(pos, hitbox().y, rnd.size().y))
+        .scale(constants::apx_scale)
+        .flip(dir == right ? hal::flip::none : hal::flip::x)();
 }
 
-void player::set_moving(bool val)
+coord character::hitbox() const
 {
-    m_moving = val;
-}
-
-void player::set_pos(pos p)
-{
-    m_pos = p;
-}
-
-void player::draw(hal::renderer& rnd) const
-{
-    rnd.draw(m_tex).to(m_pos).scale(apx_scale).flip(m_dir == dir::right ? hal::flip::none : hal::flip::x)();
-}
-
-void bullet_shell::update(lyo::f64 elapsed)
-{
-    (void)elapsed;
-}
-
-void bullet_shell::draw(hal::renderer& rnd) const
-{
-    (void)rnd;
-}
-
-void light::draw(hal::renderer& rnd) const
-{
-    (void)rnd;
+    return tex.size() * constants::apx_scale * scale;
 }
