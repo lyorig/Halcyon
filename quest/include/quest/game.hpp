@@ -5,7 +5,6 @@
 #include <quest/entity_manager.hpp>
 #include <quest/event_handler.hpp>
 #include <quest/timeout.hpp>
-#include <random>
 
 // game.hpp:
 // The HalQuest game class.
@@ -27,7 +26,7 @@ namespace quest
         LYO_NOSIZE hal::cleanup m_cleanup { hal::system::video };
         LYO_NOSIZE hal::image_loader m_image { hal::image_loader::png };
 
-        hal::window   m_window { "HalodaQuest", { 640, 480 }, {} };
+        hal::window   m_window { "HalodaQuest", { hal::fullscreen_mode } };
         hal::renderer m_renderer { m_window, { hal::renderer::accelerated, hal::renderer::vsync } };
 
         camera m_cam;
