@@ -91,7 +91,7 @@ blend_mode surface::blend() const
     return blend_mode(bm);
 }
 
-void surface::set_blend(blend_mode bm)
+void surface::blend(blend_mode bm)
 {
     HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }

@@ -43,20 +43,20 @@ namespace hal
         void fill_rects(const std::span<const sdl::coord_rect>& areas);
         void fill_target();
 
-        void set_target(target_texture& tx);
-        void reset_target();
+        void target(target_texture& tx);
+        void target();
 
         // Get the color with which line/rect/fill drawing operations happen.
         color draw_color() const;
-        void  set_draw_color(color clr);
+        void  draw_color(color clr);
 
         // Set the way blending happens with line/rect/fill operations.
         blend_mode blend() const;
-        void       set_blend(blend_mode bm);
+        void       blend(blend_mode bm);
 
         // Get the size of the "drawing board."
         pixel_point size() const;
-        void        set_size(const pixel_point& sz);
+        void        size(const pixel_point& sz);
 
         [[nodiscard]] copyer draw(const texture_base& tex);
 
@@ -66,7 +66,7 @@ namespace hal
     private:
         void clear();
 
-        void internal_set_target(SDL_Texture* target);
+        void internal_target(SDL_Texture* target);
     };
 
     class copyer : public drawer<texture_base, sdl::coord_t, renderer, copyer>

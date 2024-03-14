@@ -53,7 +53,7 @@ namespace hal
         color operator[](const pixel_point& pos) const;
 
         blend_mode blend() const;
-        void       set_blend(blend_mode bm);
+        void       blend(blend_mode bm);
 
         [[nodiscard]] blitter blit(surface& dst) const;
 
@@ -94,12 +94,12 @@ namespace hal
             : m_obj { obj }
             , m_old { obj.blend() }
         {
-            obj.set_blend(new_mode);
+            obj.blend(new_mode);
         }
 
         ~blend_lock()
         {
-            m_obj.set_blend(m_old);
+            m_obj.blend(m_old);
         }
 
     private:

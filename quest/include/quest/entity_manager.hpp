@@ -13,9 +13,9 @@
 namespace quest
 {
     template <typename T>
-    concept manager_compatible = std::derived_from<T, entity> && lyo::non_cv<T>;
+    concept emgr_compatible = std::derived_from<T, non_unique_entity> && lyo::non_cv<T>;
 
-    template <manager_compatible... Types>
+    template <emgr_compatible... Types>
         requires(sizeof...(Types) > 0)
     class entity_manager_tmpl
     {
@@ -188,8 +188,29 @@ namespace quest
     private:
         std::array<std::vector<holder>, sizeof...(Types)> m_vectors;
 
-        entity::ID m_id { 0 };
+        non_unique_entity::ID m_id { 0 };
     };
 
-    using entity_manager = entity_manager_tmpl<character>;
+    using entity_manager = entity_manager_tmpl<npc>;
+
+    template <typename T>
+    concept semgr_compatible = std::derived_from<T, unique_entity> && lyo::non_cv<T>;
+
+    template <semgr_compatible... Ents>
+    class singleton_entity_manager_tmpl
+    {
+    public:
+        singleton_entity_manager_tmpl() = default;
+
+        template <typename F>
+        void visit(F&& func)
+        {
+            std::apply(std::forward<F>(func), m_tuple);
+        }
+
+    private:
+        std::tuple<Ents...> m_tuple;
+    };
+
+    using singleton_entity_manager = singleton_entity_manager_tmpl<player>;
 }

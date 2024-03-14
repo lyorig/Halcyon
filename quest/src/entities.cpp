@@ -3,24 +3,24 @@
 
 using namespace quest;
 
-entity::entity(ID id)
+non_unique_entity::non_unique_entity(ID id)
     : m_id { id }
 {
 }
 
-entity::ID entity::id() const
+non_unique_entity::ID non_unique_entity::id() const
 {
     return m_id;
 }
 
-character::character(ID id, hal::texture&& tex, coord spawn_point)
-    : entity { id }
+npc::npc(ID id, hal::texture&& tex, coord spawn_point)
+    : non_unique_entity { id }
     , pos { spawn_point }
     , tex { std::move(tex) }
 {
 }
 
-void character::update(delta_t elapsed)
+void npc::update(delta_t elapsed)
 {
     constexpr meter_t Acceleration { 40.0 }, MaxSpeed { 5.0 }, Friction { 20.0 }, DriftMul { 2.0 };
 
@@ -39,7 +39,7 @@ void character::update(delta_t elapsed)
         vel.x = std::clamp<meter_t>(std::abs(vel.x) - Friction * elapsed, 0.0, MaxSpeed) * std::to_underlying(dir);
 }
 
-void character::draw(hal::renderer& rnd, const camera& cam) const
+void npc::draw(hal::renderer& rnd, const camera& cam) const
 {
     rnd.draw(tex)
         .to(cam.transform(pos, hitbox().y, rnd.size().y))
@@ -47,7 +47,7 @@ void character::draw(hal::renderer& rnd, const camera& cam) const
         .flip(dir == right ? hal::flip::none : hal::flip::x)();
 }
 
-coord character::hitbox() const
+coord npc::hitbox() const
 {
     return tex.size() * constants::apx_scale * scale;
 }

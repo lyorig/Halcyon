@@ -25,7 +25,7 @@ pixel_point window::size() const
     return size;
 }
 
-void window::set_size(pixel_point sz)
+void window::size(pixel_point sz)
 {
     ::SDL_SetWindowSize(this->ptr(), sz.x, sz.y);
 }

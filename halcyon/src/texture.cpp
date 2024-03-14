@@ -14,7 +14,7 @@ pixel_point texture_base::size() const
     return size;
 }
 
-void texture_base::set_opacity(color::value value)
+void texture_base::opacity(color::value value)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
 }
@@ -28,7 +28,7 @@ color texture_base::color_mod() const
     return c;
 }
 
-void texture_base::set_color_mod(color clr)
+void texture_base::color_mod(color clr)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, ::SDL_GetError());
 }
@@ -42,7 +42,7 @@ blend_mode texture_base::blend() const
     return blend_mode(bm);
 }
 
-void texture_base::set_blend(blend_mode bm)
+void texture_base::blend(blend_mode bm)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
 }
@@ -60,13 +60,13 @@ lyo::u8 texture_base::opacity() const
 texture_base::texture_base(SDL_Texture* ptr)
     : object { ptr }
 {
-    this->set_blend(blend_mode::blend);
+    this->blend(blend_mode::blend);
 }
 
 void texture_base::reset(SDL_Texture* ptr)
 {
     object::reset(ptr);
-    this->set_blend(blend_mode::blend);
+    this->blend(blend_mode::blend);
 }
 
 void texture_base::query(Uint32* format, int* access, int* w, int* h) const
@@ -77,7 +77,7 @@ void texture_base::query(Uint32* format, int* access, int* w, int* h) const
 texture::texture(renderer& wnd, const surface& image)
     : texture_base { create(wnd, image) }
 {
-    this->set_blend(blend_mode::blend);
+    this->blend(blend_mode::blend);
 }
 
 texture& texture::change(renderer& wnd, const surface& image)

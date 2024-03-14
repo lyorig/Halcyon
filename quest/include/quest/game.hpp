@@ -19,7 +19,9 @@ namespace quest
         void main_loop();
 
     private:
-        entity_manager  m_ents;
+        entity_manager           m_ents;
+        singleton_entity_manager m_sents;
+
         event_handler   m_evts;
         timeout_manager m_tm;
 
@@ -31,12 +33,9 @@ namespace quest
 
         camera m_cam;
 
-        character* m_player { nullptr };
-        lyo::f64   m_timescale { 1.0 };
+        lyo::f64 m_timescale { 1.0 };
 
         void process_press(hal::button b);
         void process_release(hal::button b);
-
-        void attach_player(character* plr);
     };
 };

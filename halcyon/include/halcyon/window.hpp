@@ -27,7 +27,7 @@ namespace hal
         window(std::string_view title, fullscreen_mode_tag);
 
         pixel_point size() const;
-        void        set_size(pixel_point sz);
+        void        size(pixel_point sz);
 
         display display_info() const;
 
