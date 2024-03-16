@@ -1,8 +1,20 @@
-#include <halcyon/components/font.hpp>
-
-#include <halcyon/components/surface.hpp>
+#include <halcyon/ttf.hpp>
 
 using namespace hal;
+
+ttf_engine::ttf_engine()
+{
+    HAL_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
+
+    HAL_PRINT(debug::init, "Initialized TTF engine");
+}
+
+ttf_engine::~ttf_engine() { ::TTF_Quit(); }
+
+bool ttf_engine::initialized()
+{
+    return ::TTF_WasInit() > 0;
+}
 
 font::font(std::string_view path, lyo::u8 size)
     : object { ::TTF_OpenFont(path.data(), size) }

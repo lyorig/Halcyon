@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/components/surface.hpp>
+#include <halcyon/surface.hpp>
 
 // texture.cpp:
 // Proper textures that can be drawn to a window (or a target texture).

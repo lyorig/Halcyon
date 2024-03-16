@@ -2,9 +2,11 @@
 
 using namespace quest;
 
-hal::coord_point camera::transform(coord pos, meter_t obj_height, hal::pixel_t renderer_height) const
+hal::coord_point camera::transform(hitbox hbx, hal::pixel_t renderer_height) const
 {
-    pos.y = renderer_height - pos.y - obj_height;
+    (void)hbx;
+    // TODO: This calculation
+    // hbx.pos.y = renderer_height - 1;
 
     return pos;
 }

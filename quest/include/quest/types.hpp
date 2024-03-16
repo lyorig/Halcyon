@@ -10,10 +10,14 @@ namespace quest
     // The time elapsed between frames.
     using delta_t = lyo::f64;
 
+    // An object's scale.
+    using scale_t = lyo::f32;
+
     // An object's mass, in kilos.
     using mass_t = lyo::u16;
 
-    using coord = hal::point<meter_t>;
+    using coord  = hal::point<meter_t>;
+    using hitbox = hal::rectangle<meter_t>;
 
     enum direction : lyo::i8
     {

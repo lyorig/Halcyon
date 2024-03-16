@@ -10,7 +10,7 @@
 #include <lyo/pass_key.hpp>
 #include <span>
 
-#include <halcyon/components/sdl_object.hpp>
+#include <halcyon/internal/sdl_object.hpp>
 
 namespace hal
 {

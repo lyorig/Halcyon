@@ -2,8 +2,8 @@ include(lyo/config.cmake)
 include(halcyon/config.cmake)
 
 set(QUEST_SOURCES
+ents/components.cpp
 camera.cpp
-entities.cpp
 game.cpp
 main.cpp
 spritesheet.cpp

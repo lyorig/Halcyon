@@ -14,6 +14,6 @@ namespace quest
         // Transform an object's position to rendering coordinates.
         // The renderer height parameter is used because the coordinate system used under
         // the hood has the origin at the top-left corner, meaning that the height goes "downward."
-        hal::coord_point transform(coord obj_pos, meter_t obj_height, hal::pixel_t renderer_height) const;
+        hal::coord_point transform(hitbox hbx, hal::pixel_t renderer_height) const;
     };
 }

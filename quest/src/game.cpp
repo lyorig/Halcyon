@@ -4,6 +4,9 @@
 using namespace quest;
 
 game::game(lyo::parser p)
+    : m_sents {
+        ent::player { hal::texture { m_renderer, hal::image_loader::load("pi") } }
+    }
 {
     (void)p;
 
@@ -21,9 +24,6 @@ void game::main_loop()
 
     lyo::steady_timer timer;
     delta_t           delta;
-
-    hal::texture vt;
-    hal::font    f { "assets/m5x7.ttf", 42 };
 
     while (true)
     {
@@ -53,17 +53,17 @@ void game::main_loop()
         timer.reset();
 
         // Update everything.
-        m_ents.visit([&]<updateable T>(T& ent)
+        m_ents.visit([&](auto& ent)
             { ent.update(delta * m_timescale); });
 
         m_sents.visit([&](auto& ent)
             { ent.update(delta * m_timescale); });
 
-        m_renderer.draw(vt)
-            .to({ 0, 50 })();
-
         // Draw everything.
-        m_ents.visit([this]<drawable T>(const T& ent)
+        m_ents.visit([this](const auto& ent)
+            { ent.draw(m_renderer, m_cam); });
+
+        m_sents.visit([this](const auto& ent)
             { ent.draw(m_renderer, m_cam); });
 
         m_renderer.present();
@@ -95,8 +95,11 @@ void game::process_release(hal::button b)
     switch (b)
     {
     case A:
+        break;
+
     case D:
         break;
+
     default:
         break;
     }

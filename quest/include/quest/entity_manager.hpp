@@ -1,6 +1,6 @@
 #pragma once
 
-#include "entities.hpp"
+#include <quest/ents/types.hpp>
 
 #include <variant>
 #include <vector>
@@ -13,7 +13,7 @@
 namespace quest
 {
     template <typename T>
-    concept emgr_compatible = std::derived_from<T, non_unique_entity> && lyo::non_cv<T>;
+    concept emgr_compatible = std::is_base_of_v<ent::mod::non_unique, T> && lyo::non_cv<T>;
 
     template <emgr_compatible... Types>
         requires(sizeof...(Types) > 0)
@@ -165,6 +165,7 @@ namespace quest
                     // Suppress warnings about unused captures.
                     (void)this, (void)v;
 
+                    if constexpr (std::is_invocable_v<Visitor, Types>)
                         for (auto& ent : view<Types>())
                             v(ent); }(),
                 ...);
@@ -188,29 +189,8 @@ namespace quest
     private:
         std::array<std::vector<holder>, sizeof...(Types)> m_vectors;
 
-        non_unique_entity::ID m_id { 0 };
+        ent::mod::non_unique::ID m_id { 0 };
     };
 
-    using entity_manager = entity_manager_tmpl<npc>;
-
-    template <typename T>
-    concept semgr_compatible = std::derived_from<T, unique_entity> && lyo::non_cv<T>;
-
-    template <semgr_compatible... Ents>
-    class singleton_entity_manager_tmpl
-    {
-    public:
-        singleton_entity_manager_tmpl() = default;
-
-        template <typename F>
-        void visit(F&& func)
-        {
-            std::apply(std::forward<F>(func), m_tuple);
-        }
-
-    private:
-        std::tuple<Ents...> m_tuple;
-    };
-
-    using singleton_entity_manager = singleton_entity_manager_tmpl<player>;
+    using entity_manager = entity_manager_tmpl<ent::npc>;
 }

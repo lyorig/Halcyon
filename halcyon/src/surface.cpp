@@ -1,4 +1,4 @@
-#include <halcyon/components/surface.hpp>
+#include <halcyon/surface.hpp>
 
 using namespace hal;
 

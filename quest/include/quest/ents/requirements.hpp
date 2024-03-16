@@ -3,7 +3,8 @@
 #include <quest/camera.hpp>
 #include <quest/types.hpp>
 
-namespace quest::ent
+// Entity requirement namespace.
+namespace quest::ent::req
 {
     // This entity needs to be updated every frame. This does not mean that
     // it cannot change, but rather that it doesn't need to be done automatically.

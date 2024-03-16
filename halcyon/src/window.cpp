@@ -1,7 +1,7 @@
-#include <halcyon/system.hpp>
 #include <halcyon/window.hpp>
 
 #include <halcyon/other/helpers.hpp>
+#include <halcyon/other/system.hpp>
 
 using namespace hal;
 

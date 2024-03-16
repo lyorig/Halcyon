@@ -1,11 +1,15 @@
 #pragma once
 
+#include <quest/ents/components.hpp>
 #include <quest/ents/modifiers.hpp>
-#include <quest/ents/prefabs.hpp>
 
 namespace quest::ent
 {
-    class player : public mod::non_unique, pfb::character
+    struct npc : mod::non_unique, cmp::scaleable
+    {
+    };
+
+    struct player : mod::unique, cmp::scaleable
     {
     };
 }

@@ -5,7 +5,7 @@
 #include <halcyon/image_loader.hpp>
 #include <halcyon/renderer.hpp>
 #include <halcyon/texture.hpp>
-#include <halcyon/ttf_engine.hpp>
+#include <halcyon/ttf.hpp>
 #include <halcyon/window.hpp>
 
 // halcyon.hpp:

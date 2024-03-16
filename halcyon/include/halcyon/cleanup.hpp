@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/system.hpp>
+#include <halcyon/other/system.hpp>
 
 // cleanup.hpp:
 // A class that deinitializes SDL upon destruction.

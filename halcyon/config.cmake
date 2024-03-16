@@ -5,12 +5,11 @@ debug.cpp
 events.cpp
 image_loader.cpp
 renderer.cpp
-system.cpp
 texture.cpp
-ttf_engine.cpp
+ttf.cpp
 window.cpp
-components/font.cpp
-components/surface.cpp
+surface.cpp
+other/system.cpp
 other/display.cpp
 other/driver.cpp
 other/printing.cpp

@@ -1,9 +1,13 @@
 #pragma once
 
 #include <lyo/argparse.hpp>
+
+#include <halcyon/halcyon.hpp>
+
 #include <quest/camera.hpp>
 #include <quest/entity_manager.hpp>
 #include <quest/event_handler.hpp>
+#include <quest/singleton_entity_manager.hpp>
 #include <quest/timeout.hpp>
 
 // game.hpp:

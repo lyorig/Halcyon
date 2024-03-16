@@ -30,9 +30,9 @@ namespace hal
                 HAL_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
             }
 
-            // Return the underlying pointer to the object. This is only for
-            // when you want to interface with SDL to use functions not yet
-            // implemented in Halcyon.
+            // Return the underlying pointer to the object. Intended for internal
+            // use, or for when you want to interface with SDL to use functions not
+            // yet implemented in Halcyon.
             Type* ptr() const
             {
                 return m_object.get();
