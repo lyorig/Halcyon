@@ -3,7 +3,6 @@
 #include <halcyon/types/sdl.hpp>
 
 #include <halcyon/types/point.hpp>
-#include <iosfwd>
 
 namespace hal
 {
@@ -21,7 +20,12 @@ namespace hal
         {
         }
 
-        constexpr rectangle(const point<T>& size)
+        constexpr rectangle(const point<T>& pos)
+            : pos { pos }
+        {
+        }
+
+        constexpr rectangle(as_size_tag, const point<T>& size)
             : size { size }
         {
         }

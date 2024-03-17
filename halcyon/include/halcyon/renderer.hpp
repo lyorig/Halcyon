@@ -43,18 +43,19 @@ namespace hal
         void fill_rects(const std::span<const sdl::coord_rect>& areas);
         void fill_target();
 
+        // Get/set the rendering target.
         void target(target_texture& tx);
-        void target();
+        void retarget();
 
-        // Get the color with which line/rect/fill drawing operations happen.
+        // Get/set the color with which line/rect/fill drawing operations happen.
         color draw_color() const;
         void  draw_color(color clr);
 
-        // Set the way blending happens with line/rect/fill operations.
+        // Get/set the way blending happens with line/rect/fill operations.
         blend_mode blend() const;
         void       blend(blend_mode bm);
 
-        // Get the size of the "drawing board."
+        // Get/set the size of the "drawing board."
         pixel_point size() const;
         void        size(const pixel_point& sz);
 

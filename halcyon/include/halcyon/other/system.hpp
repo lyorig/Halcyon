@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SDL.h>
-#include <initializer_list>
 #include <lyo/types.hpp>
 
 // engine.hpp:

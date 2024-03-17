@@ -1,6 +1,7 @@
 #pragma once
 
 #include <halcyon/other/system.hpp>
+#include <initializer_list>
 
 // cleanup.hpp:
 // A class that deinitializes SDL upon destruction.
@@ -13,11 +14,10 @@ namespace hal
     class cleanup
     {
     public:
-        // Create the cleanup class without initializing anything.
-        cleanup() = default;
+        // Initialize the SDL base and nothing else.
+        cleanup();
 
-        // Create the cleanup class and initialize some subsystems
-        // while we're at it.
+        // Initialize SDL along with some subsystems.
         cleanup(std::initializer_list<system::type> subs);
 
         ~cleanup();

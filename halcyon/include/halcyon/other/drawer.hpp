@@ -34,7 +34,7 @@ namespace hal
         [[nodiscard]] drawer(Pass& ths, const T& src, lyo::pass_key<Pass>)
             : m_pass { ths }
             , m_this { src }
-            , m_dst { src.size() }
+            , m_dst { as_size, src.size() }
         {
             m_src.pos.x = unset<src_t>;
         }

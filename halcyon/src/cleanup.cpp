@@ -3,6 +3,11 @@
 
 using namespace hal;
 
+cleanup::cleanup()
+{
+    HAL_ASSERT_VITAL(::SDL_Init(0), ::SDL_GetError());
+}
+
 cleanup::cleanup(std::initializer_list<system::type> subs)
 {
     for (auto s : subs)
