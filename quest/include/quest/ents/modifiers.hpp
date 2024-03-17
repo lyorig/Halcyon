@@ -18,9 +18,15 @@ namespace quest::ent::mod
     public:
         using ID = lyo::u32;
 
-        non_unique(ID id);
+        constexpr non_unique(ID id)
+            : m_id { id }
+        {
+        }
 
-        ID id() const;
+        constexpr ID id() const
+        {
+            return m_id;
+        }
 
     private:
         ID m_id;

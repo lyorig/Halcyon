@@ -1,6 +1,6 @@
 #pragma once
 
-#include <quest/ents/types.hpp>
+#include <quest/ents/entities.hpp>
 
 #include <variant>
 #include <vector>

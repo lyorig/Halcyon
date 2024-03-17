@@ -5,15 +5,16 @@
 
 namespace quest
 {
+    // A camera that transforms object positions into rending coordinates.
+    // The position represents the center of the viewport, not a corner.
     class camera
     {
     public:
-        coord    pos;
-        lyo::f64 scale;
+        coord pos;
 
         // Transform an object's position to rendering coordinates.
         // The renderer height parameter is used because the coordinate system used under
         // the hood has the origin at the top-left corner, meaning that the height goes "downward."
-        hal::coord_point transform(hitbox hbx, hal::pixel_t renderer_height) const;
+        hitbox transform(hitbox hbx, hal::pixel_point rsz) const;
     };
 }

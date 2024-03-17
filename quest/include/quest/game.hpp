@@ -7,7 +7,6 @@
 #include <quest/camera.hpp>
 #include <quest/entity_manager.hpp>
 #include <quest/event_handler.hpp>
-#include <quest/singleton_entity_manager.hpp>
 #include <quest/timeout.hpp>
 
 // game.hpp:
@@ -23,8 +22,7 @@ namespace quest
         void main_loop();
 
     private:
-        entity_manager           m_ents;
-        singleton_entity_manager m_sents;
+        entity_manager m_ents;
 
         event_handler   m_evts;
         timeout_manager m_tm;
@@ -39,7 +37,7 @@ namespace quest
 
         lyo::f64 m_timescale { 1.0 };
 
-        void process_press(hal::button b);
+        bool process_press(hal::button b);
         void process_release(hal::button b);
     };
 };

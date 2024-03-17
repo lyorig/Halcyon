@@ -3,6 +3,7 @@ include(halcyon/config.cmake)
 
 set(QUEST_SOURCES
 ents/components.cpp
+ents/entities.cpp
 camera.cpp
 game.cpp
 main.cpp

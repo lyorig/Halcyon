@@ -11,21 +11,18 @@
 // Entity component namespace.
 namespace quest::ent::cmp
 {
-    struct drawable
+    struct scaleable
     {
-        drawable(hal::texture&& t);
+        // An object's scale.
+        using scale_t = lyo::f32;
+
+        scaleable(hal::texture&& t, const coord& spawnpoint);
 
         hal::texture tex;
-        coord        pos;
-    };
-
-    struct scaleable : drawable
-    {
-        scaleable(hal::texture&& t);
-
-        coord size;
+        coord        pos, size; // Cache the size for slightly faster drawing.
 
         void resize(scale_t scl);
+
         void draw(hal::renderer& rnd, const camera& cam) const;
     };
 }

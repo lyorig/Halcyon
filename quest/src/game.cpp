@@ -4,16 +4,17 @@
 using namespace quest;
 
 game::game(lyo::parser p)
-    : m_sents {
-        ent::player { hal::texture { m_renderer, hal::image_loader::load("pi") } }
-    }
 {
     (void)p;
 
     m_renderer.size(constants::rpx_size(m_window.size()));
     HAL_PRINT("Set game size to ", m_renderer.size());
 
-    hal::texture tex { m_renderer, hal::image_loader::load("assets/test_sprite.png") };
+    m_cam.pos = m_renderer.size() / 2.0;
+
+    m_ents.spawn<ent::npc>(
+        hal::texture { m_renderer, hal::image_loader::load("assets/test_sprite.png") },
+        coord { 0, 0 });
 }
 
 void game::main_loop()
@@ -37,11 +38,12 @@ void game::main_loop()
                 return;
 
             case key_pressed:
-                this->process_press(hal::button(event.data.key.keysym.scancode));
+                if (event.data.key.repeat == 0 && !process_press(hal::button(event.data.key.keysym.scancode)))
+                    return;
                 break;
 
             case key_released:
-                this->process_release(hal::button(event.data.key.keysym.scancode));
+                process_release(hal::button(event.data.key.keysym.scancode));
                 break;
 
             default:
@@ -56,36 +58,28 @@ void game::main_loop()
         m_ents.visit([&](auto& ent)
             { ent.update(delta * m_timescale); });
 
-        m_sents.visit([&](auto& ent)
-            { ent.update(delta * m_timescale); });
-
         // Draw everything.
         m_ents.visit([this](const auto& ent)
-            { ent.draw(m_renderer, m_cam); });
-
-        m_sents.visit([this](const auto& ent)
             { ent.draw(m_renderer, m_cam); });
 
         m_renderer.present();
     }
 }
 
-void game::process_press(hal::button b)
+bool game::process_press(hal::button b)
 {
     using enum hal::button;
-    using namespace std::chrono_literals;
 
     switch (b)
     {
-    case A:
-        break;
-
-    case D:
-        break;
+    case esc:
+        return false;
 
     default:
         break;
     }
+
+    return true;
 }
 
 void game::process_release(hal::button b)
@@ -94,12 +88,6 @@ void game::process_release(hal::button b)
 
     switch (b)
     {
-    case A:
-        break;
-
-    case D:
-        break;
-
     default:
         break;
     }

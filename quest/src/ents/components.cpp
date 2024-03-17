@@ -1,24 +1,22 @@
+#include <quest/constants.hpp>
 #include <quest/ents/components.hpp>
 
 using namespace quest::ent::cmp;
 
-drawable::drawable(hal::texture&& t)
+scaleable::scaleable(hal::texture&& t, const coord& spawnpoint)
     : tex { std::move(t) }
-{
-}
-
-scaleable::scaleable(hal::texture&& t)
-    : drawable { std::move(t) }
-    , size(tex.size())
+    , pos { spawnpoint }
+    , size { tex.size() * constants::apx_scale }
 {
 }
 
 void scaleable::resize(scale_t scl)
 {
-    size = tex.size() * scl;
+    size = tex.size() * constants::apx_scale * scl;
 }
 
 void scaleable::draw(hal::renderer& rnd, const camera& cam) const
 {
-    rnd.draw(tex).to(cam.transform({ pos, size }, rnd.size().y))();
+    rnd.draw(tex)
+        .to(cam.transform({ pos, size }, rnd.size()))();
 }
