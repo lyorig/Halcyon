@@ -122,6 +122,13 @@ namespace hal
         return pt.x >= rect.pos.x && pt.x <= rect.pos.x + rect.size.x && pt.y >= rect.pos.y && pt.y <= rect.pos.y + rect.size.y;
     }
 
+    template <lyo::arithmetic T>
+    constexpr lyo::f64 distance(const point<T>& lhs, const point<T>& rhs)
+    {
+        const point<T> dist { lhs - rhs };
+        return static_cast<lyo::f64>(std::sqrt(std::pow(dist.x, 2) + std::pow(dist.y, 2)));
+    }
+
     // Wrappers for native SDL types.
     namespace sdl
     {

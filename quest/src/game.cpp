@@ -10,11 +10,15 @@ game::game(lyo::parser p)
     m_renderer.size(constants::rpx_size(m_window.size()));
     HAL_PRINT("Set game size to ", m_renderer.size());
 
-    m_cam.pos = m_renderer.size() / 2.0;
+    m_cam.m_pos = m_renderer.size() / 2.0;
 
     m_ents.spawn<ent::npc>(
         hal::texture { m_renderer, hal::image_loader::load("assets/test_sprite.png") },
         coord { 0, 0 });
+
+    m_ents.spawn<ent::npc>(
+        hal::texture { m_renderer, hal::image_loader::load("assets/pieces.png") },
+        coord { 600, 600 });
 }
 
 void game::main_loop()
@@ -58,9 +62,13 @@ void game::main_loop()
         m_ents.visit([&](auto& ent)
             { ent.update(delta * m_timescale); });
 
-        // Draw everything.
-        m_ents.visit([this](const auto& ent)
-            { ent.draw(m_renderer, m_cam); });
+        // The camera isn't affected by the time scale.
+        m_cam.update(delta);
+
+        for (const auto& ent : m_ents.access<ent::npc>())
+        {
+            std::get<ent::npc>(ent).draw(m_renderer, m_cam);
+        }
 
         m_renderer.present();
     }
@@ -74,6 +82,12 @@ bool game::process_press(hal::button b)
     {
     case esc:
         return false;
+
+    case one:
+        m_cam.target(m_ents.view<ent::npc>().front().pos);
+
+    case two:
+        m_cam.target(m_ents.view<ent::npc>().back().pos);
 
     default:
         break;

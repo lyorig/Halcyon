@@ -1,7 +1,5 @@
 #pragma once
 
-#include <climits>
-#include <compare>
 #include <halcyon/types/sdl.hpp>
 #include <halcyon/types/tags.hpp>
 #include <lyo/cast.hpp>
@@ -136,18 +134,6 @@ namespace hal
 
         constexpr auto operator<=>(const point& cmp) const = default;
 
-        // Create a new rectangle with this point acting as the size.
-        constexpr rectangle<T> rect() const
-        {
-            return rectangle<T> { as_size, *this };
-        }
-
-        // Join two points into a rectangle.
-        constexpr rectangle<T> rect(const point<T>& pt) const
-        {
-            return rectangle<T> { *this, pt };
-        }
-
         template <lyo::arithmetic Convert>
         constexpr operator point<Convert>() const
         {
@@ -185,6 +171,14 @@ namespace hal
             requires(lyo::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<const sdl::point_t<T>*>(this);
+        }
+
+        constexpr point<T> abs() const
+        {
+            return {
+                std::abs(x),
+                std::abs(y)
+            };
         }
     };
 
