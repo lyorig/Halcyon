@@ -28,7 +28,7 @@ namespace quest
         public:
             using iterator_category = std::contiguous_iterator_tag;
 
-            using value_type      = std::remove_cv_t<Ent_Type>;
+            using value_type      = Ent_Type;
             using difference_type = std::ptrdiff_t;
 
             using pointer   = value_type*;

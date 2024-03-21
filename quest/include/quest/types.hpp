@@ -15,7 +15,10 @@ namespace quest
 
     enum direction : lyo::i8
     {
+        right = 1,
         left  = -1,
-        right = 1
+
+        up   = 1,
+        down = -1
     };
 }

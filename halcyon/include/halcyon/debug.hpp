@@ -20,7 +20,6 @@
     #include <lyo/timer.hpp>
     #include <lyo/utility.hpp>
 
-    #include <array>
     #include <fstream>
     #include <iostream>
     #include <sstream>
@@ -143,8 +142,8 @@ namespace hal
 
             const std::string with_info { fwd_info.str() + msg };
 
-            m_output << with_info << '\n';
-            (type == error ? std::cerr : std::cout) << with_info << '\n';
+            m_output << with_info << std::endl;
+            (type == error ? std::cerr : std::cout) << with_info << std::endl;
         }
 
         static std::ofstream            m_output;
