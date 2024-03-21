@@ -1,7 +1,7 @@
 #pragma once
 
 #include <halcyon/renderer.hpp>
-#include <quest/types.hpp>
+#include <quest/animatable.hpp>
 
 namespace quest
 {
@@ -10,11 +10,15 @@ namespace quest
     class camera
     {
     public:
-        coord pos;
+        void update(delta_t elapsed);
 
         // Transform an object's position to rendering coordinates.
         // The renderer height parameter is used because the coordinate system used under
         // the hood has the origin at the top-left corner, meaning that the height goes "downward."
         hitbox transform(hitbox hbx, hal::pixel_point rsz) const;
+
+        animatable<coord, [](delta_t t)
+            { return t * (2 - t); }>
+            pos;
     };
 }

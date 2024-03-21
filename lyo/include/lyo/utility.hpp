@@ -31,7 +31,7 @@ namespace lyo
 
     // Input all arguments into a stringstream and return them as a string.
     template <typename... Args>
-    std::string string_from_pack(Args... args) noexcept
+    std::string string_from_pack(Args&&... args) noexcept
     {
         // Warning suppression.
         if constexpr (sizeof...(Args) == 0)
@@ -43,7 +43,7 @@ namespace lyo
 
             stream << std::fixed;
 
-            (stream << ... << args);
+            (stream << ... << std::forward<Args>(args));
 
             return stream.str();
         }

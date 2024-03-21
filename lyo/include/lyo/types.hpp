@@ -48,7 +48,7 @@ namespace lyo
     template <typename Return_type, typename... Args>
     using func_ptr = Return_type (*)(Args...);
 
-    template <std::floating_point T>
+    template <typename T>
     constexpr inline bool iec_check = std::numeric_limits<T>::is_iec559;
 
     static_assert(iec_check<f32> && iec_check<f64>);
