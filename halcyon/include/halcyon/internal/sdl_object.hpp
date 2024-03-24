@@ -2,6 +2,7 @@
 
 #include <SDL_error.h>
 #include <halcyon/debug.hpp>
+#include <lyo/types.hpp>
 #include <memory>
 
 namespace hal

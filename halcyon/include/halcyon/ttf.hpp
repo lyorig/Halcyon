@@ -3,6 +3,7 @@
 #include <SDL_ttf.h>
 #include <halcyon/internal/sdl_object.hpp>
 #include <halcyon/surface.hpp>
+#include <string_view>
 
 namespace hal
 {

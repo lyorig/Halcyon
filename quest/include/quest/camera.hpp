@@ -7,7 +7,7 @@ namespace quest
 {
     // A camera that transforms object positions into rending coordinates.
     // The position represents the center of the viewport, not a corner.
-     class camera
+    class camera
     {
     public:
         void update(delta_t elapsed);
