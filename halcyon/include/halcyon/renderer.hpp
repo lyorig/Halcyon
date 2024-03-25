@@ -36,6 +36,7 @@ namespace hal
 
         void present();
 
+        void draw_point(const sdl::coord_point& pt);
         void draw_line(const sdl::coord_point& from, const sdl::coord_point& to);
         void draw_rect(const sdl::coord_rect& area);
 

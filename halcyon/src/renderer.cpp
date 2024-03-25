@@ -23,22 +23,21 @@ void renderer::clear()
     HAL_ASSERT_VITAL(::SDL_RenderClear(this->ptr()) == 0, ::SDL_GetError());
 }
 
+void renderer::draw_point(const sdl::coord_point& pt)
+{
+#ifdef HAL_INTEGRAL_COORD
+    ::SDL_RenderDrawPoint(this->ptr(), pt.x, pt.y);
+#else
+    ::SDL_RenderDrawPointF(this->ptr(), pt.x, pt.y);
+#endif
+}
+
 void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& to)
 {
 #ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderDrawLine(this->ptr(), static_cast<sdl::coord_t>(from.x),
-                         static_cast<sdl::coord_t>(from.y),
-                         static_cast<sdl::coord_t>(to.x),
-                         static_cast<sdl::coord_t>(to.y))
-            == 0,
-        ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_RenderDrawLine(this->ptr(), from.x, from.y, to.x, to.y) == 0, ::SDL_GetError());
 #else
-    HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), static_cast<sdl::coord_t>(from.x),
-                         static_cast<sdl::coord_t>(from.y),
-                         static_cast<sdl::coord_t>(to.x),
-                         static_cast<sdl::coord_t>(to.y))
-            == 0,
-        ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), from.x, from.y, to.x, to.y) == 0, ::SDL_GetError());
 #endif
 }
 
