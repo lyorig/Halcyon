@@ -1,6 +1,5 @@
 #include <quest/constants.hpp>
 #include <quest/game.hpp>
-#include <quest/timeout.hpp>
 
 using namespace quest;
 
@@ -87,10 +86,6 @@ bool game::process_press(hal::button b)
     case four:
         m_timescale.start(1.0, 1.0);
         break;
-    case five:
-        set_timeout([]()
-            { std::cout << "Sus"; },
-            std::chrono::seconds { 1 });
     default:
         break;
     }

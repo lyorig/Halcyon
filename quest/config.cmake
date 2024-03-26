@@ -1,4 +1,3 @@
-include(lyo/config.cmake)
 include(halcyon/config.cmake)
 
 set(QUEST_SOURCES

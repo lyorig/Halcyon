@@ -1,3 +1,4 @@
+include(${CMAKE_CURRENT_LIST_DIR}/lib/lyo/config.cmake)
 
 set(HALCYON_SOURCES
 cleanup.cpp
