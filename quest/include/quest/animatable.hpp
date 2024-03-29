@@ -8,6 +8,8 @@ namespace quest
 {
     namespace easing
     {
+        constexpr delta_t linear(delta_t t) { return t; }
+
         namespace in // TODO
         {
 
@@ -20,8 +22,6 @@ namespace quest
 
         namespace in_out
         {
-            constexpr delta_t linear(delta_t t) { return t; }
-
             constexpr delta_t bezier(delta_t t) { return t * t * (3.0 - 2.0 * t); }
 
             constexpr delta_t parametric(delta_t t)
