@@ -59,6 +59,9 @@ namespace hal
 
         static std::span<const Uint8> keyboard_state();
 
+        static bool state(type t);
+        static void state(type t, bool enable);
+
         SDL_Event data;
     };
 

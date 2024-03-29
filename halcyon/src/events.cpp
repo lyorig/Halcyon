@@ -26,3 +26,13 @@ std::span<const Uint8> event::keyboard_state()
 
     return { ptr, static_cast<std::size_t>(size) };
 }
+
+bool event::state(type t)
+{
+    return ::SDL_EventState(t, SDL_QUERY);
+}
+
+void event::state(type t, bool enable)
+{
+    ::SDL_EventState(t, enable ? SDL_ENABLE : SDL_IGNORE);
+}

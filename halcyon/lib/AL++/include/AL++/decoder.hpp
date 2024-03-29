@@ -10,6 +10,5 @@ namespace alpp
     {
     public:
         static buffer wav(const std::filesystem::path& path);
-        static buffer mp3(const std::filesystem::path& path);
     };
 }

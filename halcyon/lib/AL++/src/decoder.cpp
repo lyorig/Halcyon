@@ -1,7 +1,6 @@
 #define MINIMP3_IMPLEMENTATION
 
 #include <AL++/decoder.hpp>
-#include <AL++/external/minimp3_ex.h>
 #include <fstream>
 #include <lyo/types.hpp>
 #include <vector>
@@ -71,18 +70,4 @@ buffer decoder::wav(const std::filesystem::path& path)
     i.read(alloc.get(), hdr.data_size);
 
     return { alloc.get(), std::size_t(hdr.data_size), get_format(hdr.channels, hdr.bits_per_sample), hdr.sample_rate, {} };
-}
-
-buffer decoder::mp3(const std::filesystem::path& path)
-{
-    mp3dec_t           mp3d;
-    mp3dec_file_info_t info;
-
-    HAL_ASSERT_VITAL(::mp3dec_load(&mp3d, path.c_str(), &info, nullptr, nullptr) == 0, "Could not decode ", path);
-
-    buffer b { info.buffer, info.samples * sizeof(mp3d_sample_t), stereo16, info.hz, {} };
-
-    std::free(info.buffer);
-
-    return b;
 }
