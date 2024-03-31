@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.22.1)
 # Create the project.
 project(HalodaQuest VERSION 0.1 LANGUAGES CXX)
 
-include (quest/config.cmake)
-
 # Set appropriate warnings and directories.
 if(MSVC)
 	add_compile_options(/W4)
@@ -27,15 +25,32 @@ elseif(NOT MSVC)
 	add_link_options(-fsanitize=undefined)
 endif()
 
+# The HalodaQuest game.
+include (quest/config.cmake)
+
 add_executable(HalQuest WIN32)
 
 set_target_properties(HalQuest PROPERTIES
 CXX_STANDARD 23
-RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+RUNTIME_OUTPUT_DIRECTORY ${QUEST_BINARY_DIR}
 )
 
 target_sources(HalQuest PRIVATE
 ${HALCYON_SOURCES}
 ${QUEST_SOURCES}
-${ALPP_SOURCES}
+)
+
+# The asset to color array convertor.
+include(asset2code/config.cmake)
+
+add_executable(asset2code)
+
+set_target_properties(asset2code PROPERTIES
+CXX_STANDARD 23
+RUNTIME_OUTPUT_DIRECTORY ${ASSET2CODE_BINARY_DIR}
+)
+
+target_sources(asset2code PRIVATE
+${HALCYON_SOURCES}
+${ASSET2CODE_SOURCES}
 )
