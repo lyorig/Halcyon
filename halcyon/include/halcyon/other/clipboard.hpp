@@ -7,8 +7,9 @@
 // This is a bit goofy on some systems (at least on Wayland),
 // so your mileage may vary.
 
-namespace hal
+namespace hal::clipboard
 {
-    std::string clipboard();
-    void        clipboard(std::string_view text);
+    std::string get();
+    void        set(std::string_view text);
+    bool        has_text();
 }

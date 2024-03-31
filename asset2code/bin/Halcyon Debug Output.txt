@@ -1,3 +1,2 @@
-[0.018s] [info]  Loading image /home/lyorig/Desktop/HalodaQuest/quest/bin/assets/pieces.png
-[0.018s] [warn]  Clipboard string empty; [no SDL error]
-[0.018s] [info]  Cleaning up SDL. Last error: [no SDL error]
+[0.083s] [info]  Loading image ../../quest/bin/assets/pieces.png
+[0.085s] [info]  Cleaning up SDL. Last error: [no SDL error]

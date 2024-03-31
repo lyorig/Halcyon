@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 
     // We have a working surface.
     std::cout << "Received asset of size " << surf.size() << '\n'
-              << "Current clipboard: " << hal::clipboard() << '\n';
+              << "Current clipboard: " << hal::clipboard::get() << '\n';
 
-    hal::clipboard(argv[1]);
+    hal::clipboard::set(argv[1]);
 }
