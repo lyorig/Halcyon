@@ -1,2 +1,0 @@
-[0.083s] [info]  Loading image ../../quest/bin/assets/pieces.png
-[0.085s] [info]  Cleaning up SDL. Last error: [no SDL error]

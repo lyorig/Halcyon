@@ -1,5 +1,0 @@
-[0.063s] [init]  Initialized image loader, flags = 0x2
-[0.082s] [init]  Initialized window "HalodaQuest", size [1920,1243] at [Display 0, [1920,1243], 60 Hz]
-[0.091s] [info]  Set game size to [1582,1024]
-[0.091s] [info]  Loading image assets/test_sprite.png
-[5.605s] [info]  Cleaning up SDL. Last error: Unknown touch device id -1, cannot reset
