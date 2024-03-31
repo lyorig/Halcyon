@@ -57,10 +57,15 @@ namespace hal
         // Check whether there are any pending events in the event queue.
         static bool pending();
 
+        // Get the current keyboard state. Index with hal::button values.
         static std::span<const Uint8> keyboard_state();
 
+        // Get the state of an event type (whether it is enabled or not).
         static bool state(type t);
-        static void state(type t, bool enable);
+
+        // Set the state of an event type (whether it is enabled or not).
+        // Returns the type's previous state.
+        static bool state(type t, bool enable);
 
         SDL_Event data;
     };

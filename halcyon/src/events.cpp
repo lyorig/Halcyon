@@ -32,7 +32,7 @@ bool event::state(type t)
     return ::SDL_EventState(t, SDL_QUERY);
 }
 
-void event::state(type t, bool enable)
+bool event::state(type t, bool enable)
 {
-    ::SDL_EventState(t, enable ? SDL_ENABLE : SDL_IGNORE);
+    return ::SDL_EventState(t, enable ? SDL_ENABLE : SDL_IGNORE) == SDL_ENABLE ? true : false;
 }
