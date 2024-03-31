@@ -1,5 +1,4 @@
 include(${CMAKE_CURRENT_LIST_DIR}/lib/lyo/config.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/lib/AL++/config.cmake)
 
 set(HALCYON_SOURCES
 cleanup.cpp
@@ -11,10 +10,11 @@ texture.cpp
 ttf.cpp
 window.cpp
 surface.cpp
-other/system.cpp
+other/clipboard.cpp
 other/display.cpp
 other/driver.cpp
 other/printing.cpp
+other/system.cpp
 )
 
 list(TRANSFORM HALCYON_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/)

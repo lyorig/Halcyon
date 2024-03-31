@@ -1,5 +1,6 @@
 #include <quest/constants.hpp>
 #include <quest/game.hpp>
+#include <utility>
 
 using namespace quest;
 
