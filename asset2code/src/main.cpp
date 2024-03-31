@@ -6,9 +6,12 @@
 
 #include <iostream>
 
-std::ostream& operator<<(const hal::color& c, std::ostream& str)
+std::ostream& operator<<(std::ostream& str, const hal::color& c)
 {
-    str << '{' << c.r << ',' << c.g << ',' << c.b << ',' << c.a << '}';
+    str << '{' << hal::to_printable_int(c.r) << ','
+        << hal::to_printable_int(c.g) << ','
+        << hal::to_printable_int(c.b) << ','
+        << hal::to_printable_int(c.a) << '}';
     return str;
 }
 
@@ -22,17 +25,27 @@ int main(int argc, char* argv[])
 
     hal::cleanup c { hal::system::video };
 
-    // Okay, so we have a filename.
-    const auto surf { hal::image_loader::load(argv[1]) };
-    if (!surf.exists())
+    if (const auto surf { hal::image_loader::load(argv[1]) }; surf.exists())
+    {
+        std::stringstream s;
+        s << '{';
+
+        const auto size = surf.size();
+        for (hal::pixel_point pt { 0, 0 }; pt.y != size.y; ++pt.y)
+            for (; pt.x != size.x; ++pt.x)
+            {
+                s << surf[pt] << ',';
+            }
+
+        s << '}';
+
+        hal::clipboard::set(s.str());
+        std::cout << "Copied " << hal::clipboard::get().size() << " bytes\n";
+    }
+
+    else
     {
         std::cout << "Could not load \"" << argv[1] << "\".\n";
         return EXIT_FAILURE;
     }
-
-    // We have a working surface.
-    std::cout << "Received asset of size " << surf.size() << '\n'
-              << "Current clipboard: " << hal::clipboard::get() << '\n';
-
-    hal::clipboard::set(argv[1]);
 }
