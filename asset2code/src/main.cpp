@@ -3,6 +3,8 @@
 #include <halcyon/other/clipboard.hpp>
 #include <halcyon/other/printing.hpp>
 #include <halcyon/surface.hpp>
+#include <lyo/timer.hpp>
+#include <sstream>
 
 #include <iostream>
 
@@ -23,7 +25,8 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    hal::cleanup c { hal::system::video };
+    lyo::precise_timer t;
+    hal::cleanup       c { hal::system::video };
 
     if (const auto surf { hal::image_loader::load(argv[1]) }; surf.exists())
     {
@@ -31,16 +34,19 @@ int main(int argc, char* argv[])
         s << '{';
 
         const auto size = surf.size();
-        for (hal::pixel_point pt { 0, 0 }; pt.y != size.y; ++pt.y)
+        for (hal::pixel_point pt { 0, 0 }; pt.y != size.y; ++pt.y, pt.x = 0)
+        {
             for (; pt.x != size.x; ++pt.x)
             {
                 s << surf[pt] << ',';
             }
+        }
 
-        s << '}';
+        s << "};";
 
-        hal::clipboard::set(s.str());
-        std::cout << "Copied " << hal::clipboard::get().size() << " bytes\n";
+        const auto str = s.str();
+        hal::clipboard::set(str);
+        std::cout << "Done in " << t() << "s, copied " << str.size() << " bytes.\n";
     }
 
     else
