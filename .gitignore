@@ -2,8 +2,7 @@
 .cache/
 build/
 
-bin/*
-!bin/assets/
+bin/
 
 *.code-workspace
 .DS_Store

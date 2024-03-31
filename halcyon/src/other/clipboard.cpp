@@ -5,7 +5,7 @@
 std::string hal::clipboard::get()
 {
     const char* ret { ::SDL_GetClipboardText() };
-    HAL_ASSERT(has_text() || lyo::is_c_string_empty(ret), debug::last_error());
+    HAL_ASSERT(has_text() || !lyo::is_c_string_empty(ret), debug::last_error());
 
     return ret;
 }
