@@ -4,14 +4,8 @@
 #include <halcyon/other/printing.hpp>
 #include <halcyon/surface.hpp>
 #include <lyo/timer.hpp>
-#include <sstream>
 
 #include <iostream>
-
-constexpr char helptext[] {
-    "This utility takes an image file and converts it into an initializer list of Halcyon colors.\n"
-    "Usage: asset2code [path]\n"
-};
 
 std::ostream& operator<<(std::ostream& str, const hal::color& c)
 {
@@ -22,10 +16,28 @@ std::ostream& operator<<(std::ostream& str, const hal::color& c)
     return str;
 }
 
+void put_color(std::string& str, hal::color c)
+{
+    char buffer[20];
+    std::snprintf(buffer, sizeof(buffer), "{%u,%u,%u,%u},", unsigned(c.r), unsigned(c.g), unsigned(c.b), unsigned(c.a));
+    str += buffer;
+}
+
+std::size_t alloc_size(hal::pixel_point sz)
+{
+    constexpr std::size_t max_chars_per_color { 19 };
+    return sz.x * sz.y * max_chars_per_color + 3; // outer braces and null terminator
+}
+
 int main(int argc, char* argv[])
 {
     if (argc == 1) // Is there an argument?
     {
+        constexpr char helptext[] {
+            "This utility takes an image file and converts it into an initializer list of Halcyon colors.\n"
+            "Usage: asset2code [path]\n"
+        };
+
         std::cout << helptext;
         return EXIT_FAILURE;
     }
@@ -35,23 +47,22 @@ int main(int argc, char* argv[])
 
     if (const auto surf { hal::image_loader::load(argv[1]) }; surf.exists())
     {
-        std::stringstream s;
-        s << '{';
-
         const auto size = surf.size();
+
+        std::string s;
+        s.reserve(alloc_size(size));
+
         for (hal::pixel_point pt { 0, 0 }; pt.y != size.y; ++pt.y, pt.x = 0)
         {
             for (; pt.x != size.x; ++pt.x)
             {
-                s << surf[pt] << ',';
+                put_color(s, surf[pt]);
             }
         }
 
-        s << "};";
-
-        const auto str = s.str();
-        hal::clipboard::set(str);
-        std::cout << "Done in " << t() << "s, copied " << str.size() << " bytes.\n";
+        s.push_back('}');
+        hal::clipboard::set(s);
+        std::cout << "Done in " << t() << "s, copied " << s.size() << " bytes.\n";
     }
 
     else

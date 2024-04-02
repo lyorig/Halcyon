@@ -40,6 +40,8 @@ ${HALCYON_SOURCES}
 ${QUEST_SOURCES}
 )
 
+target_link_libraries(HalQuest ${HALCYON_LIBRARIES})
+
 # The asset to color array convertor.
 include(asset2code/config.cmake)
 
@@ -54,3 +56,5 @@ target_sources(asset2code PRIVATE
 ${HALCYON_SOURCES}
 ${ASSET2CODE_SOURCES}
 )
+
+target_link_libraries(asset2code ${HALCYON_LIBRARIES})

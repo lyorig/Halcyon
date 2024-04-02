@@ -81,19 +81,9 @@ namespace quest
             return m_start + m_dist * AnimFunc(m_time == 0.0 ? 1.0 : m_elapsed / m_time);
         }
 
-        delta_t elapsed() const
-        {
-            return m_elapsed;
-        }
-
-        delta_t remaining() const
-        {
-            return m_time - elapsed();
-        }
-
         bool animating() const
         {
-            return elapsed() != m_time;
+            return m_elapsed != m_time;
         }
 
     private:
