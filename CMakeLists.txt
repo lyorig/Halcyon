@@ -21,8 +21,8 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 	endif()
 
 elseif(NOT MSVC)
-	add_compile_options(-fsanitize=undefined)
-	add_link_options(-fsanitize=undefined)
+	add_compile_options(-fsanitize=address)
+	add_link_options(-fsanitize=address)
 endif()
 
 # The HalodaQuest game.

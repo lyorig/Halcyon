@@ -4,13 +4,12 @@
 
 #include <halcyon/enums/anchor.hpp>
 #include <halcyon/enums/blend.hpp>
-#include <halcyon/other/drawer.hpp>
+#include <halcyon/internal/drawer.hpp>
+#include <halcyon/internal/sdl_object.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
 #include <span>
-
-#include <halcyon/internal/sdl_object.hpp>
 
 namespace hal
 {

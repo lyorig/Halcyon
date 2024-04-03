@@ -2,8 +2,60 @@
 
 using namespace hal;
 
+surface::pixel_reference::pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos)
+    : m_ptr { static_cast<std::byte*>(pixels) + pos.y * pitch + pos.x * fmt->BytesPerPixel }
+    , m_fmt { fmt }
+{
+}
+
+surface::pixel_reference::operator color() const
+{
+    color c;
+    ::SDL_GetRGBA(get(), m_fmt, &c.r, &c.g, &c.b, &c.a);
+    return c;
+}
+
+surface::pixel_reference& surface::pixel_reference::operator=(color c)
+{
+    set(::SDL_MapRGBA(m_fmt, c.r, c.g, c.b, c.a));
+    return *this;
+}
+
+Uint32 surface::pixel_reference::get() const
+{
+    Uint32 ret { 0 };
+
+    if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+        std::memcpy(&ret, m_ptr, m_fmt->BytesPerPixel);
+
+    else
+    {
+        const lyo::u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        std::memcpy(&ret + offset, m_ptr + offset, m_fmt->BytesPerPixel);
+    }
+
+    return ret;
+}
+
+void surface::pixel_reference::set(Uint32 mapped)
+{
+    if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+        std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
+
+    else
+    {
+        const lyo::u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->BytesPerPixel);
+    }
+}
+
 // Set the depth accordingly upon changing this value.
 constexpr SDL_PixelFormatEnum default_format { SDL_PIXELFORMAT_RGBA32 };
+
+surface::surface(pixel_point sz)
+    : surface { sz, CHAR_BIT * 4, default_format }
+{
+}
 
 surface::surface(SDL_Surface* surf, lyo::pass_key<image_loader>)
     : object { surf }
@@ -17,11 +69,6 @@ surface::surface(SDL_Surface* surf, lyo::pass_key<font>)
 
 surface::surface(pixel_point sz, int depth, Uint32 fmt)
     : object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, depth, fmt) }
-{
-}
-
-surface::surface(pixel_point sz)
-    : surface { sz, CHAR_BIT * 4, default_format }
 {
 }
 
@@ -68,18 +115,12 @@ pixel_point surface::size() const
     };
 }
 
-color surface::operator[](const pixel_point& pos) const
+surface::pixel_reference surface::operator[](const pixel_point& pos) const
 {
     HAL_ASSERT(pos.x < ptr()->w, "Out-of-range width");
     HAL_ASSERT(pos.y < ptr()->h, "Out-of-range height");
 
-    color ret;
-
-    // I couldn't find any mention of this function having a fail state.
-    ::SDL_GetRGBA(this->pixel_at(pos), ptr()->format, &ret.r,
-        &ret.g, &ret.b, &ret.a);
-
-    return ret;
+    return { ptr()->pixels, ptr()->pitch, ptr()->format, pos };
 }
 
 blend_mode surface::blend() const
@@ -109,39 +150,9 @@ void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::
     HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), reinterpret_cast<const SDL_Rect*>(src), to.ptr(), reinterpret_cast<SDL_Rect*>(dst)) == 0, ::SDL_GetError());
 }
 
-Uint32 surface::mapped(color clr) const
+Uint32 surface::mapped(color c) const
 {
-    return ::SDL_MapRGBA(ptr()->format, clr.r, clr.g, clr.b, clr.a);
-}
-
-Uint32 surface::pixel_at(const pixel_point& pos) const
-{
-    const auto   bpp { ptr()->format->BytesPerPixel };
-    const Uint8* p { static_cast<Uint8*>(ptr()->pixels) + pos.y * ptr()->pitch + pos.x * bpp };
-
-    switch (bpp)
-    {
-    case 1:
-        return *p;
-
-    case 2:
-        return *reinterpret_cast<const Uint16*>(p);
-
-    case 3:
-        if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-            return p[0] << 16 | p[1] << 8 | p[2];
-
-        else
-            return p[0] | p[1] << 8 | p[2] << 16;
-
-    case 4:
-        return *reinterpret_cast<const Uint32*>(p);
-
-    default: // Intentionally panic.
-        HAL_PANIC("Unknown bytes-per-pixel value while getting pixel from surface");
-
-        return 0;
-    }
+    return ::SDL_MapRGBA(ptr()->format, c.r, c.g, c.b, c.a);
 }
 
 void blitter::operator()()
@@ -155,13 +166,11 @@ void blitter::operator()()
 
 void blitter::operator()(keep_dst_tag) const
 {
-    constexpr src_t us { unset<src_t> };
-
     sdl::pixel_rect copy { m_dst };
 
     m_pass.internal_blit(
         m_this,
-        m_src.pos.x == us ? nullptr : &m_src,
-        copy.pos.x == us ? nullptr : &copy,
+        m_src.pos.x == unset<src_t> ? nullptr : &m_src,
+        copy.pos.x == unset<dst_t> ? nullptr : &copy,
         {});
 }

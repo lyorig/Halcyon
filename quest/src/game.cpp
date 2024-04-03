@@ -1,3 +1,4 @@
+#include <quest/assets_as_code.hpp>
 #include <quest/constants.hpp>
 #include <quest/game.hpp>
 #include <utility>
@@ -13,7 +14,7 @@ game::game(lyo::parser p)
 
     m_cam.pos.jump(m_renderer.size() / 2.0);
 
-    m_ents.spawn<ent::npc>(hal::texture { m_renderer, hal::image_loader::load("assets/test_sprite.png") }, coord { 100, 100 });
+    m_ents.spawn<ent::npc>(hal::texture { m_renderer, std::mdspan(test_sprite, 32, 16) }, coord { 100, 100 });
 }
 
 void game::main_loop()

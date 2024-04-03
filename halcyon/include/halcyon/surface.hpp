@@ -3,12 +3,11 @@
 #include <SDL_surface.h>
 
 #include <halcyon/enums/blend.hpp>
-#include <halcyon/other/drawer.hpp>
+#include <halcyon/internal/drawer.hpp>
+#include <halcyon/internal/sdl_object.hpp>
 #include <halcyon/types/color.hpp>
 #include <lyo/pass_key.hpp>
-#include <span>
-
-#include <halcyon/internal/sdl_object.hpp>
+#include <mdspan>
 
 // surface.hpp:
 // A "software surface" used by SDL. The user should never
@@ -19,18 +18,58 @@
 
 namespace hal
 {
+    // Forward defs for external constructor classes.
     class image_loader;
     class font;
 
+    // Ditto for helper classes.
     class blitter;
 
     LYO_TAG(keep_dst);
 
     class surface : public sdl::object<SDL_Surface, &::SDL_FreeSurface>
     {
+        // A reference to a pixel in a surface for easy access and modification.
+        class pixel_reference
+        {
+        public:
+            pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos);
+
+            operator color() const;
+
+            pixel_reference& operator=(color c);
+
+        private:
+            // Retrieve the color in a mapped format.
+            Uint32 get() const;
+
+            // Set the color to a mapped value.
+            void set(Uint32 mv);
+
+            std::byte*             m_ptr; // A pointer to the current color
+            const SDL_PixelFormat* m_fmt;
+        };
+
     public:
+        template <typename Extents>
+        using color_mdspan = std::mdspan<const color, Extents>;
+
         // Create a sized surface.
         surface(pixel_point sz);
+
+        // Create a surface from an array of colors in row-major format.
+        template <typename Extents>
+        surface(color_mdspan<Extents> colors)
+            : surface { { static_cast<pixel_t>(colors.extent(0)), static_cast<pixel_t>(colors.extent(1)) } }
+        {
+            for (pixel_point pos { 0, 0 }; static_cast<std::size_t>(pos.x) != colors.extent(0); ++pos.x, pos.y = 0)
+            {
+                for (; static_cast<std::size_t>(pos.y) != colors.extent(1); ++pos.y)
+                {
+                    operator[](pos) = colors[pos.x, pos.y];
+                }
+            }
+        }
 
         // Special c-tor for factory classes.
         surface(SDL_Surface* surf, lyo::pass_key<image_loader>);
@@ -50,7 +89,7 @@ namespace hal
         // Get pixel at position.
         // This functionality is exclusive to surfaces, as textures
         // are extremely slow to retrieve pixel information.
-        color operator[](const pixel_point& pos) const;
+        pixel_reference operator[](const pixel_point& pos) const;
 
         blend_mode blend() const;
         void       blend(blend_mode bm);
@@ -69,9 +108,7 @@ namespace hal
         // Used for resizing.
         surface(pixel_point sz, const SDL_PixelFormat* fmt);
 
-        // Get a color value corresponding to this surface's format.
-        Uint32 mapped(color clr) const;
-        Uint32 pixel_at(const pixel_point& pos) const;
+        Uint32 mapped(color c) const;
     };
 
     class blitter : public drawer<surface, sdl::pixel_t, const surface, blitter>

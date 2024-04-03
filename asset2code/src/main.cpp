@@ -49,12 +49,12 @@ int main(int argc, char* argv[])
     {
         const auto size = surf.size();
 
-        std::string s;
+        std::string s { '{' };
         s.reserve(alloc_size(size));
 
-        for (hal::pixel_point pt { 0, 0 }; pt.y != size.y; ++pt.y, pt.x = 0)
+        for (hal::pixel_point pt { 0, 0 }; pt.x != size.x; ++pt.x, pt.y = 0)
         {
-            for (; pt.x != size.x; ++pt.x)
+            for (; pt.y != size.y; ++pt.y)
             {
                 put_color(s, surf[pt]);
             }
