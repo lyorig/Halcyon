@@ -31,11 +31,11 @@ std::size_t alloc_size(hal::pixel_point sz)
 
 int main(int argc, char* argv[])
 {
-    if (argc == 1) // Is there an argument?
+    if (argc != 3) // Is there an argument?
     {
         constexpr char helptext[] {
             "This utility takes an image file and converts it into an initializer list of Halcyon colors.\n"
-            "Usage: asset2code [path]\n"
+            "Usage: asset2code [-r/-c] [path]\n"
         };
 
         std::cout << helptext;
@@ -45,19 +45,39 @@ int main(int argc, char* argv[])
     lyo::precise_timer t;
     hal::cleanup       c { hal::system::video };
 
-    if (const auto surf { hal::image_loader::load(argv[1]) }; surf.exists())
+    if (const auto surf { hal::image_loader::load(argv[2]) }; surf.exists())
     {
         const auto size = surf.size();
 
         std::string s { '{' };
         s.reserve(alloc_size(size));
 
-        for (hal::pixel_point pt { 0, 0 }; pt.x != size.x; ++pt.x, pt.y = 0)
+        if (lyo::streq(argv[1], "-r")) // Row major
         {
-            for (; pt.y != size.y; ++pt.y)
+            for (hal::pixel_point pt { 0, 0 }; pt.y != size.y; ++pt.y, pt.x = 0)
             {
-                put_color(s, surf[pt]);
+                for (; pt.x != size.x; ++pt.x)
+                {
+                    put_color(s, surf[pt]);
+                }
             }
+        }
+
+        else if (lyo::streq(argv[1], "-c")) // Column major
+        {
+            for (hal::pixel_point pt { 0, 0 }; pt.x != size.x; ++pt.x, pt.y = 0)
+            {
+                for (; pt.y != size.y; ++pt.y)
+                {
+                    put_color(s, surf[pt]);
+                }
+            }
+        }
+
+        else
+        {
+            std::cout << "Unknown ordering option \"" << argv[1] << "\".\n";
+            return EXIT_FAILURE;
         }
 
         s.push_back('}');
@@ -67,7 +87,7 @@ int main(int argc, char* argv[])
 
     else
     {
-        std::cout << "Could not load \"" << argv[1] << "\".\n";
+        std::cout << "Could not load \"" << argv[2] << "\".\n";
         return EXIT_FAILURE;
     }
 }
