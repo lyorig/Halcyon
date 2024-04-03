@@ -51,22 +51,21 @@ namespace hal
         };
 
     public:
-        template <typename Extents>
-        using color_mdspan = std::mdspan<const color, Extents>;
-
         // Create a sized surface.
         surface(pixel_point sz);
 
-        // Create a surface from an array of colors in row-major format.
-        template <typename Extents>
-        surface(color_mdspan<Extents> colors)
-            : surface { { static_cast<pixel_t>(colors.extent(0)), static_cast<pixel_t>(colors.extent(1)) } }
+        // Create a surface from an array of colors.
+        // If you are not yet accustomed to std::mdspan, the dimensional extents are in [Y, X] format.
+        // Either that, or I'm not understanding the class correctly. Womp womp.
+        template <typename Extents, typename Layout>
+        surface(std::mdspan<const hal::color, Extents, Layout> colors)
+            : surface { { static_cast<pixel_t>(colors.extent(1)), static_cast<pixel_t>(colors.extent(0)) } }
         {
-            for (pixel_point pos { 0, 0 }; static_cast<std::size_t>(pos.x) != colors.extent(0); ++pos.x, pos.y = 0)
+            for (pixel_point pos { 0, 0 }; static_cast<std::size_t>(pos.y) != colors.extent(0); ++pos.y, pos.x = 0)
             {
-                for (; static_cast<std::size_t>(pos.y) != colors.extent(1); ++pos.y)
+                for (; static_cast<std::size_t>(pos.x) != colors.extent(1); ++pos.x)
                 {
-                    operator[](pos) = colors[pos.x, pos.y];
+                    operator[](pos) = colors[pos.y, pos.x];
                 }
             }
         }

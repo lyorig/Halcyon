@@ -49,7 +49,7 @@ add_executable(asset2code)
 
 set_target_properties(asset2code PROPERTIES
 CXX_STANDARD 23
-RUNTIME_OUTPUT_DIRECTORY ${ASSET2CODE_BINARY_DIR}
+RUNTIME_OUTPUT_DIRECTORY ${QUEST_BINARY_DIR}
 )
 
 target_sources(asset2code PRIVATE

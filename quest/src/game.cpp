@@ -14,7 +14,9 @@ game::game(lyo::parser p)
 
     m_cam.pos.jump(m_renderer.size() / 2.0);
 
-    m_ents.spawn<ent::npc>(hal::texture { m_renderer, std::mdspan(test_sprite, 32, 16) }, coord { 100, 100 });
+    using mds = std::mdspan<const hal::color, std::extents<std::size_t, 16, 32>>;
+
+    m_ents.spawn<ent::npc>(hal::texture { m_renderer, mds(test_sprite) }, coord { 100, 100 });
 }
 
 void game::main_loop()
