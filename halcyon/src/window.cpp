@@ -11,8 +11,8 @@ window::window(std::string_view title, const pixel_point& size, std::initializer
     HAL_PRINT(debug::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at ", display_info());
 }
 
-window::window(std::string_view title, fullscreen_mode_tag)
-    : window { title, display { 0 }.size(), { fullscreen } }
+window::window(std::string_view title, fullscreen_tag)
+    : window { title, display { 0 }.size(), { fullscreen_mode } }
 {
 }
 
@@ -27,6 +27,8 @@ pixel_point window::size() const
 
 void window::size(pixel_point sz)
 {
+    HAL_WARN_IF(fullscreen(), "Setting size of fullscreen window - this does nothing");
+
     ::SDL_SetWindowSize(this->ptr(), sz.x, sz.y);
 }
 
@@ -42,4 +44,14 @@ display window::display_info() const
 std::string_view window::title() const
 {
     return ::SDL_GetWindowTitle(this->ptr());
+}
+
+void window::title(std::string_view val)
+{
+    ::SDL_SetWindowTitle(ptr(), val.data());
+}
+
+bool window::fullscreen() const
+{
+    return static_cast<bool>(::SDL_GetWindowFlags(ptr()) & (fullscreen_mode | fullscreen_borderless));
 }

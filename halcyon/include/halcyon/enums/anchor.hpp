@@ -18,7 +18,7 @@ namespace hal
         };
 
         template <lyo::arithmetic T>
-        constexpr static point<T> resolve(pos anch, point<T> pos, point<T> size)
+        constexpr static point<T> resolve(pos anch, point<T> pos, const point<T>& size)
         {
             switch (anch)
             {
@@ -44,6 +44,36 @@ namespace hal
             }
 
             return pos;
+        }
+
+        template <lyo::arithmetic T>
+        constexpr static point<T> resolve(pos anch, rectangle<T> area, const point<T>& size)
+        {
+            switch (anch)
+            {
+            case anchor::none:
+            case anchor::top_left:
+                return area.pos;
+
+            case anchor::top_right:
+                area.pos.x += area.size.x -= size.x;
+                break;
+
+            case anchor::bottom_left:
+                area.pos.y += area.size.y -= size.y;
+                break;
+
+            case anchor::bottom_right:
+                area.pos += area.size;
+                area.pos.x -= size.x;
+                break;
+
+            case anchor::center:
+                area.pos += area.size / 2.0 -= size / 2.0;
+                break;
+            }
+
+            return area.pos;
         }
     };
 

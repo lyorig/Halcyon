@@ -6,7 +6,7 @@ using namespace quest::ent::cmp;
 scaleable::scaleable(hal::texture&& t, const coord& spawnpoint)
     : tex { std::move(t) }
     , pos { spawnpoint }
-    , size { tex.size() * constants::apx_scale }
+    , size(tex.size() * constants::apx_scale)
 {
 }
 

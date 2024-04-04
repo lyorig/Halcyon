@@ -1,7 +1,7 @@
 #include <halcyon/image_loader.hpp>
 
-#include <halcyon/surface.hpp>
 #include <halcyon/other/helpers.hpp>
+#include <halcyon/surface.hpp>
 
 using namespace hal;
 
@@ -14,14 +14,12 @@ image_loader::image_loader(std::initializer_list<format> types)
 
 image_loader::~image_loader() { ::IMG_Quit(); }
 
-surface image_loader::load(std::string_view path)
-{
-    HAL_PRINT("Loading image ", path);
-
-    return { ::IMG_Load(path.data()), lyo::pass_key<image_loader> {} };
-}
-
 bool image_loader::initialized()
 {
     return ::IMG_Init(0) > 0;
+}
+
+surface hal::load_image(accessor data)
+{
+    return ::IMG_Load_RW(data.get(), false);
 }

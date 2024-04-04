@@ -33,6 +33,7 @@ namespace hal
 
         renderer(window& wnd, std::initializer_list<flags> flags);
 
+        // Present the back-buffer and clear it.
         void present();
 
         void draw_point(const sdl::coord_point& pt);
@@ -59,6 +60,7 @@ namespace hal
         pixel_point size() const;
         void        size(const pixel_point& sz);
 
+        // Create a copyer.
         [[nodiscard]] copyer draw(const texture_base& tex);
 
         // Public, but only accessible to the draw class.
@@ -67,6 +69,7 @@ namespace hal
     private:
         void clear();
 
+        // Helper for setting the render target.
         void internal_target(SDL_Texture* target);
     };
 

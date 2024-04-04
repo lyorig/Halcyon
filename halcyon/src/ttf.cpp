@@ -16,14 +16,15 @@ bool ttf_engine::initialized()
     return ::TTF_WasInit() > 0;
 }
 
-font::font(std::string_view path, lyo::u8 size)
-    : object { ::TTF_OpenFont(path.data(), size) }
+font::font(accessor data, lyo::u8 size)
+    : object { ::TTF_OpenFontRW(data.get(), false, size) }
 {
+    HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }
 
 surface font::render(const std::string_view& text, color color) const
 {
-    return { ::TTF_RenderUTF8_LCD_Wrapped(this->ptr(), text.data(), color.to_sdl_color(), {}, 0), lyo::pass_key<font> {} };
+    return ::TTF_RenderUTF8_LCD_Wrapped(this->ptr(), text.data(), color.to_sdl_color(), {}, 0);
 }
 
 pixel_point font::size_text(const std::string_view& text) const
@@ -43,4 +44,14 @@ pixel_t font::height() const
 pixel_t font::skip() const
 {
     return static_cast<pixel_t>(::TTF_FontLineSkip(this->ptr()));
+}
+
+std::string_view font::family() const
+{
+    return ::TTF_FontFaceFamilyName(ptr());
+}
+
+std::string_view font::style() const
+{
+    return ::TTF_FontFaceStyleName(ptr());
 }

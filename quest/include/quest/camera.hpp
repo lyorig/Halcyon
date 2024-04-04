@@ -17,6 +17,6 @@ namespace quest
         // the hood has the origin at the top-left corner, meaning that the height goes "downward."
         hitbox transform(hitbox hbx, hal::pixel_point rsz) const;
 
-        animatable<coord, easing::linear> pos;
+        animatable<coord, easing::in_out::bezier> pos;
     };
 }

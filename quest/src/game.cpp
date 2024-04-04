@@ -1,25 +1,19 @@
-#include <quest/assets_as_code.hpp>
 #include <quest/constants.hpp>
 #include <quest/game.hpp>
-#include <utility>
 
 using namespace quest;
 
-game::game(lyo::parser p)
+game::game()
 {
-    (void)p;
+    m_window.size({ 640, 480 });
 
+    // Set a unified renderer size.
     m_renderer.size(constants::rpx_size(m_window.size()));
     HAL_PRINT("Set game size to ", m_renderer.size());
 
     m_cam.pos.jump(m_renderer.size() / 2.0);
 
-    using mds = std::mdspan<const hal::color, std::extents<std::size_t, 16, 32>>;
-
-    hal::surface s { mds(test_sprite) };
-    s[{ 30, 10 }] = hal::color::weezer_blue;
-
-    m_ents.spawn<ent::npc>(hal::texture { m_renderer, std::move(s) }, coord { 100, 100 });
+    m_ents.spawn<ent::npc>(hal::texture { m_renderer, hal::load_image(hal::from_file("assets/test_sprite.png")) }, coord { 100, 100 });
 }
 
 void game::main_loop()
@@ -31,33 +25,13 @@ void game::main_loop()
 
     while (true)
     {
-        while (event.poll())
-        {
-            switch (event.data.type)
-            {
-                using enum hal::event::type;
-
-            case quit_requested:
-                return;
-
-            case key_pressed:
-                if (event.data.key.repeat == 0 && !process_press(hal::button(event.data.key.keysym.scancode)))
-                    return;
-                break;
-
-            case key_released:
-                process_release(hal::button(event.data.key.keysym.scancode));
-                break;
-
-            default:
-                break;
-            }
-        }
+        if (!process_events(event))
+            return;
 
         delta = timer();
         timer.reset();
 
-        // Do all game updates here.
+        // Update everything.
         m_ents.visit([&](auto& obj)
             { obj.update(delta * m_timescale.value()); });
 
@@ -65,12 +39,40 @@ void game::main_loop()
         m_timescale.update(delta);
         m_cam.update(delta * m_timescale.value());
 
-        // Do all rendering here.
+        // Render everything.
         m_ents.visit([this](const auto& obj)
             { obj.draw(m_renderer, m_cam); });
 
         m_renderer.present();
     }
+}
+
+bool game::process_events(hal::event& event)
+{
+    while (event.poll())
+    {
+        switch (event.data.type)
+        {
+            using enum hal::event::type;
+
+        case quit_requested:
+            return false;
+
+        case key_pressed:
+            if (event.data.key.repeat == 0 && !process_press(hal::button(event.data.key.keysym.scancode)))
+                return false;
+            break;
+
+        case key_released:
+            process_release(hal::button(event.data.key.keysym.scancode));
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    return true;
 }
 
 bool game::process_press(hal::button b)
@@ -109,9 +111,4 @@ void game::process_release(hal::button b)
     default:
         break;
     }
-}
-
-bool game::held(hal::button b)
-{
-    return hal::event::keyboard_state()[std::to_underlying(b)];
 }

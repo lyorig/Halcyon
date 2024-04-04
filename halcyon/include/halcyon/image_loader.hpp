@@ -2,13 +2,15 @@
 
 #include <SDL_image.h>
 #include <lyo/types.hpp>
-#include <string_view>
+
+#include <halcyon/internal/accessor.hpp>
 
 namespace hal
 {
     class surface;
 
-    // For loading images, obviously.
+    // Loads the necessary libraries for image loading. Use as a "fire-and-forget" object,
+    // i.e. create it, and load from anywhere afterwards.
     class image_loader
     {
     public:
@@ -23,8 +25,10 @@ namespace hal
         image_loader(std::initializer_list<format> types);
         ~image_loader();
 
-        static surface load(std::string_view file);
-
         static bool initialized();
     };
+
+    // Image loading is not dependent on a specific object, so it's a free function.
+    surface load_image(accessor data);
+
 } // namespace hal

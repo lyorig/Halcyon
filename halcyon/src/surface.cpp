@@ -2,53 +2,6 @@
 
 using namespace hal;
 
-surface::pixel_reference::pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos)
-    : m_ptr { static_cast<std::byte*>(pixels) + pos.y * pitch + pos.x * fmt->BytesPerPixel }
-    , m_fmt { fmt }
-{
-}
-
-surface::pixel_reference::operator color() const
-{
-    color c;
-    ::SDL_GetRGBA(get(), m_fmt, &c.r, &c.g, &c.b, &c.a);
-    return c;
-}
-
-surface::pixel_reference& surface::pixel_reference::operator=(color c)
-{
-    set(::SDL_MapRGBA(m_fmt, c.r, c.g, c.b, c.a));
-    return *this;
-}
-
-Uint32 surface::pixel_reference::get() const
-{
-    Uint32 ret { 0 };
-
-    if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-        std::memcpy(&ret, m_ptr, m_fmt->BytesPerPixel);
-
-    else
-    {
-        const lyo::u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
-        std::memcpy(&ret + offset, m_ptr + offset, m_fmt->BytesPerPixel);
-    }
-
-    return ret;
-}
-
-void surface::pixel_reference::set(Uint32 mapped)
-{
-    if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-        std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
-
-    else
-    {
-        const lyo::u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
-        std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->BytesPerPixel);
-    }
-}
-
 // Set the depth accordingly upon changing this value.
 constexpr SDL_PixelFormatEnum default_format { SDL_PIXELFORMAT_RGBA32 };
 
@@ -57,12 +10,7 @@ surface::surface(pixel_point sz)
 {
 }
 
-surface::surface(SDL_Surface* surf, lyo::pass_key<image_loader>)
-    : object { surf }
-{
-}
-
-surface::surface(SDL_Surface* surf, lyo::pass_key<font>)
+surface::surface(SDL_Surface* surf)
     : object { surf }
 {
 }
@@ -115,7 +63,7 @@ pixel_point surface::size() const
     };
 }
 
-surface::pixel_reference surface::operator[](const pixel_point& pos) const
+pixel_reference surface::operator[](const pixel_point& pos) const
 {
     HAL_ASSERT(pos.x < ptr()->w, "Out-of-range width");
     HAL_ASSERT(pos.y < ptr()->h, "Out-of-range height");
@@ -153,6 +101,53 @@ void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::
 Uint32 surface::mapped(color c) const
 {
     return ::SDL_MapRGBA(ptr()->format, c.r, c.g, c.b, c.a);
+}
+
+pixel_reference::pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos)
+    : m_ptr { static_cast<std::byte*>(pixels) + pos.y * pitch + pos.x * fmt->BytesPerPixel }
+    , m_fmt { fmt }
+{
+}
+
+pixel_reference::operator color() const
+{
+    color c;
+    ::SDL_GetRGBA(get(), m_fmt, &c.r, &c.g, &c.b, &c.a);
+    return c;
+}
+
+pixel_reference& pixel_reference::operator=(color c)
+{
+    set(::SDL_MapRGBA(m_fmt, c.r, c.g, c.b, c.a));
+    return *this;
+}
+
+Uint32 pixel_reference::get() const
+{
+    Uint32 ret { 0 };
+
+    if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+        std::memcpy(&ret, m_ptr, m_fmt->BytesPerPixel);
+
+    else
+    {
+        const lyo::u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        std::memcpy(&ret + offset, m_ptr + offset, m_fmt->BytesPerPixel);
+    }
+
+    return ret;
+}
+
+void pixel_reference::set(Uint32 mapped)
+{
+    if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+        std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
+
+    else
+    {
+        const lyo::u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->BytesPerPixel);
+    }
 }
 
 void blitter::operator()()

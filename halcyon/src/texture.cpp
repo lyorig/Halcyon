@@ -14,7 +14,7 @@ pixel_point texture_base::size() const
     return size;
 }
 
-void texture_base::opacity(color::value value)
+void texture_base::opacity(color::value_t value)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, ::SDL_GetError());
 }

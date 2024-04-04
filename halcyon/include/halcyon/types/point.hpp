@@ -14,20 +14,7 @@ namespace hal
     {
         T x {}, y {};
 
-        constexpr auto operator+(const point& pt) const -> point<decltype(x + pt.x)>
-        {
-            point<decltype(x + pt.x)> ret { *this };
-            ret += pt;
-            return ret;
-        }
-
-        constexpr auto operator-(const point& pt) const -> point<decltype(x + pt.x)>
-        {
-            point<decltype(x + pt.x)> ret { *this };
-            ret -= pt;
-            return ret;
-        }
-
+        // In-place arithmetic operations.
         constexpr point& operator+=(const point& pt)
         {
             x += pt.x;
@@ -44,11 +31,50 @@ namespace hal
             return *this;
         }
 
-        template <lyo::arithmetic M>
-        constexpr auto operator*(M mul) const -> point<decltype(x * mul)>
+        constexpr point& operator*=(const point& mul)
         {
-            point<decltype(x * mul)> ret = *this;
-            ret *= mul;
+            x *= mul.x;
+            y *= mul.y;
+
+            return *this;
+        }
+
+        constexpr point& operator/=(const point& div)
+        {
+            x /= div.x;
+            y /= div.y;
+
+            return *this;
+        }
+
+        constexpr point& operator%=(const point& mod)
+        {
+            if constexpr (std::is_floating_point_v<T>)
+            {
+                x = std::fmod(x, mod.x);
+                y = std::fmod(y, mod.y);
+            }
+            else
+            {
+                x %= mod.x;
+                y %= mod.y;
+            }
+
+            return *this;
+        }
+
+        // Arithmetic operations.
+        constexpr point operator+(const point& pt) const
+        {
+            point<decltype(x + pt.x)> ret { *this };
+            ret += pt;
+            return ret;
+        }
+
+        constexpr point operator-(const point& pt) const
+        {
+            point<decltype(x + pt.x)> ret { *this };
+            ret -= pt;
             return ret;
         }
 
@@ -56,14 +82,6 @@ namespace hal
         {
             point ret { *this };
             ret *= mul;
-            return ret;
-        }
-
-        template <lyo::arithmetic D>
-        constexpr auto operator/(D div) const -> point<decltype(x / div)>
-        {
-            point<decltype(x / div)> ret = *this;
-            ret /= div;
             return ret;
         }
 
@@ -81,48 +99,6 @@ namespace hal
             return ret;
         }
 
-        constexpr point& operator*=(lyo::f64 mul)
-        {
-            // Bit verbose, but MSVC won't shut up otherwise.
-            x = lyo::cast<T>(static_cast<lyo::f64>(x) * mul);
-            y = lyo::cast<T>(static_cast<lyo::f64>(y) * mul);
-
-            return *this;
-        }
-
-        constexpr point& operator*=(const point& mul)
-        {
-            x *= mul.x;
-            y *= mul.y;
-
-            return *this;
-        }
-
-        constexpr point& operator/=(lyo::f64 div)
-        {
-            // Same problem as in operator*=.
-            x = lyo::cast<T>(static_cast<lyo::f64>(x) / div);
-            y = lyo::cast<T>(static_cast<lyo::f64>(y) / div);
-
-            return *this;
-        }
-
-        constexpr point& operator/=(const point& div)
-        {
-            x /= div.x;
-            y /= div.y;
-
-            return *this;
-        }
-
-        constexpr point& operator%=(const point& mod)
-        {
-            x %= mod.x;
-            y %= mod.y;
-
-            return *this;
-        }
-
         constexpr point operator-() const
             requires std::is_signed_v<T>
         {
@@ -132,33 +108,40 @@ namespace hal
             };
         }
 
+        // Additional arithmetic operations.
+        constexpr point operator*(lyo::f64 mul) const
+        {
+            return point {
+                static_cast<T>(x * mul),
+                static_cast<T>(y * mul)
+            };
+        }
+
+        constexpr point operator/(lyo::f64 div) const
+        {
+            return point {
+                static_cast<T>(x / div),
+                static_cast<T>(y / div)
+            };
+        }
+
+        constexpr point<T> abs() const
+        {
+            return {
+                std::abs(x),
+                std::abs(y)
+            };
+        }
+
+        // Comparisons.
         constexpr auto operator<=>(const point& cmp) const = default;
 
+        // Conversions.
         template <lyo::arithmetic Convert>
         constexpr operator point<Convert>() const
         {
-            return point<Convert> { lyo::cast<Convert>(x),
-                lyo::cast<Convert>(y) };
-        }
-
-        constexpr operator SDL_Point() const
-        {
-            using t = decltype(SDL_Point::x);
-
-            return SDL_Point {
-                lyo::cast<t>(x),
-                lyo::cast<t>(y)
-            };
-        }
-
-        constexpr operator SDL_FPoint() const
-        {
-            using t = decltype(SDL_FPoint::x);
-
-            return SDL_FPoint {
-                lyo::cast<t>(x),
-                lyo::cast<t>(y)
-            };
+            return point<Convert> { static_cast<Convert>(x),
+                static_cast<Convert>(y) };
         }
 
         constexpr sdl::point_t<T>* addr()
@@ -172,21 +155,7 @@ namespace hal
         {
             return reinterpret_cast<const sdl::point_t<T>*>(this);
         }
-
-        constexpr point<T> abs() const
-        {
-            return {
-                std::abs(x),
-                std::abs(y)
-            };
-        }
     };
-
-    template <lyo::arithmetic T>
-    bool operator==(const point<T>& lhs, const point<T> rhs)
-    {
-        return lhs.x == rhs.x && lhs.y == rhs.y;
-    }
 
     // Wrappers for native SDL types.
     namespace sdl

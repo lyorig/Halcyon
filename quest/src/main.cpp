@@ -1,8 +1,8 @@
 #include <quest/game.hpp>
 
-int main(int argc, char* argv[])
+int main()
 {
-    quest::game g { { argc, argv } };
+    quest::game g;
 
     g.main_loop();
 

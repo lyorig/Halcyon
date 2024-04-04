@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL_ttf.h>
+#include <halcyon/internal/accessor.hpp>
 #include <halcyon/internal/sdl_object.hpp>
 #include <halcyon/surface.hpp>
 #include <string_view>
@@ -25,7 +26,7 @@ namespace hal
     class font : public sdl::object<TTF_Font, &::TTF_CloseFont>
     {
     public:
-        font(std::string_view path, lyo::u8 size);
+        font(accessor data, lyo::u8 size);
 
         surface render(const std::string_view& text, color color = color::white) const;
 
@@ -35,5 +36,8 @@ namespace hal
 
         pixel_t height() const;
         pixel_t skip() const;
+
+        std::string_view family() const;
+        std::string_view style() const;
     };
 } // namespace hal

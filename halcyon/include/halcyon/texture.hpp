@@ -15,8 +15,8 @@ namespace hal
     public:
         pixel_point size() const;
 
-        color::value opacity() const;
-        void         opacity(color::value value);
+        color::value_t opacity() const;
+        void           opacity(color::value_t value);
 
         color color_mod() const;
         void  color_mod(hal::color mod);

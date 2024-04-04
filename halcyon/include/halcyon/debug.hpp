@@ -34,9 +34,6 @@
 
 namespace hal
 {
-    class renderer;
-    class font;
-
     constexpr bool debug_enabled {
     #ifdef HAL_DEBUG_ENABLED
         true
@@ -100,8 +97,6 @@ namespace hal
                 debug::panic(func, file, line, cond_string, " failed: ", std::forward<Args>(extra_info)...);
         }
 
-        static void draw(renderer& rnd, const font& fnt);
-
     private:
         template <printable... Args>
         static void print_severity(severity type, Args&&... extra_info)
@@ -155,7 +150,8 @@ namespace hal
     #define HAL_PRINT      hal::debug::print
     #define HAL_PANIC(...) hal::debug::panic(__PRETTY_FUNCTION__, __FILE_NAME__, __LINE__, __VA_ARGS__)
 
-    #define HAL_WARN_IF(cond, ...) hal::debug::warn_if(cond, __VA_ARGS__)
+    #define HAL_WARN_IF(cond, ...)       HAL_WARN_IF_VITAL(cond, __VA_ARGS__)
+    #define HAL_WARN_IF_VITAL(cond, ...) hal::debug::warn_if(cond, __VA_ARGS__)
 
     #define HAL_ASSERT(cond, ...) HAL_ASSERT_VITAL(cond, __VA_ARGS__)
     #define HAL_ASSERT_VITAL(cond, ...) \
@@ -169,8 +165,9 @@ namespace hal
     #define HAL_PANIC(...)
 
     #define HAL_WARN_IF(...)
+    #define HAL_WARN_IF_VITAL(cond, ...) (void(cond))
 
     #define HAL_ASSERT(...)
-    #define HAL_ASSERT_VITAL(condition, ...) (void(condition))
+    #define HAL_ASSERT_VITAL(cond, ...) (void(cond))
 
 #endif
