@@ -57,8 +57,8 @@ namespace hal
         // Create a surface from an array of colors.
         // If you are not yet accustomed to std::mdspan, the dimensional extents are in [Y, X] format.
         // Either that, or I'm not understanding the class correctly. Womp womp.
-        template <typename Extents, typename Layout>
-        surface(std::mdspan<const hal::color, Extents, Layout> colors)
+        template <typename Extents>
+        surface(std::mdspan<const hal::color, Extents> colors)
             : surface { { static_cast<pixel_t>(colors.extent(1)), static_cast<pixel_t>(colors.extent(0)) } }
         {
             for (pixel_point pos { 0, 0 }; static_cast<std::size_t>(pos.y) != colors.extent(0); ++pos.y, pos.x = 0)

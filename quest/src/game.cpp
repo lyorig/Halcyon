@@ -16,7 +16,10 @@ game::game(lyo::parser p)
 
     using mds = std::mdspan<const hal::color, std::extents<std::size_t, 16, 32>>;
 
-    m_ents.spawn<ent::npc>(hal::texture { m_renderer, mds(test_sprite) }, coord { 100, 100 });
+    hal::surface s { mds(test_sprite) };
+    s[{ 30, 10 }] = hal::color::weezer_blue;
+
+    m_ents.spawn<ent::npc>(hal::texture { m_renderer, std::move(s) }, coord { 100, 100 });
 }
 
 void game::main_loop()

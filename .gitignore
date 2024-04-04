@@ -1,8 +1,9 @@
 .vscode/
 .cache/
-build/
 
-bin/
+build/
+/quest/bin/*
+!/quest/bin/assets
 
 *.code-workspace
 .DS_Store
