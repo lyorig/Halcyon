@@ -4,8 +4,10 @@
 
 using namespace hal;
 
+    #ifdef HAL_DEBUG_ADVANCED
 std::ofstream            debug::m_output { "Halcyon Debug Output.txt" };
 const lyo::precise_timer debug::m_timer {};
+    #endif
 
 std::string_view debug::last_error()
 {

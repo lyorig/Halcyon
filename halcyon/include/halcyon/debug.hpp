@@ -1,12 +1,16 @@
 #pragma once
 
 // debug.hpp:
-// Various debugging functions. Also hopefully the only
-// part of Halcyon that extensively uses preprocessor defines.
+// Various debugging functions. Configurable via preprocessor definitions.
 
-// If the application is in debug mode, so is Halcyon.
+// Debugging functionality is configured as such:
+//  - HAL_DEBUG_ENABLED enables debugging.
+//  - HAL_DEBUG_ADVANCED additionally provides timestamps and logs to an output file.
+//  - if NDEBUG is defined, both of the aforementioned macros are implicitly defined as well.
+
 #ifndef NDEBUG
     #define HAL_DEBUG_ENABLED
+    #define HAL_DEBUG_ADVANCED
 #endif
 
 #ifdef HAL_DEBUG_ENABLED
@@ -103,8 +107,10 @@ namespace hal
         {
             std::stringstream fwd_info, message;
 
+    #ifdef HAL_DEBUG_ADVANCED
             fwd_info << std::fixed << std::setprecision(3) << '[' << m_timer()
                      << "s] ";
+    #endif
 
             switch (type)
             {
@@ -134,17 +140,21 @@ namespace hal
             }
 
             const std::string msg { lyo::string_from_pack(extra_info...) };
-
             const std::string with_info { fwd_info.str() + msg };
 
+    #ifdef HAL_DEBUG_ADVANCED
             m_output << with_info << std::endl;
+    #endif
+
             (type == error ? std::cerr : std::cout) << with_info << std::endl;
         }
 
+    #ifdef HAL_DEBUG_ADVANCED
         static std::ofstream            m_output;
         static const lyo::precise_timer m_timer;
+    #endif
     };
-} // namespace hal
+}
 
     #define HAL_DEBUG(...) __VA_ARGS__
     #define HAL_PRINT      hal::debug::print

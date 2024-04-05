@@ -8,8 +8,6 @@ namespace quest
 {
     namespace constants
     {
-        constexpr meter_t gravity { 9.81 };
-
         // All of the following values apply to the base camera distance and scale.
 
         // Different aspect ratios exist, and it is my belief that "anchoring"
@@ -36,7 +34,7 @@ namespace quest
 
         constexpr hal::pixel_point rpx_size(hal::pixel_point actual_size)
         {
-            return actual_size * (rpx_height / lyo::f64(actual_size.y));
+            return actual_size * (rpx_height / static_cast<lyo::f64>(actual_size.y));
         }
     }
 }
