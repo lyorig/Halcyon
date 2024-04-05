@@ -23,8 +23,8 @@ namespace quest
         entity_manager m_ents;
 
         LYO_NOSIZE hal::cleanup m_cleanup { hal::system::video };
-        LYO_NOSIZE hal::image_cleanup m_image { hal::image_cleanup::png };
-        LYO_NOSIZE hal::ttf_cleanup m_ttf;
+        LYO_NOSIZE hal::image::cleanup m_image { hal::image::png };
+        LYO_NOSIZE hal::ttf::cleanup m_ttf;
 
         hal::window   m_window { "HalodaQuest", hal::fullscreen };
         hal::renderer m_renderer { m_window, { hal::renderer::accelerated, hal::renderer::vsync } };

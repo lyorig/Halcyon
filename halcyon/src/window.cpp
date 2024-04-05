@@ -1,6 +1,6 @@
 #include <halcyon/window.hpp>
 
-#include <halcyon/other/helpers.hpp>
+#include <halcyon/internal/helpers.hpp>
 #include <halcyon/other/system.hpp>
 
 using namespace hal;
@@ -36,7 +36,7 @@ display window::display_info() const
 {
     const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
 
-    HAL_ASSERT(ret >= 0, ::SDL_GetError());
+    HAL_ASSERT(ret >= 0, debug::last_error());
 
     return display { static_cast<display::index_t>(ret) };
 }

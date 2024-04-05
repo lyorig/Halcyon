@@ -11,7 +11,7 @@ game::game()
 
     m_cam.pos.jump(m_renderer.size() / 2.0);
 
-    m_ents.spawn<ent::npc>(hal::texture { m_renderer, hal::load_image(hal::from_file("assets/test_sprite.png")) }, coord { 100, 100 });
+    m_ents.spawn<ent::npc>(hal::texture { m_renderer, hal::image::load(hal::from_file("assets/test_sprite.png")) }, coord { 100, 100 });
 }
 
 void game::main_loop()

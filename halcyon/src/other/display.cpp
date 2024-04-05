@@ -8,7 +8,7 @@ display::display(index_t disp_idx)
 {
     SDL_DisplayMode dm;
 
-    HAL_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(disp_idx, &dm) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(disp_idx, &dm) == 0, debug::last_error());
 
     m_size.x = static_cast<pixel_t>(dm.w);
     m_size.y = static_cast<pixel_t>(dm.h);
@@ -21,7 +21,7 @@ display::display(index_t disp_idx, index_t mode_idx)
 {
     SDL_DisplayMode dm;
 
-    HAL_ASSERT_VITAL(::SDL_GetDisplayMode(disp_idx, mode_idx, &dm) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_GetDisplayMode(disp_idx, mode_idx, &dm) == 0, debug::last_error());
 
     m_size.x = static_cast<pixel_t>(dm.w);
     m_size.y = static_cast<pixel_t>(dm.h);
@@ -33,7 +33,7 @@ display::index_t display::amount()
 {
     const auto ret = ::SDL_GetNumVideoDisplays();
 
-    HAL_ASSERT(ret >= 1, ::SDL_GetError());
+    HAL_ASSERT(ret >= 1, debug::last_error());
 
     return static_cast<index_t>(ret);
 }
@@ -42,7 +42,7 @@ display::index_t display::num_modes() const
 {
     const auto ret = ::SDL_GetNumDisplayModes(m_index);
 
-    HAL_ASSERT(ret >= 1, ::SDL_GetError());
+    HAL_ASSERT(ret >= 1, debug::last_error());
 
     return static_cast<index_t>(ret);
 }
@@ -71,7 +71,7 @@ std::string_view display::name(index_t idx)
 {
     const char* name { ::SDL_GetDisplayName(idx) };
 
-    HAL_ASSERT(name != nullptr, ::SDL_GetError());
+    HAL_ASSERT(name != nullptr, debug::last_error());
 
     return name;
 }

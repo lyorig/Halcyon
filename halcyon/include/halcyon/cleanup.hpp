@@ -9,8 +9,8 @@
 namespace hal
 {
     // This class initializes everything Halcyon needs.
-    // Its creation might not be necessary for all functionality, but in
-    // case of
+    // Its creation might not be necessary for all functionality, but it's good
+    // practice to have it initialized before using anything else regardless.
     class cleanup
     {
     public:

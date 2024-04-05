@@ -58,7 +58,7 @@ namespace hal
         static bool pending();
 
         // Get the current keyboard state. Index with hal::button values.
-        static std::span<const Uint8> keyboard_state();
+        static std::span<const std::uint8_t> keyboard_state();
 
         // Get the state of an event type (whether it is enabled or not).
         static bool state(type t);

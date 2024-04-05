@@ -42,17 +42,17 @@ surface surface::resize(lyo::f64 scale)
 
 void surface::fill(color clr)
 {
-    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), nullptr, mapped(clr)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), nullptr, mapped(clr)) == 0, debug::last_error());
 }
 
 void surface::fill_rect(const sdl::pixel_rect& area, color clr)
 {
-    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), area.addr(), mapped(clr)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), area.addr(), mapped(clr)) == 0, debug::last_error());
 }
 
 void surface::fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr)
 {
-    HAL_ASSERT_VITAL(::SDL_FillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_FillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, debug::last_error());
 }
 
 pixel_point surface::size() const
@@ -75,14 +75,14 @@ blend_mode surface::blend() const
 {
     SDL_BlendMode bm;
 
-    HAL_ASSERT_VITAL(::SDL_GetSurfaceBlendMode(this->ptr(), &bm) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_GetSurfaceBlendMode(this->ptr(), &bm) == 0, debug::last_error());
 
     return blend_mode(bm);
 }
 
 void surface::blend(blend_mode bm)
 {
-    HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
 blitter surface::blit(surface& dst) const
@@ -95,7 +95,7 @@ void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::
     HAL_ASSERT(this->exists(), "Drawing null surface");
     HAL_ASSERT(to.exists(), "Drawing to null surface");
 
-    HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), reinterpret_cast<const SDL_Rect*>(src), to.ptr(), reinterpret_cast<SDL_Rect*>(dst)) == 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), reinterpret_cast<const SDL_Rect*>(src), to.ptr(), reinterpret_cast<SDL_Rect*>(dst)) == 0, debug::last_error());
 }
 
 Uint32 surface::mapped(color c) const

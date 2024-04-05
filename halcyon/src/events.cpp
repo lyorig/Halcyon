@@ -10,7 +10,7 @@ bool event::poll()
 
 void event::push()
 {
-    HAL_ASSERT_VITAL(::SDL_PushEvent(&data) >= 0, ::SDL_GetError());
+    HAL_ASSERT_VITAL(::SDL_PushEvent(&data) >= 0, debug::last_error());
 }
 
 bool event::pending()
@@ -18,12 +18,11 @@ bool event::pending()
     return ::SDL_PollEvent(nullptr) == 1;
 }
 
-std::span<const Uint8> event::keyboard_state()
+std::span<const std::uint8_t> event::keyboard_state()
 {
     int size;
 
-    const auto ptr = ::SDL_GetKeyboardState(&size);
-
+    const std::uint8_t* ptr { ::SDL_GetKeyboardState(&size) };
     return { ptr, static_cast<std::size_t>(size) };
 }
 
@@ -34,5 +33,5 @@ bool event::state(type t)
 
 bool event::state(type t, bool enable)
 {
-    return ::SDL_EventState(t, enable ? SDL_ENABLE : SDL_IGNORE) == SDL_ENABLE ? true : false;
+    return ::SDL_EventState(t, enable ? SDL_ENABLE : SDL_IGNORE) == SDL_ENABLE;
 }

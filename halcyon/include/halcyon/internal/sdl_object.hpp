@@ -28,7 +28,7 @@ namespace hal
             object(Type* object)
                 : m_object { object }
             {
-                HAL_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
+                HAL_ASSERT(m_object.get() != nullptr, debug::last_error());
             }
 
             // Return the underlying pointer to the object. Intended for internal
@@ -54,7 +54,7 @@ namespace hal
             void reset(Type* object)
             {
                 m_object.reset(object);
-                HAL_ASSERT(m_object.get() != nullptr, ::SDL_GetError());
+                HAL_ASSERT(m_object.get() != nullptr, debug::last_error());
             }
 
         private:

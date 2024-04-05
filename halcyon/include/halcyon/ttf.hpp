@@ -1,12 +1,13 @@
 #pragma once
 
 #include <SDL_ttf.h>
+
 #include <halcyon/internal/accessor.hpp>
-#include <halcyon/internal/sdl_object.hpp>
 #include <halcyon/surface.hpp>
+
 #include <string_view>
 
-namespace hal
+namespace hal::ttf
 {
     // A class that makes sure everything TTF-related is loaded and
     // ready to use. This includes not only loading fonts, but also
@@ -14,11 +15,11 @@ namespace hal
     // TTF engine doesn't exist.
     // TL;DR: Ensure that this object outlives all fonts.
 
-    class ttf_cleanup
+    class cleanup
     {
     public:
-        ttf_cleanup();
-        ~ttf_cleanup();
+        cleanup();
+        ~cleanup();
 
         static bool initialized();
     };
@@ -40,4 +41,4 @@ namespace hal
         std::string_view family() const;
         std::string_view style() const;
     };
-} // namespace hal
+}
