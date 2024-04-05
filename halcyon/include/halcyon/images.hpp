@@ -11,7 +11,7 @@ namespace hal
 
     // Loads the necessary libraries for image loading. Use as a "fire-and-forget" object,
     // i.e. create it, and load from anywhere afterwards.
-    class image_loader
+    class image_cleanup
     {
     public:
         enum format : lyo::u8 // Image types, adapted from SDL.
@@ -22,8 +22,8 @@ namespace hal
             webp = IMG_INIT_WEBP
         };
 
-        image_loader(std::initializer_list<format> types);
-        ~image_loader();
+        image_cleanup(std::initializer_list<format> types);
+        ~image_cleanup();
 
         static bool initialized();
     };

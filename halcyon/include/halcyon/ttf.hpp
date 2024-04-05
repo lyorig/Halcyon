@@ -14,11 +14,11 @@ namespace hal
     // TTF engine doesn't exist.
     // TL;DR: Ensure that this object outlives all fonts.
 
-    class ttf_engine
+    class ttf_cleanup
     {
     public:
-        ttf_engine();
-        ~ttf_engine();
+        ttf_cleanup();
+        ~ttf_cleanup();
 
         static bool initialized();
     };

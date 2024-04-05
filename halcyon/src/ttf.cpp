@@ -2,16 +2,16 @@
 
 using namespace hal;
 
-ttf_engine::ttf_engine()
+ttf_cleanup::ttf_cleanup()
 {
     HAL_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
 
     HAL_PRINT(debug::init, "Initialized TTF engine");
 }
 
-ttf_engine::~ttf_engine() { ::TTF_Quit(); }
+ttf_cleanup::~ttf_cleanup() { ::TTF_Quit(); }
 
-bool ttf_engine::initialized()
+bool ttf_cleanup::initialized()
 {
     return ::TTF_WasInit() > 0;
 }

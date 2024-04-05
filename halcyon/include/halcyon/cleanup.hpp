@@ -4,13 +4,13 @@
 #include <initializer_list>
 
 // cleanup.hpp:
-// A class that deinitializes SDL upon destruction.
+// A class that manages SDL (de)initialization.
 
 namespace hal
 {
-    // This class deinitializes everything SDL-related upon destruction.
-    // You don't have to create it, but it's probably good practice to
-    // create one before using anything else from Halcyon.
+    // This class initializes everything Halcyon needs.
+    // Its creation might not be necessary for all functionality, but in
+    // case of
     class cleanup
     {
     public:

@@ -5,8 +5,6 @@ using namespace quest;
 
 game::game()
 {
-    m_window.size({ 640, 480 });
-
     // Set a unified renderer size.
     m_renderer.size(constants::rpx_size(m_window.size()));
     HAL_PRINT("Set game size to ", m_renderer.size());
@@ -59,8 +57,8 @@ bool game::process_events(hal::event& event)
             return false;
 
         case key_pressed:
-            if (event.data.key.repeat == 0 && !process_press(hal::button(event.data.key.keysym.scancode)))
-                return false;
+            if (event.data.key.repeat == 0)
+                process_press(hal::button(event.data.key.keysym.scancode));
             break;
 
         case key_released:
@@ -75,14 +73,12 @@ bool game::process_events(hal::event& event)
     return true;
 }
 
-bool game::process_press(hal::button b)
+void game::process_press(hal::button b)
 {
     using enum hal::button;
 
     switch (b)
     {
-    case esc:
-        return false;
     case one:
         m_cam.pos.start({ 1000, 100 }, 1.0);
         break;
@@ -98,8 +94,6 @@ bool game::process_press(hal::button b)
     default:
         break;
     }
-
-    return true;
 }
 
 void game::process_release(hal::button b)

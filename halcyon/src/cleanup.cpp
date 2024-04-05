@@ -1,17 +1,17 @@
 #include <halcyon/cleanup.hpp>
 #include <halcyon/debug.hpp>
+#include <halcyon/internal/helpers.hpp>
 
 using namespace hal;
 
 cleanup::cleanup()
+    : cleanup { {} }
 {
-    HAL_ASSERT_VITAL(::SDL_Init(0), ::SDL_GetError());
 }
 
 cleanup::cleanup(std::initializer_list<system::type> subs)
 {
-    for (auto s : subs)
-        initialize(s);
+    HAL_ASSERT_VITAL(::SDL_Init(il2bm<Uint32>(subs)) == 0, debug::last_error());
 }
 
 cleanup::~cleanup()

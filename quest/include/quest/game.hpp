@@ -23,7 +23,8 @@ namespace quest
         entity_manager m_ents;
 
         LYO_NOSIZE hal::cleanup m_cleanup { hal::system::video };
-        LYO_NOSIZE hal::image_loader m_image { hal::image_loader::png };
+        LYO_NOSIZE hal::image_cleanup m_image { hal::image_cleanup::png };
+        LYO_NOSIZE hal::ttf_cleanup m_ttf;
 
         hal::window   m_window { "HalodaQuest", hal::fullscreen };
         hal::renderer m_renderer { m_window, { hal::renderer::accelerated, hal::renderer::vsync } };
@@ -32,9 +33,10 @@ namespace quest
 
         animatable<lyo::f64, easing::in_out::parametric> m_timescale { 1.0 };
 
+        // Returns whether to continue running.
         bool process_events(hal::event& event);
 
-        bool process_press(hal::button b);
+        void process_press(hal::button b);
         void process_release(hal::button b);
     };
 };
