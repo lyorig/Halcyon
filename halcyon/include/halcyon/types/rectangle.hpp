@@ -43,52 +43,32 @@ namespace hal
                 static_cast<point<Convert>>(size) };
         }
 
-        constexpr rectangle operator*(lyo::f64 mul) const
+        constexpr point<T> anchor(anchor a, const point<T>& sz) const
         {
-            return rectangle { pos, size * mul };
-        }
+            point ret { pos };
 
-        constexpr rectangle operator/(lyo::f64 div) const
-        {
-            return rectangle { pos, size / div };
-        }
+            using enum hal::anchor;
 
-        constexpr rectangle& operator*=(lyo::f64 mul)
-        {
-            size *= mul;
+            switch (a)
+            {
+            case center:
+                ret += size / 2 - sz / 2;
+                break;
+            case top_left:
+                ret.y += size.y - sz.y;
+                break;
+            case top_right:
+                (ret += size) -= sz;
+                break;
+            case bottom_left:
+                // nothing to do.
+                break;
+            case bottom_right:
+                ret.x += size.x - sz.x;
+                break;
+            }
 
-            return *this;
-        }
-
-        constexpr rectangle& operator/=(lyo::f64 div)
-        {
-            size /= div;
-
-            return *this;
-        }
-
-        constexpr operator SDL_Rect() const
-        {
-            using type = decltype(SDL_Rect::x);
-
-            return SDL_Rect {
-                lyo::cast<type>(pos.x),
-                lyo::cast<type>(pos.y),
-                lyo::cast<type>(size.x),
-                lyo::cast<type>(size.y),
-            };
-        }
-
-        constexpr operator SDL_FRect() const
-        {
-            using type = decltype(SDL_FRect::x);
-
-            return SDL_FRect {
-                lyo::cast<type>(pos.x),
-                lyo::cast<type>(pos.y),
-                lyo::cast<type>(size.x),
-                lyo::cast<type>(size.y),
-            };
+            return ret;
         }
 
         constexpr sdl::rect_t<T>* addr()
@@ -120,13 +100,6 @@ namespace hal
     constexpr bool operator|(const point<T>& pt, const rectangle<T> rect)
     {
         return pt.x >= rect.pos.x && pt.x <= rect.pos.x + rect.size.x && pt.y >= rect.pos.y && pt.y <= rect.pos.y + rect.size.y;
-    }
-
-    template <lyo::arithmetic T>
-    constexpr lyo::f64 distance(const point<T>& lhs, const point<T>& rhs)
-    {
-        const point<T> dist { lhs - rhs };
-        return static_cast<lyo::f64>(std::sqrt(std::pow(dist.x, 2) + std::pow(dist.y, 2)));
     }
 
     // Wrappers for native SDL types.

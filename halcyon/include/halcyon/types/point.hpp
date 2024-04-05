@@ -2,10 +2,18 @@
 
 #include <halcyon/types/sdl.hpp>
 #include <halcyon/types/tags.hpp>
-#include <lyo/cast.hpp>
 
 namespace hal
 {
+    enum class anchor
+    {
+        center,
+        top_left,
+        top_right,
+        bottom_left,
+        bottom_right
+    };
+
     template <lyo::arithmetic T>
     struct rectangle;
 
@@ -125,12 +133,40 @@ namespace hal
             };
         }
 
-        constexpr point<T> abs() const
+        constexpr point abs() const
         {
             return {
                 std::abs(x),
                 std::abs(y)
             };
+        }
+
+        constexpr point anchor(anchor a, const point<T>& size) const
+        {
+            point ret { *this };
+
+            using enum hal::anchor;
+
+            switch (a)
+            {
+            case center:
+                ret -= size / 2;
+                break;
+            case top_left:
+                ret.y += size.y;
+                break;
+            case top_right:
+                ret += size;
+                break;
+            case bottom_left:
+                // Nothing to do.
+                break;
+            case bottom_right:
+                ret.x += size.x;
+                break;
+            }
+
+            return ret;
         }
 
         // Comparisons.
@@ -156,6 +192,13 @@ namespace hal
             return reinterpret_cast<const sdl::point_t<T>*>(this);
         }
     };
+
+    template <lyo::arithmetic T>
+    constexpr lyo::f64 distance(const point<T>& lhs, const point<T>& rhs)
+    {
+        const point<T> dist { lhs - rhs };
+        return static_cast<lyo::f64>(std::sqrt(dist.x * dist.x + dist.y * dist.y));
+    }
 
     // Wrappers for native SDL types.
     namespace sdl

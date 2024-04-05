@@ -1,5 +1,4 @@
 #pragma once
-#include <halcyon/enums/anchor.hpp>
 #include <halcyon/types/render.hpp>
 #include <limits>
 #include <lyo/pass_key.hpp>
@@ -83,10 +82,10 @@ namespace hal
 
         // Anchor from the destination position.
         // Call after setting the destination and scaling.
-        [[nodiscard]] this_ref anchor(anchor::pos anch)
+        [[nodiscard]] this_ref anchor(anchor anch)
         {
             if (m_dst.pos.x != unset<dst_t>)
-                m_dst.pos = anchor::resolve(anch, m_dst.pos, m_dst.size);
+                m_dst.pos = m_dst.pos.anchor(anch, m_dst.size);
             return get_this();
         }
 

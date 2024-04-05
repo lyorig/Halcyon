@@ -15,7 +15,7 @@ namespace hal
     class event
     {
     public:
-        enum type
+        enum system_event
         {
             quit_requested = SDL_QUIT,
             terminated     = SDL_APP_TERMINATING,
@@ -48,31 +48,7 @@ namespace hal
             user_event = SDL_USEREVENT
         };
 
-        // Get an event from the event queue.
-        bool poll();
-
-        // Push this event into the event queue.
-        void push();
-
-        // Check whether there are any pending events in the event queue.
-        static bool pending();
-
-        // Get the current keyboard state. Index with hal::button values.
-        static std::span<const std::uint8_t> keyboard_state();
-
-        // Get the state of an event type (whether it is enabled or not).
-        static bool state(type t);
-
-        // Set the state of an event type (whether it is enabled or not).
-        // Returns the type's previous state.
-        static bool state(type t, bool enable);
-
-        SDL_Event data;
-    };
-
-    namespace window_event
-    {
-        enum type
+        enum window_event
         {
             shown               = SDL_WINDOWEVENT_SHOWN,
             hidden              = SDL_WINDOWEVENT_HIDDEN,
@@ -93,5 +69,26 @@ namespace hal
             icc_profile_changed = SDL_WINDOWEVENT_ICCPROF_CHANGED,
             display_changed     = SDL_WINDOWEVENT_DISPLAY_CHANGED
         };
-    }
+
+        // Get an event from the event queue.
+        bool poll();
+
+        // Push this event into the event queue.
+        void push();
+
+        // Check whether there are any pending events in the event queue.
+        static bool pending();
+
+        // Get the current keyboard state. Index with hal::button values.
+        static std::span<const std::uint8_t> keyboard_state();
+
+        // Get the state of an event type (whether it is enabled or not).
+        static bool state(system_event t);
+
+        // Set the state of an event type (whether it is enabled or not).
+        // Returns the type's previous state.
+        static bool state(system_event t, bool enable);
+
+        SDL_Event data;
+    };
 }

@@ -2,6 +2,8 @@
 
 #include <halcyon/surface.hpp>
 
+#include <SDL_render.h>
+
 // texture.cpp:
 // Proper textures that can be drawn to a window (or a target texture).
 

@@ -2,7 +2,6 @@
 
 #include <SDL_render.h>
 
-#include <halcyon/enums/anchor.hpp>
 #include <halcyon/enums/blend.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
@@ -19,6 +18,14 @@ namespace hal
     class target_texture;
 
     class copyer;
+
+    enum class flip : lyo::u8
+    {
+        none = SDL_FLIP_NONE,
+        x    = SDL_FLIP_HORIZONTAL,
+        y    = SDL_FLIP_VERTICAL,
+        both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
+    };
 
     class renderer : public sdl::object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
