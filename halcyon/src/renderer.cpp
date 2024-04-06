@@ -53,7 +53,7 @@ void renderer::draw_rect(const sdl::coord_rect& area)
 void renderer::fill_rect(const sdl::coord_rect& area)
 {
 #ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderFillRect(this->ptr(), area.addr))) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_RenderFillRect(this->ptr(), area.addr()) == 0, debug::last_error());
 #else
     HAL_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), area.addr()) == 0, debug::last_error());
 #endif

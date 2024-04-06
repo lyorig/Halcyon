@@ -36,6 +36,8 @@ ${HALCYON_SOURCES}
 ${QUEST_SOURCES}
 )
 
+target_compile_definitions(HalQuest PRIVATE HAL_INTEGRAL_COORD)
+
 target_link_libraries(HalQuest ${HALCYON_LIBRARIES})
 
 # The asset to color array convertor.
