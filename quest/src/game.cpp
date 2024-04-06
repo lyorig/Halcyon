@@ -47,12 +47,6 @@ void game::main_loop()
 
 bool game::process_events(hal::event& event)
 {
-    constexpr hitbox area { 100, 100, 400, 400 };
-    hal::color_lock  cl { m_renderer, hal::color::weezer_blue };
-    m_renderer.fill_rect(m_cam.transform(area, m_renderer.size()));
-
-    auto& first = m_ents.view<ent::npc>().front();
-
     while (event.poll())
     {
         switch (event.type())
@@ -64,7 +58,7 @@ bool game::process_events(hal::event& event)
 
         case key_pressed:
             if (!event.keyboard().repeat())
-                first.pos = area.anchor(process_press(event.keyboard().button()), first.size);
+                process_press(event.keyboard().button());
             break;
 
         case key_released:
@@ -79,27 +73,14 @@ bool game::process_events(hal::event& event)
     return true;
 }
 
-hal::anchor game::process_press(hal::keyboard::button b)
+void game::process_press(hal::keyboard::button b)
 {
     using enum hal::keyboard::button;
-    using enum hal::anchor;
 
     switch (b)
     {
-    case one:
-        return top_left;
-
-    case two:
-        return top_right;
-
-    case three:
-        return bottom_left;
-
-    case four:
-        return bottom_right;
-
     default:
-        return center;
+        break;
     }
 }
 

@@ -36,7 +36,7 @@ namespace quest
         // Returns whether to continue running.
         bool process_events(hal::event& event);
 
-        hal::anchor process_press(hal::keyboard::button b);
-        void        process_release(hal::keyboard::button b);
+        void process_press(hal::keyboard::button b);
+        void process_release(hal::keyboard::button b);
     };
 };
