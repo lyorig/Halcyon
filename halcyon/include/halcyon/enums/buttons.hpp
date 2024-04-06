@@ -10,7 +10,7 @@
 
 namespace hal
 {
-    enum class button : lyo::u16
+    enum class button : lyo::u8
     {
         A = SDL_SCANCODE_A,
         B = SDL_SCANCODE_B,
@@ -75,11 +75,14 @@ namespace hal
 
         left_alt  = SDL_SCANCODE_LALT,
         right_alt = SDL_SCANCODE_RALT,
+    };
 
-        left_mouse    = SDL_NUM_SCANCODES + SDL_BUTTON_LEFT - 1,
-        middle_moouse = SDL_NUM_SCANCODES + SDL_BUTTON_MIDDLE - 1,
-        right_mouse   = SDL_NUM_SCANCODES + SDL_BUTTON_RIGHT - 1,
-        mouse_x1      = SDL_NUM_SCANCODES + SDL_BUTTON_X1 - 1,
-        mouse_x2      = SDL_NUM_SCANCODES + SDL_BUTTON_X2 - 1
+    enum class button_mouse : lyo::u8
+    {
+        left   = SDL_BUTTON_LEFT,
+        middle = SDL_BUTTON_MIDDLE,
+        right  = SDL_BUTTON_RIGHT,
+        x1     = SDL_BUTTON_X1,
+        x2     = SDL_BUTTON_X2
     };
 }

@@ -9,6 +9,7 @@
 
 namespace hal
 {
+    // Forward declarations for parameters and return types.
     class renderer;
     class copyer;
 

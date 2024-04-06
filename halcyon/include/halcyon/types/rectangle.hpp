@@ -43,6 +43,9 @@ namespace hal
                 static_cast<point<Convert>>(size) };
         }
 
+        // Get the origin of a rectangle anchored at a certain point in this rectangle.
+        // Since the rendering origin is at the top left of the screen, the top and bottom
+        // anchorings will have to be switched around.
         constexpr point<T> anchor(anchor a, const point<T>& sz) const
         {
             point ret { pos };

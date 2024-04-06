@@ -45,6 +45,10 @@ int main()
                     current = hbx.anchor(bottom_right, quest::coord(tex.size()));
                     break;
 
+                case five:
+                    current = hbx.anchor(center, quest::coord(tex.size()));
+                    break;
+
                 default:
                     break;
                 }

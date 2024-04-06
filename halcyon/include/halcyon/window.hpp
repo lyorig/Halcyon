@@ -12,6 +12,8 @@ namespace hal
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
+        using id_t = lyo::u8;
+
         enum flags : Uint32
         {
             none                  = 0,

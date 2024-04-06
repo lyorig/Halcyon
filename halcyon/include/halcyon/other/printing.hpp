@@ -1,6 +1,5 @@
 #pragma once
 
-#include <halcyon/enums/buttons.hpp>
 #include <halcyon/types/rectangle.hpp>
 #include <ostream>
 #include <utility>

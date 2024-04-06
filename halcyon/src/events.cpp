@@ -5,12 +5,30 @@ using namespace hal;
 
 bool event::poll()
 {
-    return ::SDL_PollEvent(&data) == 1;
+    if (::SDL_PollEvent(&m_event) == 0)
+        return false;
+
+    switch (static_cast<enum type>(evt.type))
+    {
+        case 
+    }
+
+    return true;
 }
 
 void event::push()
 {
     HAL_ASSERT_VITAL(::SDL_PushEvent(&data) >= 0, debug::last_error());
+}
+
+event::system_event event::type() const
+{
+    return static_cast<event::system_event>(data.common.type);
+}
+
+event::tick_t event::timestamp() const
+{
+    return static_cast<event::tick_t>(data.common.timestamp);
 }
 
 bool event::pending()

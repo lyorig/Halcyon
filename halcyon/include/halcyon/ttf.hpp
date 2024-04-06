@@ -14,7 +14,6 @@ namespace hal::ttf
     // their features - for example, font::render() will fail if a
     // TTF engine doesn't exist.
     // TL;DR: Ensure that this object outlives all fonts.
-
     class cleanup
     {
     public:
