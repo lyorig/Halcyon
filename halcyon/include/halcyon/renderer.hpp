@@ -2,9 +2,9 @@
 
 #include <SDL_render.h>
 
-#include <halcyon/enums/blend.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
+#include <halcyon/other/blend.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 #include <lyo/pass_key.hpp>
@@ -80,7 +80,7 @@ namespace hal
         void internal_target(SDL_Texture* target);
     };
 
-    class copyer : public drawer<texture_base, sdl::coord_t, renderer, copyer>
+    class copyer : public detail::drawer<texture_base, sdl::coord_t, renderer, copyer>
     {
     public:
         using drawer::drawer;

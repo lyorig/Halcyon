@@ -6,7 +6,7 @@
 // helpers.hpp:
 // One-off functions that I didn't know where else to put.
 
-namespace hal
+namespace hal::detail
 {
     // OR together a set of values.
     // The name stands for "initializer list to bit mask".

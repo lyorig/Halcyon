@@ -17,17 +17,17 @@ int main()
     {
         while (e.poll())
         {
-            using enum hal::event::system_event;
-            using enum hal::button;
+            using enum hal::event::event_type;
+            using enum hal::keyboard::button;
             using enum hal::anchor;
 
-            switch (e.data.type)
+            switch (e.type())
             {
             case quit_requested:
                 return EXIT_SUCCESS;
 
             case key_pressed:
-                switch (static_cast<hal::button>(e.data.key.keysym.scancode))
+                switch (e.keyboard().button())
                 {
                 case one:
                     current = hbx.anchor(top_left, quest::coord(tex.size()));
@@ -53,6 +53,9 @@ int main()
                     break;
                 }
 
+                break;
+
+            default:
                 break;
             }
         }

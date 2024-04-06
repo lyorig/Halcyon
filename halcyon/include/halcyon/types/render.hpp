@@ -11,7 +11,7 @@ namespace hal
     // Native SDL interop ought to be the fastest.
     // As such, using fast types will map Halcyon's types to SDL's.
     using pixel_t = lyo::CFT<lyo::i16, sdl::pixel_t>;
-    using coord_t = lyo::CFT<lyo::f64, sdl::coord_t>;
+    using coord_t = lyo::CFT<std::conditional_t<sdl::integral_coord, pixel_t, lyo::f32>, sdl::coord_t>;
 
     using pixel_point = point<pixel_t>;
     using pixel_rect  = rectangle<pixel_t>;

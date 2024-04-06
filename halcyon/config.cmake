@@ -5,6 +5,8 @@ internal/accessor.cpp
 other/clipboard.cpp
 other/display.cpp
 other/driver.cpp
+other/event_types.cpp
+other/keyboard_mouse.cpp
 other/printing.cpp
 other/system.cpp
 cleanup.cpp

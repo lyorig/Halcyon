@@ -131,8 +131,8 @@ void copyer::operator()()
 {
     m_pass.internal_render_copy(
         m_this,
-        m_src.pos.x == unset<src_t> ? nullptr : &m_src,
-        m_dst.pos.x == unset<dst_t> ? nullptr : &m_dst,
+        m_src.pos.x == detail::unset_pos<src_t> ? nullptr : &m_src,
+        m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : &m_dst,
         m_angle,
         m_flip,
         {});

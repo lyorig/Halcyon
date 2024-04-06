@@ -3,10 +3,10 @@
 #include <limits>
 #include <lyo/pass_key.hpp>
 
-namespace hal
+namespace hal::detail
 {
     template <lyo::arithmetic T>
-    constexpr T unset { std::numeric_limits<T>::max() };
+    constexpr T unset_pos { std::numeric_limits<T>::max() };
 
     // A base drawer class, implementing the builder method for drawing textures.
     // Designed to be used as an rvalue - all functions should only be called once.
@@ -35,7 +35,7 @@ namespace hal
             , m_this { src }
             , m_dst { as_size, src.size() }
         {
-            m_src.pos.x = unset<src_t>;
+            m_src.pos.x = unset_pos<src_t>;
         }
 
         // Set where to draw.
@@ -58,7 +58,7 @@ namespace hal
         // Do not use with scaling and anchoring.
         [[nodiscard]] this_ref to(fill_tag)
         {
-            m_dst.pos.x = unset<dst_t>;
+            m_dst.pos.x = unset_pos<dst_t>;
             return get_this();
         }
 
@@ -75,7 +75,7 @@ namespace hal
         // Call after setting the destination and before anchoring.
         [[nodiscard]] this_ref scale(lyo::f64 mul)
         {
-            if (m_dst.pos.x != unset<dst_t>)
+            if (m_dst.pos.x != unset_pos<dst_t>)
                 m_dst.size *= mul;
             return get_this();
         }
@@ -84,7 +84,7 @@ namespace hal
         // Call after setting the destination and scaling.
         [[nodiscard]] this_ref anchor(anchor anch)
         {
-            if (m_dst.pos.x != unset<dst_t>)
+            if (m_dst.pos.x != unset_pos<dst_t>)
                 m_dst.pos = m_dst.pos.anchor(anch, m_dst.size);
             return get_this();
         }

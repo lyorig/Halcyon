@@ -19,10 +19,6 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 		add_compile_options(-flto)
 		add_link_options(-flto)
 	endif()
-
-elseif(NOT MSVC)
-	add_compile_options(-fsanitize=address)
-	add_link_options(-fsanitize=address)
 endif()
 
 # The HalodaQuest game.

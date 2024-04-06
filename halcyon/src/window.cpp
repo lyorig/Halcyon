@@ -6,7 +6,7 @@
 using namespace hal;
 
 window::window(std::string_view title, const pixel_point& size, std::initializer_list<flags> flags)
-    : object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, il2bm<Uint32>(flags)) }
+    : object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::il2bm<Uint32>(flags)) }
 {
     HAL_PRINT(debug::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at ", display_info());
 }

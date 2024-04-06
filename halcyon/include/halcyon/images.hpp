@@ -30,5 +30,5 @@ namespace hal::image
     };
 
     // Image loading is not dependent on a specific object, so it's a free function.
-    surface load(accessor data);
+    surface load(detail::accessor data);
 }

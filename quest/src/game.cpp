@@ -55,20 +55,20 @@ bool game::process_events(hal::event& event)
 
     while (event.poll())
     {
-        switch (event.data.type)
+        switch (event.type())
         {
-            using enum hal::event::system_event;
+            using enum hal::event::event_type;
 
         case quit_requested:
             return false;
 
         case key_pressed:
-            if (event.data.key.repeat == 0)
-                first.pos = area.anchor(process_press(hal::button(event.data.key.keysym.scancode)), first.size);
+            if (!event.keyboard().repeat())
+                first.pos = area.anchor(process_press(event.keyboard().button()), first.size);
             break;
 
         case key_released:
-            process_release(hal::button(event.data.key.keysym.scancode));
+            process_release(event.keyboard().button());
             break;
 
         default:
@@ -79,9 +79,9 @@ bool game::process_events(hal::event& event)
     return true;
 }
 
-hal::anchor game::process_press(hal::button b)
+hal::anchor game::process_press(hal::keyboard::button b)
 {
-    using enum hal::button;
+    using enum hal::keyboard::button;
     using enum hal::anchor;
 
     switch (b)
@@ -103,9 +103,9 @@ hal::anchor game::process_press(hal::button b)
     }
 }
 
-void game::process_release(hal::button b)
+void game::process_release(hal::keyboard::button b)
 {
-    using enum hal::button;
+    using enum hal::keyboard::button;
 
     switch (b)
     {

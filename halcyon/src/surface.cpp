@@ -1,5 +1,7 @@
 #include <halcyon/surface.hpp>
 
+#include <cstring>
+
 using namespace hal;
 
 // Set the depth accordingly upon changing this value.
@@ -154,8 +156,8 @@ void blitter::operator()()
 {
     m_pass.internal_blit(
         m_this,
-        m_src.pos.x == unset<src_t> ? nullptr : &m_src,
-        m_dst.pos.x == unset<dst_t> ? nullptr : &m_dst,
+        m_src.pos.x == detail::unset_pos<src_t> ? nullptr : &m_src,
+        m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : &m_dst,
         {});
 }
 
@@ -165,7 +167,7 @@ void blitter::operator()(keep_dst_tag) const
 
     m_pass.internal_blit(
         m_this,
-        m_src.pos.x == unset<src_t> ? nullptr : &m_src,
-        copy.pos.x == unset<dst_t> ? nullptr : &copy,
+        m_src.pos.x == detail::unset_pos<src_t> ? nullptr : &m_src,
+        copy.pos.x == detail::unset_pos<dst_t> ? nullptr : &copy,
         {});
 }

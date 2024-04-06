@@ -26,7 +26,7 @@ namespace hal::ttf
     class font : public sdl::object<TTF_Font, &::TTF_CloseFont>
     {
     public:
-        font(accessor data, lyo::u8 size);
+        font(detail::accessor data, lyo::u8 size);
 
         surface render(const std::string_view& text, color color = color::white) const;
 

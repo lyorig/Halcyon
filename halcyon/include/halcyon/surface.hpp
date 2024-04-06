@@ -2,18 +2,14 @@
 
 #include <SDL_surface.h>
 
-#include <halcyon/enums/blend.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
+#include <halcyon/other/blend.hpp>
 #include <halcyon/types/color.hpp>
 #include <span>
 
 // surface.hpp:
-// A "software surface" used by SDL. The user should never
-// directly create a surface, but instead use various loading
-// functions of other classes, which are responsible for providing
-// a valid SDL_Surface pointer. On top of staying true to the SDL object
-// structure, another upside comes in the form of early error handling.
+// A "software surface" used by SDL.
 
 namespace hal
 {
@@ -91,7 +87,7 @@ namespace hal
         const SDL_PixelFormat* m_fmt;
     };
 
-    class blitter : public drawer<surface, sdl::pixel_t, const surface, blitter>
+    class blitter : public detail::drawer<surface, sdl::pixel_t, const surface, blitter>
     {
     public:
         using drawer::drawer;
