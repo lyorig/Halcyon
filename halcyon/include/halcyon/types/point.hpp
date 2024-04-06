@@ -1,7 +1,7 @@
 #pragma once
 
-#include <halcyon/types/sdl.hpp>
-#include <halcyon/types/tags.hpp>
+#include <halcyon/internal/sdl_types.hpp>
+#include <halcyon/internal/tags.hpp>
 
 namespace hal
 {

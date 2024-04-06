@@ -1,7 +1,5 @@
 #pragma once
 
-#include <halcyon/types/sdl.hpp>
-
 #include <halcyon/types/point.hpp>
 
 namespace hal
