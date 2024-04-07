@@ -175,9 +175,9 @@ namespace hal
     #define HAL_PANIC(...)
 
     #define HAL_WARN_IF(...)
-    #define HAL_WARN_IF_VITAL(cond, ...) (void(cond))
+    #define HAL_WARN_IF_VITAL(cond, ...) (static_cast<void>(cond))
 
     #define HAL_ASSERT(...)
-    #define HAL_ASSERT_VITAL(cond, ...) (void(cond))
+    #define HAL_ASSERT_VITAL(cond, ...) (static_cast<void>(cond))
 
 #endif
