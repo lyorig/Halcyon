@@ -3,7 +3,7 @@
 #include <SDL_keyboard.h>
 #include <SDL_mouse.h>
 
-#include <lyo/types.hpp>
+#include <halcyon/types/render.hpp>
 
 namespace hal
 {
@@ -91,7 +91,7 @@ namespace hal
 
     namespace mouse
     {
-        enum class button : lyo::CFT<lyo::u8, decltype(SDL_BUTTON_LEFT)>
+        enum class button : lyo::u8
         {
             left   = SDL_BUTTON_LEFT,
             middle = SDL_BUTTON_MIDDLE,
@@ -110,5 +110,7 @@ namespace hal
         private:
             lyo::u8 m_state;
         };
+
+        pixel_point pos();
     }
 }

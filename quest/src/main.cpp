@@ -1,4 +1,5 @@
 #include <quest/game.hpp>
+#include <print>
 
 int main()
 {

@@ -9,11 +9,10 @@
 // event_types.hpp:
 // Event type wrappers for SDL. Their sizes must match their
 // SDL counterparts, as Halcyon does some union hackery to
-// speed things up. Extensive static_assert use is recommended.
+// speed things up. Extensive static_assert checking is recommended.
 
 namespace hal::events
 {
-    // The event classes themselves.
     class display : SDL_DisplayEvent
     {
     public:

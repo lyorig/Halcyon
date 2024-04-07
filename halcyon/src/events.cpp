@@ -47,7 +47,9 @@ event::event()
              SDL_SENSORUPDATE,
              SDL_RENDER_TARGETS_RESET,
              SDL_RENDER_DEVICE_RESET })
+    {
         ::SDL_EventState(type, SDL_IGNORE);
+    }
 }
 
 bool event::poll()

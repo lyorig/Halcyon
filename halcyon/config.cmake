@@ -2,13 +2,13 @@ include(${CMAKE_CURRENT_LIST_DIR}/lib/lyo/config.cmake)
 
 set(HALCYON_SOURCES
 internal/accessor.cpp
-internal/event_types.cpp
 internal/system.cpp
 other/clipboard.cpp
 other/display.cpp
 other/driver.cpp
 other/keyboard_mouse.cpp
 other/printing.cpp
+types/events.cpp
 cleanup.cpp
 debug.cpp
 events.cpp

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <halcyon/internal/event_types.hpp>
 #include <halcyon/other/display.hpp>
+#include <halcyon/types/events.hpp>
 #include <halcyon/window.hpp>
 
 // events.hpp:
