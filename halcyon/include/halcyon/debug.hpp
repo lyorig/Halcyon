@@ -15,11 +15,6 @@
 
 #ifdef HAL_DEBUG_ENABLED
 
-    // MSVC has its own version, because of course it does.
-    #if !defined(__PRETTY_FUNCTION__) && !defined(__GNUC__)
-        #define __PRETTY_FUNCTION__ __FUNCSIG__
-    #endif
-
     #include <halcyon/other/printing.hpp>
     #include <lyo/timer.hpp>
     #include <lyo/utility.hpp>
@@ -28,6 +23,7 @@
     #include <iostream>
     #include <sstream>
 
+    // For compatibility with MSVC.
     #ifdef _MSC_VER
         #define __PRETTY_FUNCTION__ __FUNCSIG__
     #endif
