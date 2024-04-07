@@ -18,7 +18,7 @@ bool image::cleanup::initialized()
     return ::IMG_Init(0) > 0;
 }
 
-surface image::load(detail::accessor data)
+surface image::load(accessor data)
 {
     return ::IMG_Load_RW(data.get(), false);
 }

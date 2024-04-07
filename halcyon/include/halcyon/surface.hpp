@@ -9,7 +9,9 @@
 #include <span>
 
 // surface.hpp:
-// A "software surface" used by SDL.
+// A software bitmap, from which textures are created.
+// Offers fast pixel retrieval and manipulation, which textures do not,
+// but surface-on-surface blitting is slower due to not being GPU-accelerated.
 
 namespace hal
 {

@@ -16,7 +16,7 @@ bool ttf::cleanup::initialized()
     return ::TTF_WasInit() > 0;
 }
 
-ttf::font::font(detail::accessor data, lyo::u8 size)
+ttf::font::font(accessor data, lyo::u8 size)
     : object { ::TTF_OpenFontRW(data.get(), false, size) }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");

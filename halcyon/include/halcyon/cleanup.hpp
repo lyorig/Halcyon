@@ -1,10 +1,10 @@
 #pragma once
 
-#include <halcyon/other/system.hpp>
+#include <halcyon/internal/system.hpp>
 #include <initializer_list>
 
 // cleanup.hpp:
-// A class that manages SDL (de)initialization.
+// A RAII class that manages SDL (de)initialization.
 
 namespace hal
 {
