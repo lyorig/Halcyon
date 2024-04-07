@@ -36,7 +36,7 @@ namespace hal
         void        size(pixel_point sz);
 
         // Get information about this window's display.
-        display display_info() const;
+        display::index_t display_index() const;
 
         // Get/set this window's title.
         std::string_view title() const;

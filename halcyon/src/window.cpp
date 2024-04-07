@@ -8,7 +8,7 @@ using namespace hal;
 window::window(std::string_view title, const pixel_point& size, std::initializer_list<flags> flags)
     : object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::il2bm<Uint32>(flags)) }
 {
-    HAL_PRINT(debug::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at ", display_info());
+    HAL_PRINT(debug::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at display ", hal::to_printable_int(display_index()));
 }
 
 window::window(std::string_view title, fullscreen_tag)
@@ -32,13 +32,13 @@ void window::size(pixel_point sz)
     ::SDL_SetWindowSize(this->ptr(), sz.x, sz.y);
 }
 
-display window::display_info() const
+display::index_t window::display_index() const
 {
     const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
 
     HAL_ASSERT(ret >= 0, debug::last_error());
 
-    return display { static_cast<display::index_t>(ret) };
+    return static_cast<display::index_t>(ret);
 }
 
 std::string_view window::title() const
