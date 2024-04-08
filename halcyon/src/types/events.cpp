@@ -43,6 +43,11 @@ keyboard::button events::keyboard::button() const
     return static_cast<hal::keyboard::button>(keysym.scancode);
 }
 
+keyboard::key events::keyboard::key() const
+{
+    return static_cast<hal::keyboard::key>(keysym.sym);
+}
+
 bool events::keyboard::repeat() const
 {
     return static_cast<bool>(SDL_KeyboardEvent::repeat);
@@ -57,7 +62,7 @@ window::id_t events::mouse_motion::window_id() const
 
 mouse::state events::mouse_motion::state() const
 {
-    return SDL_MouseMotionEvent::state;
+    return { SDL_MouseMotionEvent::state, lyo::pass_key<mouse_motion> {} };
 }
 
 pixel_point events::mouse_motion::pos() const
@@ -79,7 +84,7 @@ window::id_t events::mouse_button::window_id() const
 
 mouse::state events::mouse_button::state() const
 {
-    return SDL_MouseButtonEvent::state;
+    return { SDL_MouseButtonEvent::state, lyo::pass_key<mouse_button> {} };
 }
 
 mouse::button events::mouse_button::button() const

@@ -79,6 +79,12 @@ void game::process_press(hal::keyboard::button b)
 
     switch (b)
     {
+    case Z:
+        HAL_PRINT("Z pressed");
+        break;
+    case one:
+        HAL_PRINT("1 pressed");
+        break;
     default:
         break;
     }

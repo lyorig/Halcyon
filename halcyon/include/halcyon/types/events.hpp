@@ -76,6 +76,7 @@ namespace hal::events
         hal::window::id_t window_id() const;
 
         hal::keyboard::button button() const;
+        hal::keyboard::key    key() const;
         bool                  repeat() const;
     };
 

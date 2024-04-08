@@ -3,12 +3,15 @@
 #include <SDL_keyboard.h>
 #include <SDL_mouse.h>
 
+#include <lyo/pass_key.hpp>
+
 #include <halcyon/types/render.hpp>
 
 namespace hal
 {
     namespace keyboard
     {
+        // A representation of a physical, layout- and locale-independent button.
         enum class button : lyo::CFT<lyo::u8, std::underlying_type_t<SDL_Scancode>>
         {
             A = SDL_SCANCODE_A,
@@ -76,18 +79,95 @@ namespace hal
             right_alt = SDL_SCANCODE_RALT,
         };
 
+        // A representation of a locale- and layout-dependent key.
+        enum class key : lyo::CFT<lyo::u32, std::underlying_type_t<SDL_KeyCode>>
+        {
+            A = SDLK_a,
+            B = SDLK_b,
+            C = SDLK_c,
+            D = SDLK_d,
+            E = SDLK_e,
+            F = SDLK_f,
+            G = SDLK_g,
+            H = SDLK_h,
+            I = SDLK_i,
+            J = SDLK_j,
+            K = SDLK_k,
+            L = SDLK_l,
+            M = SDLK_m,
+            N = SDLK_n,
+            O = SDLK_o,
+            P = SDLK_p,
+            Q = SDLK_q,
+            R = SDLK_r,
+            S = SDLK_s,
+            T = SDLK_t,
+            U = SDLK_u,
+            V = SDLK_v,
+            W = SDLK_w,
+            X = SDLK_x,
+            Y = SDLK_y,
+            Z = SDLK_z,
+
+            one   = SDLK_1,
+            two   = SDLK_2,
+            three = SDLK_3,
+            four  = SDLK_4,
+            five  = SDLK_5,
+            six   = SDLK_6,
+            seven = SDLK_7,
+            eight = SDLK_8,
+            nine  = SDLK_9,
+
+            F1  = SDLK_F1,
+            F2  = SDLK_F2,
+            F3  = SDLK_F3,
+            F4  = SDLK_F4,
+            F5  = SDLK_F5,
+            F6  = SDLK_F6,
+            F7  = SDLK_F7,
+            F8  = SDLK_F8,
+            F9  = SDLK_F9,
+            F10 = SDLK_F10,
+            F11 = SDLK_F11,
+            F12 = SDLK_F12,
+
+            esc        = SDLK_ESCAPE,
+            tab        = SDLK_TAB,
+            caps_lock  = SDLK_CAPSLOCK,
+            left_shift = SDLK_LSHIFT,
+            left_ctrl  = SDLK_LCTRL,
+
+            backspace   = SDLK_BACKSPACE,
+            enter       = SDLK_RETURN,
+            right_shift = SDLK_RSHIFT,
+            right_ctrl  = SDLK_RCTRL,
+
+            left_alt  = SDLK_LALT,
+            right_alt = SDLK_RALT,
+        };
+
         // A reference to the keyboard state. Unlike that mouse state,
-        // you can keep this object around, as it always holds the current state.
+        // you can keep this object around, as it always references the current
+        // state as long as you keep polling for events in your application loop.
         class state_reference
         {
         public:
             state_reference();
 
             bool operator[](button btn) const;
+            bool operator[](key k) const;
 
         private:
             const std::uint8_t* m_arr;
         };
+    }
+
+    // Forward declarations for mouse::state's pass-key constructors.
+    namespace events
+    {
+        class mouse_motion;
+        class mouse_button;
     }
 
     namespace mouse
@@ -106,11 +186,19 @@ namespace hal
         class state
         {
         public:
+            // Default constructor that captures the mouse state at the time of construction.
             state();
+
+            // Private constructors meant for events.
+            state(std::uint32_t mask, lyo::pass_key<events::mouse_motion>);
+            state(std::uint32_t mask, lyo::pass_key<events::mouse_button>);
 
             bool operator[](button btn) const;
 
         private:
+            // Delegated to by pass-key constructors.
+            state(std::uint32_t mask);
+
             lyo::u8 m_state;
         };
 
