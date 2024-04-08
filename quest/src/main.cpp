@@ -1,5 +1,5 @@
-#include <quest/game.hpp>
 #include <print>
+#include <quest/game.hpp>
 
 int main()
 {

@@ -76,11 +76,12 @@ namespace hal
             right_alt = SDL_SCANCODE_RALT,
         };
 
-        // A reference to the current keyboard state.
-        class state
+        // A reference to the keyboard state. Unlike that mouse state,
+        // you can keep this object around, as it always holds the current state.
+        class state_reference
         {
         public:
-            state(const std::uint8_t* ptr);
+            state_reference();
 
             bool operator[](button btn) const;
 
@@ -100,10 +101,12 @@ namespace hal
             x2     = SDL_BUTTON_X2
         };
 
+        // A snapshot of the current mouse state. Unlike the keyboard state reference,
+        // you need to recreate this object to observe any changes.
         class state
         {
         public:
-            state(std::uint32_t state);
+            state();
 
             bool operator[](button btn) const;
 

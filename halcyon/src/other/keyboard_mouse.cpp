@@ -3,18 +3,18 @@
 
 using namespace hal;
 
-keyboard::state::state(const std::uint8_t* ptr)
-    : m_arr { ptr }
+keyboard::state_reference::state_reference()
+    : m_arr { ::SDL_GetKeyboardState(nullptr) }
 {
 }
 
-bool keyboard::state::operator[](button btn) const
+bool keyboard::state_reference::operator[](button btn) const
 {
     return m_arr[std::to_underlying(btn)];
 }
 
-mouse::state::state(std::uint32_t state)
-    : m_state { static_cast<lyo::u8>(state) }
+mouse::state::state()
+    : m_state { static_cast<lyo::u8>(::SDL_GetMouseState(nullptr, nullptr)) }
 {
 }
 
