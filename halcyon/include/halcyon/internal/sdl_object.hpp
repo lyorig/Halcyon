@@ -1,6 +1,5 @@
 #pragma once
 
-#include <SDL_error.h>
 #include <halcyon/debug.hpp>
 #include <lyo/types.hpp>
 #include <memory>
@@ -39,7 +38,7 @@ namespace hal
                 return m_object.get();
             }
 
-            bool exists() const
+            bool valid() const
             {
                 return m_object.get() != nullptr;
             }

@@ -94,8 +94,8 @@ blitter surface::blit(surface& dst) const
 
 void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blitter>) const
 {
-    HAL_ASSERT(this->exists(), "Drawing null surface");
-    HAL_ASSERT(to.exists(), "Drawing to null surface");
+    HAL_ASSERT(this->valid(), "Drawing null surface");
+    HAL_ASSERT(to.valid(), "Drawing to null surface");
 
     HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), reinterpret_cast<const SDL_Rect*>(src), to.ptr(), reinterpret_cast<SDL_Rect*>(dst)) == 0, debug::last_error());
 }

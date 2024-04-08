@@ -135,7 +135,7 @@ copyer renderer::draw(const texture_base& tex)
 
 void renderer::internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>)
 {
-    HAL_ASSERT(tex.exists(), "Drawing null texture");
+    HAL_ASSERT(tex.valid(), "Drawing invalid texture");
 
     if constexpr (sdl::integral_coord)
     {
