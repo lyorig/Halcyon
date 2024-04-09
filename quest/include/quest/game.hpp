@@ -27,7 +27,7 @@ namespace quest
         LYO_NOSIZE hal::ttf::cleanup m_ttf;
 
         hal::window   m_window { "HalodaQuest", hal::fullscreen };
-        hal::renderer m_renderer { m_window, { hal::renderer::accelerated, hal::renderer::vsync } };
+        hal::renderer m_renderer { m_window, { hal::renderer::flags::accelerated, hal::renderer::flags::vsync } };
 
         camera m_cam;
 

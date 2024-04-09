@@ -30,7 +30,7 @@ namespace hal
     class renderer : public sdl::object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
     public:
-        enum flags : lyo::u8
+        enum class flags : lyo::u8
         {
             none        = 0,
             software    = SDL_RENDERER_SOFTWARE,

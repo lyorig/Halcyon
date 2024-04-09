@@ -147,6 +147,9 @@ namespace hal
             right_alt = SDLK_RALT,
         };
 
+        key    to_key(button btn);
+        button to_button(key k);
+
         // A reference to the keyboard state. Unlike that mouse state,
         // you can keep this object around, as it always references the current
         // state as long as you keep polling for events in your application loop.

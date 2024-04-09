@@ -3,6 +3,16 @@
 
 using namespace hal;
 
+keyboard::key keyboard::to_key(button btn)
+{
+    return static_cast<keyboard::key>(::SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn)));
+}
+
+keyboard::button keyboard::to_button(key k)
+{
+    return static_cast<keyboard::button>(::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k)));
+}
+
 keyboard::state_reference::state_reference()
     : m_arr { ::SDL_GetKeyboardState(nullptr) }
 {

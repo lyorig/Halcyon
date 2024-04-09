@@ -14,10 +14,10 @@ namespace hal
     public:
         using id_t = lyo::u8;
 
-        enum flags : Uint32
+        enum class flags : lyo::u16
         {
             none                  = 0,
-            fullscreen_mode       = SDL_WINDOW_FULLSCREEN,
+            fullscreen            = SDL_WINDOW_FULLSCREEN,
             fullscreen_borderless = SDL_WINDOW_FULLSCREEN_DESKTOP,
             hidden                = SDL_WINDOW_HIDDEN,
             resizeable            = SDL_WINDOW_RESIZABLE,

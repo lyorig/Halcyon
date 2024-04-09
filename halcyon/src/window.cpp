@@ -6,13 +6,13 @@
 using namespace hal;
 
 window::window(std::string_view title, const pixel_point& size, std::initializer_list<flags> flags)
-    : object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::il2bm<Uint32>(flags)) }
+    : object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
 {
     HAL_PRINT(debug::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at display ", hal::to_printable_int(display_index()));
 }
 
 window::window(std::string_view title, fullscreen_tag)
-    : window { title, display { 0 }.size(), { fullscreen_mode } }
+    : window { title, display { 0 }.size(), { flags::fullscreen } }
 {
 }
 
@@ -53,5 +53,5 @@ void window::title(std::string_view val)
 
 bool window::fullscreen() const
 {
-    return static_cast<bool>(::SDL_GetWindowFlags(ptr()) & (fullscreen_mode | fullscreen_borderless));
+    return static_cast<bool>(::SDL_GetWindowFlags(ptr()) & (std::to_underlying(flags::fullscreen) | std::to_underlying(flags::fullscreen_borderless)));
 }

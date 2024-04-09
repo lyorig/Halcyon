@@ -2,6 +2,7 @@
 
 #include <initializer_list>
 #include <lyo/concepts.hpp>
+#include <utility>
 
 // helpers.hpp:
 // One-off functions that I didn't know where else to put.
@@ -10,13 +11,14 @@ namespace hal::detail
 {
     // OR together a set of values.
     // The name stands for "initializer list to bit mask".
-    template <lyo::arithmetic Cvt, std::convertible_to<Cvt> T>
-    constexpr Cvt il2bm(std::initializer_list<T> list)
+    template <lyo::arithmetic Cvt, typename T>
+        requires std::is_enum_v<T>
+    constexpr Cvt to_bitmask(std::initializer_list<T> list)
     {
         Cvt mask { 0 };
 
         for (const auto value : list)
-            mask |= static_cast<Cvt>(value);
+            mask |= std::to_underlying(value);
 
         return mask;
     }

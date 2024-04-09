@@ -1,10 +1,8 @@
-#include <quest/game.hpp>
+#include <halcyon/halcyon.hpp>
 
 int main()
 {
-    quest::game g;
+    hal::cleanup c { hal::system::video };
 
-    g.main_loop();
-
-    return EXIT_SUCCESS;
+    hal::window okno { "Halcyon App", { 640, 480 }, { hal::window::flags::resizeable } };
 }
