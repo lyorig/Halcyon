@@ -51,6 +51,15 @@ void window::title(std::string_view val)
     ::SDL_SetWindowTitle(ptr(), val.data());
 }
 
+window::id_t window::id() const
+{
+    const auto ret = ::SDL_GetWindowID(ptr());
+
+    HAL_ASSERT(ret != 0, debug::last_error());
+
+    return static_cast<window::id_t>(ret);
+}
+
 bool window::fullscreen() const
 {
     return static_cast<bool>(::SDL_GetWindowFlags(ptr()) & (std::to_underlying(flags::fullscreen) | std::to_underlying(flags::fullscreen_borderless)));

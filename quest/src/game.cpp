@@ -51,7 +51,7 @@ bool game::process_events(hal::event& event)
     {
         switch (event.type())
         {
-            using enum hal::event::event_type;
+            using enum hal::event_type;
 
         case quit_requested:
             return false;

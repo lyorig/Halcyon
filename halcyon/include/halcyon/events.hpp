@@ -9,38 +9,38 @@
 
 namespace hal
 {
+    // Top-level event types.
+    // The ones that are commented out are not implemented.
+    enum class event_type : lyo::u16
+    {
+        quit_requested = SDL_QUIT,
+        terminated     = SDL_APP_TERMINATING,
+
+        low_memory = SDL_APP_LOWMEMORY,
+
+        will_enter_background = SDL_APP_WILLENTERBACKGROUND,
+        entered_background    = SDL_APP_DIDENTERBACKGROUND,
+
+        will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
+        entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
+
+        display_event = SDL_DISPLAYEVENT,
+        window_event  = SDL_WINDOWEVENT,
+
+        key_pressed  = SDL_KEYDOWN,
+        key_released = SDL_KEYUP,
+
+        mouse_motion   = SDL_MOUSEMOTION,
+        mouse_pressed  = SDL_MOUSEBUTTONDOWN,
+        mouse_released = SDL_MOUSEBUTTONUP,
+        mouse_wheel    = SDL_MOUSEWHEEL,
+
+        clipboard_updated = SDL_CLIPBOARDUPDATE
+    };
+
     class event
     {
     public:
-        // Top-level event types.
-        // The ones that are commented out are not implemented.
-        enum event_type : lyo::u16
-        {
-            quit_requested = SDL_QUIT,
-            terminated     = SDL_APP_TERMINATING,
-
-            low_memory = SDL_APP_LOWMEMORY,
-
-            will_enter_background = SDL_APP_WILLENTERBACKGROUND,
-            entered_background    = SDL_APP_DIDENTERBACKGROUND,
-
-            will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
-            entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
-
-            display_event = SDL_DISPLAYEVENT,
-            window_event  = SDL_WINDOWEVENT,
-
-            key_pressed  = SDL_KEYDOWN,
-            key_released = SDL_KEYUP,
-
-            mouse_motion   = SDL_MOUSEMOTION,
-            mouse_pressed  = SDL_MOUSEBUTTONDOWN,
-            mouse_released = SDL_MOUSEBUTTONUP,
-            mouse_wheel    = SDL_MOUSEWHEEL,
-
-            clipboard_updated = SDL_CLIPBOARDUPDATE
-        };
-
         // Constructor that disables unused events.
         // This should reduce heap allocations on SDL's part.
         event();

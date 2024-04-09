@@ -42,6 +42,8 @@ namespace hal
         std::string_view title() const;
         void             title(std::string_view val);
 
+        id_t id() const;
+
         // Returns true if the window is fullscreen.
         // Fullscreen borderless mode is also considered as such.
         bool fullscreen() const;
