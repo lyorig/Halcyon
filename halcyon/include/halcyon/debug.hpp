@@ -34,6 +34,15 @@
 
 namespace hal
 {
+    enum class severity
+    {
+        info,
+        warning,
+        error,
+        init,
+        load
+    };
+
     constexpr bool debug_enabled {
     #ifdef HAL_DEBUG_ENABLED
         true
@@ -45,22 +54,13 @@ namespace hal
     class debug
     {
     public:
-        enum severity
-        {
-            info,
-            warning,
-            error,
-            init,
-            load
-        };
-
         static std::string_view last_error();
 
         // Output any amount of arguments to stdout/stderr and an output file.
         template <printable... Args>
         static void print(Args&&... extra_info)
         {
-            debug::print_severity(info, std::forward<Args>(extra_info)...);
+            debug::print_severity(severity::info, std::forward<Args>(extra_info)...);
         }
 
         // Output any amount of arguments to stdout/stderr and an output file.
@@ -75,8 +75,8 @@ namespace hal
         template <printable... Args>
         [[noreturn]] static void panic(std::string_view function, std::string_view file, lyo::u32 line, Args&&... extra_info)
         {
-            debug::print_severity(error, "In file ", file, ", line ", line, ", function ", function);
-            debug::print_severity(error, lyo::string_from_pack(std::forward<Args>(extra_info)...));
+            debug::print_severity(severity::error, "In file ", file, ", line ", line, ", function ", function);
+            debug::print_severity(severity::error, lyo::string_from_pack(std::forward<Args>(extra_info)...));
 
             std::exit(EXIT_FAILURE);
         }
@@ -85,7 +85,7 @@ namespace hal
         static void warn_if(bool condition, Args&&... extra_info)
         {
             if (condition) [[unlikely]]
-                debug::print(warning, std::forward<Args>(extra_info)...);
+                debug::print(severity::warning, std::forward<Args>(extra_info)...);
         }
 
         // Check a condition, and panic if it's false.
@@ -107,6 +107,8 @@ namespace hal
             fwd_info << std::fixed << std::setprecision(3) << '[' << m_timer()
                      << "s] ";
     #endif
+
+            using enum severity;
 
             switch (type)
             {

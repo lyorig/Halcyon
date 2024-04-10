@@ -1,14 +1,13 @@
 #include <halcyon/window.hpp>
 
 #include <halcyon/internal/helpers.hpp>
-#include <halcyon/internal/system.hpp>
 
 using namespace hal;
 
 window::window(std::string_view title, const pixel_point& size, std::initializer_list<flags> flags)
     : object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
 {
-    HAL_PRINT(debug::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at display ", hal::to_printable_int(display_index()));
+    HAL_PRINT(severity::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at display ", hal::to_printable_int(display_index()));
 }
 
 window::window(std::string_view title, fullscreen_tag)

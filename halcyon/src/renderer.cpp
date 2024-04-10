@@ -128,12 +128,12 @@ void renderer::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-copyer renderer::draw(const texture_base& tex)
+copyer renderer::draw(const detail::texture_base& tex)
 {
     return { *this, tex, {} };
 }
 
-void renderer::internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>)
+void renderer::internal_render_copy(const detail::texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>)
 {
     HAL_ASSERT(tex.valid(), "Drawing invalid texture");
 

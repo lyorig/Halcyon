@@ -2,7 +2,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/lib/lyo/config.cmake)
 
 set(HALCYON_SOURCES
 internal/accessor.cpp
-internal/system.cpp
 other/clipboard.cpp
 other/display.cpp
 other/driver.cpp

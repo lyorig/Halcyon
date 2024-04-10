@@ -13,32 +13,35 @@ namespace hal
     class renderer;
     class copyer;
 
-    class texture_base : public sdl::object<SDL_Texture, &::SDL_DestroyTexture>
+    namespace detail
     {
-    public:
-        pixel_point size() const;
+        class texture_base : public sdl::object<SDL_Texture, &::SDL_DestroyTexture>
+        {
+        public:
+            pixel_point size() const;
 
-        color::value_t opacity() const;
-        void           opacity(color::value_t value);
+            color::value_t opacity() const;
+            void           opacity(color::value_t value);
 
-        color color_mod() const;
-        void  color_mod(hal::color mod);
+            color color_mod() const;
+            void  color_mod(hal::color mod);
 
-        blend_mode blend() const;
-        void       blend(blend_mode bm);
+            blend_mode blend() const;
+            void       blend(blend_mode bm);
 
-    protected:
-        texture_base() = default;
-        texture_base(SDL_Texture* ptr);
+        protected:
+            texture_base() = default;
+            texture_base(SDL_Texture* ptr);
 
-        void reset(SDL_Texture* ptr);
+            void reset(SDL_Texture* ptr);
 
-    private:
-        void query(Uint32* format, int* access, int* w, int* h) const;
-    };
+        private:
+            void query(Uint32* format, int* access, int* w, int* h) const;
+        };
+    }
 
     // A texture that cannot be drawn onto, only reassigned.
-    class texture : public texture_base
+    class texture : public detail::texture_base
     {
     public:
         texture() = default;
@@ -52,7 +55,7 @@ namespace hal
     };
 
     // A texture that can be drawn onto.
-    class target_texture : public texture_base
+    class target_texture : public detail::texture_base
     {
     public:
         target_texture() = default;

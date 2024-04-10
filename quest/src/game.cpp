@@ -16,7 +16,7 @@ game::game()
 
 void game::main_loop()
 {
-    hal::event event;
+    hal::event_handler event;
 
     lyo::steady_timer timer;
     delta_t           delta;
@@ -45,13 +45,13 @@ void game::main_loop()
     }
 }
 
-bool game::process_events(hal::event& event)
+bool game::process_events(hal::event_handler& event)
 {
     while (event.poll())
     {
         switch (event.type())
         {
-            using enum hal::event_type;
+            using enum hal::event;
 
         case quit_requested:
             return false;

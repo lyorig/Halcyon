@@ -11,7 +11,7 @@ namespace hal
 {
     // Top-level event types.
     // The ones that are commented out are not implemented.
-    enum class event_type : lyo::u16
+    enum class event : lyo::u16
     {
         quit_requested = SDL_QUIT,
         terminated     = SDL_APP_TERMINATING,
@@ -38,18 +38,18 @@ namespace hal
         clipboard_updated = SDL_CLIPBOARDUPDATE
     };
 
-    class event
+    class event_handler
     {
     public:
         // Constructor that disables unused events.
         // This should reduce heap allocations on SDL's part.
-        event();
+        event_handler();
 
         // Get an event from the event queue.
         // Returns true if the polled event is valid, false if there are no more to process.
         bool poll();
 
-        event_type type() const;
+        event type() const;
 
         const events::display&      display() const;
         const events::window&       window() const;

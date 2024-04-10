@@ -10,14 +10,23 @@
 #include <lyo/pass_key.hpp>
 #include <span>
 
+// renderer.hpp:
+// A wrapper of SDL_Renderer. Essentially, this is the thing that does the rendering, and
+// is attached to a window. Multiple renderers can exist for a single window, i.e. a hardware-
+// accelerated one, plus a software fallback in case the former isn't available.
+
 namespace hal
 {
+    // Forward declarations for parameters and return types.
     class window;
-
-    class texture_base;
-    class target_texture;
-
     class copyer;
+
+    namespace detail
+    {
+        class texture_base;
+    }
+
+    class target_texture;
 
     enum class flip : lyo::u8
     {
@@ -68,10 +77,10 @@ namespace hal
         void        size(const pixel_point& sz);
 
         // Create a copyer.
-        [[nodiscard]] copyer draw(const texture_base& tex);
+        [[nodiscard]] copyer draw(const detail::texture_base& tex);
 
         // Public, but only accessible to the draw class.
-        void internal_render_copy(const texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>);
+        void internal_render_copy(const detail::texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>);
 
     private:
         void clear();
@@ -80,7 +89,7 @@ namespace hal
         void internal_target(SDL_Texture* target);
     };
 
-    class copyer : public detail::drawer<texture_base, sdl::coord_t, renderer, copyer>
+    class copyer : public detail::drawer<detail::texture_base, sdl::coord_t, renderer, copyer>
     {
     public:
         using drawer::drawer;

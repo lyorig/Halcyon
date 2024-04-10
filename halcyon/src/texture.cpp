@@ -5,7 +5,7 @@
 
 using namespace hal;
 
-pixel_point texture_base::size() const
+pixel_point detail::texture_base::size() const
 {
     point<int> size;
 
@@ -14,12 +14,12 @@ pixel_point texture_base::size() const
     return size;
 }
 
-void texture_base::opacity(color::value_t value)
+void detail::texture_base::opacity(color::value_t value)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, debug::last_error());
 }
 
-color texture_base::color_mod() const
+color detail::texture_base::color_mod() const
 {
     color c;
 
@@ -28,12 +28,12 @@ color texture_base::color_mod() const
     return c;
 }
 
-void texture_base::color_mod(color clr)
+void detail::texture_base::color_mod(color clr)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, debug::last_error());
 }
 
-blend_mode texture_base::blend() const
+blend_mode detail::texture_base::blend() const
 {
     SDL_BlendMode bm;
 
@@ -42,12 +42,12 @@ blend_mode texture_base::blend() const
     return blend_mode(bm);
 }
 
-void texture_base::blend(blend_mode bm)
+void detail::texture_base::blend(blend_mode bm)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-lyo::u8 texture_base::opacity() const
+lyo::u8 detail::texture_base::opacity() const
 {
     Uint8 alpha;
 
@@ -57,19 +57,19 @@ lyo::u8 texture_base::opacity() const
     return alpha;
 }
 
-texture_base::texture_base(SDL_Texture* ptr)
+detail::texture_base::texture_base(SDL_Texture* ptr)
     : object { ptr }
 {
     this->blend(blend_mode::blend);
 }
 
-void texture_base::reset(SDL_Texture* ptr)
+void detail::texture_base::reset(SDL_Texture* ptr)
 {
     object::reset(ptr);
     this->blend(blend_mode::blend);
 }
 
-void texture_base::query(Uint32* format, int* access, int* w, int* h) const
+void detail::texture_base::query(Uint32* format, int* access, int* w, int* h) const
 {
     HAL_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, debug::last_error());
 }

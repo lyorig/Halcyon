@@ -26,9 +26,9 @@ window::id_t events::window::window_id() const
     return static_cast<hal::window::id_t>(windowID);
 }
 
-events::window::event_type events::window::type() const
+window_event events::window::type() const
 {
-    return static_cast<event_type>(event);
+    return static_cast<window_event>(event);
 }
 
 // Keyboard event.

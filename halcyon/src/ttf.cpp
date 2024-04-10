@@ -6,7 +6,7 @@ ttf::cleanup::cleanup()
 {
     HAL_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
 
-    HAL_PRINT(debug::init, "Initialized TTF engine");
+    HAL_PRINT(severity::init, "Initialized TTF engine");
 }
 
 ttf::cleanup::~cleanup() { ::TTF_Quit(); }

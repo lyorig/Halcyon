@@ -10,7 +10,7 @@
 
 namespace hal::image
 {
-    enum format : lyo::u8
+    enum class format : lyo::u8
     {
         jpg  = IMG_INIT_JPG,
         png  = IMG_INIT_PNG,
