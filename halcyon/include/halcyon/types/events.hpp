@@ -19,8 +19,7 @@ namespace hal
         hidden              = SDL_WINDOWEVENT_HIDDEN,
         exposed             = SDL_WINDOWEVENT_EXPOSED,
         moved               = SDL_WINDOWEVENT_MOVED,
-        resized             = SDL_WINDOWEVENT_RESIZED,
-        size_changed        = SDL_WINDOWEVENT_SIZE_CHANGED,
+        resized             = SDL_WINDOWEVENT_SIZE_CHANGED, // The actual SDL resized event generates a duplicate event.
         minimized           = SDL_WINDOWEVENT_MINIMIZED,
         maximized           = SDL_WINDOWEVENT_MAXIMIZED,
         restored            = SDL_WINDOWEVENT_RESTORED,
@@ -35,25 +34,25 @@ namespace hal
         display_changed     = SDL_WINDOWEVENT_DISPLAY_CHANGED
     };
 
+    enum class display_event
+    {
+        connected    = SDL_DISPLAYEVENT_CONNECTED,
+        disconnected = SDL_DISPLAYEVENT_DISCONNECTED,
+        moved        = SDL_DISPLAYEVENT_MOVED,
+        reoriented   = SDL_DISPLAYEVENT_ORIENTATION
+    };
+
     namespace events
     {
         class display : SDL_DisplayEvent
         {
         public:
             using event_id_t = lyo::u8;
-            using payload_t  = lyo::i32;
 
-            enum event_type : lyo::u8
-            {
-                connected    = SDL_DISPLAYEVENT_CONNECTED,
-                disconnected = SDL_DISPLAYEVENT_DISCONNECTED,
-                moved        = SDL_DISPLAYEVENT_MOVED,
-                reoriented   = SDL_DISPLAYEVENT_ORIENTATION
-            };
-
-            event_type            type() const;
+            display_event         type() const;
             hal::display::index_t display_index() const;
-            payload_t             data() const;
+
+            // As of April 2024, there are no events using the "data1" member.
         };
 
         static_assert(sizeof(display) == sizeof(SDL_DisplayEvent));
@@ -61,13 +60,14 @@ namespace hal
         class window : SDL_WindowEvent
         {
         public:
-            using payload_t = lyo::i32;
-
+            window_event      type() const;
             hal::window::id_t window_id() const;
 
-            window_event type() const;
+            // Valid for: display_changed
+            hal::display::index_t new_display_index() const;
 
-            std::pair<payload_t, payload_t> data() const;
+            // Valid for: resized, moved
+            pixel_point new_point() const;
         };
 
         static_assert(sizeof(window) == sizeof(SDL_WindowEvent));

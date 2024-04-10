@@ -10,7 +10,6 @@
 namespace hal
 {
     // Top-level event types.
-    // The ones that are commented out are not implemented.
     enum class event : lyo::u16
     {
         quit_requested = SDL_QUIT,
@@ -24,16 +23,16 @@ namespace hal
         will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
         entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
 
-        display_event = SDL_DISPLAYEVENT,
-        window_event  = SDL_WINDOWEVENT,
+        display = SDL_DISPLAYEVENT,
+        window  = SDL_WINDOWEVENT,
 
         key_pressed  = SDL_KEYDOWN,
         key_released = SDL_KEYUP,
 
-        mouse_motion   = SDL_MOUSEMOTION,
-        mouse_pressed  = SDL_MOUSEBUTTONDOWN,
-        mouse_released = SDL_MOUSEBUTTONUP,
-        mouse_wheel    = SDL_MOUSEWHEEL,
+        mouse_moved       = SDL_MOUSEMOTION,
+        mouse_pressed     = SDL_MOUSEBUTTONDOWN,
+        mouse_released    = SDL_MOUSEBUTTONUP,
+        mouse_wheel_moved = SDL_MOUSEWHEEL,
 
         clipboard_updated = SDL_CLIPBOARDUPDATE
     };
@@ -49,14 +48,26 @@ namespace hal
         // Returns true if the polled event is valid, false if there are no more to process.
         bool poll();
 
+        // Get the last polled event's type.
         event type() const;
 
-        const events::display&      display() const;
-        const events::window&       window() const;
-        const events::keyboard&     keyboard() const;
-        const events::mouse_motion& motion() const;
-        const events::mouse_button& button() const;
-        const events::mouse_wheel&  wheel() const;
+        // Valid for: display
+        const events::display& display() const;
+
+        // Valid for: window
+        const events::window& window() const;
+
+        // Valid for: key_pressed, key_released
+        const events::keyboard& keyboard() const;
+
+        // Valid for: mouse_moved
+        const events::mouse_motion& mouse_motion() const;
+
+        // Valid for: mouse_pressed, mouse_released
+        const events::mouse_button& mouse_button() const;
+
+        // Valid for: mouse_wheel_moved
+        const events::mouse_wheel& mouse_wheel() const;
 
         // Check whether there are any pending events in the event queue.
         static bool pending();

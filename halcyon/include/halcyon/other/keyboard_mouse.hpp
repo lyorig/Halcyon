@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #include <SDL_keyboard.h>
 #include <SDL_mouse.h>
 
@@ -181,7 +183,7 @@ namespace hal
             middle = SDL_BUTTON_MIDDLE,
             right  = SDL_BUTTON_RIGHT,
             x1     = SDL_BUTTON_X1,
-            x2     = SDL_BUTTON_X2
+            x2     = SDL_BUTTON_X2,
         };
 
         // A snapshot of the current mouse state. Unlike the keyboard state reference,
@@ -207,4 +209,8 @@ namespace hal
 
         pixel_point pos();
     }
+
+    std::string_view to_string(keyboard::button btn);
+    std::string_view to_string(keyboard::key k);
+    std::string_view to_string(mouse::button btn);
 }

@@ -61,3 +61,36 @@ pixel_point mouse::pos()
 
     return ret;
 }
+
+std::string_view hal::to_string(keyboard::button btn)
+{
+    return ::SDL_GetScancodeName(static_cast<SDL_Scancode>(btn));
+}
+
+std::string_view hal::to_string(keyboard::key k)
+{
+    return ::SDL_GetKeyName(static_cast<SDL_KeyCode>(k));
+}
+
+std::string_view hal::to_string(mouse::button btn)
+{
+    using enum hal::mouse::button;
+
+    switch (btn)
+    {
+    case left:
+        return "Left Mouse";
+
+    case right:
+        return "Right Mouse";
+
+    case middle:
+        return "Middle Mouse";
+
+    case x1:
+        return "Mouse Extra 1";
+
+    case x2:
+        return "Mouse Extra 2";
+    }
+}

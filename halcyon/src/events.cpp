@@ -69,13 +69,13 @@ bool event_handler::pending()
 
 const events::display& event_handler::display() const
 {
-    HAL_ASSERT(type() == event::display_event, "Invalid type");
+    HAL_ASSERT(type() == event::display, "Invalid type");
     return m_event.data.display;
 }
 
 const events::window& event_handler::window() const
 {
-    HAL_ASSERT(type() == event::window_event, "Invalid type");
+    HAL_ASSERT(type() == event::window, "Invalid type");
     return m_event.data.window;
 }
 
@@ -85,20 +85,20 @@ const events::keyboard& event_handler::keyboard() const
     return m_event.data.key;
 }
 
-const events::mouse_motion& event_handler::motion() const
+const events::mouse_motion& event_handler::mouse_motion() const
 {
-    HAL_ASSERT(type() == event::mouse_motion, "Invalid type");
+    HAL_ASSERT(type() == event::mouse_moved, "Invalid type");
     return m_event.data.motion;
 }
 
-const events::mouse_button& event_handler::button() const
+const events::mouse_button& event_handler::mouse_button() const
 {
     HAL_ASSERT(type() == event::mouse_pressed || type() == event::mouse_released, "Invalid type");
     return m_event.data.button;
 }
 
-const events::mouse_wheel& event_handler::wheel() const
+const events::mouse_wheel& event_handler::mouse_wheel() const
 {
-    HAL_ASSERT(type() == event::mouse_wheel, "Invalid type");
+    HAL_ASSERT(type() == event::mouse_wheel_moved, "Invalid type");
     return m_event.data.wheel;
 }

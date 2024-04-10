@@ -4,19 +4,14 @@ using namespace hal;
 
 // Display event.
 
-events::display::event_type events::display::type() const
+display_event events::display::type() const
 {
-    return static_cast<event_type>(event);
+    return static_cast<display_event>(event);
 }
 
 display::index_t events::display::display_index() const
 {
     return static_cast<hal::display::index_t>(SDL_DisplayEvent::display);
-}
-
-events::display::payload_t events::display::data() const
-{
-    return static_cast<payload_t>(data1);
 }
 
 // Window event.
@@ -29,6 +24,18 @@ window::id_t events::window::window_id() const
 window_event events::window::type() const
 {
     return static_cast<window_event>(event);
+}
+
+hal::display::index_t events::window::new_display_index() const
+{
+    HAL_ASSERT(type() == window_event::display_changed, "Invalid event type");
+    return static_cast<hal::display::index_t>(data1);
+}
+
+pixel_point events::window::new_point() const
+{
+    HAL_ASSERT(type() == window_event::resized || type() == window_event::moved, "Invalid event type");
+    return { static_cast<pixel_t>(data1), static_cast<pixel_t>(data2) };
 }
 
 // Keyboard event.

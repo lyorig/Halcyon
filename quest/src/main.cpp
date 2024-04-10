@@ -4,8 +4,8 @@ int main()
 {
     hal::cleanup c { hal::system::video };
 
-    hal::window okno { "Halcyon App", { 640, 480 }, { hal::window::flags::resizeable } };
-    hal::window druhe_okno { "Second one", { 480, 640 }, {} };
+    hal::window   okno { "Halcyon App", { 640, 480 }, { hal::window::flags::resizeable } };
+    hal::renderer rend { okno, { hal::renderer::flags::accelerated, hal::renderer::flags::vsync } };
 
     hal::event_handler evt;
 
@@ -20,19 +20,26 @@ int main()
             case quit_requested:
                 return EXIT_SUCCESS;
 
-            case window_event:
-                if (evt.window().type() == hal::window_event::closed)
-                {
-                    if (evt.window().window_id() == okno.id())
-                        okno.release();
+            case window:
+                if (evt.window().type() == hal::window_event::resized)
+                    HAL_PRINT("Velikost okna je nyní ", evt.window().new_point());
+                break;
 
-                    else
-                        druhe_okno.release();
-                }
+            case key_pressed:
+                if (!evt.keyboard().repeat())
+                    HAL_PRINT(hal::to_string(evt.keyboard().button()), " byl stisknut");
+                break;
+
+            case mouse_pressed:
+                HAL_PRINT(hal::to_string(evt.mouse_button().button()), " bylo zmáčknuto");
+                break;
 
             default:
                 break;
             }
         }
     }
+
+    // Pokud jsme se dostali sem, něco se pokazilo.
+    return EXIT_FAILURE;
 }
