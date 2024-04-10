@@ -1,4 +1,5 @@
-include(${CMAKE_CURRENT_LIST_DIR}/lib/lyo/config.cmake)
+# Configure lyoSTL.
+include(${CMAKE_CURRENT_LIST_DIR}/lib/lyoSTL/config.cmake)
 
 set(HALCYON_SOURCES
 internal/accessor.cpp
@@ -31,5 +32,7 @@ SDL2::SDL2
 SDL2_image::SDL2_image
 SDL2_ttf::SDL2_ttf
 )
+
+set(CMAKE_CXX_STANDARD 23)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include/)

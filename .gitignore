@@ -1,8 +1,2 @@
-.vscode/
 .cache/
-
-build/
-bin/
-
-*.code-workspace
 .DS_Store
