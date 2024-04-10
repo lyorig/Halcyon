@@ -2,8 +2,7 @@
 .cache/
 
 build/
-/quest/bin/*
-!/quest/bin/assets
+bin/
 
 *.code-workspace
 .DS_Store

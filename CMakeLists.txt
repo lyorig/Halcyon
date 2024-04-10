@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22.1)
 
 # Create the project.
-project(HalodaQuest VERSION 0.1 LANGUAGES CXX)
+project(HalShowcase VERSION 0.1 LANGUAGES CXX)
 
 # Set appropriate warnings and directories.
 if(MSVC)
@@ -21,38 +21,14 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
 	endif()
 endif()
 
-# The HalodaQuest game.
-include (quest/config.cmake)
+include(halcyon/config.cmake)
 
-add_executable(HalQuest WIN32)
-
-set_target_properties(HalQuest PROPERTIES
-CXX_STANDARD 23
-RUNTIME_OUTPUT_DIRECTORY ${QUEST_BINARY_DIR}
+add_executable(HalMain 
+${CMAKE_CURRENT_SOURCE_DIR}/test/hal_main.cpp  ${HALCYON_SOURCES}
 )
 
-target_sources(HalQuest PRIVATE
-${HALCYON_SOURCES}
-${QUEST_SOURCES}
-)
+set_target_properties(HalMain PROPERTIES
+RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test/bin/
+CXX_STANDARD 23)
 
-# target_compile_definitions(HalQuest PRIVATE HAL_INTEGRAL_COORD)
-
-target_link_libraries(HalQuest ${HALCYON_LIBRARIES})
-
-# The asset to color array convertor.
-include(asset2code/config.cmake)
-
-add_executable(asset2code)
-
-set_target_properties(asset2code PROPERTIES
-CXX_STANDARD 23
-RUNTIME_OUTPUT_DIRECTORY ${QUEST_BINARY_DIR}
-)
-
-target_sources(asset2code PRIVATE
-${HALCYON_SOURCES}
-${ASSET2CODE_SOURCES}
-)
-
-target_link_libraries(asset2code ${HALCYON_LIBRARIES})
+target_link_libraries(HalMain ${HALCYON_LIBRARIES})

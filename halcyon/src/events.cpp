@@ -69,13 +69,13 @@ bool event_handler::pending()
 
 const events::display& event_handler::display() const
 {
-    HAL_ASSERT(type() == event::display, "Invalid type");
+    HAL_ASSERT(type() == event::display_event, "Invalid type");
     return m_event.data.display;
 }
 
 const events::window& event_handler::window() const
 {
-    HAL_ASSERT(type() == event::window, "Invalid type");
+    HAL_ASSERT(type() == event::window_event, "Invalid type");
     return m_event.data.window;
 }
 

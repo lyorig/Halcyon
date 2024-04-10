@@ -1,11 +1,10 @@
 include(halcyon/config.cmake)
 
-set(ASSET2CODE_SOURCES
-main.cpp
+add_executable(asset2code ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp ${HALCYON_SOURCES})
+
+target_link_libraries(asset2code ${HALCYON_LIBRARIES})
+
+set_target_properties(asset2code PROPERTIES
+CXX_STANDARD 23
+RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin/
 )
-
-list(TRANSFORM ASSET2CODE_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/)
-
-set(ASSET2CODE_BINARY_DIR ${CMAKE_CURRENT_LIST_DIR}/bin/)
-
-include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
