@@ -32,4 +32,4 @@ SDL2_image::SDL2_image
 SDL2_ttf::SDL2_ttf
 )
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/include/)
