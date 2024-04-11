@@ -1,6 +1,8 @@
 #include <halcyon/halcyon.hpp>
 #include <halcyon/other/clipboard.hpp>
 
+#include <lyo/utility.hpp>
+
 #include "data.hpp"
 
 namespace test
@@ -13,6 +15,7 @@ namespace test
         return EXIT_SUCCESS;
     }
 
+    // Resizing a window and checking whether the event handler was notified.
     int window_resize()
     {
         constexpr hal::pixel_point new_size { 120, 120 };
@@ -41,6 +44,7 @@ namespace test
         return EXIT_SUCCESS;
     }
 
+    // Basic Halcyon initialization.
     int basic_init()
     {
         hal::cleanup c { hal::system::video };
@@ -56,6 +60,7 @@ namespace test
         return EXIT_SUCCESS;
     }
 
+    // Passing an invalid buffer to a function expecting valid image data.
     // This test should fail.
     int invalid_buffer()
     {
@@ -67,6 +72,7 @@ namespace test
         return EXIT_SUCCESS;
     }
 
+    // Setting and getting the clipboard.
     int clipboard()
     {
         constexpr char text[] { "We can be heroes - just for one day." };
@@ -81,6 +87,7 @@ namespace test
         return EXIT_SUCCESS;
     }
 
+    // Checking pixel colors in a 2x1 surface.
     int surface_color()
     {
         constexpr hal::color red { 255, 0, 0 }, blue { 0, 0, 255 };
