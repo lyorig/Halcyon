@@ -11,9 +11,7 @@
 #include <span>
 
 // renderer.hpp:
-// A wrapper of SDL_Renderer. Essentially, this is the thing that does the rendering, and
-// is attached to a window. Multiple renderers can exist for a single window, i.e. a hardware-
-// accelerated one, plus a software fallback in case the former isn't available.
+// Rendering stuff - more info below.
 
 namespace hal
 {
@@ -36,6 +34,9 @@ namespace hal
         both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
     };
 
+    // A wrapper of SDL_Renderer. Essentially, this is the thing that does the rendering, and
+    // is attached to a window. Multiple renderers can exist for a single window, i.e. a hardware-
+    // accelerated one, plus a software fallback in case the former isn't available.
     class renderer : public sdl::object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
     public:

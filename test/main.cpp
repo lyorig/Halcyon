@@ -1,18 +1,29 @@
 #include <halcyon/halcyon.hpp>
+#include <halcyon/other/clipboard.hpp>
 
-constexpr hal::pixel_point new_size { 120, 120 };
+#include "data.hpp"
 
 namespace test
 {
+    // This test should fail.
+    int assert_fail()
+    {
+        HAL_ASSERT(false, "This is intentional.");
+
+        return EXIT_SUCCESS;
+    }
+
     int window_resize()
     {
+        constexpr hal::pixel_point new_size { 120, 120 };
+
         hal::cleanup c { hal::system::video };
 
         hal::window wnd { "HalTest Window", { 100, 100 }, { hal::window::flags::hidden } };
 
         hal::event_handler e;
 
-        while (e.poll()) // clear events
+        while (e.poll()) // Clear events.
             ;
 
         wnd.size(new_size);
@@ -44,6 +55,43 @@ namespace test
 
         return EXIT_SUCCESS;
     }
+
+    // This test should fail.
+    int invalid_buffer()
+    {
+        constexpr std::uint8_t data[1024] {};
+
+        // Failure should occur here.
+        const hal::surface s { hal::image::load(hal::from_memory(data)) };
+
+        return EXIT_SUCCESS;
+    }
+
+    int clipboard()
+    {
+        constexpr char text[] { "We can be heroes - just for one day." };
+
+        hal::cleanup c { hal::system::video };
+
+        hal::clipboard::set(text);
+
+        if (!hal::clipboard::has_text() || hal::clipboard::get() != text)
+            return EXIT_FAILURE;
+
+        return EXIT_SUCCESS;
+    }
+
+    int surface_color()
+    {
+        constexpr hal::color red { 255, 0, 0 }, blue { 0, 0, 255 };
+
+        hal::surface s { hal::image::load(hal::from_memory(two_by_one)) };
+
+        if (s[{ 0, 0 }] != red || s[{ 1, 0 }] != blue)
+            return EXIT_FAILURE;
+
+        return EXIT_SUCCESS;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -54,11 +102,23 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    if (lyo::streq(argv[1], "--window-resize"))
+    if (lyo::streq(argv[1], "--assert-fail"))
+        return test::assert_fail();
+
+    else if (lyo::streq(argv[1], "--window-resize"))
         return test::window_resize();
 
-    if (lyo::streq(argv[1], "--basic-init"))
+    else if (lyo::streq(argv[1], "--basic-init"))
         return test::basic_init();
+
+    else if (lyo::streq(argv[1], "--invalid-buffer"))
+        return test::invalid_buffer();
+
+    else if (lyo::streq(argv[1], "--clipboard"))
+        return test::clipboard();
+
+    else if (lyo::streq(argv[1], "--surface-color"))
+        return test::surface_color();
 
     else
     {
