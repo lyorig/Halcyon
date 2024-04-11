@@ -6,53 +6,35 @@
 #include <halcyon/other/keyboard_mouse.hpp>
 #include <halcyon/window.hpp>
 
-// event_types.hpp:
+// types/events.hpp:
 // Event type wrappers for SDL. Their sizes must match their
 // SDL counterparts, as Halcyon does some union hackery to
 // speed things up. Extensive static_assert checking is recommended.
 
 namespace hal
 {
-    enum class window_event : lyo::u8
+    namespace event
     {
-        shown               = SDL_WINDOWEVENT_SHOWN,
-        hidden              = SDL_WINDOWEVENT_HIDDEN,
-        exposed             = SDL_WINDOWEVENT_EXPOSED,
-        moved               = SDL_WINDOWEVENT_MOVED,
-        resized             = SDL_WINDOWEVENT_SIZE_CHANGED, // The actual SDL resized event generates a duplicate event.
-        minimized           = SDL_WINDOWEVENT_MINIMIZED,
-        maximized           = SDL_WINDOWEVENT_MAXIMIZED,
-        restored            = SDL_WINDOWEVENT_RESTORED,
-        got_mouse_focus     = SDL_WINDOWEVENT_ENTER,
-        lost_mouse_focus    = SDL_WINDOWEVENT_LEAVE,
-        got_keyboard_focus  = SDL_WINDOWEVENT_FOCUS_GAINED,
-        lost_keyboard_focus = SDL_WINDOWEVENT_FOCUS_LOST,
-        closed              = SDL_WINDOWEVENT_CLOSE,
-        focus_offered       = SDL_WINDOWEVENT_TAKE_FOCUS,
-        hit_test            = SDL_WINDOWEVENT_HIT_TEST,
-        icc_profile_changed = SDL_WINDOWEVENT_ICCPROF_CHANGED,
-        display_changed     = SDL_WINDOWEVENT_DISPLAY_CHANGED
-    };
+        class handler;
 
-    enum class display_event
-    {
-        connected    = SDL_DISPLAYEVENT_CONNECTED,
-        disconnected = SDL_DISPLAYEVENT_DISCONNECTED,
-        moved        = SDL_DISPLAYEVENT_MOVED,
-        reoriented   = SDL_DISPLAYEVENT_ORIENTATION
-    };
-
-    namespace events
-    {
         class display : SDL_DisplayEvent
         {
         public:
-            using event_id_t = lyo::u8;
+            enum class type : lyo::u8
+            {
+                connected    = SDL_DISPLAYEVENT_CONNECTED,
+                disconnected = SDL_DISPLAYEVENT_DISCONNECTED,
+                moved        = SDL_DISPLAYEVENT_MOVED,
+                reoriented   = SDL_DISPLAYEVENT_ORIENTATION
+            };
 
-            display_event         type() const;
+            display(const SDL_DisplayEvent& evt, lyo::pass_key<event::handler>);
+
+            type type() const;
+
             hal::display::index_t display_index() const;
 
-            // As of April 2024, there are no events using the "data1" member.
+            // As of April 2024, there are no event using the "data1" member.
         };
 
         static_assert(sizeof(display) == sizeof(SDL_DisplayEvent));
@@ -60,7 +42,31 @@ namespace hal
         class window : SDL_WindowEvent
         {
         public:
-            window_event      type() const;
+            enum class type : lyo::u8
+            {
+                shown               = SDL_WINDOWEVENT_SHOWN,
+                hidden              = SDL_WINDOWEVENT_HIDDEN,
+                exposed             = SDL_WINDOWEVENT_EXPOSED,
+                moved               = SDL_WINDOWEVENT_MOVED,
+                resized             = SDL_WINDOWEVENT_SIZE_CHANGED, // The actual SDL resized event generates a duplicate event.
+                minimized           = SDL_WINDOWEVENT_MINIMIZED,
+                maximized           = SDL_WINDOWEVENT_MAXIMIZED,
+                restored            = SDL_WINDOWEVENT_RESTORED,
+                got_mouse_focus     = SDL_WINDOWEVENT_ENTER,
+                lost_mouse_focus    = SDL_WINDOWEVENT_LEAVE,
+                got_keyboard_focus  = SDL_WINDOWEVENT_FOCUS_GAINED,
+                lost_keyboard_focus = SDL_WINDOWEVENT_FOCUS_LOST,
+                closed              = SDL_WINDOWEVENT_CLOSE,
+                focus_offered       = SDL_WINDOWEVENT_TAKE_FOCUS,
+                hit_test            = SDL_WINDOWEVENT_HIT_TEST,
+                icc_profile_changed = SDL_WINDOWEVENT_ICCPROF_CHANGED,
+                display_changed     = SDL_WINDOWEVENT_DISPLAY_CHANGED
+            };
+
+            window(const SDL_WindowEvent& evt, lyo::pass_key<event::handler>);
+
+            type type() const;
+
             hal::window::id_t window_id() const;
 
             // Valid for: display_changed
@@ -75,6 +81,8 @@ namespace hal
         class keyboard : SDL_KeyboardEvent
         {
         public:
+            keyboard(const SDL_KeyboardEvent& evt, lyo::pass_key<event::handler>);
+
             hal::window::id_t window_id() const;
 
             hal::keyboard::button button() const;
@@ -87,6 +95,8 @@ namespace hal
         class mouse_motion : SDL_MouseMotionEvent
         {
         public:
+            mouse_motion(const SDL_MouseMotionEvent& evt, lyo::pass_key<event::handler>);
+
             hal::window::id_t window_id() const;
 
             mouse::state state() const;
@@ -99,6 +109,8 @@ namespace hal
         class mouse_button : SDL_MouseButtonEvent
         {
         public:
+            mouse_button(const SDL_MouseButtonEvent& evt, lyo::pass_key<event::handler>);
+
             hal::window::id_t window_id() const;
 
             mouse::state  state() const;
@@ -112,6 +124,8 @@ namespace hal
         class mouse_wheel : SDL_MouseWheelEvent
         {
         public:
+            mouse_wheel(const SDL_MouseWheelEvent& evt, lyo::pass_key<event::handler>);
+
             hal::window::id_t window_id() const;
 
             point<lyo::f32> scroll() const;

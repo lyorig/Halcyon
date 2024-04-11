@@ -5,8 +5,13 @@
 
 #include "data.hpp"
 
+// Halcyon testing.
+// A single text-runner executable that contains all tests.
+// Tests are added to CTest by specifiying the appropriate command-line argument.
+
 namespace test
 {
+    // Debug assertion testing.
     // This test should fail.
     int assert_fail()
     {
@@ -24,18 +29,20 @@ namespace test
 
         hal::window wnd { "HalTest Window", { 100, 100 }, { hal::window::flags::hidden } };
 
-        hal::event_handler e;
+        hal::from_memory(two_by_one);
 
-        while (e.poll()) // Clear events.
+        hal::event::handler e;
+
+        while (e.poll()) // Clear event.
             ;
 
         wnd.size(new_size);
         e.poll();
 
-        if (e.type() != hal::event::window_event)
+        if (e.type() != hal::event::type::window)
             return EXIT_FAILURE;
 
-        if (e.window().type() != hal::window_event::resized)
+        if (e.window().type() != hal::event::window::type::resized)
             return EXIT_FAILURE;
 
         if (e.window().new_point() != new_size)
@@ -52,7 +59,7 @@ namespace test
         hal::window   wnd { "HalTest Window", { 100, 100 }, { hal::window::flags::hidden } };
         hal::renderer rnd { wnd, { hal::renderer::flags::accelerated, hal::renderer::flags::vsync } };
 
-        hal::event_handler e;
+        hal::event::handler e;
         e.poll();
 
         rnd.present();

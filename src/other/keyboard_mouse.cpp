@@ -33,12 +33,12 @@ mouse::state::state()
 {
 }
 
-mouse::state::state(std::uint32_t mask, lyo::pass_key<events::mouse_motion>)
+mouse::state::state(std::uint32_t mask, lyo::pass_key<event::mouse_motion>)
     : state { mask }
 {
 }
 
-mouse::state::state(std::uint32_t mask, lyo::pass_key<events::mouse_button>)
+mouse::state::state(std::uint32_t mask, lyo::pass_key<event::mouse_button>)
     : state { mask }
 {
 }

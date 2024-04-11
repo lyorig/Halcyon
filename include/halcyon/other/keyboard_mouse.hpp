@@ -154,7 +154,7 @@ namespace hal
 
         // A reference to the keyboard state. Unlike that mouse state,
         // you can keep this object around, as it always references the current
-        // state as long as you keep polling for events in your application loop.
+        // state as long as you keep polling for event in your application loop.
         class state_reference
         {
         public:
@@ -169,7 +169,7 @@ namespace hal
     }
 
     // Forward declarations for mouse::state's pass-key constructors.
-    namespace events
+    namespace event
     {
         class mouse_motion;
         class mouse_button;
@@ -194,9 +194,9 @@ namespace hal
             // Default constructor that captures the mouse state at the time of construction.
             state();
 
-            // Private constructors meant for events.
-            state(std::uint32_t mask, lyo::pass_key<events::mouse_motion>);
-            state(std::uint32_t mask, lyo::pass_key<events::mouse_button>);
+            // Private constructors meant for event.
+            state(std::uint32_t mask, lyo::pass_key<event::mouse_motion>);
+            state(std::uint32_t mask, lyo::pass_key<event::mouse_button>);
 
             bool operator[](button btn) const;
 

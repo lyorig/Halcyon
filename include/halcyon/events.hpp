@@ -6,11 +6,12 @@
 
 // events.hpp:
 // A thin wrapper of SDL's event handling system.
+// hal::event is a complex namespace, so the handler isn't top-level as usual.
 
-namespace hal
+namespace hal::event
 {
     // Top-level event types.
-    enum class event : lyo::u16
+    enum class type : lyo::u16
     {
         quit_requested = SDL_QUIT,
         terminated     = SDL_APP_TERMINATING,
@@ -23,8 +24,8 @@ namespace hal
         will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
         entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
 
-        display_event = SDL_DISPLAYEVENT,
-        window_event  = SDL_WINDOWEVENT,
+        display = SDL_DISPLAYEVENT,
+        window  = SDL_WINDOWEVENT,
 
         key_pressed  = SDL_KEYDOWN,
         key_released = SDL_KEYUP,
@@ -37,39 +38,39 @@ namespace hal
         clipboard_updated = SDL_CLIPBOARDUPDATE
     };
 
-    class event_handler
+    class handler
     {
     public:
-        // Constructor that disables unused events.
+        // Constructor that disables unused event.
         // This should reduce heap allocations on SDL's part.
-        event_handler();
+        handler();
 
         // Get an event from the event queue.
         // Returns true if the polled event is valid, false if there are no more to process.
         bool poll();
 
         // Get the last polled event's type.
-        event type() const;
+        type type() const;
 
         // Valid for: display
-        const events::display& display() const;
+        const event::display& display() const;
 
         // Valid for: window
-        const events::window& window() const;
+        const event::window& window() const;
 
         // Valid for: key_pressed, key_released
-        const events::keyboard& keyboard() const;
+        const event::keyboard& keyboard() const;
 
         // Valid for: mouse_moved
-        const events::mouse_motion& mouse_motion() const;
+        const event::mouse_motion& mouse_motion() const;
 
         // Valid for: mouse_pressed, mouse_released
-        const events::mouse_button& mouse_button() const;
+        const event::mouse_button& mouse_button() const;
 
         // Valid for: mouse_wheel_moved
-        const events::mouse_wheel& mouse_wheel() const;
+        const event::mouse_wheel& mouse_wheel() const;
 
-        // Check whether there are any pending events in the event queue.
+        // Check whether there are any pending event in the event queue.
         static bool pending();
 
     private:
@@ -82,13 +83,13 @@ namespace hal
 
                 SDL_CommonEvent common;
 
-                events::display  display;
-                events::window   window;
-                events::keyboard key;
+                event::display  display;
+                event::window   window;
+                event::keyboard key;
 
-                events::mouse_motion motion;
-                events::mouse_button button;
-                events::mouse_wheel  wheel;
+                event::mouse_motion motion;
+                event::mouse_button button;
+                event::mouse_wheel  wheel;
             } data;
 
             std::byte padding[sizeof(SDL_Event) - sizeof(data)];

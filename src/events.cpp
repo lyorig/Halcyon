@@ -3,9 +3,10 @@
 
 using namespace hal;
 
-event_handler::event_handler()
+event::handler::handler() // Start with an invalid event.
+    : m_event { std::numeric_limits<std::uint32_t>::max() }
 {
-    // Disable unused events.
+    // Disable unused event.
     for (SDL_EventType type : {
              SDL_LOCALECHANGED,
              SDL_SYSWMEVENT,
@@ -52,53 +53,53 @@ event_handler::event_handler()
     }
 }
 
-bool event_handler::poll()
+bool event::handler::poll()
 {
     return ::SDL_PollEvent(reinterpret_cast<SDL_Event*>(&m_event.data)) == 1;
 }
 
-event event_handler::type() const
+event::type event::handler::type() const
 {
-    return static_cast<event>(m_event.data.type);
+    return static_cast<event::type>(m_event.data.type);
 }
 
-bool event_handler::pending()
+bool event::handler::pending()
 {
     return ::SDL_PollEvent(nullptr) == 1;
 }
 
-const events::display& event_handler::display() const
+const event::display& event::handler::display() const
 {
-    HAL_ASSERT(type() == event::display_event, "Invalid type");
+    HAL_ASSERT(type() == event::type::display, "Invalid type");
     return m_event.data.display;
 }
 
-const events::window& event_handler::window() const
+const event::window& event::handler::window() const
 {
-    HAL_ASSERT(type() == event::window_event, "Invalid type");
+    HAL_ASSERT(type() == event::type::window, "Invalid type");
     return m_event.data.window;
 }
 
-const events::keyboard& event_handler::keyboard() const
+const event::keyboard& event::handler::keyboard() const
 {
-    HAL_ASSERT(type() == event::key_pressed || type() == event::key_released, "Invalid type");
+    HAL_ASSERT(type() == event::type::key_pressed || type() == event::type::key_released, "Invalid type");
     return m_event.data.key;
 }
 
-const events::mouse_motion& event_handler::mouse_motion() const
+const event::mouse_motion& event::handler::mouse_motion() const
 {
-    HAL_ASSERT(type() == event::mouse_moved, "Invalid type");
+    HAL_ASSERT(type() == event::type::mouse_moved, "Invalid type");
     return m_event.data.motion;
 }
 
-const events::mouse_button& event_handler::mouse_button() const
+const event::mouse_button& event::handler::mouse_button() const
 {
-    HAL_ASSERT(type() == event::mouse_pressed || type() == event::mouse_released, "Invalid type");
+    HAL_ASSERT(type() == event::type::mouse_pressed || type() == event::type::mouse_released, "Invalid type");
     return m_event.data.button;
 }
 
-const events::mouse_wheel& event_handler::mouse_wheel() const
+const event::mouse_wheel& event::handler::mouse_wheel() const
 {
-    HAL_ASSERT(type() == event::mouse_wheel_moved, "Invalid type");
+    HAL_ASSERT(type() == event::type::mouse_wheel_moved, "Invalid type");
     return m_event.data.wheel;
 }
