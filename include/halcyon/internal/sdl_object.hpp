@@ -9,17 +9,16 @@ namespace hal
     namespace sdl
     {
         template <typename Type, lyo::func_ptr<void, Type*> Deleter>
-        struct deleter
-        {
-            void operator()(Type* ptr)
-            {
-                Deleter(ptr);
-            }
-        };
-
-        template <typename Type, lyo::func_ptr<void, Type*> Deleter>
         class object
         {
+            struct deleter
+            {
+                void operator()(Type* ptr)
+                {
+                    Deleter(ptr);
+                }
+            };
+
         public:
             // A default constructor that doesn't check for null.
             object() = default;
@@ -38,6 +37,7 @@ namespace hal
                 return m_object.get();
             }
 
+            // Check whether the object is valid and useable (a.k.a. non-null).;
             bool valid() const
             {
                 return m_object.get() != nullptr;
@@ -57,7 +57,7 @@ namespace hal
             }
 
         private:
-            std::unique_ptr<Type, deleter<Type, Deleter>> m_object;
+            std::unique_ptr<Type, deleter> m_object;
         };
     }
 }
