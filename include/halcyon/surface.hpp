@@ -2,8 +2,10 @@
 
 #include <SDL_surface.h>
 
+#include <halcyon/internal/accessor.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
+
 #include <halcyon/types/color.hpp>
 #include <span>
 
@@ -18,6 +20,16 @@ namespace hal
     class pixel_reference;
     class blitter;
 
+    namespace image
+    {
+        class context;
+    }
+
+    namespace ttf
+    {
+        class font;
+    }
+
     LYO_TAG(keep_dst);
 
     class surface : public sdl::object<SDL_Surface, &::SDL_FreeSurface>
@@ -27,7 +39,8 @@ namespace hal
         surface(pixel_point sz);
 
         // Special c-tor for factory classes. Do not use directly.
-        surface(SDL_Surface* surf);
+        surface(const image::context& auth, accessor data);
+        surface(const ttf::font& font, std::string_view text, hal::color color = hal::palette::white);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.

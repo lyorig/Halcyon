@@ -25,8 +25,6 @@ namespace hal::image
         context(std::initializer_list<format> types);
         ~context();
 
-        surface load(accessor data);
-
         static bool initialized();
     };
 }

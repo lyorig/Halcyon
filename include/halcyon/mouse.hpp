@@ -52,5 +52,26 @@ namespace hal
         pixel_point pos();
     }
 
-    std::string_view to_string(mouse::button btn);
+    constexpr std::string_view to_string(mouse::button btn)
+    {
+        using enum hal::mouse::button;
+
+        switch (btn)
+        {
+        case left:
+            return "Left Mouse";
+
+        case right:
+            return "Right Mouse";
+
+        case middle:
+            return "Middle Mouse";
+
+        case x1:
+            return "Mouse Extra 1";
+
+        case x2:
+            return "Mouse Extra 2";
+        }
+    }
 }

@@ -86,7 +86,7 @@ namespace test
         hal::image::context ictx { hal::image::format::png };
 
         // Failure should occur here.
-        const hal::surface s { ictx.load(hal::from_memory(data)) };
+        const hal::surface s { ictx, hal::from_memory(data) };
 
         return EXIT_SUCCESS;
     }
@@ -127,7 +127,7 @@ namespace test
     {
         hal::image::context ictx { hal::image::format::png };
 
-        hal::surface s { ictx.load(hal::from_memory(two_by_one)) };
+        hal::surface s { ictx, hal::from_memory(two_by_one) };
 
         if (s[{ 0, 0 }] != hal::palette::red || s[{ 1, 0 }] != hal::palette::blue)
             return EXIT_FAILURE;

@@ -39,7 +39,7 @@ namespace hal
         class subsystem
         {
         public:
-            subsystem([[maybe_unused]] context& ctx)
+            explicit subsystem([[maybe_unused]] context& ctx)
             {
             }
 
@@ -59,7 +59,7 @@ namespace hal
             subinit([[maybe_unused]] context& ctx)
                 : subsystem<S> { ctx }
             {
-                HAL_WARN_IF(initialized(), "Subsystem \"", to_string(S), "\" is already initialized");
+                HAL_WARN_IF(initialized(), to_string(S), " subsystem is already initialized");
                 HAL_ASSERT_VITAL(::SDL_InitSubSystem(static_cast<std::uint32_t>(S)) == 0, debug::last_error());
             }
 
