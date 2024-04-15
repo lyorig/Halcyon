@@ -48,6 +48,35 @@ namespace hal
             vsync       = SDL_RENDERER_PRESENTVSYNC
         };
 
+        // C-tor: Sets the renderer's draw color.
+        // D-tor: Sets the draw color back to the previous one.
+        class color_lock
+        {
+        public:
+            explicit color_lock(renderer& rnd, color new_clr);
+            ~color_lock();
+
+            void set(color clr);
+
+        private:
+            renderer&   m_rnd;
+            const color m_old;
+        };
+
+        // C-tor: Sets the renderer's target texture.
+        // D-tor: Sets the target back to the renderer's window.
+        class target_lock
+        {
+        public:
+            explicit target_lock(renderer& rnd, target_texture& tgt);
+            ~target_lock();
+
+            void set(target_texture& tgt);
+
+        private:
+            renderer& m_rnd;
+        };
+
         renderer(hal::window& wnd, std::initializer_list<flags> flags = { hal::renderer::flags::accelerated });
 
         // Present the back-buffer and clear it.
@@ -112,35 +141,5 @@ namespace hal
         {
             flip::none
         };
-    };
-
-    // C-tor: Sets the renderer's draw color.
-    // D-tor: Sets the draw color back to the previous one.
-    class color_lock
-    {
-    public:
-        color_lock(renderer& rnd);
-        color_lock(renderer& rnd, color new_clr);
-        ~color_lock();
-
-        void set(color clr);
-
-    private:
-        renderer&   m_rnd;
-        const color m_old;
-    };
-
-    // C-tor: Sets the renderer's target texture.
-    // D-tor: Sets the target back to the renderer's window.
-    class target_lock
-    {
-    public:
-        target_lock(renderer& rnd, target_texture& tgt);
-        ~target_lock();
-
-        void set(target_texture& tgt);
-
-    private:
-        renderer& m_rnd;
     };
 }

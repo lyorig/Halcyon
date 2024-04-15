@@ -11,6 +11,23 @@ using namespace hal;
 // Set the depth accordingly upon changing this value.
 constexpr SDL_PixelFormatEnum default_format { SDL_PIXELFORMAT_RGBA32 };
 
+surface::blend_lock::blend_lock(surface& surf, blend_mode bm)
+    : m_surf { surf }
+    , m_old { surf.blend() }
+{
+    m_surf.blend(bm);
+}
+
+surface::blend_lock::~blend_lock()
+{
+    m_surf.blend(m_old);
+}
+
+void surface::blend_lock::set(blend_mode bm)
+{
+    m_surf.blend(bm);
+}
+
 surface::surface(pixel_point sz)
     : surface { sz, CHAR_BIT * 4, default_format }
 {

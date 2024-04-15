@@ -35,6 +35,19 @@ namespace hal
     class surface : public sdl::object<SDL_Surface, &::SDL_FreeSurface>
     {
     public:
+        class blend_lock
+        {
+        public:
+            explicit blend_lock(surface& surf, blend_mode bm);
+            ~blend_lock();
+
+            void set(blend_mode bm);
+
+        private:
+            surface&   m_surf;
+            blend_mode m_old;
+        };
+
         // Create a sized surface.
         surface(pixel_point sz);
 
@@ -113,27 +126,5 @@ namespace hal
         // SDL's blitting function overwrites the destination rectangle.
         // This overload creates a copy to ensure it remains unchanged.
         void operator()(keep_dst_tag) const;
-    };
-
-    template <typename T>
-    class blend_lock
-    {
-    public:
-        blend_lock(T& obj, blend_mode new_mode)
-            : m_obj { obj }
-            , m_old { obj.blend() }
-        {
-            obj.blend(new_mode);
-        }
-
-        ~blend_lock()
-        {
-            m_obj.blend(m_old);
-        }
-
-    private:
-        T& m_obj;
-
-        blend_mode m_old;
     };
 } // namespace hal

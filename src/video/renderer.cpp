@@ -7,6 +7,39 @@
 
 using namespace hal;
 
+renderer::color_lock::color_lock(renderer& rnd, color new_clr)
+    : m_rnd { rnd }
+    , m_old { rnd.draw_color() }
+{
+    set(new_clr);
+}
+
+renderer::color_lock::~color_lock()
+{
+    m_rnd.draw_color(m_old);
+}
+
+void renderer::color_lock::set(color clr)
+{
+    m_rnd.draw_color(clr);
+}
+
+renderer::target_lock::target_lock(renderer& rnd, target_texture& tgt)
+    : m_rnd { rnd }
+{
+    set(tgt);
+}
+
+renderer::target_lock::~target_lock()
+{
+    m_rnd.retarget();
+}
+
+void renderer::target_lock::set(target_texture& tgt)
+{
+    m_rnd.target(tgt);
+}
+
 renderer::renderer(window& wnd, std::initializer_list<flags> flags)
     : object { ::SDL_CreateRenderer(wnd.ptr(), -1, detail::to_bitmask<std::uint32_t>(flags)) }
 {
@@ -151,42 +184,4 @@ void renderer::internal_render_copy(const detail::texture_base& tex, const sdl::
 void renderer::internal_target(SDL_Texture* target)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), target) == 0, debug::last_error());
-}
-
-color_lock::color_lock(renderer& rnd)
-    : m_rnd { rnd }
-    , m_old { rnd.draw_color() }
-{
-}
-
-color_lock::color_lock(renderer& rnd, color new_clr)
-    : color_lock { rnd }
-{
-    set(new_clr);
-}
-
-color_lock::~color_lock()
-{
-    m_rnd.draw_color(m_old);
-}
-
-void color_lock::set(color clr)
-{
-    m_rnd.draw_color(clr);
-}
-
-target_lock::target_lock(renderer& rnd, target_texture& tgt)
-    : m_rnd { rnd }
-{
-    set(tgt);
-}
-
-target_lock::~target_lock()
-{
-    m_rnd.retarget();
-}
-
-void target_lock::set(target_texture& tgt)
-{
-    m_rnd.target(tgt);
 }
