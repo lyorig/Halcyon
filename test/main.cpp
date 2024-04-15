@@ -91,6 +91,8 @@ namespace test
         return EXIT_SUCCESS;
     }
 
+    // Drawing a null texture.
+    // This test should fail.
     int invalid_texture()
     {
         hal::context ctx;
@@ -135,6 +137,7 @@ namespace test
         return EXIT_SUCCESS;
     }
 
+    // Sending a quit event and checking whether it gets caught.
     int quit_event()
     {
         hal::context ctx;
