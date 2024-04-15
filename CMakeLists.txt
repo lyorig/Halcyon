@@ -26,6 +26,7 @@ add_test(NAME Clipboard         COMMAND $<TARGET_FILE:HalTest> --clipboard)
 add_test(NAME SurfaceColor      COMMAND $<TARGET_FILE:HalTest> --surface-color)
 add_test(NAME InvalidTexture    COMMAND $<TARGET_FILE:HalTest> --invalid-texture)
 add_test(NAME QuitEvent         COMMAND $<TARGET_FILE:HalTest> --quit-event)
+add_test(NAME TTFInit           COMMAND $<TARGET_FILE:HalTest> --ttf-init)
 
 # Set which tests are expected to fail.
 set_tests_properties(AssertFail InvalidBuffer InvalidTexture PROPERTIES WILL_FAIL TRUE)

@@ -26,7 +26,7 @@ namespace hal
             object(Type* object)
                 : m_object { object }
             {
-                HAL_ASSERT(m_object.get() != nullptr, debug::last_error());
+                HAL_ASSERT(ptr() != nullptr, debug::last_error());
             }
 
             // Return the underlying pointer to the object. Intended for internal
@@ -40,7 +40,7 @@ namespace hal
             // Check whether the object is valid and useable (a.k.a. non-null).;
             bool valid() const
             {
-                return m_object.get() != nullptr;
+                return ptr() != nullptr;
             }
 
             // Release (reset) the object.

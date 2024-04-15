@@ -12,7 +12,7 @@ video::video(context& auth)
 
 std::string video::clipboard_proxy::operator()() const
 {
-    const char* text { ::SDL_GetClipboardText() };
+    const auto text = ::SDL_GetClipboardText();
 
     HAL_ASSERT(!lyo::is_c_string_empty(text) || has_text(), debug::last_error());
 
@@ -29,22 +29,13 @@ bool video::clipboard_proxy::has_text() const
     return ::SDL_HasClipboardText() == SDL_TRUE;
 }
 
-display::index_t video::display_proxy::amount() const
+display::index_t video::display_proxy::size() const
 {
-    const int ret { ::SDL_GetNumVideoDisplays() };
+    const auto ret = ::SDL_GetNumVideoDisplays();
 
     HAL_ASSERT(ret >= 1, debug::last_error());
 
     return static_cast<display::index_t>(ret);
-}
-
-std::string_view video::display_proxy::name(display::index_t idx) const
-{
-    const char* ret { ::SDL_GetDisplayName(idx) };
-
-    HAL_ASSERT(ret != nullptr, debug::last_error());
-
-    return ret;
 }
 
 display video::display_proxy::operator[](display::index_t idx) const

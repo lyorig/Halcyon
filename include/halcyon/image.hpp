@@ -1,31 +1,42 @@
 #pragma once
 
+#include <initializer_list>
+
 #include <SDL_image.h>
 
-#include <halcyon/surface.hpp>
+#include <lyo/types.hpp>
+
+#include <halcyon/internal/accessor.hpp>
 
 // image.hpp:
 // Halcyon's image loading functionality.
 
-namespace hal::image
+namespace hal
 {
-    enum class format : lyo::u8
+    class surface;
+
+    namespace image
     {
-        jpg  = IMG_INIT_JPG,
-        png  = IMG_INIT_PNG,
-        tif  = IMG_INIT_TIF,
-        webp = IMG_INIT_WEBP
-    };
+        enum class format : lyo::u8
+        {
+            jpg  = IMG_INIT_JPG,
+            png  = IMG_INIT_PNG,
+            tif  = IMG_INIT_TIF,
+            webp = IMG_INIT_WEBP
+        };
 
-    // Loads the necessary libraries for image loading.
-    class context
-    {
-    public:
-        context(std::initializer_list<format> types);
-        ~context();
+        // Loads the necessary libraries for image loading.
+        class context
+        {
+        public:
+            context(std::initializer_list<format> types);
+            context(const context&) = delete;
 
-        context(const context&) = delete;
+            ~context();
 
-        static bool initialized();
-    };
+            [[nodiscard]] surface load(accessor data) const;
+
+            static bool initialized();
+        };
+    }
 }

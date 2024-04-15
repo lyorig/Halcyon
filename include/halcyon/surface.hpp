@@ -7,12 +7,11 @@
 #include <halcyon/internal/sdl_object.hpp>
 
 #include <halcyon/types/color.hpp>
-#include <span>
 
 // surface.hpp:
 // A software bitmap, from which textures are created.
 // Offers fast pixel retrieval and manipulation, which textures do not,
-// but surface-on-surface blitting is slower due to not being GPU-accelerated.
+// but surface-on-surface blitting is slower due to not being GPU accelerated.
 
 namespace hal
 {
@@ -48,14 +47,17 @@ namespace hal
             blend_mode m_old;
         };
 
+        // Create an invalid surface.
+        surface() = default;
+
         // Create a sized surface.
         surface(pixel_point sz);
 
-        // Load an image.
-        surface(const image::context& auth, accessor data);
+        // Private constructor for the image context.
+        surface(SDL_Surface* ptr, lyo::pass_key<image::context>);
 
-        // Render text using a font.
-        surface(const ttf::font& font, std::string_view text, hal::color color = hal::palette::white);
+        // Private constructor for fonts.
+        surface(SDL_Surface* ptr, lyo::pass_key<ttf::font>);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.

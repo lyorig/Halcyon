@@ -17,12 +17,14 @@ namespace hal
     // Forward declarations for parameters and return types.
     class window;
     class copyer;
+    class surface;
 
     namespace detail
     {
         class texture_base;
     }
 
+    class texture;
     class target_texture;
 
     enum class flip : lyo::u8
@@ -105,6 +107,10 @@ namespace hal
         // Get/set the size of the "drawing board."
         pixel_point size() const;
         void        size(const pixel_point& sz);
+
+        // Texture creation functions.
+        texture        make_texture(const surface& surf) const;
+        target_texture make_texture(pixel_point size) const;
 
         // Create a copyer.
         [[nodiscard]] copyer draw(const detail::texture_base& tex);

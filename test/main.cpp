@@ -2,6 +2,7 @@
 
 #include <halcyon/image.hpp>
 #include <halcyon/surface.hpp>
+#include <halcyon/ttf.hpp>
 
 #include <halcyon/context.hpp>
 #include <halcyon/video.hpp>
@@ -20,6 +21,7 @@ namespace test
     // This test should fail.
     int assert_fail()
     {
+        // Failure should occur here.
         HAL_ASSERT(false, "This is intentional.");
 
         return EXIT_SUCCESS;
@@ -86,7 +88,7 @@ namespace test
         hal::image::context ictx { hal::image::format::png };
 
         // Failure should occur here.
-        const hal::surface s { ictx, hal::from_memory(data) };
+        const hal::surface s { ictx.load(hal::from_memory(data)) };
 
         return EXIT_SUCCESS;
     }
@@ -103,6 +105,7 @@ namespace test
 
         hal::texture tex;
 
+        // Failure should occur here.
         rnd.draw(tex)();
 
         return EXIT_SUCCESS;
@@ -129,7 +132,7 @@ namespace test
     {
         hal::image::context ictx { hal::image::format::png };
 
-        hal::surface s { ictx, hal::from_memory(two_by_one) };
+        hal::surface s { ictx.load(hal::from_memory(two_by_one)) };
 
         if (s[{ 0, 0 }] != hal::palette::red || s[{ 1, 0 }] != hal::palette::blue)
             return EXIT_FAILURE;
@@ -164,6 +167,18 @@ namespace test
 
         HAL_PANIC("Reached unreachable point");
     }
+
+    // This crashes, and it shouldn't.
+    int ttf_init()
+    {
+        hal::ttf::context tctx;
+
+        const hal::ttf::font x { tctx.load(hal::from_file("m5x7.ttf"), 48) };
+
+        const hal::surface surf { x.render("I hate you for what you did - and I miss you like a little kid") };
+
+        return EXIT_SUCCESS;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -176,7 +191,8 @@ int main(int argc, char* argv[])
         { "--clipboard", test::clipboard },
         { "--surface-color", test::surface_color },
         { "--invalid-textire", test::invalid_texture },
-        { "--quit-event", test::quit_event }
+        { "--quit-event", test::quit_event },
+        { "--ttf-init", test::ttf_init }
     };
 
     if (argc == 1)

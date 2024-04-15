@@ -20,9 +20,11 @@ namespace hal::ttf
     {
     public:
         context();
+        context(const context&) = delete;
+
         ~context();
 
-        context(const context&) = delete;
+        [[nodiscard]] font load(accessor data, lyo::u8 pt) &;
 
         static bool initialized();
     };
@@ -31,10 +33,12 @@ namespace hal::ttf
     {
     public:
         // A font can only be created by the TTF context.
-        font(context& auth, accessor data, lyo::u8 pt);
+        font(TTF_Font* ptr, lyo::pass_key<context>);
 
         // Debug destructor to check whether the TTF context still exists.
         ~font();
+
+        [[nodiscard]] surface render(std::string_view text, color color = palette::white) const;
 
         // When sizing text, it's important to know that the vertical size
         // doesn't necessarily have to match that of the rendered surface.

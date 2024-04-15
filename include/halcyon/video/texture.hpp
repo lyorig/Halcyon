@@ -1,10 +1,12 @@
 #pragma once
 
+#include <SDL_render.h>
+
+#include <lyo/pass_key.hpp>
+
 #include <halcyon/internal/sdl_object.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
-
-#include <SDL_render.h>
 
 // video/texture.cpp:
 // Proper textures that can be drawn to a window (or a target texture).
@@ -13,7 +15,6 @@ namespace hal
 {
     // Forward declarations for parameters and return types.
     class renderer;
-    class copyer;
     class surface;
 
     namespace detail
@@ -28,7 +29,7 @@ namespace hal
             void           opacity(color::value_t value);
 
             color color_mod() const;
-            void  color_mod(hal::color mod);
+            void  color_mod(color mod);
 
             blend_mode blend() const;
             void       blend(blend_mode bm);
@@ -49,11 +50,7 @@ namespace hal
     {
     public:
         texture() = default;
-        texture(renderer& rnd, const surface& surf);
-
-    private:
-        // Convenience function.
-        static SDL_Texture* create(renderer& rnd, const surface& image);
+        texture(SDL_Texture* ptr, lyo::pass_key<renderer>);
     };
 
     // A texture that can be drawn onto.
@@ -61,10 +58,6 @@ namespace hal
     {
     public:
         target_texture() = default;
-        target_texture(renderer& rnd, const pixel_point& size);
-
-    private:
-        // Multiple things can fail here on top of it being a convenience function.
-        static SDL_Texture* create(renderer& rnd, const pixel_point& sz);
+        target_texture(SDL_Texture* ptr, lyo::pass_key<renderer>);
     };
 } // namespace hal

@@ -1,5 +1,7 @@
 #include <halcyon/video/renderer.hpp>
 
+#include <halcyon/surface.hpp>
+
 #include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>
 
@@ -160,6 +162,22 @@ blend_mode renderer::blend() const
 void renderer::blend(blend_mode bm)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, debug::last_error());
+}
+
+texture renderer::make_texture(const surface& surf) const
+{
+    return { ::SDL_CreateTextureFromSurface(ptr(), surf.ptr()), {} };
+}
+
+target_texture renderer::make_texture(pixel_point size) const
+{
+    const auto window = ::SDL_RenderGetWindow(ptr());
+    HAL_ASSERT(window != nullptr, debug::last_error());
+
+    const auto format = ::SDL_GetWindowPixelFormat(window);
+    HAL_ASSERT(format != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
+
+    return { ::SDL_CreateTexture(ptr(), format, SDL_TEXTUREACCESS_TARGET, size.x, size.y), {} };
 }
 
 copyer renderer::draw(const detail::texture_base& tex)

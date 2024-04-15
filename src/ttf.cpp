@@ -13,13 +13,18 @@ ttf::context::context()
 
 ttf::context::~context() { ::TTF_Quit(); }
 
+ttf::font ttf::context::load(accessor data, lyo::u8 pt) &
+{
+    return { ::TTF_OpenFontRW(data.get(), false, pt), {} };
+}
+
 bool ttf::context::initialized()
 {
     return ::TTF_WasInit() > 0;
 }
 
-ttf::font::font(context& auth, accessor data, lyo::u8 pt)
-    : object { ::TTF_OpenFontRW(data.get(), false, pt) }
+ttf::font::font(TTF_Font* ptr, lyo::pass_key<ttf::context>)
+    : object { ptr }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }
@@ -27,6 +32,11 @@ ttf::font::font(context& auth, accessor data, lyo::u8 pt)
 ttf::font::~font()
 {
     HAL_ASSERT(ttf::context::initialized(), "TTF context inactive in font destructor");
+}
+
+surface ttf::font::render(std::string_view text, hal::color color) const
+{
+    return { ::TTF_RenderText_LCD_Wrapped(ptr(), text.data(), color.to_sdl_color(), { 0x000000, 0 }, 0), lyo::pass_key<ttf::font> {} };
 }
 
 pixel_point ttf::font::size_text(const std::string_view& text) const

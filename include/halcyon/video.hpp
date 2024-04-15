@@ -29,8 +29,7 @@ namespace hal
         class display_proxy
         {
         public:
-            display::index_t amount() const;
-            std::string_view name(display::index_t idx) const;
+            display::index_t size() const;
 
             display operator[](display::index_t idx) const;
         };

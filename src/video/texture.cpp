@@ -70,39 +70,19 @@ void detail::texture_base::reset(SDL_Texture* ptr)
     this->blend(blend_mode::blend);
 }
 
-void detail::texture_base::query(Uint32* format, int* access, int* w, int* h) const
+void detail::texture_base::query(std::uint32_t* format, int* access, int* w, int* h) const
 {
     HAL_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, debug::last_error());
 }
 
-texture::texture(renderer& wnd, const surface& image)
-    : texture_base { create(wnd, image) }
-{
-    this->blend(blend_mode::blend);
-}
-
-SDL_Texture* texture::create(renderer& rnd, const surface& image)
-{
-    return ::SDL_CreateTextureFromSurface(rnd.ptr(), image.ptr());
-}
-
-target_texture::target_texture(renderer& rnd, const pixel_point& sz)
-    : texture_base { create(rnd, sz) }
+texture::texture(SDL_Texture* ptr, lyo::pass_key<renderer>)
+    : texture_base { ptr }
 {
 }
 
-SDL_Texture* target_texture::create(renderer& rnd, const pixel_point& sz)
+target_texture::target_texture(SDL_Texture* ptr, lyo::pass_key<renderer>)
+    : texture_base { ptr }
 {
-    SDL_Window* wnd { ::SDL_RenderGetWindow(rnd.ptr()) };
-    HAL_ASSERT(wnd != nullptr, debug::last_error());
-
-    const Uint32 pixel_format { ::SDL_GetWindowPixelFormat(wnd) };
-    HAL_ASSERT(pixel_format != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
-
-    SDL_Texture* tex { ::SDL_CreateTexture(rnd.ptr(), pixel_format, SDL_TEXTUREACCESS_TARGET, sz.x, sz.y) };
-    HAL_ASSERT(tex != nullptr, debug::last_error());
-
-    return tex;
 }
 
 copyer& copyer::rotate(lyo::f64 angle)
