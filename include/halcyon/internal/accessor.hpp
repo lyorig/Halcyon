@@ -31,6 +31,7 @@ namespace hal
         // Non-copyable, only moveable to accomodate some
         // convenience factory functions.
         accessor(const accessor&) = delete;
+        accessor(accessor&&)      = default;
 
         friend accessor from_file(std::string_view file);
         friend accessor from_memory(std::span<const std::uint8_t> data);
