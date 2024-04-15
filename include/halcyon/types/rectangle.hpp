@@ -4,7 +4,6 @@
 
 namespace hal
 {
-
     template <lyo::arithmetic T>
     struct rectangle
     {

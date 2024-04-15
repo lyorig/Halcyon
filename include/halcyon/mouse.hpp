@@ -8,6 +8,9 @@
 
 #include <halcyon/types/render.hpp>
 
+// mouse.hpp:
+// Mouse button access and data.
+
 namespace hal
 {
     // Forward declarations for mouse::state's pass-key constructors.

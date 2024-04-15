@@ -1,6 +1,8 @@
 #pragma once
 
-#include <halcyon/surface.hpp>
+#include <halcyon/internal/sdl_object.hpp>
+#include <halcyon/types/color.hpp>
+#include <halcyon/types/render.hpp>
 
 #include <SDL_render.h>
 
@@ -12,9 +14,11 @@ namespace hal
     // Forward declarations for parameters and return types.
     class renderer;
     class copyer;
+    class surface;
 
     namespace detail
     {
+        // Common texture functionality.
         class texture_base : public sdl::object<SDL_Texture, &::SDL_DestroyTexture>
         {
         public:
@@ -36,19 +40,16 @@ namespace hal
             void reset(SDL_Texture* ptr);
 
         private:
-            void query(Uint32* format, int* access, int* w, int* h) const;
+            void query(std::uint32_t* format, int* access, int* w, int* h) const;
         };
     }
 
     // A texture that cannot be drawn onto, only reassigned.
-    // Authority: video.
     class texture : public detail::texture_base
     {
     public:
         texture() = default;
         texture(renderer& rnd, const surface& surf);
-
-        texture& change(renderer& rnd, const surface& surf);
 
     private:
         // Convenience function.
@@ -56,14 +57,11 @@ namespace hal
     };
 
     // A texture that can be drawn onto.
-    // Authority: video.
     class target_texture : public detail::texture_base
     {
     public:
         target_texture() = default;
         target_texture(renderer& rnd, const pixel_point& size);
-
-        void resize(renderer& rnd, pixel_point sz);
 
     private:
         // Multiple things can fail here on top of it being a convenience function.

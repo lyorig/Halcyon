@@ -2,7 +2,6 @@
 
 #include <SDL_image.h>
 
-#include <halcyon/internal/accessor.hpp>
 #include <halcyon/surface.hpp>
 
 // image.hpp:
@@ -24,6 +23,8 @@ namespace hal::image
     public:
         context(std::initializer_list<format> types);
         ~context();
+
+        context(const context&) = delete;
 
         static bool initialized();
     };

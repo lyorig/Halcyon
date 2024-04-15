@@ -2,11 +2,9 @@
 
 #include <SDL_pixels.h>
 
-#include <algorithm>
-#include <lyo/cast.hpp>
 #include <lyo/types.hpp>
 
-// color.hpp:
+// types/color.hpp:
 // An extension of SDL_Color with custom constructors,
 // functions and operators.
 

@@ -1,5 +1,8 @@
-#include <halcyon/debug.hpp>
 #include <halcyon/video/display.hpp>
+
+#include <SDL_video.h>
+
+#include <halcyon/debug.hpp>
 
 using namespace hal;
 

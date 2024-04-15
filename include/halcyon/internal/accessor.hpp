@@ -1,12 +1,13 @@
 #pragma once
 
-#include <cstdint>
 #include <span>
 #include <string_view>
 
 #include <SDL_rwops.h>
 
-#include <lyo/pass_key.hpp>
+// internal/accessor.hpp:
+// A wrapper of SDL_RWops that enables stuff to be loaded from not only
+// files, but also "baked-in" data residing in memory.
 
 namespace hal
 {

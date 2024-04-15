@@ -4,8 +4,6 @@
 #include <lyo/pass_key.hpp>
 #include <string_view>
 
-#include <halcyon/internal/subsystem.hpp>
-
 // video/display.hpp:
 // A representation of a monitor.
 
@@ -30,9 +28,7 @@ namespace hal
 
     private:
         pixel_point m_size;
-
-        hz_t m_hz;
-
-        index_t m_index;
+        hz_t        m_hz;
+        index_t     m_index;
     };
 }

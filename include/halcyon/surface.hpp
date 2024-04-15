@@ -38,8 +38,10 @@ namespace hal
         // Create a sized surface.
         surface(pixel_point sz);
 
-        // Special c-tor for factory classes. Do not use directly.
+        // Load an image.
         surface(const image::context& auth, accessor data);
+
+        // Render text using a font.
         surface(const ttf::font& font, std::string_view text, hal::color color = hal::palette::white);
 
         // Get a resized copy of the surface. Useful for saving

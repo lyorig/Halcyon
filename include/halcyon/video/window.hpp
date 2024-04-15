@@ -1,7 +1,8 @@
 #pragma once
 
+#include <halcyon/internal/sdl_object.hpp>
+
 #include <halcyon/video/display.hpp>
-#include <halcyon/video/renderer.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
 

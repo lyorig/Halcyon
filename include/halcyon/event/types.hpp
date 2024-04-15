@@ -7,7 +7,7 @@
 
 #include <halcyon/video/window.hpp>
 
-// types/events.hpp:
+// event/types.hpp:
 // Event type wrappers for SDL. Their sizes must match their
 // SDL counterparts, as Halcyon does some union hackery to
 // speed things up. Extensive static_assert checking is recommended.

@@ -22,6 +22,8 @@ namespace hal::ttf
         context();
         ~context();
 
+        context(const context&) = delete;
+
         static bool initialized();
     };
 
@@ -29,7 +31,7 @@ namespace hal::ttf
     {
     public:
         // A font can only be created by the TTF context.
-        font(context auth, accessor data, lyo::u8 pt);
+        font(context& auth, accessor data, lyo::u8 pt);
 
         // Debug destructor to check whether the TTF context still exists.
         ~font();

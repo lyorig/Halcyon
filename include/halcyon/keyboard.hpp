@@ -9,6 +9,9 @@
 
 #include <halcyon/types/render.hpp>
 
+// keyboard.hpp:
+// Keyboard enumerations and access.
+
 namespace hal
 {
     namespace keyboard

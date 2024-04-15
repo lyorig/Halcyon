@@ -18,7 +18,7 @@ bool ttf::context::initialized()
     return ::TTF_WasInit() > 0;
 }
 
-ttf::font::font(context auth, accessor data, lyo::u8 pt)
+ttf::font::font(context& auth, accessor data, lyo::u8 pt)
     : object { ::TTF_OpenFontRW(data.get(), false, pt) }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");

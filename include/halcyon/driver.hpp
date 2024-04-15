@@ -3,7 +3,7 @@
 #include <lyo/types.hpp>
 #include <string_view>
 
-// video/driver.hpp:
+// driver.hpp:
 // Video driver information and enumeration.
 
 namespace hal

@@ -1,7 +1,8 @@
 #include <halcyon/debug.hpp>
 
+#include <SDL.h>
+
 #include <halcyon/context.hpp>
-#include <halcyon/internal/helpers.hpp>
 
 using namespace hal;
 

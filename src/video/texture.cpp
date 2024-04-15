@@ -1,7 +1,8 @@
 #include <halcyon/video/texture.hpp>
 
-#include <halcyon/video/renderer.hpp>
 #include <halcyon/debug.hpp>
+#include <halcyon/surface.hpp>
+#include <halcyon/video/renderer.hpp>
 
 using namespace hal;
 
@@ -80,12 +81,6 @@ texture::texture(renderer& wnd, const surface& image)
     this->blend(blend_mode::blend);
 }
 
-texture& texture::change(renderer& wnd, const surface& image)
-{
-    texture_base::reset(create(wnd, image));
-    return *this;
-}
-
 SDL_Texture* texture::create(renderer& rnd, const surface& image)
 {
     return ::SDL_CreateTextureFromSurface(rnd.ptr(), image.ptr());
@@ -94,11 +89,6 @@ SDL_Texture* texture::create(renderer& rnd, const surface& image)
 target_texture::target_texture(renderer& rnd, const pixel_point& sz)
     : texture_base { create(rnd, sz) }
 {
-}
-
-void target_texture::resize(renderer& rnd, pixel_point sz)
-{
-    texture_base::reset(create(rnd, sz));
 }
 
 SDL_Texture* target_texture::create(renderer& rnd, const pixel_point& sz)
