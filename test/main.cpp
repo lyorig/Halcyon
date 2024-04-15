@@ -168,14 +168,13 @@ namespace test
         HAL_PANIC("Reached unreachable point");
     }
 
-    // This crashes, and it shouldn't.
+    // Basic TTF initialization.
     int ttf_init()
     {
         hal::ttf::context tctx;
 
         const hal::ttf::font x { tctx.load(hal::from_file("m5x7.ttf"), 48) };
-
-        const hal::surface surf { x.render("I hate you for what you did - and I miss you like a little kid") };
+        const hal::surface   surf { x.render("I hate you for what you did - and I miss you like a little kid") };
 
         return EXIT_SUCCESS;
     }

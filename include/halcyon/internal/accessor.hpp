@@ -18,28 +18,29 @@ namespace hal
 {
     class surface;
 
-    namespace image
-    {
-        class context;
-    }
-
     namespace ttf
     {
         class font;
     }
 
+    // A proxy to various methods of accessing a file. Only meant for
+    // use in constructors; usage anywhere else is not recommended.
     class accessor
     {
     public:
-        accessor(SDL_RWops* ptr);
+        // Non-copyable, only moveable to accomodate some
+        // convenience factory functions.
         accessor(const accessor&) = delete;
-        accessor(accessor&&)      = default;
+
+        friend accessor from_file(std::string_view file);
+        friend accessor from_memory(std::span<const std::uint8_t> data);
 
         SDL_RWops* get(lyo::pass_key<surface>);
-        SDL_RWops* get(lyo::pass_key<image::context>);
         SDL_RWops* get(lyo::pass_key<ttf::font>);
 
     private:
+        accessor(SDL_RWops* ptr);
+
         SDL_RWops* m_ops;
     };
 
