@@ -1,5 +1,11 @@
 #pragma once
 
+#include <halcyon/context.hpp>
+
+#include <halcyon/image.hpp>
+#include <halcyon/surface.hpp>
+#include <halcyon/ttf.hpp>
+
 #include <halcyon/video/display.hpp>
 #include <halcyon/video/renderer.hpp>
 #include <halcyon/video/texture.hpp>

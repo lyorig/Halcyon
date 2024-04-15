@@ -1,13 +1,7 @@
 #include <lyo/utility.hpp>
 
-#include <halcyon/image.hpp>
-#include <halcyon/surface.hpp>
-#include <halcyon/ttf.hpp>
-
-#include <halcyon/context.hpp>
-#include <halcyon/video.hpp>
-
 #include <halcyon/events.hpp>
+#include <halcyon/video.hpp>
 
 #include "data.hpp"
 
