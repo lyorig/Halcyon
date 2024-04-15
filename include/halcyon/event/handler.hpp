@@ -1,9 +1,8 @@
 #pragma once
 
 #include <halcyon/event/types.hpp>
-#include <halcyon/video/display.hpp>
 
-// events.hpp:
+// event/handler.hpp:
 // A thin wrapper of SDL's event handling system.
 // hal::event is a complex namespace, so the handler isn't top-level as usual.
 

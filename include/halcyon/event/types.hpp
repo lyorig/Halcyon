@@ -5,7 +5,6 @@
 #include <halcyon/keyboard.hpp>
 #include <halcyon/mouse.hpp>
 
-#include <halcyon/video/display.hpp>
 #include <halcyon/video/window.hpp>
 
 // types/events.hpp:
@@ -36,7 +35,7 @@ namespace hal
 
             hal::display::index_t display_index() const;
 
-            // As of April 2024, there are no event using the "data1" member.
+            // As of April 2024, there are no events using the "data1" member.
         };
 
         static_assert(sizeof(display) == sizeof(SDL_DisplayEvent));
@@ -65,8 +64,6 @@ namespace hal
                 display_changed     = SDL_WINDOWEVENT_DISPLAY_CHANGED
             };
 
-            window(const SDL_WindowEvent& evt, lyo::pass_key<event::handler>);
-
             type type() const;
 
             hal::window::id_t window_id() const;
@@ -83,8 +80,6 @@ namespace hal
         class keyboard : SDL_KeyboardEvent
         {
         public:
-            keyboard(const SDL_KeyboardEvent& evt, lyo::pass_key<event::handler>);
-
             hal::window::id_t window_id() const;
 
             hal::keyboard::button button() const;
@@ -97,8 +92,6 @@ namespace hal
         class mouse_motion : SDL_MouseMotionEvent
         {
         public:
-            mouse_motion(const SDL_MouseMotionEvent& evt, lyo::pass_key<event::handler>);
-
             hal::window::id_t window_id() const;
 
             mouse::state state() const;
@@ -111,8 +104,6 @@ namespace hal
         class mouse_button : SDL_MouseButtonEvent
         {
         public:
-            mouse_button(const SDL_MouseButtonEvent& evt, lyo::pass_key<event::handler>);
-
             hal::window::id_t window_id() const;
 
             mouse::state  state() const;
@@ -126,11 +117,10 @@ namespace hal
         class mouse_wheel : SDL_MouseWheelEvent
         {
         public:
-            mouse_wheel(const SDL_MouseWheelEvent& evt, lyo::pass_key<event::handler>);
-
             hal::window::id_t window_id() const;
 
-            point<lyo::f32> scroll() const;
+            point<lyo::i16> scroll() const;
+            point<lyo::f32> scroll_precise() const;
             pixel_point     pos() const;
             bool            scroll_flipped() const;
         };

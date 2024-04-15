@@ -116,7 +116,12 @@ window::id_t event::mouse_wheel::window_id() const
     return static_cast<hal::window::id_t>(windowID);
 }
 
-point<lyo::f32> event::mouse_wheel::scroll() const
+point<lyo::i16> event::mouse_wheel::scroll() const
+{
+    return { static_cast<lyo::i16>(x), static_cast<lyo::i16>(y) };
+}
+
+point<lyo::f32> event::mouse_wheel::scroll_precise() const
 {
     return { static_cast<lyo::f32>(preciseX), static_cast<lyo::f32>(preciseY) };
 }
