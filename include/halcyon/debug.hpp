@@ -15,7 +15,7 @@
 
 #ifdef HAL_DEBUG_ENABLED
 
-    #include <halcyon/other/printing.hpp>
+    #include <halcyon/printing.hpp>
     #include <lyo/timer.hpp>
     #include <lyo/utility.hpp>
 

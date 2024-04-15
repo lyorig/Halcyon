@@ -1,13 +1,22 @@
 #pragma once
 
+#include <SDL_blendmode.h>
 #include <halcyon/types/rectangle.hpp>
 
-// render.hpp:
+// types/render.hpp:
 // Rendering-related types used throughout Halcyon.
+// Defining LYO_FAST_TYPES maps Halcyon's types directly to SDL's where applicable.
 
 namespace hal
 {
-    // Defining LYO_FAST_TYPES maps Halcyon's types directly to SDL's where applicable.
+    enum class blend_mode : lyo::u8
+    {
+        none  = SDL_BLENDMODE_NONE,
+        add   = SDL_BLENDMODE_ADD,
+        mod   = SDL_BLENDMODE_MOD,
+        mul   = SDL_BLENDMODE_MUL,
+        blend = SDL_BLENDMODE_BLEND
+    };
 
     // A measurement type for surface/texture pixels.
     using pixel_t = lyo::CFT<lyo::i16, sdl::pixel_t>;

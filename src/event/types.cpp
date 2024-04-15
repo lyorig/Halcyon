@@ -1,4 +1,4 @@
-#include <halcyon/types/events.hpp>
+#include <halcyon/event/types.hpp>
 
 using namespace hal;
 

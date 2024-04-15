@@ -1,17 +1,13 @@
-#include <halcyon/window.hpp>
+#include <halcyon/video/window.hpp>
+
+#include <halcyon/event/handler.hpp>
 
 #include <halcyon/internal/helpers.hpp>
 
 using namespace hal;
 
-window::window(std::string_view title, const pixel_point& size, std::initializer_list<flags> flags)
-    : object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
-{
-    HAL_PRINT(severity::init, "Initialized window \"", this->title(), "\", size ", this->size(), " at display ", hal::to_printable_int(display_index()));
-}
-
-window::window(std::string_view title, fullscreen_tag)
-    : window { title, display { 0 }.size(), { flags::fullscreen } }
+window::window(detail::subsystem<system::video>&, std::string_view name, pixel_point size, std::initializer_list<flags> flags)
+    : object { ::SDL_CreateWindow(name.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
 {
 }
 

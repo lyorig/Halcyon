@@ -4,7 +4,7 @@
 
 #include <SDL_render.h>
 
-// texture.cpp:
+// video/texture.cpp:
 // Proper textures that can be drawn to a window (or a target texture).
 
 namespace hal
@@ -41,6 +41,7 @@ namespace hal
     }
 
     // A texture that cannot be drawn onto, only reassigned.
+    // Authority: video.
     class texture : public detail::texture_base
     {
     public:
@@ -55,6 +56,7 @@ namespace hal
     };
 
     // A texture that can be drawn onto.
+    // Authority: video.
     class target_texture : public detail::texture_base
     {
     public:

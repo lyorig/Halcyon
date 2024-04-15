@@ -4,7 +4,6 @@
 
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
-#include <halcyon/other/blend.hpp>
 #include <halcyon/types/color.hpp>
 #include <span>
 

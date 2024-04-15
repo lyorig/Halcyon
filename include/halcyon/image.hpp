@@ -5,7 +5,7 @@
 #include <halcyon/internal/accessor.hpp>
 #include <halcyon/surface.hpp>
 
-// images.hpp:
+// image.hpp:
 // Halcyon's image loading functionality.
 
 namespace hal::image
@@ -18,17 +18,15 @@ namespace hal::image
         webp = IMG_INIT_WEBP
     };
 
-    // Loads the necessary libraries for image loading. Use as a "fire-and-forget" object,
-    // i.e. create it, and load from anywhere afterwards.
-    class cleanup
+    // Loads the necessary libraries for image loading.
+    class context
     {
     public:
-        cleanup(std::initializer_list<format> types);
-        ~cleanup();
+        context(std::initializer_list<format> types);
+        ~context();
+
+        surface load(accessor data);
 
         static bool initialized();
     };
-
-    // Image loading is not dependent on a specific object, so it's a free function.
-    surface load(accessor data);
 }

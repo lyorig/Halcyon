@@ -1,7 +1,7 @@
-#include <halcyon/texture.hpp>
+#include <halcyon/video/texture.hpp>
 
+#include <halcyon/video/renderer.hpp>
 #include <halcyon/debug.hpp>
-#include <halcyon/renderer.hpp>
 
 using namespace hal;
 

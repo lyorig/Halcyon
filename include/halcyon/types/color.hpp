@@ -18,25 +18,7 @@ namespace hal
         using hex_t = lyo::u32;
 
         // A single R, G, B or A value.
-        using value_t = Uint8;
-
-        // Predefined colors in RGB form.
-        enum predefined : hex_t
-        {
-            black = 0x000000,
-
-            red   = 0xFF0000,
-            green = 0x00FF00,
-            blue  = 0x0000FF,
-
-            yellow = 0xFFFF00,
-            orange = 0xFFA500,
-            cyan   = 0x00FFFF,
-
-            weezer_blue = 0x0099D3,
-
-            white = 0xFFFFFF
-        };
+        using value_t = std::uint8_t;
 
         enum limits
         {
@@ -45,7 +27,7 @@ namespace hal
         };
 
         constexpr color()
-            : color { black }
+            : color { 0x000000 }
         {
         }
 
@@ -73,4 +55,18 @@ namespace hal
             return r == other.r && g == other.g && b == other.b && a == other.a;
         }
     };
-} // namespace hal
+
+    // Predefined colors in RGB form.
+    namespace palette
+    {
+        constexpr color black       = 0x000000,
+                        red         = 0xFF0000,
+                        green       = 0x00FF00,
+                        blue        = 0x0000FF,
+                        yellow      = 0xFFFF00,
+                        orange      = 0xFFA500,
+                        cyan        = 0x00FFFF,
+                        weezer_blue = 0x0099D3,
+                        white       = 0xFFFFFF;
+    }
+}

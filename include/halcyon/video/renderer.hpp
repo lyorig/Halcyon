@@ -1,17 +1,18 @@
 #pragma once
 
+#include <span>
+
 #include <SDL_render.h>
+
+#include <lyo/pass_key.hpp>
 
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
-#include <halcyon/other/blend.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
-#include <lyo/pass_key.hpp>
-#include <span>
 
-// renderer.hpp:
-// Rendering stuff - more info below.
+// video/renderer.hpp:
+// A proxy for creating and rendering textures etc. - more info below.
 
 namespace hal
 {
@@ -37,6 +38,7 @@ namespace hal
     // A wrapper of SDL_Renderer. Essentially, this is the thing that does the rendering, and
     // is attached to a window. Multiple renderers can exist for a single window, i.e. a hardware-
     // accelerated one, plus a software fallback in case the former isn't available.
+    // By default, renderers use hardware acceleration. You can override this in the constructor.
     class renderer : public sdl::object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
     public:
@@ -48,7 +50,7 @@ namespace hal
             vsync       = SDL_RENDERER_PRESENTVSYNC
         };
 
-        renderer(window& wnd, std::initializer_list<flags> flags);
+        renderer(hal::window& wnd, std::initializer_list<flags> flags = { hal::renderer::flags::accelerated });
 
         // Present the back-buffer and clear it.
         void present();

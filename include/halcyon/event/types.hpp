@@ -2,9 +2,11 @@
 
 #include <SDL_events.h>
 
-#include <halcyon/other/display.hpp>
-#include <halcyon/other/keyboard_mouse.hpp>
-#include <halcyon/window.hpp>
+#include <halcyon/keyboard.hpp>
+#include <halcyon/mouse.hpp>
+
+#include <halcyon/video/display.hpp>
+#include <halcyon/video/window.hpp>
 
 // types/events.hpp:
 // Event type wrappers for SDL. Their sizes must match their

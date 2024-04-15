@@ -13,22 +13,23 @@ set(HALCYON_INCLUDE_DIRS ${LYO_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR}/include/)
 
 # Sources.
 set(HALCYON_SOURCES
+event/handler.cpp
+event/types.cpp
 internal/accessor.cpp
-other/clipboard.cpp
-other/display.cpp
-other/driver.cpp
-other/keyboard_mouse.cpp
-other/printing.cpp
-types/events.cpp
-cleanup.cpp
+video/display.cpp
+video/renderer.cpp
+video/texture.cpp
+video/window.cpp
+keyboard.cpp
+mouse.cpp
+printing.cpp
+video.cpp
+context.cpp
+driver.cpp
 debug.cpp
-events.cpp
-images.cpp
-renderer.cpp
-texture.cpp
-ttf.cpp
-window.cpp
+image.cpp
 surface.cpp
+ttf.cpp
 )
 
 list(TRANSFORM HALCYON_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/)

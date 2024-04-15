@@ -1,12 +1,17 @@
-#include <halcyon/halcyon.hpp>
-#include <halcyon/other/clipboard.hpp>
-
 #include <lyo/utility.hpp>
+
+#include <halcyon/image.hpp>
+#include <halcyon/surface.hpp>
+
+#include <halcyon/context.hpp>
+#include <halcyon/video.hpp>
+
+#include <halcyon/events.hpp>
 
 #include "data.hpp"
 
 // Halcyon testing.
-// A single text-runner executable that contains all tests.
+// A single test-runner executable that contains all tests.
 // Tests are added to CTest by specifiying the appropriate command-line argument.
 
 namespace test
@@ -25,15 +30,14 @@ namespace test
     {
         constexpr hal::pixel_point new_size { 120, 120 };
 
-        hal::cleanup c { hal::system::video };
+        hal::context ctx;
+        hal::video   vid { ctx };
 
-        hal::window wnd { "HalTest Window", { 100, 100 }, { hal::window::flags::hidden } };
+        hal::window wnd { vid, "HalTest: Window resize", { 640, 480 }, { hal::window::flags::hidden } };
 
-        hal::from_memory(two_by_one);
+        hal::event::handler e { vid.events };
 
-        hal::event::handler e;
-
-        while (e.poll()) // Clear event.
+        while (e.poll()) // Clear events.
             ;
 
         wnd.size(new_size);
@@ -54,12 +58,18 @@ namespace test
     // Basic Halcyon initialization.
     int basic_init()
     {
-        hal::cleanup c { hal::system::video };
+        hal::context ctx;
 
-        hal::window   wnd { "HalTest Window", { 100, 100 }, { hal::window::flags::hidden } };
-        hal::renderer rnd { wnd, { hal::renderer::flags::accelerated, hal::renderer::flags::vsync } };
+        HAL_ASSERT(!hal::video::initialized(), "Video should not be initialized at this point");
 
-        hal::event::handler e;
+        hal::video vid { ctx };
+
+        HAL_ASSERT(hal::video::initialized(), "Video should report initialization by now");
+
+        hal::window   wnd { vid, "HalTest: Basic init", { 640, 480 }, { hal::window::flags::hidden } };
+        hal::renderer rnd { wnd, { hal::renderer::flags::accelerated } };
+
+        hal::event::handler e { vid.events };
         e.poll();
 
         rnd.present();
@@ -67,14 +77,31 @@ namespace test
         return EXIT_SUCCESS;
     }
 
-    // Passing an invalid buffer to a function expecting valid image data.
+    // Passing a zeroed-out buffer to a function expecting valid image data.
     // This test should fail.
     int invalid_buffer()
     {
         constexpr std::uint8_t data[1024] {};
 
+        hal::image::context ictx { hal::image::format::png };
+
         // Failure should occur here.
-        const hal::surface s { hal::image::load(hal::from_memory(data)) };
+        const hal::surface s { ictx.load(hal::from_memory(data)) };
+
+        return EXIT_SUCCESS;
+    }
+
+    int invalid_texture()
+    {
+        hal::context ctx;
+        hal::video   vid { ctx };
+
+        hal::window   wnd { vid, "HalTest: Invalid texture", { 640, 480 }, { hal::window::flags::hidden } };
+        hal::renderer rnd { wnd };
+
+        hal::texture tex;
+
+        rnd.draw(tex)();
 
         return EXIT_SUCCESS;
     }
@@ -84,11 +111,12 @@ namespace test
     {
         constexpr char text[] { "We can be heroes - just for one day." };
 
-        hal::cleanup c { hal::system::video };
+        hal::context ctx;
+        hal::video   vid { ctx };
 
-        hal::clipboard::set(text);
+        vid.clipboard(text);
 
-        if (!hal::clipboard::has_text() || hal::clipboard::get() != text)
+        if (!vid.clipboard.has_text() || vid.clipboard() != text)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
@@ -97,46 +125,71 @@ namespace test
     // Checking pixel colors in a 2x1 surface.
     int surface_color()
     {
-        constexpr hal::color red { 255, 0, 0 }, blue { 0, 0, 255 };
+        hal::image::context ictx { hal::image::format::png };
 
-        hal::surface s { hal::image::load(hal::from_memory(two_by_one)) };
+        hal::surface s { ictx.load(hal::from_memory(two_by_one)) };
 
-        if (s[{ 0, 0 }] != red || s[{ 1, 0 }] != blue)
+        if (s[{ 0, 0 }] != hal::palette::red || s[{ 1, 0 }] != hal::palette::blue)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
+    }
+
+    int quit_event()
+    {
+        hal::context ctx;
+        hal::events  evt { ctx };
+
+        hal::event::handler eh { evt };
+
+        SDL_Event e;
+        e.type = SDL_QUIT;
+
+        ::SDL_PushEvent(&e);
+
+        while (eh.poll())
+        {
+            switch (eh.type())
+            {
+            case hal::event::type::quit_requested:
+                return EXIT_SUCCESS;
+
+            default:
+                break;
+            }
+        }
+
+        HAL_PANIC("Reached unreachable point");
     }
 }
 
 int main(int argc, char* argv[])
 {
+    constexpr std::pair<std::string_view, lyo::func_ptr<int>> tests[] {
+        { "--assert-fail", test::assert_fail },
+        { "--window-resize", test::window_resize },
+        { "--basic-init", test::basic_init },
+        { "--invalid-buffer", test::invalid_buffer },
+        { "--clipboard", test::clipboard },
+        { "--surface-color", test::surface_color },
+        { "--invalid-textire", test::invalid_texture },
+        { "--quit-event", test::quit_event }
+    };
+
     if (argc == 1)
     {
-        std::puts("No test type given.");
+        std::cout << "No test type given.\n";
         return EXIT_FAILURE;
     }
 
-    if (lyo::streq(argv[1], "--assert-fail"))
-        return test::assert_fail();
+    auto iter = std::find_if(std::begin(tests), std::end(tests), [&](const auto& pair)
+        { return pair.first == argv[1]; });
 
-    else if (lyo::streq(argv[1], "--window-resize"))
-        return test::window_resize();
-
-    else if (lyo::streq(argv[1], "--basic-init"))
-        return test::basic_init();
-
-    else if (lyo::streq(argv[1], "--invalid-buffer"))
-        return test::invalid_buffer();
-
-    else if (lyo::streq(argv[1], "--clipboard"))
-        return test::clipboard();
-
-    else if (lyo::streq(argv[1], "--surface-color"))
-        return test::surface_color();
-
-    else
+    if (iter == std::end(tests))
     {
-        std::printf("Unknown test type given: %s\n", argv[1]);
+        std::cout << "Invalid option specified: " << argv[1] << '\n';
         return EXIT_FAILURE;
     }
+
+    return iter->second();
 }

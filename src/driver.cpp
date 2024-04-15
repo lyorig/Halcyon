@@ -1,7 +1,7 @@
 #include <SDL_video.h>
 
 #include <halcyon/debug.hpp>
-#include <halcyon/other/driver.hpp>
+#include <halcyon/driver.hpp>
 
 using namespace hal;
 

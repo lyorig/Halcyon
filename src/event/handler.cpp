@@ -1,12 +1,12 @@
 #include <halcyon/debug.hpp>
-#include <halcyon/events.hpp>
+#include <halcyon/event/handler.hpp>
 
 using namespace hal;
 
-event::handler::handler() // Start with an invalid event.
-    : m_event { std::numeric_limits<std::uint32_t>::max() }
+event::handler::handler(detail::subsystem<system::events>&)
+    : m_event { std::numeric_limits<std::uint32_t>::max() } // Start with an invalid event.
 {
-    // Disable unused event.
+    // Disable unused events.
     for (SDL_EventType type : {
              SDL_LOCALECHANGED,
              SDL_SYSWMEVENT,

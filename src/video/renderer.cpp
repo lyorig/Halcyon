@@ -1,15 +1,16 @@
-#include <halcyon/renderer.hpp>
+#include <halcyon/video/renderer.hpp>
+
+#include <halcyon/video/texture.hpp>
+#include <halcyon/video/window.hpp>
 
 #include <halcyon/internal/helpers.hpp>
-#include <halcyon/window.hpp>
 
 using namespace hal;
 
 renderer::renderer(window& wnd, std::initializer_list<flags> flags)
     : object { ::SDL_CreateRenderer(wnd.ptr(), -1, detail::to_bitmask<std::uint32_t>(flags)) }
 {
-    this->blend(blend_mode::blend);
-    this->clear();
+    HAL_PRINT("Created renderer for window \"", wnd.title(), "\", flags = ", std::hex, detail::to_bitmask<std::uint32_t>(flags));
 }
 
 void renderer::present()

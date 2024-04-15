@@ -1,14 +1,16 @@
 #pragma once
 
-#include <lyo/timer.hpp>
+#include <halcyon/video/display.hpp>
+#include <halcyon/video/renderer.hpp>
 
-#include <halcyon/other/display.hpp>
-#include <halcyon/texture.hpp>
+#include <halcyon/internal/subsystem.hpp>
+
+// video/window.hpp:
+// A window. Can't do much by itself.
 
 namespace hal
 {
-    LYO_TAG(fullscreen);
-
+    // A window. Not much more to say.
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
@@ -25,17 +27,13 @@ namespace hal
             maximized             = SDL_WINDOW_MAXIMIZED
         };
 
-        // Create a window with a specified title, size and flags.
-        window(std::string_view title, const pixel_point& size, std::initializer_list<flags> flags);
-
-        // Create a window with a specified title and predefined flags for fullscreen mode.
-        window(std::string_view title, fullscreen_tag);
+        window(detail::subsystem<system::video>&, std::string_view name, pixel_point size, std::initializer_list<flags> flags = {});
 
         // Get/set this window's size. Expect weird behavior in fullscreen mode.
         pixel_point size() const;
         void        size(pixel_point sz);
 
-        // Get information about this window's display.
+        // Get the index of the display this window is currently on.
         display::index_t display_index() const;
 
         // Get/set this window's title.
