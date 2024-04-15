@@ -56,7 +56,7 @@ namespace hal
         class subinit : public subsystem<S>
         {
         public:
-            subinit([[maybe_unused]] context& ctx)
+            explicit subinit([[maybe_unused]] context& ctx)
                 : subsystem<S> { ctx }
             {
                 HAL_WARN_IF(initialized(), to_string(S), " subsystem is already initialized");

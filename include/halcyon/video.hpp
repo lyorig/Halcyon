@@ -38,7 +38,7 @@ namespace hal
         static_assert(std::is_empty_v<display_proxy>);
 
     public:
-        video(context& auth);
+        explicit video(context& auth);
 
         LYO_NOSIZE detail::subsystem<system::events> events;
 
