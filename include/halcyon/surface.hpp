@@ -53,11 +53,11 @@ namespace hal
         // Create a sized surface.
         surface(pixel_point sz);
 
-        // Private constructor for the image context.
-        surface(SDL_Surface* ptr, lyo::pass_key<image::context>);
+        // Load an image.
+        surface(const image::context& auth, accessor data);
 
-        // Private constructor for fonts.
-        surface(SDL_Surface* ptr, lyo::pass_key<ttf::font>);
+        // Render text using a font.
+        surface(const ttf::font& font, std::string_view text, color color = palette::white);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.

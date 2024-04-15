@@ -6,7 +6,7 @@ ttf::context::context()
 {
     HAL_WARN_IF(initialized(), "TTF context already exists");
 
-    HAL_ASSERT_VITAL(::TTF_Init() == 0, ::TTF_GetError());
+    HAL_ASSERT_VITAL(::TTF_Init() == 0, debug::last_error());
 
     HAL_PRINT(severity::init, "Initialized TTF engine");
 }
@@ -15,7 +15,7 @@ ttf::context::~context() { ::TTF_Quit(); }
 
 ttf::font ttf::context::load(accessor data, lyo::u8 pt) &
 {
-    return { ::TTF_OpenFontRW(data.get(), false, pt), {} };
+    return { *this, std::move(data), pt };
 }
 
 bool ttf::context::initialized()
@@ -23,8 +23,8 @@ bool ttf::context::initialized()
     return ::TTF_WasInit() > 0;
 }
 
-ttf::font::font(TTF_Font* ptr, lyo::pass_key<ttf::context>)
-    : object { ptr }
+ttf::font::font(context& auth, accessor data, lyo::u8 pt)
+    : object { ::TTF_OpenFontRW(data.get(lyo::pass_key<ttf::font> {}), true, pt) }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }
@@ -36,7 +36,7 @@ ttf::font::~font()
 
 surface ttf::font::render(std::string_view text, hal::color color) const
 {
-    return { ::TTF_RenderText_LCD_Wrapped(ptr(), text.data(), color.to_sdl_color(), { 0x000000, 0 }, 0), lyo::pass_key<ttf::font> {} };
+    return { *this, text, color };
 }
 
 pixel_point ttf::font::size_text(const std::string_view& text) const

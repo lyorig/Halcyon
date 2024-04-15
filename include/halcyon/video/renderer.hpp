@@ -108,9 +108,9 @@ namespace hal
         pixel_point size() const;
         void        size(const pixel_point& sz);
 
-        // Texture creation functions.
-        texture        make_texture(const surface& surf) const;
-        target_texture make_texture(pixel_point size) const;
+        // Convenience texture creation functions.
+        [[nodiscard]] texture        make_texture(const surface& surf);
+        [[nodiscard]] target_texture make_texture(pixel_point size);
 
         // Create a copyer.
         [[nodiscard]] copyer draw(const detail::texture_base& tex);

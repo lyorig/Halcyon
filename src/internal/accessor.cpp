@@ -9,12 +9,17 @@ accessor::accessor(SDL_RWops* ptr)
     HAL_ASSERT(m_ops != nullptr, debug::last_error());
 }
 
-accessor::~accessor()
+SDL_RWops* accessor::get(lyo::pass_key<surface>)
 {
-    HAL_WARN_IF_VITAL(::SDL_RWclose(m_ops) != 0, "File failed to flush its output to disk: ", debug::last_error());
+    return m_ops;
 }
 
-SDL_RWops* accessor::get()
+SDL_RWops* accessor::get(lyo::pass_key<image::context>)
+{
+    return m_ops;
+}
+
+SDL_RWops* accessor::get(lyo::pass_key<ttf::font>)
 {
     return m_ops;
 }

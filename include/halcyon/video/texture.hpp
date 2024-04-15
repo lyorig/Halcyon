@@ -50,7 +50,7 @@ namespace hal
     {
     public:
         texture() = default;
-        texture(SDL_Texture* ptr, lyo::pass_key<renderer>);
+        texture(renderer& rnd, const surface& surf);
     };
 
     // A texture that can be drawn onto.
@@ -58,6 +58,6 @@ namespace hal
     {
     public:
         target_texture() = default;
-        target_texture(SDL_Texture* ptr, lyo::pass_key<renderer>);
+        target_texture(renderer& rnd, pixel_point sz);
     };
 } // namespace hal
