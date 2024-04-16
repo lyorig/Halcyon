@@ -1,11 +1,10 @@
 #pragma once
 
+#include <string_view>
+
 #include <SDL_ttf.h>
 
-#include <halcyon/internal/accessor.hpp>
 #include <halcyon/surface.hpp>
-
-#include <string_view>
 
 namespace hal::ttf
 {
@@ -50,4 +49,7 @@ namespace hal::ttf
         std::string_view family() const;
         std::string_view style() const;
     };
+
+    // Ensure calling debug::last_error() gives accurate information.
+    static_assert(::TTF_GetError == ::SDL_GetError);
 }

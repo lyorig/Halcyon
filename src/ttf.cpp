@@ -11,7 +11,14 @@ ttf::context::context()
     HAL_PRINT(severity::init, "Initialized TTF engine");
 }
 
-ttf::context::~context() { ::TTF_Quit(); }
+ttf::context::~context()
+{
+    HAL_ASSERT(initialized(), "TTF context not initialized at destruction");
+
+    ::TTF_Quit();
+
+    HAL_PRINT("Destroyed TTF context");
+}
 
 ttf::font ttf::context::load(accessor data, lyo::u8 pt) &
 {

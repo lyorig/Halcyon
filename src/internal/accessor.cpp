@@ -24,7 +24,12 @@ accessor hal::from_file(std::string_view file)
     return ::SDL_RWFromFile(file.data(), "r");
 }
 
-accessor hal::from_memory(std::span<const std::uint8_t> data)
+accessor hal::from_memory(std::span<const std::byte> data)
 {
-    return ::SDL_RWFromConstMem(data.data(), data.size());
+    return ::SDL_RWFromConstMem(data.data(), data.size_bytes());
+}
+
+accessor from_memory(std::span<const std::uint8_t> data)
+{
+    return ::SDL_RWFromConstMem(data.data(), data.size_bytes());
 }

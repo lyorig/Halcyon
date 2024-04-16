@@ -23,6 +23,10 @@ namespace hal
         SDL_RWops* m_ops;
     };
 
+    // Load data from a file.
     accessor from_file(std::string_view file);
+
+    // Load data from program memory.
+    accessor from_memory(std::span<const std::byte> data);
     accessor from_memory(std::span<const std::uint8_t> data);
 }

@@ -4,9 +4,7 @@
 
 #include <SDL_image.h>
 
-#include <lyo/types.hpp>
-
-#include <halcyon/internal/accessor.hpp>
+#include <halcyon/surface.hpp>
 
 // image.hpp:
 // Halcyon's image loading functionality.
@@ -39,4 +37,7 @@ namespace hal
             static bool initialized();
         };
     }
+
+    // Ensure calling debug::last_error() gives accurate information.
+    static_assert(::IMG_GetError == ::SDL_GetError);
 }
