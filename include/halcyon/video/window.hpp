@@ -15,7 +15,8 @@ namespace hal
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
-        using id_t = lyo::u8;
+        using id_t      = lyo::u8;
+        using authority = detail::subsystem<detail::system::video>;
 
         enum class flags : lyo::u16
         {
@@ -28,7 +29,7 @@ namespace hal
             maximized             = SDL_WINDOW_MAXIMIZED
         };
 
-        window(detail::subsystem<system::video>&, std::string_view name, pixel_point size, std::initializer_list<flags> flags = {});
+        window(authority&, std::string_view name, pixel_point size, std::initializer_list<flags> flags = {});
 
         // Get/set this window's size. Expect weird behavior in fullscreen mode.
         pixel_point size() const;

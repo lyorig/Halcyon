@@ -8,30 +8,31 @@ namespace hal
 {
     class context;
 
-    // Available systems. More will be added as Halcyon adds
-    // more features from SDL.
-    enum class system
-    {
-        video  = SDL_INIT_VIDEO,
-        events = SDL_INIT_EVENTS
-    };
-
-    constexpr std::string_view to_string(system s)
-    {
-        using enum system;
-
-        switch (s)
-        {
-        case video:
-            return "Video";
-
-        case events:
-            return "Events";
-        }
-    }
-
     namespace detail
     {
+        // Available systems. More will be added as Halcyon adds
+        // more features from SDL.
+        enum class system
+        {
+            video  = SDL_INIT_VIDEO,
+            events = SDL_INIT_EVENTS
+        };
+
+        // In the detail namespace; not meant to be seen by the end user.
+        constexpr std::string_view to_string(system s)
+        {
+            using enum system;
+
+            switch (s)
+            {
+            case video:
+                return "Video";
+
+            case events:
+                return "Events";
+            }
+        }
+
         // A subsystem that doesn't actually (de)initialize anything.
         // This is more of a base class to ensure dependent classes
         // accept proxies as well as actual self-initialized systems.

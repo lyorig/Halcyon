@@ -7,9 +7,9 @@
 // events.hpp:
 // Master include file for Halcyon Events, plus the events subsystem.
 
-namespace hal
+namespace hal::system
 {
-    class events : public detail::subinit<system::events>
+    class events : public detail::subinit<detail::system::events>
     {
     public:
         using subinit::subinit;

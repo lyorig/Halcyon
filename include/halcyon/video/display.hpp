@@ -9,7 +9,10 @@
 
 namespace hal
 {
-    class video;
+    namespace system
+    {
+        class video;
+    }
 
     // Display device data.
     class display
@@ -18,7 +21,7 @@ namespace hal
         using index_t = lyo::u8;
         using hz_t    = lyo::u16;
 
-        display(index_t disp_idx, lyo::pass_key<video>);
+        display(index_t disp_idx, lyo::pass_key<system::video>);
 
         pixel_point size() const;
         hz_t        hz() const;

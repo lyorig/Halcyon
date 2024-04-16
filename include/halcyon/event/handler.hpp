@@ -43,9 +43,11 @@ namespace hal
         class handler
         {
         public:
+            using authority = detail::subsystem<detail::system::events>;
+
             // Constructor that disables unused event.
             // This should reduce heap allocations on SDL's part.
-            handler(detail::subsystem<system::events>&);
+            handler(authority&);
 
             // Get an event from the event queue.
             // Returns true if the polled event is valid, false if there are no more to process.

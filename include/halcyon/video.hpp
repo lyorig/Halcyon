@@ -13,9 +13,9 @@
 
 #include <halcyon/internal/subsystem.hpp>
 
-namespace hal
+namespace hal::system
 {
-    class video : public detail::subinit<system::video>
+    class video : public detail::subinit<detail::system::video>
     {
         class clipboard_proxy
         {
@@ -41,7 +41,7 @@ namespace hal
     public:
         explicit video(context& auth);
 
-        LYO_NOSIZE detail::subsystem<system::events> events;
+        LYO_NOSIZE detail::subsystem<detail::system::events> events;
 
         LYO_NOSIZE clipboard_proxy clipboard;
         LYO_NOSIZE display_proxy   displays;

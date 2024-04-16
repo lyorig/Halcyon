@@ -26,8 +26,8 @@ namespace test
     {
         constexpr hal::pixel_point new_size { 120, 120 };
 
-        hal::context ctx;
-        hal::video   vid { ctx };
+        hal::context       ctx;
+        hal::system::video vid { ctx };
 
         hal::window wnd { vid, "HalTest: Window resize", { 640, 480 }, { hal::window::flags::hidden } };
 
@@ -56,11 +56,11 @@ namespace test
     {
         hal::context ctx;
 
-        HAL_ASSERT(!hal::video::initialized(), "Video should not be initialized at this point");
+        HAL_ASSERT(!hal::system::video::initialized(), "Video should not be initialized at this point");
 
-        hal::video vid { ctx };
+        hal::system::video vid { ctx };
 
-        HAL_ASSERT(hal::video::initialized(), "Video should report initialization by now");
+        HAL_ASSERT(hal::system::video::initialized(), "Video should report initialization by now");
 
         hal::window   wnd { vid, "HalTest: Basic init", { 640, 480 }, { hal::window::flags::hidden } };
         hal::renderer rnd { wnd, { hal::renderer::flags::accelerated } };
@@ -91,8 +91,8 @@ namespace test
     // This test should fail.
     int invalid_texture()
     {
-        hal::context ctx;
-        hal::video   vid { ctx };
+        hal::context       ctx;
+        hal::system::video vid { ctx };
 
         hal::window   wnd { vid, "HalTest: Invalid texture", { 640, 480 }, { hal::window::flags::hidden } };
         hal::renderer rnd { wnd };
@@ -110,8 +110,8 @@ namespace test
     {
         constexpr char text[] { "We can be heroes - just for one day." };
 
-        hal::context ctx;
-        hal::video   vid { ctx };
+        hal::context       ctx;
+        hal::system::video vid { ctx };
 
         vid.clipboard(text);
 
@@ -137,8 +137,8 @@ namespace test
     // Sending a quit event and checking whether it gets caught.
     int quit_event()
     {
-        hal::context ctx;
-        hal::events  evt { ctx };
+        hal::context        ctx;
+        hal::system::events evt { ctx };
 
         hal::event::handler eh { evt };
 
@@ -177,7 +177,7 @@ namespace test
     {
         hal::context c;
 
-        hal::video { c }.clipboard("Hello from HalTest!");
+        hal::system::video { c }.clipboard("Hello from HalTest!");
 
         return EXIT_SUCCESS;
     }
