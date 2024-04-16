@@ -52,7 +52,7 @@ namespace hal
             bool poll();
 
             // Get the last polled event's type.
-            type type() const;
+            enum type type() const;
 
             // Valid for: display
             const event::display& display() const;

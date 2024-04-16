@@ -44,6 +44,7 @@ namespace hal
             }
 
             subsystem(const subsystem&) = delete;
+            subsystem(subsystem&&)      = delete;
 
             static bool initialized()
             {
@@ -56,7 +57,7 @@ namespace hal
         class subinit : public subsystem<S>
         {
         public:
-            explicit subinit([[maybe_unused]] context& ctx)
+            explicit subinit(context& ctx)
                 : subsystem<S> { ctx }
             {
                 HAL_WARN_IF(initialized(), to_string(S), " subsystem is already initialized");

@@ -13,16 +13,20 @@ namespace hal::ttf
     // A class that makes sure everything TTF-related is loaded and
     // ready to use. This includes not only loading fonts, but also
     // their features - for example, font::render() will fail if a
-    // TTF engine doesn't exist.
-    // TL;DR: Ensure that this object outlives all fonts.
+    // TTF engine doesn't exist. TL;DR: Ensure that this object outlives
+    // all fonts. This includes destructors!
     class context
     {
     public:
+        // Initialize the TTF context.
         context();
+
         context(const context&) = delete;
+        context(context&&)      = delete;
 
         ~context();
 
+        // Convenience factory function.
         [[nodiscard]] font load(accessor data, lyo::u8 pt) &;
 
         static bool initialized();
@@ -31,12 +35,13 @@ namespace hal::ttf
     class font : public sdl::object<TTF_Font, &::TTF_CloseFont>
     {
     public:
-        // A font can only be created by the TTF context.
-        font(TTF_Font* ptr, lyo::pass_key<context>);
+        // A font can only be created with a TTF context.
+        font(context& auth, accessor data, lyo::u8 pt);
 
         // Debug destructor to check whether the TTF context still exists.
         ~font();
 
+        // Convenience text rendering function.
         [[nodiscard]] surface render(std::string_view text, color color = palette::white) const;
 
         // When sizing text, it's important to know that the vertical size

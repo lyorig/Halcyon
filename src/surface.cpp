@@ -2,6 +2,10 @@
 
 #include <cstring>
 
+#include <SDL_image.h>
+
+#include <halcyon/ttf.hpp>
+
 using namespace hal;
 
 // Set the depth accordingly upon changing this value.
@@ -29,13 +33,13 @@ surface::surface(pixel_point sz)
 {
 }
 
-surface::surface(SDL_Surface* ptr, lyo::pass_key<image::context>)
-    : object { ptr }
+surface::surface(const image::context& auth, accessor data)
+    : object { ::IMG_Load_RW(data.get(lyo::pass_key<surface> {}), true) }
 {
 }
 
-surface::surface(SDL_Surface* ptr, lyo::pass_key<ttf::font>)
-    : object { ptr }
+surface::surface(const ttf::font& font, std::string_view text, color color)
+    : object { ::TTF_RenderUTF8_LCD_Wrapped(font.ptr(), text.data(), color.to_sdl_color(), { 0x000000, 0 }, 0) }
 {
 }
 

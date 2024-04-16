@@ -14,6 +14,9 @@ namespace hal
         // Initialize Halcyon with no subsystems.
         context() = default;
 
+        context(const context&) = delete;
+        context(context&&)      = delete;
+
         // Forcefully shuts down everything.
         ~context();
     };

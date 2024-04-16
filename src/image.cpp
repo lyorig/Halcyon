@@ -24,7 +24,7 @@ image::context::~context()
 
 surface image::context::load(accessor data) const
 {
-    return { ::IMG_Load_RW(data.get(), false), lyo::pass_key<context> {} };
+    return { *this, std::move(data) };
 }
 
 bool image::context::initialized()

@@ -27,11 +27,15 @@ namespace hal
         class context
         {
         public:
+            // Initialize the image loader context with chosen types.
             context(std::initializer_list<format> types);
+
             context(const context&) = delete;
+            context(context&&)      = delete;
 
             ~context();
 
+            // Convenience image loading functions.
             [[nodiscard]] surface load(accessor data) const;
 
             static bool initialized();
