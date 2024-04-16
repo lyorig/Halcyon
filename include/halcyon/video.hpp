@@ -30,8 +30,6 @@ namespace hal
             bool has_text() const;
         };
 
-        static_assert(std::is_empty_v<clipboard_proxy>);
-
         class display_proxy
         {
         public:
@@ -39,8 +37,6 @@ namespace hal
 
             display operator[](display::index_t idx) const;
         };
-
-        static_assert(std::is_empty_v<display_proxy>);
 
     public:
         explicit video(context& auth);

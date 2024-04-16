@@ -35,6 +35,8 @@ namespace hal::ttf
         static bool initialized();
     };
 
+    static_assert(std::is_empty_v<context>);
+
     class font : public sdl::object<TTF_Font, &::TTF_CloseFont>
     {
     public:
