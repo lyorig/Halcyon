@@ -8,7 +8,7 @@ ttf::context::context()
 
     HAL_ASSERT_VITAL(::TTF_Init() == 0, debug::last_error());
 
-    HAL_PRINT(severity::init, "Initialized TTF engine");
+    HAL_PRINT(severity::init, "Initialized TTF context");
 }
 
 ttf::context::~context()

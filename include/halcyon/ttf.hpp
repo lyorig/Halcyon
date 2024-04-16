@@ -6,6 +6,9 @@
 
 #include <halcyon/surface.hpp>
 
+// ttf.hpp:
+// SDL_ttf wrappers for font loading and text rendering.
+
 namespace hal::ttf
 {
     class font;

@@ -34,7 +34,9 @@ namespace hal
         accessor(accessor&&)      = default;
 
         friend accessor from_file(std::string_view file);
+
         friend accessor from_memory(std::span<const std::uint8_t> data);
+        friend accessor from_memory(std::span<const std::byte> data);
 
         SDL_RWops* get(lyo::pass_key<surface>);
         SDL_RWops* get(lyo::pass_key<ttf::font>);
@@ -49,6 +51,6 @@ namespace hal
     accessor from_file(std::string_view file);
 
     // Load data from program memory.
-    accessor from_memory(std::span<const std::byte> data);
     accessor from_memory(std::span<const std::uint8_t> data);
+    accessor from_memory(std::span<const std::byte> data);
 }

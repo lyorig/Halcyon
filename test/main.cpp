@@ -172,6 +172,15 @@ namespace test
 
         return EXIT_SUCCESS;
     }
+
+    int rvalues()
+    {
+        hal::context c;
+
+        hal::video { c }.clipboard("Hello from HalTest!");
+
+        return EXIT_SUCCESS;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -185,7 +194,8 @@ int main(int argc, char* argv[])
         { "--surface-color", test::surface_color },
         { "--invalid-textire", test::invalid_texture },
         { "--quit-event", test::quit_event },
-        { "--ttf-init", test::ttf_init }
+        { "--ttf-init", test::ttf_init },
+        { "--rvalues", test::rvalues }
     };
 
     if (argc == 1)
@@ -194,7 +204,7 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    auto iter = std::find_if(std::begin(tests), std::end(tests), [&](const auto& pair)
+    const auto iter = std::find_if(std::begin(tests), std::end(tests), [&](const auto& pair)
         { return pair.first == argv[1]; });
 
     if (iter == std::end(tests))
