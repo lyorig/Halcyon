@@ -167,6 +167,10 @@ namespace hal
 
 #else
 
+    #ifdef HAL_DEBUG_ADVANCED
+        #warning HAL_DEBUG_ENABLED is not defined, but HAL_DEBUG_ADVANCED is - this will have no effect
+    #endif
+
     #define HAL_DEBUG(...)
 
     #define HAL_PRINT(...)

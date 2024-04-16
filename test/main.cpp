@@ -160,6 +160,8 @@ namespace test
         }
 
         HAL_PANIC("Reached unreachable point");
+
+        return EXIT_SUCCESS;
     }
 
     // Basic TTF initialization.
