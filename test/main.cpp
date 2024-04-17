@@ -7,6 +7,10 @@
 // A single test-runner executable that contains all tests.
 // Tests are added to CTest by specifiying the appropriate command-line argument.
 
+#ifndef HAL_DEBUG_ENABLED
+    #error Testing requires debugging to be enabled!
+#endif
+
 namespace test
 {
     // Debug assertion testing.
