@@ -1,5 +1,7 @@
 #include <halcyon/utility/strutil.hpp>
 
+#include <cstring>
+
 bool hal::streq(const char* lhs, const char* rhs)
 {
     return std::strcmp(lhs, rhs) == 0;

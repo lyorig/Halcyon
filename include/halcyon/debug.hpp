@@ -30,31 +30,40 @@
     #ifndef __FILE_NAME__
         #define __FILE_NAME__ __FILE__
     #endif
+#endif
+
+// Necessary include files.
+#include <string_view>
 
 namespace hal
 {
-    enum class severity
-    {
-        info,
-        warning,
-        error,
-        init,
-        load
-    };
-
-    constexpr bool debug_enabled {
-    #ifdef HAL_DEBUG_ENABLED
-        true
-    #else
-        false
-    #endif
-    };
-
     class debug
     {
     public:
+        enum class severity
+        {
+            info,
+            warning,
+            error,
+            init,
+            load
+        };
+
+        static constexpr bool enabled {
+#ifdef HAL_DEBUG_ENABLED
+            true
+#else
+            false
+#endif
+        };
+
+        // No clue why someone would want to do this, but it's not allowed either way.
+        debug(const debug&)            = delete;
+        debug& operator=(const debug&) = delete;
+
         static std::string_view last_error();
 
+#ifdef HAL_DEBUG_ENABLED
         // Output any amount of arguments to stdout/stderr and an output file.
         template <printable... Args>
         static void print(Args&&... extra_info)
@@ -149,8 +158,11 @@ namespace hal
         static std::ofstream m_output;
         static const timer   m_timer;
     #endif
+#endif
     };
 }
+
+#ifdef HAL_DEBUG_ENABLED
 
     #define HAL_DEBUG(...) __VA_ARGS__
     #define HAL_PRINT      hal::debug::print

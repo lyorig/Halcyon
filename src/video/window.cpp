@@ -9,7 +9,7 @@ using namespace hal::video;
 window::window(authority&, std::string_view name, pixel_point size, std::initializer_list<flags> flags)
     : object { ::SDL_CreateWindow(name.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
 {
-    HAL_PRINT(severity::init, "Created window \"", title(), "\", flags = 0x", std::hex, detail::to_bitmask<std::uint32_t>(flags));
+    HAL_PRINT(debug::severity::init, "Created window \"", title(), "\", flags = 0x", std::hex, detail::to_bitmask<std::uint32_t>(flags));
 }
 
 hal::pixel_point window::size() const

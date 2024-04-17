@@ -1,17 +1,17 @@
 #include <halcyon/ttf.hpp>
 
-using namespace hal;
+using namespace hal::ttf;
 
-ttf::context::context()
+context::context()
 {
     HAL_WARN_IF(initialized(), "TTF context already exists");
 
     HAL_ASSERT_VITAL(::TTF_Init() == 0, debug::last_error());
 
-    HAL_PRINT(severity::init, "Initialized TTF context");
+    HAL_PRINT(debug::severity::init, "Initialized TTF context");
 }
 
-ttf::context::~context()
+context::~context()
 {
     HAL_ASSERT(initialized(), "TTF context not initialized at destruction");
 
@@ -20,33 +20,33 @@ ttf::context::~context()
     HAL_PRINT("Destroyed TTF context");
 }
 
-ttf::font ttf::context::load(accessor data, u8 pt) &
+font context::load(accessor data, u8 pt) &
 {
     return { *this, std::move(data), pt };
 }
 
-bool ttf::context::initialized()
+bool context::initialized()
 {
     return ::TTF_WasInit() > 0;
 }
 
-ttf::font::font(context& auth, accessor data, u8 pt)
+font::font(context& auth, accessor data, u8 pt)
     : object { ::TTF_OpenFontRW(data.get(pass_key<ttf::font> {}), true, pt) }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }
 
-ttf::font::~font()
+font::~font()
 {
     HAL_ASSERT(ttf::context::initialized(), "TTF context inactive in font destructor");
 }
 
-surface ttf::font::render(std::string_view text, hal::color color) const
+hal::surface font::render(std::string_view text, hal::color color) const
 {
     return { *this, text, color };
 }
 
-pixel_point ttf::font::size_text(const std::string_view& text) const
+hal::pixel_point font::size_text(const std::string_view& text) const
 {
     point<int> size;
 
@@ -55,22 +55,22 @@ pixel_point ttf::font::size_text(const std::string_view& text) const
     return pixel_point(size);
 }
 
-pixel_t ttf::font::height() const
+hal::pixel_t font::height() const
 {
     return static_cast<pixel_t>(::TTF_FontHeight(this->ptr()));
 }
 
-pixel_t ttf::font::skip() const
+hal::pixel_t font::skip() const
 {
     return static_cast<pixel_t>(::TTF_FontLineSkip(this->ptr()));
 }
 
-std::string_view ttf::font::family() const
+std::string_view font::family() const
 {
     return ::TTF_FontFaceFamilyName(ptr());
 }
 
-std::string_view ttf::font::style() const
+std::string_view font::style() const
 {
     return ::TTF_FontFaceStyleName(ptr());
 }

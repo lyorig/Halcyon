@@ -63,7 +63,7 @@ namespace hal
             {
                 HAL_WARN_IF(initialized(), to_string(S), " subsystem is already initialized");
                 HAL_ASSERT_VITAL(::SDL_InitSubSystem(static_cast<std::uint32_t>(S)) == 0, debug::last_error());
-                HAL_PRINT(severity::init, to_string(S), " subsystem initialized");
+                HAL_PRINT(debug::severity::init, to_string(S), " subsystem initialized");
             }
 
             ~subinit()

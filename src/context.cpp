@@ -8,7 +8,7 @@ using namespace hal;
 
 context::context()
 {
-    HAL_PRINT(severity::init, "Initialized Halcyon context");
+    HAL_PRINT(debug::severity::init, "Initialized Halcyon context");
 }
 
 context::~context()
