@@ -137,7 +137,7 @@ namespace test
     // Sending a quit event and checking whether it gets caught.
     int quit_event()
     {
-        hal::context        ctx;
+        hal::context       ctx;
         hal::event::system evt { ctx };
 
         hal::event::handler eh { evt };

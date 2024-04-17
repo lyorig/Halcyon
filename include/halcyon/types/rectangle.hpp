@@ -22,7 +22,7 @@ namespace hal
         {
         }
 
-        constexpr rectangle(as_size_tag, const point<T>& size)
+        constexpr rectangle(LYO_TAG_NAME(as_size), const point<T>& size)
             : size { size }
         {
         }

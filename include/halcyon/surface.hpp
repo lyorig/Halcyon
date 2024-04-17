@@ -127,6 +127,6 @@ namespace hal
 
         // SDL's blitting function overwrites the destination rectangle.
         // This overload creates a copy to ensure it remains unchanged.
-        void operator()(keep_dst_tag) const;
+        void operator()(LYO_TAG_NAME(keep_dst)) const;
     };
 } // namespace hal

@@ -23,7 +23,7 @@ namespace lyo
         }
 
         // Create an uninitialized timer.
-        timer(no_init_tag) noexcept
+        timer(tag::no_init_t) noexcept
         {
         }
 

@@ -35,7 +35,7 @@ namespace hal::detail
         [[nodiscard]] drawer(Pass& ths, const T& src, lyo::pass_key<Pass>)
             : m_pass { ths }
             , m_this { src }
-            , m_dst { as_size, src.size() }
+            , m_dst { tag::as_size, src.size() }
         {
             m_src.pos.x = unset_pos<src_t>;
         }
@@ -58,7 +58,7 @@ namespace hal::detail
 
         // Stretch across the board.
         // Do not use with scaling and anchoring.
-        [[nodiscard]] this_ref to(fill_tag)
+        [[nodiscard]] this_ref to(LYO_TAG_NAME(fill))
         {
             m_dst.pos.x = unset_pos<dst_t>;
             return get_this();

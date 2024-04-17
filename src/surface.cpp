@@ -58,7 +58,7 @@ surface surface::resize(pixel_point sz)
     surface    ret { sz, ptr()->format };
     blend_lock bl { *this, blend_mode::none };
 
-    this->blit(ret).to(hal::fill)();
+    this->blit(ret).to(tag::fill)();
 
     return ret;
 }
@@ -187,7 +187,7 @@ void blitter::operator()()
         {});
 }
 
-void blitter::operator()(keep_dst_tag) const
+void blitter::operator()(LYO_TAG_NAME(keep_dst)) const
 {
     sdl::pixel_rect copy { m_dst };
 

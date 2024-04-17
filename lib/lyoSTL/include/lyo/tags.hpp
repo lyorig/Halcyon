@@ -8,5 +8,5 @@
 
 namespace lyo
 {
-    LYO_TAG(no_init);
+    LYO_TAG(no_init)
 }

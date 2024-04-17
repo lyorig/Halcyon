@@ -6,10 +6,15 @@
 
 #define LYO_NOSIZE [[no_unique_address]]
 
-#define LYO_TAG(name) \
-    struct name##_tag \
-    {                 \
-    } inline constexpr name
+#define LYO_TAG_NAME(name) tag::name##_t
+
+#define LYO_TAG(name)            \
+    namespace tag                \
+    {                            \
+        struct name##_t          \
+        {                        \
+        } inline constexpr name; \
+    }
 
 // types.hpp:
 // Various type aliases and related stuff. These are not guaranteed to be
