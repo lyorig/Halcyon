@@ -1,4 +1,4 @@
-#include <halcyon/events.hpp>
+#include <halcyon/event.hpp>
 #include <halcyon/video.hpp>
 
 #include "data.hpp"
