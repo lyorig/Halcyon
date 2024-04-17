@@ -17,7 +17,10 @@ add_executable(HalTest test/main.cpp ${HALCYON_SOURCES})
 
 # These tests use assertions present in Halcyon. Make sure they're on.
 if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
-    target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED HAL_DEBUG_ADVANCED)
+    target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED)
+    
+    target_compile_options(HalTest PRIVATE -flto)
+    target_link_options(HalTest PRIVATE -flto)
 endif()
 
 add_test(NAME AssertFail        COMMAND $<TARGET_FILE:HalTest> --assert-fail)
