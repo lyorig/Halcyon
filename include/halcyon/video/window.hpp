@@ -48,4 +48,4 @@ namespace hal::video
         // Fullscreen borderless mode is also considered as such.
         bool fullscreen() const;
     };
-} // namespace hal
+}

@@ -8,5 +8,7 @@ namespace lyo
         friend T;
 
         constexpr pass_key() { }
+
+        pass_key(const pass_key&) = delete;
     };
-} // namespace lyo
+}

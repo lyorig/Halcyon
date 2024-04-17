@@ -14,7 +14,7 @@ std::string system::clipboard_proxy::operator()() const
 {
     const auto text = ::SDL_GetClipboardText();
 
-    HAL_ASSERT(!lyo::is_c_string_empty(text) || has_text(), debug::last_error());
+    HAL_ASSERT(text[0] != '\0' || has_text(), debug::last_error());
 
     return text;
 };

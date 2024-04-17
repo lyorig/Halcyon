@@ -9,15 +9,14 @@ find_package(SDL2_image REQUIRED CONFIG)
 find_package(SDL2_ttf REQUIRED CONFIG)
 
 # Include directores.
-set(HALCYON_INCLUDE_DIRS ${LYO_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR}/include/)
+set(HALCYON_INCLUDE_DIRS ${LYOSTL_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR}/include/)
 
 # Sources.
 set(HALCYON_SOURCES
 event/handler.cpp
 event/types.cpp
 internal/accessor.cpp
-types/point.cpp
-types/rectangle.cpp
+types/templates.cpp
 video/display.cpp
 video/renderer.cpp
 video/texture.cpp
@@ -35,6 +34,7 @@ ttf.cpp
 )
 
 list(TRANSFORM HALCYON_SOURCES PREPEND ${CMAKE_CURRENT_LIST_DIR}/src/)
+list(APPEND HALCYON_SOURCES ${LYOSTL_SOURCES})
 
 # Libraries.
 set(HALCYON_LIBRARIES

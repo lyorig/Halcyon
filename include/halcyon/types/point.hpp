@@ -224,4 +224,4 @@ namespace hal
         using coord_point = point<sdl::coord_t>;
     }
 
-} // namespace hal
+}

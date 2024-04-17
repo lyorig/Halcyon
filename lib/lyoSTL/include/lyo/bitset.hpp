@@ -72,4 +72,4 @@ namespace lyo
         // You'll need eye bleach for this one. All you need to know is that it works.
         Storage_type m_storage[(Size + (sizeof(Storage_type) * 8) - 1) / (sizeof(Storage_type) * 8)] {};
     };
-} // namespace lyo
+}

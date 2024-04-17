@@ -13,7 +13,7 @@ std::string_view debug::last_error()
 {
     const char* err { ::SDL_GetError() };
 
-    return lyo::is_c_string_empty(err) ? "[no SDL error]" : err;
+    return err[0] == '\0' ? "[no SDL error]" : err;
 }
 
 #endif

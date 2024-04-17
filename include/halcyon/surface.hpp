@@ -129,4 +129,4 @@ namespace hal
         // This overload creates a copy to ensure it remains unchanged.
         void operator()(LYO_TAG_NAME(keep_dst)) const;
     };
-} // namespace hal
+}

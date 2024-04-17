@@ -1,14 +1,13 @@
 #pragma once
 
-#include "concepts.hpp"
 #include <cmath>
+#include <lyo/concepts.hpp>
 
 // cast.hpp:
 // Casting with proper rounding.
 
 namespace lyo
 {
-
     // Cast to a type with proper rounding.
     template <arithmetic To, arithmetic From>
     constexpr To cast(From value) noexcept
@@ -25,4 +24,4 @@ namespace lyo
         else
             return static_cast<To>(value);
     }
-} // namespace lyo
+}

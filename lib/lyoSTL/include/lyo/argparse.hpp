@@ -3,8 +3,8 @@
 #include <cstring>
 #include <sstream>
 
-/* argparse.hpp:
-   Argument-parsing functions. */
+// argparse.hpp:
+// Argument-parsing functions.
 
 namespace lyo
 {

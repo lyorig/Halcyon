@@ -16,8 +16,8 @@
 #ifdef HAL_DEBUG_ENABLED
 
     #include <halcyon/printing.hpp>
+    #include <lyo/strutil.hpp>
     #include <lyo/timer.hpp>
-    #include <lyo/utility.hpp>
 
     #include <fstream>
     #include <iostream>

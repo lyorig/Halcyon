@@ -1,24 +1,24 @@
 #pragma once
 
 #include <chrono>
-#include <lyo/tags.hpp>
 #include <variant>
 
+#include <lyo/tags.hpp>
+
 // timer.hpp:
-//  Timing facilities.
+// Timing facilities.
 
 namespace lyo
 {
-    // A simple timer for all your timing needs. It'll keep
-    // running no matter what, so if you require pause/resume
-    // functionality, use the stopwatch instead.
-    template <typename Clock>
+    // A simple timer for all your timing needs. It'll keep running no matter what.
     class timer
     {
     public:
+        using clock = std::chrono::steady_clock;
+
         // Create a timer that begins at the time of construction.
         timer() noexcept
-            : m_epoch { Clock::now() }
+            : m_epoch { clock::now() }
         {
         }
 
@@ -29,126 +29,41 @@ namespace lyo
 
         timer& reset() noexcept
         {
-            m_epoch = Clock::now();
+            m_epoch = clock::now();
             return *this;
         }
 
         f64 operator()() const noexcept
         {
-            return std::chrono::duration<f64> { Clock::now() - m_epoch }.count();
+            return std::chrono::duration<f64> { clock::now() - m_epoch }.count();
         }
 
-        timer& operator=(f64 time) noexcept
+        template <typename Rep, typename Period>
+        timer& operator=(std::chrono::duration<Rep, Period> dur) noexcept
         {
-            m_epoch = Clock::now() - second_type { time };
+            reset();
+            m_epoch -= dur;
             return *this;
         }
 
-        timer& operator+=(f64 time) noexcept
+        template <typename Rep, typename Period>
+        timer& operator+=(std::chrono::duration<Rep, Period> dur) noexcept
         {
-            m_epoch -= second_type { time };
+            m_epoch -= dur;
             return *this;
         }
 
-        timer& operator-=(f64 time) noexcept
+        template <typename Rep, typename Period>
+        timer& operator-=(std::chrono::duration<Rep, Period> dur) noexcept
         {
-            m_epoch += second_type { time };
-            return *this;
-        }
-
-    private:
-        using second_type = std::chrono::duration<f64>;
-        using tp          = std::chrono::time_point<Clock, second_type>;
-
-        tp m_epoch;
-    };
-
-    using steady_timer  = timer<std::chrono::steady_clock>;
-    using system_timer  = timer<std::chrono::system_clock>;
-    using precise_timer = timer<std::chrono::high_resolution_clock>;
-
-    // A pausable timer, essentially. This incurs a bit of both
-    // space and runtime overhead, so if you intend to keep it
-    // running all the time, use the regular timer instead.
-    template <typename Clock>
-    class stopwatch
-    {
-    public:
-        // HALFIX: A raw union and a bool could be better.
-
-        stopwatch() noexcept
-            : m_data { Clock::now() }
-        {
-        }
-
-        stopwatch& reset() noexcept
-        {
-            m_data = Clock::now();
-            return *this;
-        }
-
-        void pause() noexcept
-        {
-            if (std::holds_alternative<tp>(m_data))
-                m_data = std::chrono::duration<f64> { Clock::now() - std::get<tp>(m_data) }.count();
-        }
-
-        void resume() noexcept
-        {
-            if (std::holds_alternative<f64>(m_data))
-                m_data = Clock::now() - second_type { std::get<f64>(m_data) };
-        }
-
-        f64 operator()() const noexcept
-        {
-            if (std::holds_alternative<tp>(m_data)) // Not paused (time-point).
-                return std::chrono::duration<f64> { Clock::now() - std::get<tp>(m_data) }.count();
-
-            else // Paused (float).
-                return std::get<f64>(m_data);
-        }
-
-        stopwatch& operator=(f64 time) noexcept
-        {
-            if (std::holds_alternative<tp>(m_data)) // Not paused (time-point).
-                m_data = Clock::now() - second_type { time };
-
-            else // Paused (float).
-                std::get<f64>(m_data) = time;
-
-            return *this;
-        }
-
-        stopwatch& operator+=(f64 time) noexcept
-        {
-            if (std::holds_alternative<tp>(m_data)) // Not paused (time-point).
-                m_data -= second_type { time };
-
-            else // Paused (float).
-                std::get<lyo::f64>(m_data) += time;
-
-            return *this;
-        }
-
-        stopwatch& operator-=(f64 time) noexcept
-        {
-            if (std::holds_alternative<tp>(m_data)) // Not paused (time-point).
-                m_data += second_type { time };
-
-            else // Paused (float).
-                std::get<f64>(m_data) -= time;
-
+            m_epoch += dur;
             return *this;
         }
 
     private:
         using second_type = std::chrono::duration<f64>;
-        using tp          = std::chrono::time_point<Clock, second_type>;
+        using tp          = std::chrono::time_point<clock, second_type>;
 
-        std::variant<tp, f64> m_data;
+        clock::time_point m_epoch;
     };
-
-    using steady_stopwatch  = stopwatch<std::chrono::steady_clock>;
-    using system_stopwatch  = stopwatch<std::chrono::system_clock>;
-    using precise_stopwatch = stopwatch<std::chrono::high_resolution_clock>;
-} // namespace lyo
+}

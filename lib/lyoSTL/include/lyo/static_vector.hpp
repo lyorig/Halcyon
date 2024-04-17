@@ -31,9 +31,9 @@ namespace lyo
             this->resize(sz);
         }
 
-        constexpr static_vector(size_type sz, no_init_tag) noexcept
+        constexpr static_vector(size_type sz, LYO_TAG_NAME(no_init)) noexcept
         {
-            this->resize(sz, no_init);
+            this->resize(sz, tag::no_init);
         }
 
         constexpr static_vector(std::initializer_list<T> init) noexcept
@@ -100,7 +100,7 @@ namespace lyo
         }
 
         // Resize without initializing new objects.
-        constexpr void resize(size_type sz, no_init_tag) noexcept
+        constexpr void resize(size_type sz, LYO_TAG_NAME(no_init)) noexcept
         {
             if (sz == this->size()) // Nothing to do.
                 return;

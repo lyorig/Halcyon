@@ -1,5 +1,3 @@
-#include <lyo/utility.hpp>
-
 #include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
