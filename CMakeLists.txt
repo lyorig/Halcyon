@@ -15,6 +15,9 @@ link_libraries(${HALCYON_LIBRARIES})
 # Create the test runner.
 add_executable(HalTest test/main.cpp ${HALCYON_SOURCES})
 
+target_include_directories(HalTest PRIVATE ${HALCYON_INCLUDE_DIRS})
+target_link_libraries(HalTest PRIVATE ${HALCYON_LIBRARIES})
+
 # These tests use assertions present in Halcyon. Make sure they're on.
 if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
     target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED)
