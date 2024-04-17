@@ -16,6 +16,8 @@ set(HALCYON_SOURCES
 event/handler.cpp
 event/types.cpp
 internal/accessor.cpp
+types/point.cpp
+types/rectangle.cpp
 video/display.cpp
 video/renderer.cpp
 video/texture.cpp

@@ -84,6 +84,19 @@ namespace hal
         }
     };
 
+    extern template struct rectangle<std::int8_t>;
+    extern template struct rectangle<std::int16_t>;
+    extern template struct rectangle<std::int32_t>;
+    extern template struct rectangle<std::int64_t>;
+
+    extern template struct rectangle<std::uint8_t>;
+    extern template struct rectangle<std::uint16_t>;
+    extern template struct rectangle<std::uint32_t>;
+    extern template struct rectangle<std::uint64_t>;
+
+    extern template struct rectangle<float>;
+    extern template struct rectangle<double>;
+
     template <lyo::arithmetic T>
     constexpr bool operator==(const rectangle<T>& r1, const rectangle<T>& r2)
     {

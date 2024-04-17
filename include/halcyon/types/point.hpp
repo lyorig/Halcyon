@@ -74,14 +74,14 @@ namespace hal
         // Arithmetic operations.
         constexpr point operator+(const point& pt) const
         {
-            point<decltype(x + pt.x)> ret { *this };
+            point<decltype(x + pt.x)> ret = *this;
             ret += pt;
             return ret;
         }
 
         constexpr point operator-(const point& pt) const
         {
-            point<decltype(x + pt.x)> ret { *this };
+            point<decltype(x - pt.x)> ret = *this;
             ret -= pt;
             return ret;
         }
@@ -111,8 +111,8 @@ namespace hal
             requires std::is_signed_v<T>
         {
             return point {
-                -x,
-                -y
+                static_cast<T>(-x),
+                static_cast<T>(-y)
             };
         }
 
@@ -134,10 +134,11 @@ namespace hal
         }
 
         constexpr point abs() const
+            requires std::is_signed_v<T>
         {
             return {
-                std::abs(x),
-                std::abs(y)
+                static_cast<T>(std::abs(x)),
+                static_cast<T>(std::abs(y))
             };
         }
 
@@ -195,6 +196,19 @@ namespace hal
             return reinterpret_cast<const sdl::point_t<T>*>(this);
         }
     };
+
+    extern template struct point<std::int8_t>;
+    extern template struct point<std::int16_t>;
+    extern template struct point<std::int32_t>;
+    extern template struct point<std::int64_t>;
+
+    extern template struct point<std::uint8_t>;
+    extern template struct point<std::uint16_t>;
+    extern template struct point<std::uint32_t>;
+    extern template struct point<std::uint64_t>;
+
+    extern template struct point<float>;
+    extern template struct point<double>;
 
     template <lyo::arithmetic T>
     constexpr lyo::f64 distance(const point<T>& lhs, const point<T>& rhs)
