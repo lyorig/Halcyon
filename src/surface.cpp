@@ -34,7 +34,7 @@ surface::surface(pixel_point sz)
 }
 
 surface::surface(const image::context& auth, accessor data)
-    : object { ::IMG_Load_RW(data.get(lyo::pass_key<surface> {}), true) }
+    : object { ::IMG_Load_RW(data.get(pass_key<surface> {}), true) }
 {
 }
 
@@ -63,7 +63,7 @@ surface surface::resize(pixel_point sz)
     return ret;
 }
 
-surface surface::resize(lyo::f64 scale)
+surface surface::resize(f64 scale)
 {
     return this->resize(this->size() * scale);
 }
@@ -118,7 +118,7 @@ blitter surface::blit(surface& dst) const
     return { *this, dst, {} };
 }
 
-void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blitter>) const
+void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, pass_key<blitter>) const
 {
     HAL_ASSERT(this->valid(), "Drawing null surface");
     HAL_ASSERT(to.valid(), "Drawing to null surface");
@@ -159,7 +159,7 @@ Uint32 pixel_reference::get() const
 
     else
     {
-        const lyo::u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        const u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
         std::memcpy(&ret + offset, m_ptr + offset, m_fmt->BytesPerPixel);
     }
 
@@ -173,7 +173,7 @@ void pixel_reference::set(Uint32 mapped)
 
     else
     {
-        const lyo::u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        const u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
         std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->BytesPerPixel);
     }
 }
@@ -187,7 +187,7 @@ void blitter::operator()()
         {});
 }
 
-void blitter::operator()(LYO_TAG_NAME(keep_dst)) const
+void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
 {
     sdl::pixel_rect copy { m_dst };
 

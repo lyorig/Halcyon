@@ -29,7 +29,7 @@ namespace hal
         class font;
     }
 
-    LYO_TAG(keep_dst);
+    HAL_TAG(keep_dst);
 
     class surface : public sdl::object<SDL_Surface, &::SDL_FreeSurface>
     {
@@ -62,7 +62,7 @@ namespace hal
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
         surface resize(pixel_point sz);
-        surface resize(lyo::f64 scale);
+        surface resize(f64 scale);
 
         void fill(color clr);
         void fill_rect(const sdl::pixel_rect& area, color clr);
@@ -82,7 +82,7 @@ namespace hal
         [[nodiscard]] blitter blit(surface& dst) const;
 
         // Public, but only available to the blit class.
-        void internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, lyo::pass_key<blitter>) const;
+        void internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, pass_key<blitter>) const;
 
     private:
         // I'd rather use the pixel format enum, but SDL uses an integer
@@ -127,6 +127,6 @@ namespace hal
 
         // SDL's blitting function overwrites the destination rectangle.
         // This overload creates a copy to ensure it remains unchanged.
-        void operator()(LYO_TAG_NAME(keep_dst)) const;
+        void operator()(HAL_TAG_NAME(keep_dst)) const;
     };
 }

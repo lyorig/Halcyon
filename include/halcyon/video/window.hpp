@@ -15,10 +15,10 @@ namespace hal::video
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
-        using id_t      = lyo::u8;
+        using id_t      = u8;
         using authority = hal::detail::subsystem<hal::detail::system::video>;
 
-        enum class flags : lyo::u16
+        enum class flags : u16
         {
             none                  = 0,
             fullscreen            = SDL_WINDOW_FULLSCREEN,

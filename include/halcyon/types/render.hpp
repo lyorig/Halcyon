@@ -5,11 +5,11 @@
 
 // types/render.hpp:
 // Rendering-related types used throughout Halcyon.
-// Defining LYO_FAST_TYPES maps Halcyon's types directly to SDL's where applicable.
+// Defining HAL_FAST_TYPES maps Halcyon's types directly to SDL's where applicable.
 
 namespace hal
 {
-    enum class blend_mode : lyo::u8
+    enum class blend_mode : u8
     {
         none  = SDL_BLENDMODE_NONE,
         add   = SDL_BLENDMODE_ADD,
@@ -19,11 +19,11 @@ namespace hal
     };
 
     // A measurement type for surface/texture pixels.
-    using pixel_t = lyo::CFT<lyo::i16, sdl::pixel_t>;
+    using pixel_t = detail::CFT<i16, sdl::pixel_t>;
 
     // A drawing coordinate. Floating point by default, but you can define HAL_INTEGRAL_COORD to
     // make it be integral and potentially improve performance.
-    using coord_t = lyo::CFT<std::conditional_t<sdl::integral_coord, pixel_t, lyo::f32>, sdl::coord_t>;
+    using coord_t = detail::CFT<std::conditional_t<sdl::integral_coord, pixel_t, f32>, sdl::coord_t>;
 
     using pixel_point = point<pixel_t>;
     using pixel_rect  = rectangle<pixel_t>;
@@ -35,22 +35,22 @@ namespace hal
     {
         constexpr pixel_t operator""_px(unsigned long long v)
         {
-            return lyo::cast<pixel_t>(v);
+            return static_cast<pixel_t>(v);
         }
 
         constexpr pixel_t operator""_px(long double v)
         {
-            return lyo::cast<pixel_t>(v);
+            return static_cast<pixel_t>(v);
         }
 
         constexpr coord_t operator""_crd(unsigned long long v)
         {
-            return lyo::cast<coord_t>(v);
+            return static_cast<coord_t>(v);
         }
 
         constexpr coord_t operator""_crd(long double v)
         {
-            return lyo::cast<coord_t>(v);
+            return static_cast<coord_t>(v);
         }
     }
 

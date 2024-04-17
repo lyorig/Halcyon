@@ -1,4 +1,4 @@
-#include <halcyon/printing.hpp>
+#include <halcyon/utility/printing.hpp>
 #include <halcyon/video/display.hpp>
 
 using namespace hal;

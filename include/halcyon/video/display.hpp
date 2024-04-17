@@ -1,8 +1,9 @@
 #pragma once
 
-#include <halcyon/types/render.hpp>
-#include <lyo/pass_key.hpp>
 #include <string_view>
+
+#include <halcyon/types/render.hpp>
+#include <halcyon/utility/pass_key.hpp>
 
 // video/display.hpp:
 // A representation of a monitor.
@@ -15,10 +16,10 @@ namespace hal::video
     class display
     {
     public:
-        using id_t = lyo::u8;
-        using hz_t = lyo::u16;
+        using id_t = u8;
+        using hz_t = u16;
 
-        display(id_t disp_idx, lyo::pass_key<system>);
+        display(id_t disp_idx, pass_key<system>);
 
         pixel_point size() const;
         hz_t        hz() const;

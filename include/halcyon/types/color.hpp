@@ -2,7 +2,7 @@
 
 #include <SDL_pixels.h>
 
-#include <lyo/types.hpp>
+#include <halcyon/types/numeric.hpp>
 
 // types/color.hpp:
 // An extension of SDL_Color with custom constructors,
@@ -13,7 +13,7 @@ namespace hal
     struct color : public SDL_Color
     {
         // A hex value in the form of 0xNNNNNN.
-        using hex_t = lyo::u32;
+        using hex_t = u32;
 
         // A single R, G, B or A value.
         using value_t = std::uint8_t;

@@ -20,7 +20,7 @@ ttf::context::~context()
     HAL_PRINT("Destroyed TTF context");
 }
 
-ttf::font ttf::context::load(accessor data, lyo::u8 pt) &
+ttf::font ttf::context::load(accessor data, u8 pt) &
 {
     return { *this, std::move(data), pt };
 }
@@ -30,8 +30,8 @@ bool ttf::context::initialized()
     return ::TTF_WasInit() > 0;
 }
 
-ttf::font::font(context& auth, accessor data, lyo::u8 pt)
-    : object { ::TTF_OpenFontRW(data.get(lyo::pass_key<ttf::font> {}), true, pt) }
+ttf::font::font(context& auth, accessor data, u8 pt)
+    : object { ::TTF_OpenFontRW(data.get(pass_key<ttf::font> {}), true, pt) }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }

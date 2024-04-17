@@ -4,9 +4,8 @@
 
 #include <SDL_mouse.h>
 
-#include <lyo/pass_key.hpp>
-
 #include <halcyon/types/render.hpp>
+#include <halcyon/utility/pass_key.hpp>
 
 // mouse.hpp:
 // Mouse button access and data.
@@ -22,7 +21,7 @@ namespace hal
 
     namespace mouse
     {
-        enum class button : lyo::u8
+        enum class button : u8
         {
             left   = SDL_BUTTON_LEFT,
             middle = SDL_BUTTON_MIDDLE,
@@ -40,8 +39,8 @@ namespace hal
             state();
 
             // Private constructors meant for events.
-            state(std::uint32_t mask, lyo::pass_key<event::mouse_motion>);
-            state(std::uint32_t mask, lyo::pass_key<event::mouse_button>);
+            state(std::uint32_t mask, pass_key<event::mouse_motion>);
+            state(std::uint32_t mask, pass_key<event::mouse_button>);
 
             bool operator[](button btn) const;
 
@@ -49,7 +48,7 @@ namespace hal
             // Delegated to by pass-key constructors.
             state(std::uint32_t mask);
 
-            lyo::u8 m_state;
+            u8 m_state;
         };
 
         pixel_point pos();

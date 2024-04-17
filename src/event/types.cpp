@@ -75,7 +75,7 @@ window_id mouse_motion::window_id() const
 
 hal::mouse::state mouse_motion::state() const
 {
-    return { SDL_MouseMotionEvent::state, lyo::pass_key<mouse_motion> {} };
+    return { SDL_MouseMotionEvent::state, pass_key<mouse_motion> {} };
 }
 
 hal::pixel_point mouse_motion::pos() const
@@ -97,7 +97,7 @@ window_id mouse_button::window_id() const
 
 hal::mouse::state mouse_button::state() const
 {
-    return { SDL_MouseButtonEvent::state, lyo::pass_key<mouse_button> {} };
+    return { SDL_MouseButtonEvent::state, pass_key<mouse_button> {} };
 }
 
 hal::mouse::button mouse_button::button() const
@@ -105,9 +105,9 @@ hal::mouse::button mouse_button::button() const
     return static_cast<mouse::button>(SDL_MouseButtonEvent::button);
 }
 
-lyo::u8 mouse_button::click_amount() const
+hal::u8 mouse_button::click_amount() const
 {
-    return static_cast<lyo::u8>(clicks);
+    return static_cast<u8>(clicks);
 }
 
 hal::pixel_point mouse_button::pos() const
@@ -122,14 +122,14 @@ window_id mouse_wheel::window_id() const
     return static_cast<::window_id>(windowID);
 }
 
-hal::point<lyo::i16> mouse_wheel::scroll() const
+hal::point<hal::i16> mouse_wheel::scroll() const
 {
-    return { static_cast<lyo::i16>(x), static_cast<lyo::i16>(y) };
+    return { static_cast<i16>(x), static_cast<i16>(y) };
 }
 
-hal::point<lyo::f32> mouse_wheel::scroll_precise() const
+hal::point<hal::f32> mouse_wheel::scroll_precise() const
 {
-    return { static_cast<lyo::f32>(preciseX), static_cast<lyo::f32>(preciseY) };
+    return { static_cast<f32>(preciseX), static_cast<f32>(preciseY) };
 }
 
 hal::pixel_point mouse_wheel::pos() const

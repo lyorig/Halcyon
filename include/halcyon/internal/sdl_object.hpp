@@ -1,14 +1,14 @@
 #pragma once
 
 #include <halcyon/debug.hpp>
-#include <lyo/types.hpp>
+#include <halcyon/types/numeric.hpp>
 #include <memory>
 
 namespace hal
 {
     namespace sdl
     {
-        template <typename Type, lyo::func_ptr<void, Type*> Deleter>
+        template <typename Type, func_ptr<void, Type*> Deleter>
         class object
         {
             struct deleter

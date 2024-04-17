@@ -1,8 +1,9 @@
 #pragma once
 
 #include <initializer_list>
-#include <lyo/concepts.hpp>
 #include <utility>
+
+#include <halcyon/utility/concepts.hpp>
 
 // helpers.hpp:
 // One-off functions that I didn't know where else to put.
@@ -11,7 +12,7 @@ namespace hal::detail
 {
     // OR together a set of values.
     // The name stands for "initializer list to bit mask".
-    template <lyo::arithmetic Cvt, typename T>
+    template <arithmetic Cvt, typename T>
         requires std::is_enum_v<T>
     constexpr Cvt to_bitmask(std::initializer_list<T> list)
     {

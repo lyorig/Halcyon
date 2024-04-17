@@ -2,7 +2,7 @@
 
 #include <SDL_render.h>
 
-#include <lyo/pass_key.hpp>
+#include <halcyon/utility/pass_key.hpp>
 
 #include <halcyon/internal/sdl_object.hpp>
 #include <halcyon/types/color.hpp>

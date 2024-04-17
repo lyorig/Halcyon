@@ -14,10 +14,10 @@ namespace hal
         bottom_right
     };
 
-    template <lyo::arithmetic T>
+    template <arithmetic T>
     struct rectangle;
 
-    template <lyo::arithmetic T>
+    template <arithmetic T>
     struct point
     {
         T x {}, y {};
@@ -117,7 +117,7 @@ namespace hal
         }
 
         // Additional arithmetic operations.
-        constexpr point operator*(lyo::f64 mul) const
+        constexpr point operator*(f64 mul) const
         {
             return point {
                 static_cast<T>(x * mul),
@@ -125,7 +125,7 @@ namespace hal
             };
         }
 
-        constexpr point operator/(lyo::f64 div) const
+        constexpr point operator/(f64 div) const
         {
             return point {
                 static_cast<T>(x / div),
@@ -177,7 +177,7 @@ namespace hal
         constexpr auto operator<=>(const point& cmp) const = default;
 
         // Conversions.
-        template <lyo::arithmetic Convert>
+        template <arithmetic Convert>
         constexpr operator point<Convert>() const
         {
             return point<Convert> { static_cast<Convert>(x),
@@ -185,13 +185,13 @@ namespace hal
         }
 
         constexpr sdl::point_t<T>* addr()
-            requires(lyo::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
+            requires(is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<sdl::point_t<T>*>(this);
         }
 
         constexpr const sdl::point_t<T>* addr() const
-            requires(lyo::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
+            requires(is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<const sdl::point_t<T>*>(this);
         }
@@ -210,11 +210,11 @@ namespace hal
     extern template struct point<float>;
     extern template struct point<double>;
 
-    template <lyo::arithmetic T>
-    constexpr lyo::f64 distance(const point<T>& lhs, const point<T>& rhs)
+    template <arithmetic T>
+    constexpr f64 distance(const point<T>& lhs, const point<T>& rhs)
     {
         const point<T> dist { lhs - rhs };
-        return static_cast<lyo::f64>(std::sqrt(dist.x * dist.x + dist.y * dist.y));
+        return static_cast<f64>(std::sqrt(dist.x * dist.x + dist.y * dist.y));
     }
 
     // Wrappers for native SDL types.

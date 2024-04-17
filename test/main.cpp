@@ -185,7 +185,7 @@ namespace test
 
 int main(int argc, char* argv[])
 {
-    constexpr std::pair<std::string_view, lyo::func_ptr<int>> tests[] {
+    constexpr std::pair<std::string_view, hal::func_ptr<int>> tests[] {
         { "--assert-fail", test::assert_fail },
         { "--window-resize", test::window_resize },
         { "--basic-init", test::basic_init },

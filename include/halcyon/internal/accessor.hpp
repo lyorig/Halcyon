@@ -2,12 +2,11 @@
 
 #include <cstdint>
 #include <span>
-
 #include <string_view>
 
 #include <SDL_rwops.h>
 
-#include <lyo/pass_key.hpp>
+#include <halcyon/utility/pass_key.hpp>
 
 // internal/accessor.hpp:
 // A wrapper of SDL_RWops that enables stuff to be loaded from not only
@@ -38,8 +37,8 @@ namespace hal
         friend accessor from_memory(std::span<const std::uint8_t> data);
         friend accessor from_memory(std::span<const std::byte> data);
 
-        SDL_RWops* get(lyo::pass_key<surface>);
-        SDL_RWops* get(lyo::pass_key<ttf::font>);
+        SDL_RWops* get(pass_key<surface>);
+        SDL_RWops* get(pass_key<ttf::font>);
 
     private:
         accessor(SDL_RWops* ptr);

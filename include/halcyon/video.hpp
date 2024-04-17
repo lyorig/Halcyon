@@ -43,10 +43,10 @@ namespace hal::video
     public:
         explicit system(context& auth);
 
-        LYO_NOSIZE event_proxy events;
+        HAL_NO_SIZE event_proxy events;
 
-        LYO_NOSIZE clipboard_proxy clipboard;
-        LYO_NOSIZE display_proxy   displays;
+        HAL_NO_SIZE clipboard_proxy clipboard;
+        HAL_NO_SIZE display_proxy   displays;
     };
 
     static_assert(std::is_empty_v<system>);

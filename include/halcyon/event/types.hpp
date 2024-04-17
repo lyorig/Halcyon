@@ -17,7 +17,7 @@ namespace hal::event
     class display : SDL_DisplayEvent
     {
     public:
-        enum class type : lyo::u8
+        enum class type : u8
         {
             connected    = SDL_DISPLAYEVENT_CONNECTED,
             disconnected = SDL_DISPLAYEVENT_DISCONNECTED,
@@ -37,7 +37,7 @@ namespace hal::event
     class window : SDL_WindowEvent
     {
     public:
-        enum class type : lyo::u8
+        enum class type : u8
         {
             shown               = SDL_WINDOWEVENT_SHOWN,
             hidden              = SDL_WINDOWEVENT_HIDDEN,
@@ -102,7 +102,7 @@ namespace hal::event
 
         mouse::state  state() const;
         mouse::button button() const;
-        lyo::u8       click_amount() const;
+        u8            click_amount() const;
         pixel_point   pos() const;
     };
 
@@ -113,10 +113,10 @@ namespace hal::event
     public:
         hal::video::window::id_t window_id() const;
 
-        point<lyo::i16> scroll() const;
-        point<lyo::f32> scroll_precise() const;
-        pixel_point     pos() const;
-        bool            scroll_flipped() const;
+        point<i16>  scroll() const;
+        point<f32>  scroll_precise() const;
+        pixel_point pos() const;
+        bool        scroll_flipped() const;
     };
 
     static_assert(sizeof(mouse_wheel) == sizeof(SDL_MouseWheelEvent));

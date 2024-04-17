@@ -12,7 +12,7 @@ namespace hal
     namespace event
     {
         // Top-level event types.
-        enum class type : lyo::u16
+        enum class type : u16
         {
             quit_requested = SDL_QUIT,
             terminated     = SDL_APP_TERMINATING,

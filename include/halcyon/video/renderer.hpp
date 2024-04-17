@@ -30,7 +30,7 @@ namespace hal
         class texture;
         class target_texture;
 
-        enum class flip : lyo::u8
+        enum class flip : u8
         {
             none = SDL_FLIP_NONE,
             x    = SDL_FLIP_HORIZONTAL,
@@ -45,7 +45,7 @@ namespace hal
         class renderer : public sdl::object<SDL_Renderer, &::SDL_DestroyRenderer>
         {
         public:
-            enum class flags : lyo::u8
+            enum class flags : u8
             {
                 none        = 0,
                 software    = SDL_RENDERER_SOFTWARE,
@@ -119,7 +119,7 @@ namespace hal
             [[nodiscard]] copyer draw(const detail::texture_base& tex);
 
             // Public, but only accessible to the draw class.
-            void internal_render_copy(const detail::texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>);
+            void internal_render_copy(const detail::texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, f64 angle, flip f, pass_key<copyer>);
 
         private:
             void clear();
@@ -135,7 +135,7 @@ namespace hal
 
             // Set the texture's rotation.
             // Can be called at any time.
-            [[nodiscard]] copyer& rotate(lyo::f64 angle);
+            [[nodiscard]] copyer& rotate(f64 angle);
 
             // Set the texture's flip.
             // Can be called at any time.
@@ -144,7 +144,7 @@ namespace hal
             void operator()();
 
         private:
-            lyo::f64 m_angle { 0.0 };
+            f64 m_angle { 0.0 };
 
             enum flip m_flip
             {

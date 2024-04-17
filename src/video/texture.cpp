@@ -48,7 +48,7 @@ void hal::detail::texture_base::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetTextureBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-lyo::u8 hal::detail::texture_base::opacity() const
+hal::u8 hal::detail::texture_base::opacity() const
 {
     Uint8 alpha;
 
@@ -85,7 +85,7 @@ target_texture::target_texture(renderer& rnd, pixel_point sz)
 {
 }
 
-copyer& copyer::rotate(lyo::f64 angle)
+copyer& copyer::rotate(f64 angle)
 {
     m_angle = angle;
     return *this;

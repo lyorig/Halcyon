@@ -179,7 +179,7 @@ copyer renderer::draw(const detail::texture_base& tex)
     return { *this, tex, {} };
 }
 
-void renderer::internal_render_copy(const detail::texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, lyo::f64 angle, flip f, lyo::pass_key<copyer>)
+void renderer::internal_render_copy(const detail::texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, f64 angle, flip f, pass_key<copyer>)
 {
     HAL_ASSERT(tex.valid(), "Drawing invalid texture");
 

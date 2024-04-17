@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lyo/types.hpp>
+#include <halcyon/types/numeric.hpp>
 #include <string_view>
 
 // driver.hpp:
@@ -10,7 +10,7 @@ namespace hal
 {
     namespace driver
     {
-        using index_t = lyo::u8;
+        using index_t = u8;
 
         // Get the amount of available video drivers.
         index_t amount();

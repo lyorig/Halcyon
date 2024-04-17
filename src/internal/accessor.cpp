@@ -3,12 +3,12 @@
 
 using namespace hal;
 
-SDL_RWops* accessor::get(lyo::pass_key<surface>)
+SDL_RWops* accessor::get(pass_key<surface>)
 {
     return m_ops;
 }
 
-SDL_RWops* accessor::get(lyo::pass_key<ttf::font>)
+SDL_RWops* accessor::get(pass_key<ttf::font>)
 {
     return m_ops;
 }

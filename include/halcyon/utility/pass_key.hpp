@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lyo
+namespace hal
 {
     template <typename T>
     class pass_key

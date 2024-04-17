@@ -16,7 +16,7 @@ link_libraries(${HALCYON_LIBRARIES})
 add_executable(HalTest test/main.cpp ${HALCYON_SOURCES})
 
 # These tests use assertions present in Halcyon. Make sure they're on.
-target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED)
+target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED HAL_DEBUG_ADVANCED)
 
 add_test(NAME AssertFail        COMMAND $<TARGET_FILE:HalTest> --assert-fail)
 add_test(NAME WindowResize      COMMAND $<TARGET_FILE:HalTest> --window-resize)

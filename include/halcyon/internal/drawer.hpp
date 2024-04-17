@@ -1,13 +1,13 @@
 #pragma once
 #include <halcyon/types/render.hpp>
 
-#include <lyo/pass_key.hpp>
+#include <halcyon/utility/pass_key.hpp>
 
 #include <limits>
 
 namespace hal::detail
 {
-    template <lyo::arithmetic T>
+    template <arithmetic T>
     constexpr T unset_pos { std::numeric_limits<T>::max() };
 
     // A base drawer class, implementing the builder method for drawing textures.
@@ -16,7 +16,7 @@ namespace hal::detail
     // a) constant textures, and
     // b) those who know what they're doing. I'm sure you do, though.
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
-    template <typename T, lyo::one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename Pass, typename This>
+    template <typename T, one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename Pass, typename This>
     class drawer
     {
     protected:
@@ -32,7 +32,7 @@ namespace hal::detail
         using this_ref = std::conditional_t<std::is_void_v<This>, drawer, This>&;
 
     public:
-        [[nodiscard]] drawer(Pass& ths, const T& src, lyo::pass_key<Pass>)
+        [[nodiscard]] drawer(Pass& ths, const T& src, pass_key<Pass>)
             : m_pass { ths }
             , m_this { src }
             , m_dst { tag::as_size, src.size() }
@@ -58,7 +58,7 @@ namespace hal::detail
 
         // Stretch across the board.
         // Do not use with scaling and anchoring.
-        [[nodiscard]] this_ref to(LYO_TAG_NAME(fill))
+        [[nodiscard]] this_ref to(HAL_TAG_NAME(fill))
         {
             m_dst.pos.x = unset_pos<dst_t>;
             return get_this();
@@ -75,7 +75,7 @@ namespace hal::detail
 
         // Set the destination's scale.
         // Call after setting the destination and before anchoring.
-        [[nodiscard]] this_ref scale(lyo::f64 mul)
+        [[nodiscard]] this_ref scale(f64 mul)
         {
             if (m_dst.pos.x != unset_pos<dst_t>)
                 m_dst.size *= mul;

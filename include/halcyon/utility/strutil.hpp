@@ -3,20 +3,20 @@
 #include <iomanip>
 #include <sstream>
 
-#include <lyo/concepts.hpp>
+#include <halcyon/utility/concepts.hpp>
 
 // strutil.hpp:
 // String utility functions.
 
-namespace lyo
+namespace hal
 {
     // String equality check.
-    bool streq(const char* lhs, const char* rhs) noexcept;
-    bool streq(const wchar_t* lhs, const wchar_t* rhs) noexcept;
+    bool streq(const char* lhs, const char* rhs);
+    bool streq(const wchar_t* lhs, const wchar_t* rhs);
 
     // Input all arguments into a stringstream and return them as a string.
     template <typename... Args>
-    std::string string_from_pack(Args&&... args) noexcept
+    std::string string_from_pack(Args&&... args)
     {
         // Warning suppression.
         if constexpr (sizeof...(Args) == 0)

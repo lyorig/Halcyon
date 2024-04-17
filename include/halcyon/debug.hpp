@@ -15,13 +15,12 @@
 
 #ifdef HAL_DEBUG_ENABLED
 
-    #include <halcyon/printing.hpp>
-    #include <lyo/strutil.hpp>
-    #include <lyo/timer.hpp>
-
     #include <fstream>
     #include <iostream>
-    #include <sstream>
+
+    #include <halcyon/utility/printing.hpp>
+    #include <halcyon/utility/strutil.hpp>
+    #include <halcyon/utility/timer.hpp>
 
     // For compatibility with MSVC.
     #ifdef _MSC_VER
@@ -73,10 +72,10 @@ namespace hal
 
         // Show a message box with an error message.
         template <printable... Args>
-        [[noreturn]] static void panic(std::string_view function, std::string_view file, lyo::u32 line, Args&&... extra_info)
+        [[noreturn]] static void panic(std::string_view function, std::string_view file, u32 line, Args&&... extra_info)
         {
             debug::print_severity(severity::error, "In file ", file, ", line ", line, ", function ", function);
-            debug::print_severity(severity::error, lyo::string_from_pack(std::forward<Args>(extra_info)...));
+            debug::print_severity(severity::error, string_from_pack(std::forward<Args>(extra_info)...));
 
             std::exit(EXIT_FAILURE);
         }
@@ -90,7 +89,7 @@ namespace hal
 
         // Check a condition, and panic if it's false.
         template <printable... Args>
-        static void verify(bool condition, std::string_view cond_string, std::string_view func, std::string_view file, lyo::u32 line,
+        static void verify(bool condition, std::string_view cond_string, std::string_view func, std::string_view file, u32 line,
             Args&&... extra_info)
         {
             if (!condition) [[unlikely]]
@@ -101,11 +100,11 @@ namespace hal
         template <printable... Args>
         static void print_severity(severity type, Args&&... extra_info)
         {
-            std::stringstream fwd_info, message;
+            std::stringstream fwd;
 
     #ifdef HAL_DEBUG_ADVANCED
-            fwd_info << std::fixed << std::setprecision(3) << '[' << m_timer()
-                     << "s] ";
+            fwd << std::fixed << std::setprecision(3) << '[' << m_timer()
+                << "s] ";
     #endif
 
             using enum severity;
@@ -113,32 +112,31 @@ namespace hal
             switch (type)
             {
             case info:
-                fwd_info << "[info]  ";
+                fwd << "[info]  ";
                 break;
 
             case warning:
-                fwd_info << "[warn]  ";
+                fwd << "[warn]  ";
                 break;
 
             case error:
-                fwd_info << "[error] ";
+                fwd << "[error] ";
                 break;
 
             case init:
-                fwd_info << "[init]  ";
+                fwd << "[init]  ";
                 break;
 
             case load:
-                fwd_info << "[load]  ";
+                fwd << "[load]  ";
                 break;
 
             default:
-                fwd_info << "[????]  ";
+                fwd << "[????]  ";
                 break;
             }
 
-            const std::string msg { lyo::string_from_pack(extra_info...) };
-            const std::string with_info { fwd_info.str() + msg };
+            const std::string with_info { fwd.str() + string_from_pack(extra_info...) };
 
     #ifdef HAL_DEBUG_ADVANCED
             m_output << with_info << std::endl;
@@ -148,8 +146,8 @@ namespace hal
         }
 
     #ifdef HAL_DEBUG_ADVANCED
-        static std::ofstream            m_output;
-        static const lyo::precise_timer m_timer;
+        static std::ofstream m_output;
+        static const timer   m_timer;
     #endif
     };
 }
