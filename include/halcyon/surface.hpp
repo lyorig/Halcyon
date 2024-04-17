@@ -81,9 +81,6 @@ namespace hal
         // Create a blitter.
         [[nodiscard]] blitter blit(surface& dst) const;
 
-        // Public, but only available to the blit class.
-        void internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, pass_key<blitter>) const;
-
     private:
         // I'd rather use the pixel format enum, but SDL uses an integer
         // in pretty much every API function, so I'll save myself the hassle.
@@ -94,7 +91,7 @@ namespace hal
         surface(pixel_point sz, const SDL_PixelFormat* fmt);
 
         // Convert a color to a mapped value using this surface's pixel format.
-        Uint32 mapped(color c) const;
+        std::uint32_t mapped(color c) const;
     };
 
     // A reference to a pixel in a surface for easy access and modification.
@@ -109,12 +106,12 @@ namespace hal
 
     private:
         // Retrieve the color in a mapped format.
-        Uint32 get() const;
+        std::uint32_t get() const;
 
         // Set the color to a mapped value.
-        void set(Uint32 mv);
+        void set(std::uint32_t mv);
 
-        std::byte*             m_ptr; // A pointer to the current color
+        std::byte*             m_ptr; // A pointer to the current color.
         const SDL_PixelFormat* m_fmt;
     };
 

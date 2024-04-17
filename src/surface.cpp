@@ -118,15 +118,7 @@ blitter surface::blit(surface& dst) const
     return { *this, dst, {} };
 }
 
-void surface::internal_blit(const surface& to, const sdl::pixel_rect* src, sdl::pixel_rect* dst, pass_key<blitter>) const
-{
-    HAL_ASSERT(this->valid(), "Drawing null surface");
-    HAL_ASSERT(to.valid(), "Drawing to null surface");
-
-    HAL_ASSERT_VITAL(::SDL_BlitScaled(this->ptr(), reinterpret_cast<const SDL_Rect*>(src), to.ptr(), reinterpret_cast<SDL_Rect*>(dst)) == 0, debug::last_error());
-}
-
-Uint32 surface::mapped(color c) const
+std::uint32_t surface::mapped(color c) const
 {
     return ::SDL_MapRGBA(ptr()->format, c.r, c.g, c.b, c.a);
 }
@@ -150,50 +142,42 @@ pixel_reference& pixel_reference::operator=(color c)
     return *this;
 }
 
-Uint32 pixel_reference::get() const
+std::uint32_t pixel_reference::get() const
 {
-    Uint32 ret { 0 };
+    std::uint32_t ret { 0 };
 
     if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
         std::memcpy(&ret, m_ptr, m_fmt->BytesPerPixel);
 
     else
     {
-        const u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        const u8 offset = sizeof(std::uint32_t) - m_fmt->BytesPerPixel;
         std::memcpy(&ret + offset, m_ptr + offset, m_fmt->BytesPerPixel);
     }
 
     return ret;
 }
 
-void pixel_reference::set(Uint32 mapped)
+void pixel_reference::set(std::uint32_t mapped)
 {
     if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
         std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
 
     else
     {
-        const u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        const u8 offset = sizeof(std::uint32_t) - m_fmt->BytesPerPixel;
         std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->BytesPerPixel);
     }
 }
 
 void blitter::operator()()
 {
-    m_pass.internal_blit(
-        m_this,
-        m_src.pos.x == detail::unset_pos<src_t> ? nullptr : &m_src,
-        m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : &m_dst,
-        {});
+    HAL_ASSERT_VITAL(::SDL_BlitScaled(m_this.ptr(), reinterpret_cast<const SDL_Rect*>(m_src.addr()), m_pass.ptr(), reinterpret_cast<SDL_Rect*>(m_dst.addr())) == 0, debug::last_error());
 }
 
 void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
 {
     sdl::pixel_rect copy { m_dst };
 
-    m_pass.internal_blit(
-        m_this,
-        m_src.pos.x == detail::unset_pos<src_t> ? nullptr : &m_src,
-        copy.pos.x == detail::unset_pos<dst_t> ? nullptr : &copy,
-        {});
+    HAL_ASSERT_VITAL(::SDL_BlitScaled(m_this.ptr(), reinterpret_cast<const SDL_Rect*>(m_src.addr()), m_pass.ptr(), reinterpret_cast<SDL_Rect*>(copy.addr())) == 0, debug::last_error());
 }

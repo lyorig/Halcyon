@@ -118,9 +118,6 @@ namespace hal
             // Create a copyer.
             [[nodiscard]] copyer draw(const detail::texture_base& tex);
 
-            // Public, but only accessible to the draw class.
-            void internal_render_copy(const detail::texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, f64 angle, flip f, pass_key<copyer>);
-
         private:
             void clear();
 

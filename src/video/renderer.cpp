@@ -179,21 +179,32 @@ copyer renderer::draw(const detail::texture_base& tex)
     return { *this, tex, {} };
 }
 
-void renderer::internal_render_copy(const detail::texture_base& tex, const sdl::pixel_rect* src, const sdl::coord_rect* dst, f64 angle, flip f, pass_key<copyer>)
-{
-    HAL_ASSERT(tex.valid(), "Drawing invalid texture");
-
-    if constexpr (sdl::integral_coord)
-    {
-        HAL_ASSERT_VITAL(::SDL_RenderCopyEx(this->ptr(), tex.ptr(), reinterpret_cast<const SDL_Rect*>(src), reinterpret_cast<const SDL_Rect*>(dst), angle, NULL, SDL_RendererFlip(f)) == 0, debug::last_error());
-    }
-    else
-    {
-        HAL_ASSERT_VITAL(::SDL_RenderCopyExF(this->ptr(), tex.ptr(), reinterpret_cast<const SDL_Rect*>(src), reinterpret_cast<const SDL_FRect*>(dst), angle, NULL, SDL_RendererFlip(f)) == 0, debug::last_error());
-    }
-}
-
 void renderer::internal_target(SDL_Texture* target)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderTarget(this->ptr(), target) == 0, debug::last_error());
+}
+
+copyer& copyer::rotate(f64 angle)
+{
+    m_angle = angle;
+    return *this;
+}
+
+copyer& copyer::flip(enum flip f)
+{
+    m_flip = f;
+    return *this;
+}
+
+void copyer::operator()()
+{
+    if constexpr (sdl::integral_coord)
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderCopyEx(m_pass.ptr(), m_this.ptr(), reinterpret_cast<const SDL_Rect*>(m_src.addr()), reinterpret_cast<const SDL_Rect*>(m_dst.addr()), m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip)) == 0, debug::last_error());
+    }
+
+    else
+    {
+        HAL_ASSERT_VITAL(::SDL_RenderCopyExF(m_pass.ptr(), m_this.ptr(), reinterpret_cast<const SDL_Rect*>(m_src.addr()), reinterpret_cast<const SDL_FRect*>(m_dst.addr()), m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip)) == 0, debug::last_error());
+    }
 }

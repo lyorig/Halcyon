@@ -84,26 +84,3 @@ target_texture::target_texture(renderer& rnd, pixel_point sz)
     : texture_base { ::SDL_CreateTexture(rnd.ptr(), ::SDL_GetWindowPixelFormat(::SDL_RenderGetWindow(rnd.ptr())), SDL_TEXTUREACCESS_TARGET, sz.x, sz.y) }
 {
 }
-
-copyer& copyer::rotate(f64 angle)
-{
-    m_angle = angle;
-    return *this;
-}
-
-copyer& copyer::flip(enum flip f)
-{
-    m_flip = f;
-    return *this;
-}
-
-void copyer::operator()()
-{
-    m_pass.internal_render_copy(
-        m_this,
-        m_src.pos.x == detail::unset_pos<src_t> ? nullptr : &m_src,
-        m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : &m_dst,
-        m_angle,
-        m_flip,
-        {});
-}

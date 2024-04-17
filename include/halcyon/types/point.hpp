@@ -1,5 +1,7 @@
 #pragma once
 
+#include <compare>
+
 #include <halcyon/internal/sdl_types.hpp>
 #include <halcyon/internal/tags.hpp>
 
@@ -223,5 +225,4 @@ namespace hal
         using pixel_point = point<sdl::pixel_t>;
         using coord_point = point<sdl::coord_t>;
     }
-
 }
