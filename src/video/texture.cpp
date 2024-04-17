@@ -4,9 +4,9 @@
 #include <halcyon/surface.hpp>
 #include <halcyon/video/renderer.hpp>
 
-using namespace hal;
+using namespace hal::video;
 
-pixel_point detail::texture_base::size() const
+hal::pixel_point hal::detail::texture_base::size() const
 {
     point<int> size;
 
@@ -15,12 +15,12 @@ pixel_point detail::texture_base::size() const
     return size;
 }
 
-void detail::texture_base::opacity(color::value_t value)
+void hal::detail::texture_base::opacity(color::value_t value)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, debug::last_error());
 }
 
-color detail::texture_base::color_mod() const
+hal::color hal::detail::texture_base::color_mod() const
 {
     color c;
 
@@ -29,12 +29,12 @@ color detail::texture_base::color_mod() const
     return c;
 }
 
-void detail::texture_base::color_mod(color clr)
+void hal::detail::texture_base::color_mod(color clr)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureColorMod(this->ptr(), clr.r, clr.g, clr.b) == 0, debug::last_error());
 }
 
-blend_mode detail::texture_base::blend() const
+hal::blend_mode hal::detail::texture_base::blend() const
 {
     SDL_BlendMode bm;
 
@@ -43,12 +43,12 @@ blend_mode detail::texture_base::blend() const
     return blend_mode(bm);
 }
 
-void detail::texture_base::blend(blend_mode bm)
+void hal::detail::texture_base::blend(blend_mode bm)
 {
     HAL_ASSERT_VITAL(::SDL_SetTextureBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-lyo::u8 detail::texture_base::opacity() const
+lyo::u8 hal::detail::texture_base::opacity() const
 {
     Uint8 alpha;
 
@@ -58,19 +58,19 @@ lyo::u8 detail::texture_base::opacity() const
     return alpha;
 }
 
-detail::texture_base::texture_base(SDL_Texture* ptr)
+hal::detail::texture_base::texture_base(SDL_Texture* ptr)
     : object { ptr }
 {
     this->blend(blend_mode::blend);
 }
 
-void detail::texture_base::reset(SDL_Texture* ptr)
+void hal::detail::texture_base::reset(SDL_Texture* ptr)
 {
     object::reset(ptr);
     this->blend(blend_mode::blend);
 }
 
-void detail::texture_base::query(std::uint32_t* format, int* access, int* w, int* h) const
+void hal::detail::texture_base::query(std::uint32_t* format, int* access, int* w, int* h) const
 {
     HAL_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, debug::last_error());
 }

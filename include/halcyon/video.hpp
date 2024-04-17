@@ -13,9 +13,9 @@
 
 #include <halcyon/internal/subsystem.hpp>
 
-namespace hal::system
+namespace hal::video
 {
-    class video : public detail::subinit<detail::system::video>
+    class system : public hal::detail::subinit<hal::detail::system::video>
     {
         class clipboard_proxy
         {
@@ -33,19 +33,21 @@ namespace hal::system
         class display_proxy
         {
         public:
-            display::index_t size() const;
+            display::id_t size() const;
 
-            display operator[](display::index_t idx) const;
+            display operator[](display::id_t idx) const;
         };
 
-    public:
-        explicit video(context& auth);
+        using event_proxy = hal::detail::subsystem<hal::detail::system::events>;
 
-        LYO_NOSIZE detail::subsystem<detail::system::events> events;
+    public:
+        explicit system(context& auth);
+
+        LYO_NOSIZE event_proxy events;
 
         LYO_NOSIZE clipboard_proxy clipboard;
         LYO_NOSIZE display_proxy   displays;
     };
 
-    static_assert(std::is_empty_v<video>);
+    static_assert(std::is_empty_v<system>);
 }

@@ -7,7 +7,7 @@
 
 #include <halcyon/internal/helpers.hpp>
 
-using namespace hal;
+using namespace hal::video;
 
 renderer::color_lock::color_lock(renderer& rnd, color new_clr)
     : m_rnd { rnd }
@@ -43,7 +43,7 @@ void renderer::target_lock::set(target_texture& tgt)
 }
 
 renderer::renderer(window& wnd, std::initializer_list<flags> flags)
-    : object { ::SDL_CreateRenderer(wnd.ptr(), -1, detail::to_bitmask<std::uint32_t>(flags)) }
+    : object { ::SDL_CreateRenderer(wnd.ptr(), -1, hal::detail::to_bitmask<std::uint32_t>(flags)) }
 {
     HAL_PRINT(severity::init, "Created renderer for window \"", wnd.title(), "\", flags = 0x", std::hex, detail::to_bitmask<std::uint32_t>(flags));
 }
@@ -110,7 +110,7 @@ void renderer::fill_target()
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(this->ptr(), nullptr) == 0, debug::last_error());
 }
 
-pixel_point renderer::size() const
+hal::pixel_point renderer::size() const
 {
     point<int> sz;
     ::SDL_RenderGetLogicalSize(this->ptr(), &sz.x, &sz.y);
@@ -136,7 +136,7 @@ void renderer::retarget()
     this->internal_target(nullptr);
 }
 
-color renderer::draw_color() const
+hal::color renderer::draw_color() const
 {
     color ret;
 
@@ -150,7 +150,7 @@ void renderer::draw_color(color clr)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, debug::last_error());
 }
 
-blend_mode renderer::blend() const
+hal::blend_mode renderer::blend() const
 {
     SDL_BlendMode bm;
 

@@ -2,15 +2,15 @@
 
 #include <halcyon/internal/helpers.hpp>
 
-using namespace hal;
+using namespace hal::video;
 
-system::video::video(context& auth)
+system::system(context& auth)
     : subinit { auth }
     , events { auth }
 {
 }
 
-std::string system::video::clipboard_proxy::operator()() const
+std::string system::clipboard_proxy::operator()() const
 {
     const auto text = ::SDL_GetClipboardText();
 
@@ -19,26 +19,26 @@ std::string system::video::clipboard_proxy::operator()() const
     return text;
 };
 
-void system::video::clipboard_proxy::operator()(std::string_view text)
+void system::clipboard_proxy::operator()(std::string_view text)
 {
     HAL_ASSERT_VITAL(::SDL_SetClipboardText(text.data()) == 0, debug::last_error());
 }
 
-bool system::video::clipboard_proxy::has_text() const
+bool system::clipboard_proxy::has_text() const
 {
     return ::SDL_HasClipboardText() == SDL_TRUE;
 }
 
-display::index_t system::video::display_proxy::size() const
+display::id_t system::display_proxy::size() const
 {
     const auto ret = ::SDL_GetNumVideoDisplays();
 
     HAL_ASSERT(ret >= 1, debug::last_error());
 
-    return static_cast<display::index_t>(ret);
+    return static_cast<display::id_t>(ret);
 }
 
-display system::video::display_proxy::operator[](display::index_t idx) const
+display system::display_proxy::operator[](display::id_t idx) const
 {
     return { idx, {} };
 }

@@ -4,7 +4,7 @@
 
 #include <halcyon/internal/helpers.hpp>
 
-using namespace hal;
+using namespace hal::video;
 
 window::window(authority&, std::string_view name, pixel_point size, std::initializer_list<flags> flags)
     : object { ::SDL_CreateWindow(name.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
@@ -12,7 +12,7 @@ window::window(authority&, std::string_view name, pixel_point size, std::initial
     HAL_PRINT(severity::init, "Created window \"", title(), "\", flags = 0x", std::hex, detail::to_bitmask<std::uint32_t>(flags));
 }
 
-pixel_point window::size() const
+hal::pixel_point window::size() const
 {
     point<int> size;
 
@@ -28,13 +28,13 @@ void window::size(pixel_point sz)
     ::SDL_SetWindowSize(this->ptr(), sz.x, sz.y);
 }
 
-display::index_t window::display_index() const
+display::id_t window::display_index() const
 {
     const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
 
     HAL_ASSERT(ret >= 0, debug::last_error());
 
-    return static_cast<display::index_t>(ret);
+    return static_cast<display::id_t>(ret);
 }
 
 std::string_view window::title() const

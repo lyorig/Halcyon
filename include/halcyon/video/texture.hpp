@@ -13,8 +13,6 @@
 
 namespace hal
 {
-    // Forward declarations for parameters and return types.
-    class renderer;
     class surface;
 
     namespace detail
@@ -45,19 +43,25 @@ namespace hal
         };
     }
 
-    // A texture that cannot be drawn onto, only reassigned.
-    class texture : public detail::texture_base
+    namespace video
     {
-    public:
-        texture() = default;
-        texture(renderer& rnd, const surface& surf);
-    };
+        // Forward declarations for parameters and return types.
+        class renderer;
 
-    // A texture that can be drawn onto.
-    class target_texture : public detail::texture_base
-    {
-    public:
-        target_texture() = default;
-        target_texture(renderer& rnd, pixel_point sz);
-    };
-} // namespace hal
+        // A texture that cannot be drawn onto, only reassigned.
+        class texture : public hal::detail::texture_base
+        {
+        public:
+            texture() = default;
+            texture(renderer& rnd, const surface& surf);
+        };
+
+        // A texture that can be drawn onto.
+        class target_texture : public hal::detail::texture_base
+        {
+        public:
+            target_texture() = default;
+            target_texture(renderer& rnd, pixel_point sz);
+        };
+    }
+}

@@ -9,14 +9,14 @@
 // video/window.hpp:
 // A window. Can't do much by itself.
 
-namespace hal
+namespace hal::video
 {
     // A window. Not much more to say.
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
         using id_t      = lyo::u8;
-        using authority = detail::subsystem<detail::system::video>;
+        using authority = hal::detail::subsystem<hal::detail::system::video>;
 
         enum class flags : lyo::u16
         {
@@ -36,7 +36,7 @@ namespace hal
         void        size(pixel_point sz);
 
         // Get the index of the display this window is currently on.
-        display::index_t display_index() const;
+        display::id_t display_index() const;
 
         // Get/set this window's title.
         std::string_view title() const;

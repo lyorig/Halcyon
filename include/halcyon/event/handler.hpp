@@ -4,7 +4,6 @@
 
 // event/handler.hpp:
 // A thin wrapper of SDL's event handling system.
-// hal::event is a complex namespace, so the handler isn't top-level as usual.
 
 namespace hal
 {

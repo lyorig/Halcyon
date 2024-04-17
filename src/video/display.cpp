@@ -4,9 +4,9 @@
 
 #include <halcyon/debug.hpp>
 
-using namespace hal;
+using namespace hal::video;
 
-display::display(index_t disp_idx, lyo::pass_key<system::video>)
+display::display(id_t disp_idx, lyo::pass_key<system>)
     : m_index { disp_idx }
 {
     SDL_DisplayMode dm;
@@ -19,7 +19,7 @@ display::display(index_t disp_idx, lyo::pass_key<system::video>)
     m_hz = static_cast<hz_t>(dm.refresh_rate);
 }
 
-pixel_point display::size() const
+hal::pixel_point display::size() const
 {
     return m_size;
 }
@@ -29,7 +29,7 @@ display::hz_t display::hz() const
     return m_hz;
 }
 
-display::index_t display::index() const
+display::id_t display::index() const
 {
     return m_index;
 }
