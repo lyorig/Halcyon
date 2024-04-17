@@ -10,7 +10,7 @@ namespace
 
 // Display event.
 
-enum display::type display::type() const
+enum display::type display::event_type() const
 {
     return static_cast<enum type>(event);
 }
@@ -27,20 +27,20 @@ window_id window::window_id() const
     return static_cast<::window_id>(windowID);
 }
 
-enum window::type window::type() const
+enum window::type window::event_type() const
 {
     return static_cast<enum type>(event);
 }
 
 display_id window::new_display_index() const
 {
-    HAL_ASSERT(type() == type::display_changed, "Invalid event type");
+    HAL_ASSERT(event_type() == type::display_changed, "Invalid event type");
     return static_cast<display_id>(data1);
 }
 
 hal::pixel_point window::new_point() const
 {
-    HAL_ASSERT(type() == type::resized || type() == type::moved, "Invalid event type");
+    HAL_ASSERT(event_type() == type::resized || event_type() == type::moved, "Invalid event type");
     return { static_cast<pixel_t>(data1), static_cast<pixel_t>(data2) };
 }
 
@@ -140,4 +140,83 @@ hal::pixel_point mouse_wheel::pos() const
 bool mouse_wheel::scroll_flipped() const
 {
     return direction == SDL_MOUSEWHEEL_FLIPPED;
+}
+
+std::string_view hal::to_string(enum display::type evt)
+{
+    using enum display::type;
+
+    switch (evt)
+    {
+    case reoriented:
+        return "Reoriented";
+
+    case connected:
+        return "Connected";
+
+    case disconnected:
+        return "Disconnected";
+
+    case moved:
+        return "Moved";
+    }
+}
+
+std::string_view hal::to_string(enum window::type evt)
+{
+    using enum window::type;
+
+    switch (evt)
+    {
+    case shown:
+        return "Shown";
+
+    case hidden:
+        return "Hidden";
+
+    case exposed:
+        return "Exposed";
+
+    case moved:
+        return "Moved";
+
+    case resized:
+        return "Resized";
+
+    case minimized:
+        return "Minimized";
+
+    case maximized:
+        return "Maximized";
+
+    case restored:
+        return "Restored";
+
+    case got_mouse_focus:
+        return "Got mouse focus";
+
+    case lost_mouse_focus:
+        return "Lost mouse focus";
+
+    case got_keyboard_focus:
+        return "Got keyboard focus";
+
+    case lost_keyboard_focus:
+        return "Lost keyboard focus";
+
+    case closed:
+        return "Closed";
+
+    case focus_offered:
+        return "Focus offered";
+
+    case hit_test:
+        return "Hit test";
+
+    case icc_profile_changed:
+        return "ICC profile changed";
+
+    case display_changed:
+        return "Display changed";
+    }
 }

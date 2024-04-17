@@ -53,7 +53,7 @@ namespace hal
             bool poll();
 
             // Get the last polled event's type.
-            enum type type() const;
+            type event_type() const;
 
             // Valid for: display
             const event::display& display() const;
@@ -101,4 +101,6 @@ namespace hal
             static_assert(sizeof(m_event) == sizeof(SDL_Event));
         };
     }
+
+    std::string_view to_string(event::type evt);
 }

@@ -41,10 +41,10 @@ namespace test
         wnd.size(new_size);
         e.poll();
 
-        if (e.type() != hal::event::type::window)
+        if (e.event_type() != hal::event::type::window)
             return EXIT_FAILURE;
 
-        if (e.window().type() != hal::event::window::type::resized)
+        if (e.window().event_type() != hal::event::window::type::resized)
             return EXIT_FAILURE;
 
         if (e.window().new_point() != new_size)
@@ -151,7 +151,7 @@ namespace test
 
         while (eh.poll())
         {
-            switch (eh.type())
+            switch (eh.event_type())
             {
             case hal::event::type::quit_requested:
                 return EXIT_SUCCESS;
