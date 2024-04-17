@@ -2,7 +2,6 @@
 
 #include <halcyon/types/rectangle.hpp>
 #include <ostream>
-#include <utility>
 
 // printing.hpp:
 // Stream insertion support for custom types.
@@ -23,21 +22,13 @@ namespace hal
         return static_cast<printable_int_t<T>>(val);
     }
 
-    // Ensure enums get printed properly.
-    template <typename T>
-        requires std::is_enum_v<T>
-    std::ostream& operator<<(std::ostream& str, T val)
-    {
-        return str << to_printable_int(std::to_underlying(val));
-    }
-
     template <arithmetic T>
     std::ostream& operator<<(std::ostream& str, const point<T>& pt)
     {
         return str << '[' << to_printable_int(pt.x) << ',' << to_printable_int(pt.y) << ']';
     }
 
-    template <typename T>
+    template <arithmetic T>
     std::ostream& operator<<(std::ostream& str, const rectangle<T>& rect)
     {
         return str << '{' << rect.pos << ' ' << rect.size << '}';
