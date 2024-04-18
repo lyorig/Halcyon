@@ -2,8 +2,8 @@
 
 #include <SDL_events.h>
 
-#include <halcyon/keyboard.hpp>
-#include <halcyon/mouse.hpp>
+#include <halcyon/event/keyboard.hpp>
+#include <halcyon/event/mouse.hpp>
 
 #include <halcyon/video/window.hpp>
 

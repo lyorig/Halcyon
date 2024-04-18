@@ -11,6 +11,8 @@ set(HALCYON_INCLUDE_DIRS ${LYOSTL_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR}/includ
 # Sources.
 set(HALCYON_SOURCES
 event/handler.cpp
+event/keyboard.cpp
+event/mouse.cpp
 event/types.cpp
 internal/accessor.cpp
 types/templates.cpp
@@ -18,13 +20,11 @@ utility/printing.cpp
 utility/strutil.cpp
 utility/timer.cpp
 video/display.cpp
+video/driver.cpp
 video/renderer.cpp
 video/texture.cpp
 video/window.cpp
-keyboard.cpp
-mouse.cpp
 context.cpp
-driver.cpp
 debug.cpp
 image.cpp
 surface.cpp
@@ -37,7 +37,6 @@ list(APPEND HALCYON_SOURCES ${LYOSTL_SOURCES})
 
 # Libraries.
 set(HALCYON_LIBRARIES
-SDL2::SDL2main
 SDL2::SDL2
 SDL2_image::SDL2_image
 SDL2_ttf::SDL2_ttf

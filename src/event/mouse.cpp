@@ -1,4 +1,4 @@
-#include <halcyon/mouse.hpp>
+#include <halcyon/event/mouse.hpp>
 #include <utility>
 
 using namespace hal;
