@@ -70,13 +70,13 @@ bool event::handler::pending()
 
 const event::display& event::handler::display() const
 {
-    HAL_ASSERT(event_type() == event::type::display, "Invalid type");
+    HAL_ASSERT(event_type() == event::type::display_event, "Invalid type");
     return m_event.data.display;
 }
 
 const event::window& event::handler::window() const
 {
-    HAL_ASSERT(event_type() == event::type::window, "Invalid type");
+    HAL_ASSERT(event_type() == event::type::window_event, "Invalid type");
     return m_event.data.window;
 }
 
@@ -131,10 +131,10 @@ std::string_view hal::to_string(event::type evt)
     case entered_foreground:
         return "Will enter foreground";
 
-    case display:
+    case display_event:
         return "Display";
 
-    case window:
+    case window_event:
         return "Window";
 
     case key_pressed:

@@ -206,11 +206,22 @@ void copyer::operator()()
 {
     if constexpr (sdl::integral_coord)
     {
-        HAL_ASSERT_VITAL(::SDL_RenderCopyEx(m_pass.ptr(), m_this.ptr(), reinterpret_cast<const SDL_Rect*>(m_src.addr()), reinterpret_cast<const SDL_Rect*>(m_dst.addr()), m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip)) == 0, debug::last_error());
+        HAL_ASSERT_VITAL(::SDL_RenderCopyEx(m_pass.ptr(), m_this.ptr(),
+                             m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                             m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_dst.addr()),
+                             m_angle,
+                             nullptr, static_cast<SDL_RendererFlip>(m_flip))
+                == 0,
+            debug::last_error());
     }
 
     else
     {
-        HAL_ASSERT_VITAL(::SDL_RenderCopyExF(m_pass.ptr(), m_this.ptr(), reinterpret_cast<const SDL_Rect*>(m_src.addr()), reinterpret_cast<const SDL_FRect*>(m_dst.addr()), m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip)) == 0, debug::last_error());
+        HAL_ASSERT_VITAL(::SDL_RenderCopyExF(m_pass.ptr(), m_this.ptr(),
+                             m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                             m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<const SDL_FRect*>(m_dst.addr()),
+                             m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip))
+                == 0,
+            debug::last_error());
     }
 }

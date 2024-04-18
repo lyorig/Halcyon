@@ -25,8 +25,8 @@ namespace hal
             will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
             entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
 
-            display = SDL_DISPLAYEVENT,
-            window  = SDL_WINDOWEVENT,
+            display_event = SDL_DISPLAYEVENT,
+            window_event  = SDL_WINDOWEVENT,
 
             key_pressed  = SDL_KEYDOWN,
             key_released = SDL_KEYUP,
