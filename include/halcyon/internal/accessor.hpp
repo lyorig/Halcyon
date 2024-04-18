@@ -32,10 +32,9 @@ namespace hal
         accessor(const accessor&) = delete;
         accessor(accessor&&)      = default;
 
-        friend accessor from_file(std::string_view file);
-
-        friend accessor from_memory(std::span<const std::uint8_t> data);
-        friend accessor from_memory(std::span<const std::byte> data);
+        friend accessor load(std::string_view file);
+        friend accessor load(std::span<const std::uint8_t> data);
+        friend accessor load(std::span<const std::byte> data);
 
         SDL_RWops* get(pass_key<surface>);
         SDL_RWops* get(pass_key<ttf::font>);
@@ -47,9 +46,9 @@ namespace hal
     };
 
     // Load data from a file.
-    [[nodiscard]] accessor from_file(std::string_view file);
+    [[nodiscard]] accessor load(std::string_view file);
 
     // Load data from program memory.
-    [[nodiscard]] accessor from_memory(std::span<const std::uint8_t> data);
-    [[nodiscard]] accessor from_memory(std::span<const std::byte> data);
+    [[nodiscard]] accessor load(std::span<const std::uint8_t> data);
+    [[nodiscard]] accessor load(std::span<const std::byte> data);
 }
