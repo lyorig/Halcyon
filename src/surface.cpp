@@ -33,23 +33,13 @@ surface::surface(pixel_point sz)
 {
 }
 
-surface::surface(const image::context& auth, accessor data)
-    : object { ::IMG_Load_RW(data.get(pass_key<surface> {}), true) }
+surface::surface(SDL_Surface* ptr, pass_key<image::context>)
+    : object { ptr }
 {
 }
 
-surface::surface(const ttf::font& font, std::string_view text, color color)
-    : object { ::TTF_RenderUTF8_LCD_Wrapped(font.ptr(), text.data(), color.to_sdl_color(), { 0x000000, 0 }, 0) }
-{
-}
-
-surface::surface(pixel_point sz, int depth, Uint32 fmt)
-    : object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, depth, fmt) }
-{
-}
-
-surface::surface(pixel_point sz, const SDL_PixelFormat* fmt)
-    : surface { sz, fmt->BitsPerPixel * 4, fmt->format }
+surface::surface(SDL_Surface* ptr, pass_key<ttf::font>)
+    : object { ptr }
 {
 }
 
@@ -116,6 +106,16 @@ void surface::blend(blend_mode bm)
 blitter surface::blit(surface& dst) const
 {
     return { *this, dst, {} };
+}
+
+surface::surface(pixel_point sz, int depth, Uint32 fmt)
+    : object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, depth, fmt) }
+{
+}
+
+surface::surface(pixel_point sz, const SDL_PixelFormat* fmt)
+    : surface { sz, fmt->BitsPerPixel * 4, fmt->format }
+{
 }
 
 std::uint32_t surface::mapped(color c) const

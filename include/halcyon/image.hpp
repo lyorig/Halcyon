@@ -2,6 +2,7 @@
 
 #include <SDL_image.h>
 
+#include <halcyon/internal/accessor.hpp>
 #include <halcyon/surface.hpp>
 
 // image.hpp:
@@ -29,7 +30,7 @@ namespace hal::image
 
         ~context();
 
-        // Convenience image loading functions.
+        // Image loading functions.
         [[nodiscard]] surface load(accessor data) const;
 
         static bool initialized();

@@ -22,7 +22,7 @@ context::~context()
 
 font context::load(accessor data, u8 pt) &
 {
-    return { *this, std::move(data), pt };
+    return { ::TTF_OpenFontRW(data.get(pass_key<context> {}), true, pt), pass_key<context> {} };
 }
 
 bool context::initialized()
@@ -30,8 +30,8 @@ bool context::initialized()
     return ::TTF_WasInit() > 0;
 }
 
-font::font(context& auth, accessor data, u8 pt)
-    : object { ::TTF_OpenFontRW(data.get(pass_key<ttf::font> {}), true, pt) }
+font::font(TTF_Font* ptr, pass_key<context>)
+    : object { ptr }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }
@@ -43,7 +43,7 @@ font::~font()
 
 hal::surface font::render(std::string_view text, hal::color color) const
 {
-    return { *this, text, color };
+    return { ::TTF_RenderUTF8_LCD_Wrapped(ptr(), text.data(), color.to_sdl_color(), {}, 0), pass_key<font> {} };
 }
 
 hal::pixel_point font::size_text(const std::string_view& text) const

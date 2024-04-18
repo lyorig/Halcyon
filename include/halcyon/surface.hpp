@@ -1,8 +1,9 @@
 #pragma once
 
+#include <span>
+
 #include <SDL_surface.h>
 
-#include <halcyon/internal/accessor.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
 
@@ -53,11 +54,11 @@ namespace hal
         // Create a sized surface.
         surface(pixel_point sz);
 
-        // Load an image.
-        surface(const image::context& auth, accessor data);
+        // Load an image. [private]
+        surface(SDL_Surface* ptr, pass_key<image::context>);
 
-        // Render text using a font.
-        surface(const ttf::font& font, std::string_view text, color color = palette::white);
+        // Render text using a font. [private]
+        surface(SDL_Surface* ptr, pass_key<ttf::font>);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.

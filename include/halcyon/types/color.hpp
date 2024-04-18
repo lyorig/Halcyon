@@ -65,6 +65,7 @@ namespace hal
                         orange      = 0xFFA500,
                         cyan        = 0x00FFFF,
                         weezer_blue = 0x0099D3,
-                        white       = 0xFFFFFF;
+                        white       = 0xFFFFFF,
+                        transparent = { 0x000000, 0 };
     }
 }

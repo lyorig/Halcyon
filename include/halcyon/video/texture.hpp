@@ -53,7 +53,7 @@ namespace hal
         {
         public:
             texture() = default;
-            texture(renderer& rnd, const surface& surf);
+            texture(SDL_Texture* ptr, pass_key<renderer>);
         };
 
         // A texture that can be drawn onto.
@@ -61,7 +61,7 @@ namespace hal
         {
         public:
             target_texture() = default;
-            target_texture(renderer& rnd, pixel_point sz);
+            target_texture(SDL_Texture* ptr, pass_key<renderer>);
         };
     }
 }

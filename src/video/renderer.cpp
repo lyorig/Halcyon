@@ -164,14 +164,20 @@ void renderer::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-texture renderer::make_texture(const surface& surf)
+texture renderer::load(const surface& surf)
 {
-    return { *this, surf };
+    return { ::SDL_CreateTextureFromSurface(ptr(), surf.ptr()), pass_key<renderer> {} };
 }
 
-target_texture renderer::make_texture(pixel_point size)
+target_texture renderer::load(pixel_point size)
 {
-    return { *this, size };
+    SDL_Window* wnd { ::SDL_RenderGetWindow(ptr()) };
+    HAL_ASSERT(wnd != nullptr, debug::last_error());
+
+    const std::uint32_t fmt { ::SDL_GetWindowPixelFormat(wnd) };
+    HAL_ASSERT(fmt != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
+
+    return { ::SDL_CreateTexture(ptr(), fmt, SDL_TEXTUREACCESS_STATIC, size.x, size.y), pass_key<renderer> {} };
 }
 
 copyer renderer::draw(const detail::texture_base& tex)

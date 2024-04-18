@@ -75,12 +75,12 @@ void hal::detail::texture_base::query(std::uint32_t* format, int* access, int* w
     HAL_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, debug::last_error());
 }
 
-texture::texture(renderer& rnd, const surface& surf)
-    : texture_base { ::SDL_CreateTextureFromSurface(rnd.ptr(), surf.ptr()) }
+texture::texture(SDL_Texture* ptr, pass_key<renderer>)
+    : texture_base { ptr }
 {
 }
 
-target_texture::target_texture(renderer& rnd, pixel_point sz)
-    : texture_base { ::SDL_CreateTexture(rnd.ptr(), ::SDL_GetWindowPixelFormat(::SDL_RenderGetWindow(rnd.ptr())), SDL_TEXTUREACCESS_TARGET, sz.x, sz.y) }
+target_texture::target_texture(SDL_Texture* ptr, pass_key<renderer>)
+    : texture_base { ptr }
 {
 }

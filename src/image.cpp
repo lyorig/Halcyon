@@ -24,7 +24,7 @@ context::~context()
 
 hal::surface context::load(accessor data) const
 {
-    return { *this, std::move(data) };
+    return { ::IMG_Load_RW(data.get(pass_key<context> {}), true), pass_key<context> {} };
 }
 
 bool context::initialized()

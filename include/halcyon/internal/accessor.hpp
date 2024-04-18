@@ -12,14 +12,19 @@
 // A wrapper of SDL_RWops that enables stuff to be loaded from not only
 // files, but also "baked-in" data residing in memory. A destructor is not
 // provided, because RW functions close it automatically.
+// This has actually proved to be quite the challenge, since I also want to
+// disallow the user from creating this class outside of its intended places.
 
 namespace hal
 {
-    class surface;
+    namespace image
+    {
+        class context;
+    }
 
     namespace ttf
     {
-        class font;
+        class context;
     }
 
     // A proxy to various methods of accessing a file. Only meant for use in
@@ -27,28 +32,27 @@ namespace hal
     class accessor
     {
     public:
-        // Non-copyable, only moveable to accomodate some
-        // convenience factory functions.
+        // Non-copyable.
         accessor(const accessor&) = delete;
         accessor(accessor&&)      = default;
 
-        friend accessor load(std::string_view file);
-        friend accessor load(std::span<const std::uint8_t> data);
-        friend accessor load(std::span<const std::byte> data);
+        accessor(std::nullptr_t) = delete;
 
-        SDL_RWops* get(pass_key<surface>);
-        SDL_RWops* get(pass_key<ttf::font>);
+        accessor(std::string_view path);
+        accessor(std::span<const std::byte> data);
+
+        SDL_RWops* get(pass_key<image::context>) const;
+        SDL_RWops* get(pass_key<ttf::context>) const;
 
     private:
+        // Delegating constructor.
         accessor(SDL_RWops* ptr);
 
         SDL_RWops* m_ops;
     };
 
-    // Load data from a file.
-    [[nodiscard]] accessor load(std::string_view file);
+    [[nodiscard]] accessor access(std::string_view path);
 
-    // Load data from program memory.
-    [[nodiscard]] accessor load(std::span<const std::uint8_t> data);
-    [[nodiscard]] accessor load(std::span<const std::byte> data);
+    [[nodiscard]] accessor access(std::span<const std::byte> data);
+    [[nodiscard]] accessor access(std::span<const std::uint8_t> data);
 }

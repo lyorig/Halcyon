@@ -4,6 +4,7 @@
 
 #include <SDL_ttf.h>
 
+#include <halcyon/internal/accessor.hpp>
 #include <halcyon/surface.hpp>
 
 // ttf.hpp:
@@ -29,7 +30,7 @@ namespace hal::ttf
 
         ~context();
 
-        // Convenience factory function.
+        // Font loading function.
         [[nodiscard]] font load(accessor data, u8 pt) &;
 
         static bool initialized();
@@ -41,7 +42,7 @@ namespace hal::ttf
     {
     public:
         // A font can only be created with a TTF context.
-        font(context& auth, accessor data, u8 pt);
+        font(TTF_Font* ptr, pass_key<context>);
 
         // Debug destructor to check whether the TTF context still exists.
         ~font();

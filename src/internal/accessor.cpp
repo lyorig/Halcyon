@@ -3,12 +3,22 @@
 
 using namespace hal;
 
-SDL_RWops* accessor::get(pass_key<surface>)
+accessor::accessor(std::string_view path)
+    : accessor { ::SDL_RWFromFile(path.data(), "r") }
+{
+}
+
+accessor::accessor(std::span<const std::byte> data)
+    : accessor { ::SDL_RWFromConstMem(data.data(), data.size_bytes()) }
+{
+}
+
+SDL_RWops* accessor::get(pass_key<image::context>) const
 {
     return m_ops;
 }
 
-SDL_RWops* accessor::get(pass_key<ttf::font>)
+SDL_RWops* accessor::get(pass_key<ttf::context>) const
 {
     return m_ops;
 }
@@ -19,17 +29,17 @@ accessor::accessor(SDL_RWops* ptr)
     HAL_ASSERT(m_ops != nullptr, debug::last_error());
 }
 
-accessor hal::load(std::string_view file)
+accessor hal::access(std::string_view path)
 {
-    return ::SDL_RWFromFile(file.data(), "r");
+    return path;
 }
 
-accessor hal::load(std::span<const std::uint8_t> data)
+accessor hal::access(std::span<const std::byte> data)
 {
-    return ::SDL_RWFromConstMem(data.data(), data.size_bytes());
+    return data;
 }
 
-accessor hal::load(std::span<const std::byte> data)
+accessor hal::access(std::span<const std::uint8_t> data)
 {
-    return ::SDL_RWFromConstMem(data.data(), data.size_bytes());
+    return std::as_bytes(data);
 }
