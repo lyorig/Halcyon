@@ -22,8 +22,8 @@ namespace hal
         class font;
     }
 
-    // A proxy to various methods of accessing a file. Only meant for
-    // use in constructors; usage anywhere else is not recommended.
+    // A proxy to various methods of accessing a file. Only meant for use in
+    // constructors and functions; creation anywhere else will cause a memory leak.
     class accessor
     {
     public:
@@ -47,9 +47,9 @@ namespace hal
     };
 
     // Load data from a file.
-    accessor from_file(std::string_view file);
+    [[nodiscard]] accessor from_file(std::string_view file);
 
     // Load data from program memory.
-    accessor from_memory(std::span<const std::uint8_t> data);
-    accessor from_memory(std::span<const std::byte> data);
+    [[nodiscard]] accessor from_memory(std::span<const std::uint8_t> data);
+    [[nodiscard]] accessor from_memory(std::span<const std::byte> data);
 }
