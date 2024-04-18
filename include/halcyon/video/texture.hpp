@@ -53,6 +53,8 @@ namespace hal
         {
         public:
             texture() = default;
+
+            // [private] Textures are created with renderer::load().
             texture(SDL_Texture* ptr, pass_key<renderer>);
         };
 
@@ -61,6 +63,8 @@ namespace hal
         {
         public:
             target_texture() = default;
+
+            // [private] Target textures are created with renderer::load().
             target_texture(SDL_Texture* ptr, pass_key<renderer>);
         };
     }

@@ -41,7 +41,7 @@ namespace hal::ttf
     class font : public sdl::object<TTF_Font, &::TTF_CloseFont>
     {
     public:
-        // A font can only be created with a TTF context.
+        // [private] Fonts are loaded with ttf::context::load().
         font(TTF_Font* ptr, pass_key<context>);
 
         // Debug destructor to check whether the TTF context still exists.

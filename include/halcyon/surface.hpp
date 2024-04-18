@@ -54,10 +54,10 @@ namespace hal
         // Create a sized surface.
         surface(pixel_point sz);
 
-        // Load an image. [private]
+        // [private] Images are loaded with image::context::load().
         surface(SDL_Surface* ptr, pass_key<image::context>);
 
-        // Render text using a font. [private]
+        // [private] Text is rendered with ttf::font::render().
         surface(SDL_Surface* ptr, pass_key<ttf::font>);
 
         // Get a resized copy of the surface. Useful for saving
@@ -83,11 +83,11 @@ namespace hal
         [[nodiscard]] blitter blit(surface& dst) const;
 
     private:
-        // I'd rather use the pixel format enum, but SDL uses an integer
+        // [private] I'd rather use the pixel format enum, but SDL uses an integer
         // in pretty much every API function, so I'll save myself the hassle.
         surface(pixel_point sz, int depth, Uint32 format);
 
-        // Construct a new surface from an existing one's pixel format.
+        // [private] Construct a new surface from an existing one's pixel format.
         // Used for resizing.
         surface(pixel_point sz, const SDL_PixelFormat* fmt);
 

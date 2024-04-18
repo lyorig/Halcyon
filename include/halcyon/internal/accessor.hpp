@@ -45,7 +45,7 @@ namespace hal
         SDL_RWops* get(pass_key<ttf::context>) const;
 
     private:
-        // Delegating constructor.
+        // [private] Delegating constructor.
         accessor(SDL_RWops* ptr);
 
         SDL_RWops* m_ops;

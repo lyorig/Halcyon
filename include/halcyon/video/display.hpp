@@ -19,6 +19,7 @@ namespace hal::video
         using id_t = u8;
         using hz_t = u16;
 
+        // [private] Display info is provided by the display proxy in hal::video::system.
         display(id_t disp_idx, pass_key<system>);
 
         pixel_point size() const;
