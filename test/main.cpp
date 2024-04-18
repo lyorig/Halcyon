@@ -46,7 +46,7 @@ namespace test
         wnd.size(new_size);
         e.poll();
 
-        if (e.event_type() != hal::event::type::window)
+        if (e.event_type() != hal::event::type::window_event)
             return EXIT_FAILURE;
 
         if (e.window().event_type() != hal::event::window::type::resized)
