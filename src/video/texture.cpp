@@ -20,6 +20,20 @@ void hal::detail::texture_base::opacity(color::value_t value)
     HAL_ASSERT_VITAL(::SDL_SetTextureAlphaMod(this->ptr(), value) == 0, debug::last_error());
 }
 
+hal::color::value_t hal::detail::texture_base::alpha_mod() const
+{
+    hal::color::value_t ret;
+
+    ::SDL_GetTextureAlphaMod(ptr(), &ret);
+
+    return ret;
+}
+
+void hal::detail::texture_base::alpha_mod(hal::color::value_t val)
+{
+    ::SDL_SetTextureAlphaMod(ptr(), val);
+}
+
 hal::color hal::detail::texture_base::color_mod() const
 {
     color c;

@@ -26,6 +26,9 @@ namespace hal
             color::value_t opacity() const;
             void           opacity(color::value_t value);
 
+            color::value_t alpha_mod() const;
+            void           alpha_mod(color::value_t val);
+
             color color_mod() const;
             void  color_mod(color mod);
 
