@@ -87,9 +87,10 @@ namespace hal
         // in pretty much every API function, so I'll save myself the hassle.
         surface(pixel_point sz, int depth, Uint32 format);
 
-        // [private] Construct a new surface from an existing one's pixel format.
-        // Used for resizing.
-        surface(pixel_point sz, const SDL_PixelFormat* fmt);
+        // [private] Construct a new surface from a pointer.
+        surface(SDL_Surface* ptr);
+
+        surface convert() const;
 
         // Convert a color to a mapped value using this surface's pixel format.
         std::uint32_t mapped(color c) const;

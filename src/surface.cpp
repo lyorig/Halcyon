@@ -34,21 +34,25 @@ surface::surface(pixel_point sz)
 }
 
 surface::surface(SDL_Surface* ptr, pass_key<image::context>)
-    : object { ptr }
+    : surface { ptr }
 {
 }
 
 surface::surface(SDL_Surface* ptr, pass_key<ttf::font>)
-    : object { ptr }
+    : surface { ptr }
 {
 }
 
 surface surface::resize(pixel_point sz)
 {
-    surface    ret { sz, ptr()->format };
+    surface    ret { sz };
     blend_lock bl { *this, blend_mode::none };
 
-    this->blit(ret).to(tag::fill)();
+    if (ptr()->format->format == default_format)
+        blit(ret).to(tag::fill)();
+
+    else
+        convert().blit(ret).to(tag::fill)();
 
     return ret;
 }
@@ -109,13 +113,18 @@ blitter surface::blit(surface& dst) const
 }
 
 surface::surface(pixel_point sz, int depth, Uint32 fmt)
-    : object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, depth, fmt) }
+    : surface { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, depth, fmt) }
 {
 }
 
-surface::surface(pixel_point sz, const SDL_PixelFormat* fmt)
-    : surface { sz, fmt->BitsPerPixel * 4, fmt->format }
+surface::surface(SDL_Surface* ptr)
+    : object { ptr }
 {
+}
+
+surface surface::convert() const
+{
+    return ::SDL_ConvertSurfaceFormat(ptr(), default_format, 0);
 }
 
 std::uint32_t surface::mapped(color c) const
