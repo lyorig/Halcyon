@@ -74,3 +74,12 @@ bool window::fullscreen() const
 {
     return static_cast<bool>(::SDL_GetWindowFlags(ptr()) & (std::to_underlying(flags::fullscreen) | std::to_underlying(flags::fullscreen_borderless)));
 }
+
+void window::fullscreen(bool set)
+{
+    HAL_ASSERT_VITAL(::SDL_SetWindowFullscreen(
+                         ptr(),
+                         set ? std::to_underlying(flags::fullscreen_borderless) : 0)
+            == 0,
+        debug::last_error());
+}

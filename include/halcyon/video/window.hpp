@@ -50,5 +50,6 @@ namespace hal::video
         // Returns true if the window is fullscreen.
         // Fullscreen borderless mode is also considered as such.
         bool fullscreen() const;
+        void fullscreen(bool set);
     };
 }
