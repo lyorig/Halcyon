@@ -95,7 +95,7 @@ namespace hal
                     event::mouse_wheel  wheel;
                 } data;
 
-                std::byte padding[sizeof(SDL_Event) - sizeof(data)];
+                std::byte padding[sizeof(SDL_Event) - sizeof(data)] {};
             } m_event;
 
             static_assert(sizeof(m_event) == sizeof(SDL_Event));

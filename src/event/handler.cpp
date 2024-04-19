@@ -4,7 +4,7 @@
 using namespace hal;
 
 event::handler::handler(authority&)
-    : m_event { std::numeric_limits<std::uint32_t>::max() } // Start with an invalid event.
+    : m_event { { std::numeric_limits<std::uint32_t>::max() } } // Start with an invalid event.
 {
     // Disable unused events.
     for (SDL_EventType type : {
