@@ -191,3 +191,36 @@ namespace test
         return EXIT_SUCCESS;
     }
 }
+
+int main(int argc, char* argv[])
+{
+    constexpr std::pair<std::string_view, hal::func_ptr<int>> tests[] {
+        { "--assert-fail", test::assert_fail },
+        { "--window-resize", test::window_resize },
+        { "--basic-init", test::basic_init },
+        { "--invalid-buffer", test::invalid_buffer },
+        { "--clipboard", test::clipboard },
+        { "--surface-color", test::surface_color },
+        { "--invalid-textire", test::invalid_texture },
+        { "--quit-event", test::quit_event },
+        { "--ttf-init", test::ttf_init },
+        { "--rvalues", test::rvalues }
+    };
+
+    if (argc == 1)
+    {
+        std::cout << "No test type given.\n";
+        return EXIT_FAILURE;
+    }
+
+    const auto iter = std::find_if(std::begin(tests), std::end(tests), [&](const auto& pair)
+        { return pair.first == argv[1]; });
+
+    if (iter == std::end(tests))
+    {
+        std::cout << "Invalid option specified: " << argv[1] << '\n';
+        return EXIT_FAILURE;
+    }
+
+    return iter->second();
+}
