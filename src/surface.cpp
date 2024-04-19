@@ -172,12 +172,24 @@ void pixel_reference::set(std::uint32_t mapped)
 
 void blitter::operator()()
 {
-    HAL_ASSERT_VITAL(::SDL_BlitScaled(m_this.ptr(), reinterpret_cast<const SDL_Rect*>(m_src.addr()), m_pass.ptr(), reinterpret_cast<SDL_Rect*>(m_dst.addr())) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_BlitScaled(
+                         m_pass.ptr(),
+                         m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_this.ptr(),
+                         m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<SDL_Rect*>(m_dst.addr()))
+            == 0,
+        debug::last_error());
 }
 
 void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
 {
     sdl::pixel_rect copy { m_dst };
 
-    HAL_ASSERT_VITAL(::SDL_BlitScaled(m_this.ptr(), reinterpret_cast<const SDL_Rect*>(m_src.addr()), m_pass.ptr(), reinterpret_cast<SDL_Rect*>(copy.addr())) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_BlitScaled(
+                         m_pass.ptr(),
+                         reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_this.ptr(),
+                         reinterpret_cast<SDL_Rect*>(copy.addr()))
+            == 0,
+        debug::last_error());
 }
