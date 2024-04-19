@@ -12,6 +12,20 @@ window::window(authority&, std::string_view name, pixel_point size, std::initial
     HAL_PRINT(debug::severity::init, "Created window \"", title(), "\", flags = 0x", std::hex, detail::to_bitmask<std::uint32_t>(flags), ", ID = ", to_printable_int(id()));
 }
 
+hal::pixel_point window::pos() const
+{
+    point<int> ret;
+
+    ::SDL_GetWindowPosition(ptr(), &ret.x, &ret.y);
+
+    return ret;
+}
+
+void window::pos(hal::pixel_point ps)
+{
+    ::SDL_SetWindowPosition(ptr(), ps.x, ps.y);
+}
+
 hal::pixel_point window::size() const
 {
     point<int> size;
