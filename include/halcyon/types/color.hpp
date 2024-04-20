@@ -15,13 +15,20 @@ namespace hal
         // A hex value in the form of 0xNNNNNN.
         using hex_t = u32;
 
+        // A difference between two colors.
+        using diff_t = i16;
+
         // A single R, G, B or A value.
         using value_t = std::uint8_t;
 
-        enum limits
+        struct diff
         {
-            min = SDL_ALPHA_TRANSPARENT,
-            max = SDL_ALPHA_OPAQUE
+            diff_t r, g, b;
+
+            constexpr friend diff operator*(diff d, f64 mul)
+            {
+                return { static_cast<diff_t>(d.r * mul), static_cast<diff_t>(d.g * mul), static_cast<diff_t>(d.b * mul) };
+            }
         };
 
         constexpr color()
@@ -48,9 +55,39 @@ namespace hal
             return static_cast<SDL_Color>(*this);
         }
 
-        constexpr bool operator==(const color& other) const
+        constexpr friend bool operator==(color a, color b)
         {
-            return r == other.r && g == other.g && b == other.b && a == other.a;
+            return a.r == b.r && a.g == b.g && a.g == b.g && a.a == b.a;
+        }
+
+        constexpr friend diff operator-(color a, color b)
+        {
+            return { static_cast<diff_t>(a.r - b.r), static_cast<diff_t>(a.g - b.g), static_cast<diff_t>(a.b - b.b) };
+        }
+
+        constexpr friend diff operator+(color a, color b)
+        {
+            return { static_cast<diff_t>(a.r + b.r), static_cast<diff_t>(a.g + b.g), static_cast<diff_t>(a.b + b.b) };
+        }
+
+        constexpr friend color operator+(color a, diff b)
+        {
+            return {
+                static_cast<value_t>(a.r + b.r),
+                static_cast<value_t>(a.g + b.g),
+                static_cast<value_t>(a.b + b.b),
+                a.a
+            };
+        }
+
+        constexpr friend color operator-(color a, diff b)
+        {
+            return {
+                static_cast<value_t>(a.r - b.r),
+                static_cast<value_t>(a.g - b.g),
+                static_cast<value_t>(a.b - b.b),
+                a.a
+            };
         }
     };
 
