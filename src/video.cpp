@@ -1,5 +1,7 @@
 #include <halcyon/video.hpp>
 
+#include <string>
+
 #include <halcyon/internal/helpers.hpp>
 
 using namespace hal::video;

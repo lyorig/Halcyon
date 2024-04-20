@@ -1,5 +1,6 @@
 #include <halcyon/surface.hpp>
 
+#include <climits>
 #include <cstring>
 
 #include <SDL_image.h>
