@@ -36,8 +36,6 @@ namespace hal
         accessor(const accessor&) = delete;
         accessor(accessor&&)      = default;
 
-        accessor(std::nullptr_t) = delete;
-
         accessor(std::string_view path);
         accessor(std::span<const std::byte> data);
 
