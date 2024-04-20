@@ -6,13 +6,9 @@
 
 using namespace hal::video;
 
-system::system(context& auth)
-    : subinit { auth }
-    , events { auth }
-{
-}
+using sub = hal::detail::subsystem<hal::detail::system::video>;
 
-std::string system::clipboard_proxy::operator()() const
+std::string sub::clipboard_proxy::operator()() const
 {
     const auto text = ::SDL_GetClipboardText();
 
@@ -21,17 +17,17 @@ std::string system::clipboard_proxy::operator()() const
     return text;
 };
 
-void system::clipboard_proxy::operator()(std::string_view text)
+void sub::clipboard_proxy::operator()(std::string_view text)
 {
     HAL_ASSERT_VITAL(::SDL_SetClipboardText(text.data()) == 0, debug::last_error());
 }
 
-bool system::clipboard_proxy::has_text() const
+bool sub::clipboard_proxy::has_text() const
 {
     return ::SDL_HasClipboardText() == SDL_TRUE;
 }
 
-display::id_t system::display_proxy::size() const
+display::id_t sub::display_proxy::size() const
 {
     const auto ret = ::SDL_GetNumVideoDisplays();
 
@@ -40,7 +36,7 @@ display::id_t system::display_proxy::size() const
     return static_cast<display::id_t>(ret);
 }
 
-display system::display_proxy::operator[](display::id_t idx) const
+display sub::display_proxy::operator[](display::id_t idx) const
 {
     return { idx, {} };
 }

@@ -102,7 +102,6 @@ namespace hal
         public:
             hal::video::window::id_t window_id() const;
 
-            mouse::state  state() const;
             mouse::button button() const;
             u8            click_amount() const;
             pixel_point   pos() const;

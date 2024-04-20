@@ -13,7 +13,7 @@ keyboard::button keyboard::to_button(key k)
     return static_cast<keyboard::button>(::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k)));
 }
 
-keyboard::state_reference::state_reference()
+keyboard::state_reference::state_reference(pass_key<authority>)
     : m_arr { ::SDL_GetKeyboardState(nullptr) }
 {
 }

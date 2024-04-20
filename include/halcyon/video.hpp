@@ -13,41 +13,53 @@
 
 #include <halcyon/internal/subsystem.hpp>
 
-namespace hal::video
+namespace hal
 {
-    class system : public hal::detail::subinit<hal::detail::system::video>
+    namespace detail
     {
-        class clipboard_proxy
+        template <>
+        class subsystem<system::video>
+        {
+            class clipboard_proxy
+            {
+            public:
+                // Get current clipboard text.
+                // This has to be freed, so a std::string is provided instead.
+                std::string operator()() const;
+
+                // Set clipboard text.
+                void operator()(std::string_view text);
+
+                bool has_text() const;
+            };
+
+            class display_proxy
+            {
+            public:
+                video::display::id_t size() const;
+
+                video::display operator[](video::display::id_t idx) const;
+            };
+
+            using event_proxy = hal::detail::subsystem<hal::detail::system::events>;
+
+        public:
+            subsystem() = default;
+
+            HAL_NO_SIZE event_proxy events;
+
+            HAL_NO_SIZE clipboard_proxy clipboard;
+            HAL_NO_SIZE display_proxy   displays;
+        };
+    }
+    namespace video
+    {
+        class system : public hal::detail::subinit<hal::detail::system::video>
         {
         public:
-            // Get current clipboard text.
-            // This has to be freed, so a std::string is provided instead.
-            std::string operator()() const;
-
-            // Set clipboard text.
-            void operator()(std::string_view text);
-
-            bool has_text() const;
+            using subinit::subinit;
         };
 
-        class display_proxy
-        {
-        public:
-            display::id_t size() const;
-
-            display operator[](display::id_t idx) const;
-        };
-
-        using event_proxy = hal::detail::subsystem<hal::detail::system::events>;
-
-    public:
-        explicit system(context& auth);
-
-        HAL_NO_SIZE event_proxy events;
-
-        HAL_NO_SIZE clipboard_proxy clipboard;
-        HAL_NO_SIZE display_proxy   displays;
-    };
-
-    static_assert(std::is_empty_v<system>);
+        static_assert(std::is_empty_v<system>);
+    }
 }

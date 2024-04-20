@@ -26,7 +26,7 @@ video/texture.cpp
 video/window.cpp
 context.cpp
 debug.cpp
-image.cpp
+event.cpp
 surface.cpp
 ttf.cpp
 video.cpp

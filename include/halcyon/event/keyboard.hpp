@@ -9,6 +9,8 @@
 
 #include <halcyon/types/render.hpp>
 
+#include <halcyon/internal/subsystem.hpp>
+
 // keyboard.hpp:
 // Keyboard enumerations and access.
 
@@ -161,7 +163,9 @@ namespace hal
         class state_reference
         {
         public:
-            state_reference();
+            using authority = hal::detail::subsystem<hal::detail::system::events>;
+
+            state_reference(pass_key<authority>);
 
             bool operator[](button btn) const;
             bool operator[](key k) const;

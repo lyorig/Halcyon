@@ -75,7 +75,7 @@ window_id mouse_motion::window_id() const
 
 hal::mouse::state mouse_motion::state() const
 {
-    return { SDL_MouseMotionEvent::state, pass_key<mouse_motion> {} };
+    return { static_cast<std::uint8_t>(SDL_MouseMotionEvent::state), pass_key<mouse_motion> {} };
 }
 
 hal::pixel_point mouse_motion::pos() const
@@ -93,11 +93,6 @@ hal::pixel_point mouse_motion::rel() const
 window_id mouse_button::window_id() const
 {
     return static_cast<::window_id>(windowID);
-}
-
-hal::mouse::state mouse_button::state() const
-{
-    return { SDL_MouseButtonEvent::state, pass_key<mouse_button> {} };
 }
 
 hal::mouse::button mouse_button::button() const
