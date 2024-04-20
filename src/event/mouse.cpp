@@ -1,5 +1,8 @@
 #include <halcyon/event/mouse.hpp>
+
 #include <utility>
+
+#include <halcyon/debug.hpp>
 
 using namespace hal;
 
@@ -32,7 +35,7 @@ pixel_point mouse::pos_rel()
 {
     hal::point<int> ret;
 
-    ::SDL_GetMouseState(&ret.x, &ret.y);
+    static_cast<void>(::SDL_GetMouseState(&ret.x, &ret.y));
 
     return ret;
 }
@@ -41,7 +44,7 @@ pixel_point mouse::pos_abs()
 {
     hal::point<int> ret;
 
-    ::SDL_GetGlobalMouseState(&ret.x, &ret.y);
+    static_cast<void>(::SDL_GetGlobalMouseState(&ret.x, &ret.y) != std::numeric_limits<std::uint32_t>::max());
 
     return ret;
 }
