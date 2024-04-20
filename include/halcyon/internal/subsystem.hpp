@@ -40,17 +40,10 @@ namespace hal
         class subsystem
         {
         public:
-            explicit subsystem([[maybe_unused]] context& ctx)
-            {
-            }
+            subsystem() = default;
 
             subsystem(const subsystem&) = delete;
             subsystem(subsystem&&)      = delete;
-
-            static bool initialized()
-            {
-                return ::SDL_WasInit(static_cast<std::uint32_t>(S)) == static_cast<std::uint32_t>(S);
-            }
         };
 
         // A subsystem that initializes itself.
@@ -58,8 +51,7 @@ namespace hal
         class subinit : public subsystem<S>
         {
         public:
-            explicit subinit(context& ctx)
-                : subsystem<S> { ctx }
+            explicit subinit(context&)
             {
                 HAL_WARN_IF(initialized(), to_string(S), " subsystem is already initialized");
                 HAL_ASSERT_VITAL(::SDL_InitSubSystem(static_cast<std::uint32_t>(S)) == 0, debug::last_error());

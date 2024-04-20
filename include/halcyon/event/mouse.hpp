@@ -7,7 +7,9 @@
 #include <halcyon/types/render.hpp>
 #include <halcyon/utility/pass_key.hpp>
 
-// mouse.hpp:
+#include <halcyon/internal/subsystem.hpp>
+
+// event/mouse.hpp:
 // Mouse button access and data.
 
 namespace hal
@@ -35,24 +37,19 @@ namespace hal
         class state
         {
         public:
+            using authority = hal::detail::subsystem<hal::detail::system::events>;
+
             // Default constructor that captures the mouse state at the time of construction.
-            state();
+            state(pass_key<authority>);
 
             // Private constructors meant for events.
             state(std::uint32_t mask, pass_key<event::mouse_motion>);
-            state(std::uint32_t mask, pass_key<event::mouse_button>);
 
             bool operator[](button btn) const;
 
         private:
-            // Delegated to by pass-key constructors.
-            state(std::uint32_t mask);
-
             u8 m_state;
         };
-
-        coord_point pos_rel();
-        coord_point pos_abs();
     }
 
     constexpr std::string_view to_string(mouse::button btn)

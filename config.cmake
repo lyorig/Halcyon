@@ -24,6 +24,7 @@ video/texture.cpp
 video/window.cpp
 context.cpp
 debug.cpp
+event.cpp
 surface.cpp
 video.cpp
 )

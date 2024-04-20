@@ -9,9 +9,9 @@
 #include <halcyon/utility/pass_key.hpp>
 
 // internal/accessor.hpp:
-// A wrapper of SDL_RWops that enables stuff to be loaded from not only
+// A wrapper of SDL_IOStream that enables stuff to be loaded from not only
 // files, but also "baked-in" data residing in memory. A destructor is not
-// provided, because RW functions close it automatically.
+// provided, because IO functions close it automatically.
 // This has actually proved to be quite the challenge, since I also want to
 // disallow the user from creating this class outside of its intended places.
 
