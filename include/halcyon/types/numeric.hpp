@@ -17,10 +17,10 @@
         } inline constexpr name; \
     }
 
-// types.hpp:
+// types/numeric.hpp:
 // Various type aliases and related stuff. These are not guaranteed to be
 // as large as the types they represent due to the fast type switch, so if
-// you want to be certain about bit width, use the cstdint types instead.
+// you want to be certain about bit width, use the <cstdint> types instead.
 
 namespace hal
 {

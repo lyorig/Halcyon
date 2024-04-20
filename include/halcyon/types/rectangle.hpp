@@ -2,6 +2,9 @@
 
 #include <halcyon/types/point.hpp>
 
+// rectangle.hpp:
+// A rectangle in 2D space. Composed of two points.
+
 namespace hal
 {
     template <arithmetic T>
