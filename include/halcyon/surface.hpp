@@ -54,12 +54,6 @@ namespace hal
         // Create a sized surface.
         surface(pixel_point sz);
 
-        // [private] Images are loaded with image::context::load().
-        surface(SDL_Surface* ptr, pass_key<image::context>);
-
-        // [private] Text is rendered with ttf::font::render().
-        surface(SDL_Surface* ptr, pass_key<ttf::font>);
-
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
         surface resize(pixel_point sz);

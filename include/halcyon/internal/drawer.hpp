@@ -16,18 +16,17 @@ namespace hal::detail
     // a) constant textures, and
     // b) those who know what they're doing. I'm sure you do, though.
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
-    template <typename T, one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename Pass, typename This>
+    template <typename T, one_of<sdl::pixel_t, sdl::coord_t> Render_type, typename Pass, typename This>
     class drawer
     {
     protected:
-        using src_t = sdl::pixel_t;
-        using dst_t = Dst_type;
+        using render_t = Render_type;
 
-        using src_point = point<src_t>;
-        using src_rect  = rectangle<src_t>;
+        using src_point = point<render_t>;
+        using src_rect  = rectangle<render_t>;
 
-        using dst_point = point<dst_t>;
-        using dst_rect  = rectangle<dst_t>;
+        using dst_point = point<render_t>;
+        using dst_rect  = rectangle<render_t>;
 
         using this_ref = std::conditional_t<std::is_void_v<This>, drawer, This>&;
 
@@ -37,7 +36,7 @@ namespace hal::detail
             , m_this { src }
             , m_dst { tag::as_size, src.size() }
         {
-            m_src.pos.x = unset_pos<src_t>;
+            m_src.pos.x = unset_pos<render_t>;
         }
 
         // Set where to draw.
@@ -60,7 +59,7 @@ namespace hal::detail
         // Do not use with scaling and anchoring.
         [[nodiscard]] this_ref to(HAL_TAG_NAME(fill))
         {
-            m_dst.pos.x = unset_pos<dst_t>;
+            m_dst.pos.x = unset_pos<render_t>;
             return get_this();
         }
 
@@ -77,7 +76,7 @@ namespace hal::detail
         // Call after setting the destination and before anchoring.
         [[nodiscard]] this_ref scale(f64 mul)
         {
-            if (m_dst.pos.x != unset_pos<dst_t>)
+            if (m_dst.pos.x != unset_pos<render_t>)
                 m_dst.size *= mul;
             return get_this();
         }
@@ -86,7 +85,7 @@ namespace hal::detail
         // Call after setting the destination and scaling.
         [[nodiscard]] this_ref anchor(anchor anch)
         {
-            if (m_dst.pos.x != unset_pos<dst_t>)
+            if (m_dst.pos.x != unset_pos<render_t>)
                 m_dst.pos = m_dst.pos.anchor(anch, m_dst.size);
             return get_this();
         }

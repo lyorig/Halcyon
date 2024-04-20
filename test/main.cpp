@@ -22,9 +22,6 @@ namespace test
 
         hal::accessor a = hal::access("amogus");
 
-        hal::image::context c {};
-        hal::surface        s { c.load(std::move(a)) };
-
         return EXIT_SUCCESS;
     }
 
@@ -44,18 +41,15 @@ namespace test
             ;
 
         wnd.size(new_size);
-        e.poll();
+        wnd.sync();
 
-        if (e.event_type() != hal::event::type::window_event)
-            return EXIT_FAILURE;
+        while (e.poll())
+        {
+            if (e.event_type() == hal::event::type::window_resized)
+                return EXIT_SUCCESS;
+        }
 
-        if (e.window().event_type() != hal::event::window::type::resized)
-            return EXIT_FAILURE;
-
-        if (e.window().new_point() != new_size)
-            return EXIT_FAILURE;
-
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
     }
 
     // Basic Halcyon initialization.
@@ -70,26 +64,12 @@ namespace test
         HAL_ASSERT(hal::video::system::initialized(), "Video should report initialization by now");
 
         hal::video::window   wnd { vid, "HalTest: Basic init", { 640, 480 }, { hal::video::window::flags::hidden } };
-        hal::video::renderer rnd { wnd, { hal::video::renderer::flags::accelerated } };
+        hal::video::renderer rnd { wnd, { hal::video::renderer::flags::vsync } };
 
         hal::event::handler e { vid.events };
         e.poll();
 
         rnd.present();
-
-        return EXIT_SUCCESS;
-    }
-
-    // Passing a zeroed-out buffer to a function expecting valid image data.
-    // This test should fail.
-    int invalid_buffer()
-    {
-        constexpr std::uint8_t data[1024] {};
-
-        hal::image::context ictx { hal::image::format::png };
-
-        // Failure should occur here.
-        const hal::surface s { ictx.load(hal::access(data)) };
 
         return EXIT_SUCCESS;
     }
@@ -131,9 +111,9 @@ namespace test
     // Checking pixel colors in a 2x1 surface.
     int surface_color()
     {
-        hal::image::context ictx { hal::image::format::png };
-
-        hal::surface s { ictx.load(hal::access(two_by_one)) };
+        hal::surface s { { 2, 1 } };
+        s[{ 0, 0 }] = hal::palette::red;
+        s[{ 1, 0 }] = hal::palette::blue;
 
         if (s[{ 0, 0 }] != hal::palette::red || s[{ 1, 0 }] != hal::palette::blue)
             return EXIT_FAILURE;
@@ -150,7 +130,7 @@ namespace test
         hal::event::handler eh { evt };
 
         SDL_Event e;
-        e.type = SDL_QUIT;
+        e.type = SDL_EVENT_QUIT;
 
         ::SDL_PushEvent(&e);
 
@@ -171,17 +151,6 @@ namespace test
         return EXIT_SUCCESS;
     }
 
-    // Basic TTF initialization.
-    int ttf_init()
-    {
-        hal::ttf::context tctx;
-
-        const hal::ttf::font x { tctx.load(hal::access("m5x7.ttf"), 48) };
-        const hal::surface   surf { x.render("I hate you for what you did - and I miss you like a little kid") };
-
-        return EXIT_SUCCESS;
-    }
-
     int rvalues()
     {
         hal::context c;
@@ -198,12 +167,10 @@ int main(int argc, char* argv[])
         { "--assert-fail", test::assert_fail },
         { "--window-resize", test::window_resize },
         { "--basic-init", test::basic_init },
-        { "--invalid-buffer", test::invalid_buffer },
         { "--clipboard", test::clipboard },
         { "--surface-color", test::surface_color },
         { "--invalid-textire", test::invalid_texture },
         { "--quit-event", test::quit_event },
-        { "--ttf-init", test::ttf_init },
         { "--rvalues", test::rvalues }
     };
 

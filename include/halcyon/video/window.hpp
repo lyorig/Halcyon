@@ -15,8 +15,8 @@ namespace hal::video
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {
     public:
-        using id_t      = u8;
-        using authority = hal::detail::subsystem<hal::detail::system::video>;
+        using id_t      = detail::cft<u8, SDL_WindowID>;
+        using authority = detail::subsystem<hal::detail::system::video>;
 
         enum class flags : u16
         {
@@ -29,6 +29,8 @@ namespace hal::video
         };
 
         window(authority&, std::string_view name, pixel_point size, std::initializer_list<flags> flags = {});
+
+        void sync();
 
         pixel_point pos() const;
         void        pos(pixel_point ps);

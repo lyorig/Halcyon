@@ -31,16 +31,6 @@ surface::surface(pixel_point sz)
 {
 }
 
-surface::surface(SDL_Surface* ptr, pass_key<image::context>)
-    : surface { ptr }
-{
-}
-
-surface::surface(SDL_Surface* ptr, pass_key<ttf::font>)
-    : surface { ptr }
-{
-}
-
 surface surface::resize(pixel_point sz)
 {
     surface    ret { sz };
@@ -176,9 +166,9 @@ void blitter::operator()()
 {
     HAL_ASSERT_VITAL(::SDL_BlitSurfaceScaled(
                          m_pass.ptr(),
-                         m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_src.pos.x == detail::unset_pos<render_t> ? nullptr : m_src.addr(),
                          m_this.ptr(),
-                         m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<SDL_Rect*>(m_dst.addr()),
+                         m_dst.pos.x == detail::unset_pos<render_t> ? nullptr : m_dst.addr(),
                          default_scale_mode)
             == 0,
         debug::last_error());
@@ -190,9 +180,9 @@ void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
 
     HAL_ASSERT_VITAL(::SDL_BlitSurfaceScaled(
                          m_pass.ptr(),
-                         reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_src.addr(),
                          m_this.ptr(),
-                         reinterpret_cast<SDL_Rect*>(copy.addr()),
+                         copy.addr(),
                          default_scale_mode)
             == 0,
         debug::last_error());

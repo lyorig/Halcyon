@@ -33,9 +33,13 @@ bool system::clipboard_proxy::has_text() const
 
 display::id_t system::display_proxy::size() const
 {
-    const auto ret = ::SDL_GetNumVideoDisplays();
+    int ret;
 
-    HAL_ASSERT(ret >= 1, debug::last_error());
+    const auto ptr = ::SDL_GetDisplays(&ret);
+
+    HAL_ASSERT(ptr != nullptr, debug::last_error());
+
+    ::SDL_free(ptr);
 
     return static_cast<display::id_t>(ret);
 }

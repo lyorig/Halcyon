@@ -38,14 +38,14 @@ namespace hal
     namespace detail
     {
         template <typename Normal_type, typename Fast_type>
-        using CFT = std::conditional_t<fast_types, Fast_type, Normal_type>; // Conditional Fast Type.
+        using cft = std::conditional_t<fast_types, Fast_type, Normal_type>; // Conditional Fast Type.
     }
 
     // Integral types.
-    using i8  = detail::CFT<std::int8_t, std::int_fast8_t>;
-    using i16 = detail::CFT<std::int16_t, std::int_fast16_t>;
-    using i32 = detail::CFT<std::int32_t, std::int_fast32_t>;
-    using i64 = detail::CFT<std::int64_t, std::int_fast64_t>;
+    using i8  = detail::cft<std::int8_t, std::int_fast8_t>;
+    using i16 = detail::cft<std::int16_t, std::int_fast16_t>;
+    using i32 = detail::cft<std::int32_t, std::int_fast32_t>;
+    using i64 = detail::cft<std::int64_t, std::int_fast64_t>;
 
     using u8  = std::make_unsigned_t<i8>;
     using u16 = std::make_unsigned_t<i16>;
@@ -53,8 +53,8 @@ namespace hal
     using u64 = std::make_unsigned_t<i64>;
 
     // Floating-point types.
-    using f32 = detail::CFT<float, std::float_t>;
-    using f64 = detail::CFT<double, std::double_t>;
+    using f32 = detail::cft<float, std::float_t>;
+    using f64 = detail::cft<double, std::double_t>;
 
     template <typename Return_type, typename... Args>
     using func_ptr = Return_type (*)(Args...);

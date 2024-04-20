@@ -9,14 +9,6 @@
 
 namespace hal::sdl
 {
-    constexpr bool integral_coord {
-#ifdef HAL_INTEGRAL_COORD
-        true
-#else
-        false
-#endif
-    };
-
     using pixel_t = decltype(SDL_Rect::x);
     using coord_t = decltype(SDL_FRect::x);
 

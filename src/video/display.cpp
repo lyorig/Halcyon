@@ -7,36 +7,29 @@
 using namespace hal::video;
 
 display::display(id_t disp_idx, pass_key<system>)
-    : m_index { disp_idx }
+    : m_ptr { ::SDL_GetDesktopDisplayMode(disp_idx) }
 {
-    SDL_DisplayMode dm;
-
-    HAL_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(disp_idx, &dm) == 0, debug::last_error());
-
-    m_size.x = static_cast<pixel_t>(dm.w);
-    m_size.y = static_cast<pixel_t>(dm.h);
-
-    m_hz = static_cast<hz_t>(dm.refresh_rate);
+    HAL_ASSERT_VITAL(m_ptr != nullptr, debug::last_error());
 }
 
 hal::pixel_point display::size() const
 {
-    return m_size;
+    return { static_cast<hal::pixel_t>(m_ptr->w), static_cast<hal::pixel_t>(m_ptr->h) };
 }
 
 display::hz_t display::hz() const
 {
-    return m_hz;
+    return static_cast<display::hz_t>(m_ptr->refresh_rate);
 }
 
 display::id_t display::index() const
 {
-    return m_index;
+    return static_cast<display::id_t>(m_ptr->displayID);
 }
 
 std::string_view display::name() const
 {
-    const char* name { ::SDL_GetDisplayName(m_index) };
+    const char* name { ::SDL_GetDisplayName(index()) };
 
     HAL_ASSERT(name != nullptr, debug::last_error());
 

@@ -1,9 +1,7 @@
 # Halcyon CMake configuration. Include this and you should be good to go.
 
 # Make sure SDL is present on the system.
-find_package(SDL2 REQUIRED CONFIG)
-find_package(SDL2_image REQUIRED CONFIG)
-find_package(SDL2_ttf REQUIRED CONFIG)
+find_package(SDL3 REQUIRED CONFIG)
 
 # Include directores.
 set(HALCYON_INCLUDE_DIRS ${LYOSTL_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR}/include/)
@@ -26,9 +24,7 @@ video/texture.cpp
 video/window.cpp
 context.cpp
 debug.cpp
-image.cpp
 surface.cpp
-ttf.cpp
 video.cpp
 )
 
@@ -37,9 +33,7 @@ list(APPEND HALCYON_SOURCES ${LYOSTL_SOURCES})
 
 # Libraries.
 set(HALCYON_LIBRARIES
-SDL2::SDL2
-SDL2_image::SDL2_image
-SDL2_ttf::SDL2_ttf
+SDL3::SDL3
 )
 
 # Halcyon uses C++23 features.

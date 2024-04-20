@@ -7,9 +7,17 @@
 using namespace hal::video;
 
 window::window(authority&, std::string_view name, pixel_point size, std::initializer_list<flags> flags)
-    : object { ::SDL_CreateWindow(name.data(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
+    : object { ::SDL_CreateWindow(name.data(), size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
 {
     HAL_PRINT(debug::severity::init, "Created window \"", title(), "\", flags = 0x", std::hex, detail::to_bitmask<std::uint32_t>(flags), ", ID = ", to_printable_int(id()));
+}
+
+void window::sync()
+{
+    const auto ret = ::SDL_SyncWindow(ptr());
+
+    HAL_ASSERT(ret >= 0, debug::last_error());
+    HAL_WARN_IF(ret > 0, "Window sync timed out before queued operations completed");
 }
 
 hal::pixel_point window::pos() const
@@ -44,7 +52,7 @@ void window::size(pixel_point sz)
 
 display::id_t window::display_index() const
 {
-    const auto ret = ::SDL_GetWindowDisplayIndex(this->ptr());
+    const auto ret = ::SDL_GetDisplayForWindow(this->ptr());
 
     HAL_ASSERT(ret >= 0, debug::last_error());
 
@@ -72,14 +80,14 @@ window::id_t window::id() const
 
 bool window::fullscreen() const
 {
-    return static_cast<bool>(::SDL_GetWindowFlags(ptr()) & (std::to_underlying(flags::fullscreen) | std::to_underlying(flags::fullscreen_borderless)));
+    return static_cast<bool>(::SDL_GetWindowFlags(ptr()) & std::to_underlying(flags::fullscreen));
 }
 
 void window::fullscreen(bool set)
 {
     HAL_ASSERT_VITAL(::SDL_SetWindowFullscreen(
                          ptr(),
-                         set ? std::to_underlying(flags::fullscreen_borderless) : 0)
+                         static_cast<SDL_bool>(set))
             == 0,
         debug::last_error());
 }

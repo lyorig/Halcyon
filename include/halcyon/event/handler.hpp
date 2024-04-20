@@ -12,7 +12,7 @@ namespace hal
     namespace event
     {
         // Top-level event types.
-        enum class type : u16
+        enum class type : detail::cft<u16, std::underlying_type_t<SDL_EventType>>
         {
             quit_requested = SDL_EVENT_QUIT,
             terminated     = SDL_EVENT_TERMINATING,
@@ -25,6 +25,9 @@ namespace hal
             will_enter_foreground = SDL_EVENT_WILL_ENTER_FOREGROUND,
             entered_foreground    = SDL_EVENT_DID_ENTER_FOREGROUND,
 
+            changed_locale       = SDL_EVENT_LOCALE_CHANGED,
+            system_theme_changed = SDL_EVENT_SYSTEM_THEME_CHANGED,
+
             key_pressed  = SDL_EVENT_KEY_DOWN,
             key_released = SDL_EVENT_KEY_UP,
 
@@ -32,6 +35,45 @@ namespace hal
             mouse_pressed     = SDL_EVENT_MOUSE_BUTTON_DOWN,
             mouse_released    = SDL_EVENT_MOUSE_BUTTON_UP,
             mouse_wheel_moved = SDL_EVENT_MOUSE_WHEEL,
+            mouse_added       = SDL_EVENT_MOUSE_ADDED,
+            mouse_removed     = SDL_EVENT_MOUSE_REMOVED,
+
+            // Display events.
+            display_reoriented            = SDL_EVENT_DISPLAY_ORIENTATION,
+            display_added                 = SDL_EVENT_DISPLAY_ADDED,
+            display_removed               = SDL_EVENT_DISPLAY_REMOVED,
+            display_moved                 = SDL_EVENT_DISPLAY_MOVED,
+            display_content_scale_changed = SDL_EVENT_DISPLAY_CONTENT_SCALE_CHANGED,
+            display_hdr_state_changed     = SDL_EVENT_DISPLAY_HDR_STATE_CHANGED,
+
+            // Window events.
+            window_shown                 = SDL_EVENT_WINDOW_SHOWN,
+            window_hidden                = SDL_EVENT_WINDOW_HIDDEN,
+            window_exposed               = SDL_EVENT_WINDOW_EXPOSED,
+            window_moved                 = SDL_EVENT_WINDOW_MOVED,
+            window_resized               = SDL_EVENT_WINDOW_RESIZED,
+            window_changed_pixel_size    = SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED,
+            window_minimized             = SDL_EVENT_WINDOW_MINIMIZED,
+            window_maximized             = SDL_EVENT_WINDOW_MAXIMIZED,
+            window_restored              = SDL_EVENT_WINDOW_RESTORED,
+            window_mouse_entered         = SDL_EVENT_WINDOW_MOUSE_ENTER,
+            window_mouse_left            = SDL_EVENT_WINDOW_MOUSE_LEAVE,
+            window_focus_gained          = SDL_EVENT_WINDOW_FOCUS_GAINED,
+            window_focus_lost            = SDL_EVENT_WINDOW_FOCUS_LOST,
+            window_close_requested       = SDL_EVENT_WINDOW_CLOSE_REQUESTED,
+            window_focus_offered         = SDL_EVENT_WINDOW_TAKE_FOCUS,
+            window_hit_test              = SDL_EVENT_WINDOW_HIT_TEST,
+            window_changed_icc_profile   = SDL_EVENT_WINDOW_ICCPROF_CHANGED,
+            window_changed_display       = SDL_EVENT_WINDOW_DISPLAY_CHANGED,
+            window_changed_display_scale = SDL_EVENT_WINDOW_DISPLAY_SCALE_CHANGED,
+            window_occluded              = SDL_EVENT_WINDOW_OCCLUDED,
+            window_fullscreen_entered    = SDL_EVENT_WINDOW_ENTER_FULLSCREEN,
+            window_fullscreen_left       = SDL_EVENT_WINDOW_LEAVE_FULLSCREEN,
+            window_destroyed             = SDL_EVENT_WINDOW_DESTROYED,
+
+            audio_device_added          = SDL_EVENT_AUDIO_DEVICE_ADDED,
+            audio_device_removed        = SDL_EVENT_AUDIO_DEVICE_REMOVED,
+            audio_device_format_changed = SDL_EVENT_AUDIO_DEVICE_FORMAT_CHANGED,
 
             clipboard_updated = SDL_EVENT_CLIPBOARD_UPDATE
         };
@@ -96,6 +138,9 @@ namespace hal
             } m_event;
 
             static_assert(sizeof(m_event) == sizeof(SDL_Event));
+
+            bool is_window_event() const;
+            bool is_display_event() const;
         };
     }
 

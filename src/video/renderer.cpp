@@ -101,7 +101,7 @@ hal::pixel_point renderer::size() const
 
 void renderer::size(const pixel_point& sz)
 {
-    HAL_ASSERT_VITAL(::SDL_RenderSetLogicalPresentation(this->ptr(), sz.x, sz.y) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_SetRenderLogicalPresentation(this->ptr(), sz.x, sz.y, SDL_LOGICAL_PRESENTATION_LETTERBOX, SDL_SCALEMODE_NEAREST) == 0, debug::last_error());
 }
 
 void renderer::target(target_texture& tx)
@@ -182,24 +182,10 @@ copyer& copyer::flip(enum flip f)
 
 void copyer::operator()()
 {
-    if constexpr (sdl::integral_coord)
-    {
-        HAL_ASSERT_VITAL(::SDL_RenderTextureRotated(m_pass.ptr(), m_this.ptr(),
-                             m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
-                             m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_dst.addr()),
-                             m_angle,
-                             nullptr, static_cast<SDL_FlipMode>(m_flip))
-                == 0,
-            debug::last_error());
-    }
-
-    else
-    {
-        HAL_ASSERT_VITAL(::SDL_RenderTextureRotated(m_pass.ptr(), m_this.ptr(),
-                             m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
-                             m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<const SDL_FRect*>(m_dst.addr()),
-                             m_angle, nullptr, static_cast<SDL_FlipMode>(m_flip))
-                == 0,
-            debug::last_error());
-    }
+    HAL_ASSERT_VITAL(::SDL_RenderTextureRotated(m_pass.ptr(), m_this.ptr(),
+                         m_src.pos.x == detail::unset_pos<render_t> ? nullptr : m_src.addr(),
+                         m_dst.pos.x == detail::unset_pos<render_t> ? nullptr : m_dst.addr(),
+                         m_angle, nullptr, static_cast<SDL_FlipMode>(m_flip))
+            == 0,
+        debug::last_error());
 }

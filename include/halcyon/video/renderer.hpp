@@ -80,7 +80,7 @@ namespace hal
                 renderer& m_rnd;
             };
 
-            renderer(window& wnd, std::initializer_list<flags> flags);
+            renderer(window& wnd, std::initializer_list<flags> flags = {});
 
             // Present the back-buffer and clear it.
             void present();

@@ -1,6 +1,8 @@
 #include <halcyon/debug.hpp>
 #include <halcyon/event/handler.hpp>
 
+#include <utility>
+
 using namespace hal;
 
 event::handler::handler(authority&)
@@ -25,13 +27,13 @@ bool event::handler::pending()
 
 const event::display& event::handler::display() const
 {
-    HAL_ASSERT(event_type() == event::type::display_event, "Invalid type");
+    HAL_ASSERT(is_display_event(), "Invalid type");
     return m_event.data.display;
 }
 
 const event::window& event::handler::window() const
 {
-    HAL_ASSERT(event_type() == event::type::window_event, "Invalid type");
+    HAL_ASSERT(is_window_event(), "Invalid type");
     return m_event.data.window;
 }
 
@@ -57,6 +59,20 @@ const event::mouse_wheel& event::handler::mouse_wheel() const
 {
     HAL_ASSERT(event_type() == event::type::mouse_wheel_moved, "Invalid type");
     return m_event.data.wheel;
+}
+
+bool event::handler::is_window_event() const
+{
+    const auto val = std::to_underlying(event_type());
+
+    return val >= SDL_EVENT_WINDOW_FIRST && val <= SDL_EVENT_WINDOW_LAST;
+}
+
+bool event::handler::is_display_event() const
+{
+    const auto val = std::to_underlying(event_type());
+
+    return val >= SDL_EVENT_DISPLAY_FIRST && val <= SDL_EVENT_DISPLAY_LAST;
 }
 
 std::string_view hal::to_string(event::type evt)
@@ -86,11 +102,62 @@ std::string_view hal::to_string(event::type evt)
     case entered_foreground:
         return "Will enter foreground";
 
-    case display_event:
-        return "Display";
+    case window_shown:
+        return "Window: Shown";
 
-    case window_event:
-        return "Window";
+    case window_hidden:
+        return "Window: Hidden";
+
+    case window_exposed:
+        return "Window: Exposed";
+
+    case window_moved:
+        return "Window: Moved";
+
+    case window_resized:
+        return "Window: Resized";
+
+    case window_minimized:
+        return "Window: Minimized";
+
+    case window_maximized:
+        return "Window: Maximized";
+
+    case window_restored:
+        return "Window: Restored";
+
+    case window_focus_gained:
+        return "Window: Focus gained";
+
+    case window_focus_lost:
+        return "Window: Focus lost";
+
+    case window_close_requested:
+        return "Window: Close requestd";
+
+    case window_focus_offered:
+        return "Window: Focus offered";
+
+    case window_hit_test:
+        return "Window: Hit test";
+
+    case window_changed_icc_profile:
+        return "Window: ICC profile changed";
+
+    case window_changed_display:
+        return "Window: Window display changed";
+
+    case display_reoriented:
+        return "Display: Reoriented";
+
+    case display_added:
+        return "Display: Connected";
+
+    case display_removed:
+        return "Display: Disconnected";
+
+    case display_moved:
+        return "Display: Moved";
 
     case key_pressed:
         return "Key pressed";
@@ -112,5 +179,8 @@ std::string_view hal::to_string(event::type evt)
 
     case clipboard_updated:
         return "Clipboard updated";
+
+    default:
+        return "[unimplemented]";
     }
 }

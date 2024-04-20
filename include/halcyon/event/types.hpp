@@ -19,17 +19,6 @@ namespace hal
         class display : SDL_DisplayEvent
         {
         public:
-            // TODO: Finish this.
-            enum class type : u16
-            {
-                connected    = SDL_EVENT_DISPLAY_ADDED,
-                disconnected = SDL_EVENT_DISPLAY_REMOVED,
-                moved        = SDL_EVENT_DISPLAY_MOVED,
-                reoriented   = SDL_EVENT_DISPLAY_ORIENTATION
-            };
-
-            type event_type() const;
-
             hal::video::display::id_t display_index() const;
 
             // As of April 2024, there are no events using the "data1" member.
@@ -40,28 +29,6 @@ namespace hal
         class window : SDL_WindowEvent
         {
         public:
-            // TODO: Finish this.
-            enum class type : u16
-            {
-                shown               = SDL_EVENT_WINDOW_SHOWN,
-                hidden              = SDL_EVENT_WINDOW_HIDDEN,
-                exposed             = SDL_EVENT_WINDOW_EXPOSED,
-                moved               = SDL_EVENT_WINDOW_MOVED,
-                resized             = SDL_EVENT_WINDOW_RESIZED, // The actual SDL resized event generates a duplicate event.
-                minimized           = SDL_EVENT_WINDOW_MINIMIZED,
-                maximized           = SDL_EVENT_WINDOW_MAXIMIZED,
-                restored            = SDL_EVENT_WINDOW_RESTORED,
-                got_focus           = SDL_EVENT_WINDOW_FOCUS_GAINED,
-                lost_focus          = SDL_EVENT_WINDOW_FOCUS_LOST,
-                lost_keyboard_focus = SDL_EVENT_WINDOW_FOCUS_LOST,
-                close_requested     = SDL_EVENT_WINDOW_CLOSE_REQUESTED,
-                focus_offered       = SDL_EVENT_WINDOW_TAKE_FOCUS,
-                hit_test            = SDL_EVENT_WINDOW_HIT_TEST,
-                icc_profile_changed = SDL_EVENT_WINDOW_ICCPROF_CHANGED,
-                display_changed     = SDL_EVENT_WINDOW_DISPLAY_CHANGED
-            };
-
-            type event_type() const;
 
             hal::video::window::id_t window_id() const;
 
@@ -124,7 +91,4 @@ namespace hal
 
         static_assert(sizeof(mouse_wheel) == sizeof(SDL_MouseWheelEvent));
     }
-
-    std::string_view to_string(event::display::type evt);
-    std::string_view to_string(event::window::type evt);
 }

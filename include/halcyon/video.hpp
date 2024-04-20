@@ -2,15 +2,14 @@
 
 #include <halcyon/context.hpp>
 
-#include <halcyon/image.hpp>
 #include <halcyon/surface.hpp>
-#include <halcyon/ttf.hpp>
 
 #include <halcyon/video/display.hpp>
 #include <halcyon/video/renderer.hpp>
 #include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>
 
+#include <halcyon/internal/accessor.hpp>
 #include <halcyon/internal/subsystem.hpp>
 
 namespace hal::video

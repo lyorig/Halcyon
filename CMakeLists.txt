@@ -29,14 +29,12 @@ endif()
 add_test(NAME AssertFail        COMMAND $<TARGET_FILE:HalTest> --assert-fail)
 add_test(NAME WindowResize      COMMAND $<TARGET_FILE:HalTest> --window-resize)
 add_test(NAME BasicInit         COMMAND $<TARGET_FILE:HalTest> --basic-init)
-add_test(NAME InvalidBuffer     COMMAND $<TARGET_FILE:HalTest> --invalid-buffer)
 add_test(NAME Clipboard         COMMAND $<TARGET_FILE:HalTest> --clipboard)
 add_test(NAME SurfaceColor      COMMAND $<TARGET_FILE:HalTest> --surface-color)
 add_test(NAME InvalidTexture    COMMAND $<TARGET_FILE:HalTest> --invalid-texture)
 add_test(NAME QuitEvent         COMMAND $<TARGET_FILE:HalTest> --quit-event)
-add_test(NAME TTFInit           COMMAND $<TARGET_FILE:HalTest> --ttf-init)
 add_test(NAME RValues           COMMAND $<TARGET_FILE:HalTest> --rvalues)
 
 
 # Set which tests are expected to fail.
-set_tests_properties(AssertFail InvalidBuffer InvalidTexture PROPERTIES WILL_FAIL TRUE)
+set_tests_properties(AssertFail InvalidTexture PROPERTIES WILL_FAIL TRUE)
