@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
 
 #include <halcyon/event/keyboard.hpp>
 #include <halcyon/event/mouse.hpp>
@@ -19,12 +19,13 @@ namespace hal
         class display : SDL_DisplayEvent
         {
         public:
-            enum class type : u8
+            // TODO: Finish this.
+            enum class type : u16
             {
-                connected    = SDL_DISPLAYEVENT_CONNECTED,
-                disconnected = SDL_DISPLAYEVENT_DISCONNECTED,
-                moved        = SDL_DISPLAYEVENT_MOVED,
-                reoriented   = SDL_DISPLAYEVENT_ORIENTATION
+                connected    = SDL_EVENT_DISPLAY_ADDED,
+                disconnected = SDL_EVENT_DISPLAY_REMOVED,
+                moved        = SDL_EVENT_DISPLAY_MOVED,
+                reoriented   = SDL_EVENT_DISPLAY_ORIENTATION
             };
 
             type event_type() const;
@@ -39,25 +40,25 @@ namespace hal
         class window : SDL_WindowEvent
         {
         public:
-            enum class type : u8
+            // TODO: Finish this.
+            enum class type : u16
             {
-                shown               = SDL_WINDOWEVENT_SHOWN,
-                hidden              = SDL_WINDOWEVENT_HIDDEN,
-                exposed             = SDL_WINDOWEVENT_EXPOSED,
-                moved               = SDL_WINDOWEVENT_MOVED,
-                resized             = SDL_WINDOWEVENT_SIZE_CHANGED, // The actual SDL resized event generates a duplicate event.
-                minimized           = SDL_WINDOWEVENT_MINIMIZED,
-                maximized           = SDL_WINDOWEVENT_MAXIMIZED,
-                restored            = SDL_WINDOWEVENT_RESTORED,
-                got_mouse_focus     = SDL_WINDOWEVENT_ENTER,
-                lost_mouse_focus    = SDL_WINDOWEVENT_LEAVE,
-                got_keyboard_focus  = SDL_WINDOWEVENT_FOCUS_GAINED,
-                lost_keyboard_focus = SDL_WINDOWEVENT_FOCUS_LOST,
-                closed              = SDL_WINDOWEVENT_CLOSE,
-                focus_offered       = SDL_WINDOWEVENT_TAKE_FOCUS,
-                hit_test            = SDL_WINDOWEVENT_HIT_TEST,
-                icc_profile_changed = SDL_WINDOWEVENT_ICCPROF_CHANGED,
-                display_changed     = SDL_WINDOWEVENT_DISPLAY_CHANGED
+                shown               = SDL_EVENT_WINDOW_SHOWN,
+                hidden              = SDL_EVENT_WINDOW_HIDDEN,
+                exposed             = SDL_EVENT_WINDOW_EXPOSED,
+                moved               = SDL_EVENT_WINDOW_MOVED,
+                resized             = SDL_EVENT_WINDOW_RESIZED, // The actual SDL resized event generates a duplicate event.
+                minimized           = SDL_EVENT_WINDOW_MINIMIZED,
+                maximized           = SDL_EVENT_WINDOW_MAXIMIZED,
+                restored            = SDL_EVENT_WINDOW_RESTORED,
+                got_focus           = SDL_EVENT_WINDOW_FOCUS_GAINED,
+                lost_focus          = SDL_EVENT_WINDOW_FOCUS_LOST,
+                lost_keyboard_focus = SDL_EVENT_WINDOW_FOCUS_LOST,
+                close_requested     = SDL_EVENT_WINDOW_CLOSE_REQUESTED,
+                focus_offered       = SDL_EVENT_WINDOW_TAKE_FOCUS,
+                hit_test            = SDL_EVENT_WINDOW_HIT_TEST,
+                icc_profile_changed = SDL_EVENT_WINDOW_ICCPROF_CHANGED,
+                display_changed     = SDL_EVENT_WINDOW_DISPLAY_CHANGED
             };
 
             type event_type() const;

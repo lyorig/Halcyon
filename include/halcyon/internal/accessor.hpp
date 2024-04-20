@@ -4,7 +4,7 @@
 #include <span>
 #include <string_view>
 
-#include <SDL_rwops.h>
+#include <SDL3/SDL_iostream.h>
 
 #include <halcyon/utility/pass_key.hpp>
 
@@ -41,14 +41,14 @@ namespace hal
         accessor(std::string_view path);
         accessor(std::span<const std::byte> data);
 
-        SDL_RWops* get(pass_key<image::context>) const;
-        SDL_RWops* get(pass_key<ttf::context>) const;
+        SDL_IOStream* get(pass_key<image::context>) const;
+        SDL_IOStream* get(pass_key<ttf::context>) const;
 
     private:
         // [private] Delegating constructor.
-        accessor(SDL_RWops* ptr);
+        accessor(SDL_IOStream* ptr);
 
-        SDL_RWops* m_ops;
+        SDL_IOStream* m_ops;
     };
 
     [[nodiscard]] accessor access(std::string_view path);

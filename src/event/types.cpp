@@ -12,12 +12,12 @@ namespace
 
 enum display::type display::event_type() const
 {
-    return static_cast<enum type>(event);
+    return static_cast<enum type>(SDL_DisplayEvent::type);
 }
 
 display_id display::display_index() const
 {
-    return static_cast<display_id>(SDL_DisplayEvent::display);
+    return static_cast<display_id>(SDL_DisplayEvent::displayID);
 }
 
 // Window event.
@@ -29,7 +29,7 @@ window_id window::window_id() const
 
 enum window::type window::event_type() const
 {
-    return static_cast<enum type>(event);
+    return static_cast<enum type>(SDL_DisplayEvent::type);
 }
 
 display_id window::new_display_index() const
@@ -129,7 +129,7 @@ hal::point<hal::i16> mouse_wheel::scroll() const
 
 hal::point<hal::f32> mouse_wheel::scroll_precise() const
 {
-    return { static_cast<f32>(preciseX), static_cast<f32>(preciseY) };
+    return { static_cast<f32>(x), static_cast<f32>(y) };
 }
 
 hal::pixel_point mouse_wheel::pos() const
@@ -192,20 +192,14 @@ std::string_view hal::to_string(enum window::type evt)
     case restored:
         return "Restored";
 
-    case got_mouse_focus:
-        return "Got mouse focus";
+    case got_focus:
+        return "Got focus";
 
-    case lost_mouse_focus:
-        return "Lost mouse focus";
+    case lost_focus:
+        return "Lost focus";
 
-    case got_keyboard_focus:
-        return "Got keyboard focus";
-
-    case lost_keyboard_focus:
-        return "Lost keyboard focus";
-
-    case closed:
-        return "Closed";
+    case close_requested:
+        return "Close requestd";
 
     case focus_offered:
         return "Focus offered";

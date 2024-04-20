@@ -14,29 +14,26 @@ namespace hal
         // Top-level event types.
         enum class type : u16
         {
-            quit_requested = SDL_QUIT,
-            terminated     = SDL_APP_TERMINATING,
+            quit_requested = SDL_EVENT_QUIT,
+            terminated     = SDL_EVENT_TERMINATING,
 
-            low_memory = SDL_APP_LOWMEMORY,
+            low_memory = SDL_EVENT_LOW_MEMORY,
 
-            will_enter_background = SDL_APP_WILLENTERBACKGROUND,
-            entered_background    = SDL_APP_DIDENTERBACKGROUND,
+            will_enter_background = SDL_EVENT_WILL_ENTER_BACKGROUND,
+            entered_background    = SDL_EVENT_DID_ENTER_BACKGROUND,
 
-            will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
-            entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
+            will_enter_foreground = SDL_EVENT_WILL_ENTER_FOREGROUND,
+            entered_foreground    = SDL_EVENT_DID_ENTER_FOREGROUND,
 
-            display_event = SDL_DISPLAYEVENT,
-            window_event  = SDL_WINDOWEVENT,
+            key_pressed  = SDL_EVENT_KEY_DOWN,
+            key_released = SDL_EVENT_KEY_UP,
 
-            key_pressed  = SDL_KEYDOWN,
-            key_released = SDL_KEYUP,
+            mouse_moved       = SDL_EVENT_MOUSE_MOTION,
+            mouse_pressed     = SDL_EVENT_MOUSE_BUTTON_DOWN,
+            mouse_released    = SDL_EVENT_MOUSE_BUTTON_UP,
+            mouse_wheel_moved = SDL_EVENT_MOUSE_WHEEL,
 
-            mouse_moved       = SDL_MOUSEMOTION,
-            mouse_pressed     = SDL_MOUSEBUTTONDOWN,
-            mouse_released    = SDL_MOUSEBUTTONUP,
-            mouse_wheel_moved = SDL_MOUSEWHEEL,
-
-            clipboard_updated = SDL_CLIPBOARDUPDATE
+            clipboard_updated = SDL_EVENT_CLIPBOARD_UPDATE
         };
 
         class handler

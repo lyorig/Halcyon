@@ -20,13 +20,12 @@ namespace hal::video
 
         enum class flags : u16
         {
-            none                  = 0,
-            fullscreen            = SDL_WINDOW_FULLSCREEN,
-            fullscreen_borderless = SDL_WINDOW_FULLSCREEN_DESKTOP,
-            hidden                = SDL_WINDOW_HIDDEN,
-            resizeable            = SDL_WINDOW_RESIZABLE,
-            minimized             = SDL_WINDOW_MINIMIZED,
-            maximized             = SDL_WINDOW_MAXIMIZED
+            none       = 0,
+            fullscreen = SDL_WINDOW_FULLSCREEN,
+            hidden     = SDL_WINDOW_HIDDEN,
+            resizeable = SDL_WINDOW_RESIZABLE,
+            minimized  = SDL_WINDOW_MINIMIZED,
+            maximized  = SDL_WINDOW_MAXIMIZED
         };
 
         window(authority&, std::string_view name, pixel_point size, std::initializer_list<flags> flags = {});

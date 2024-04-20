@@ -43,7 +43,7 @@ void renderer::target_lock::set(target_texture& tgt)
 }
 
 renderer::renderer(window& wnd, std::initializer_list<flags> flags)
-    : object { ::SDL_CreateRenderer(wnd.ptr(), -1, hal::detail::to_bitmask<std::uint32_t>(flags)) }
+    : object { ::SDL_CreateRenderer(wnd.ptr(), nullptr, hal::detail::to_bitmask<std::uint32_t>(flags)) }
 {
     HAL_PRINT(debug::severity::init, "Created renderer for window \"", wnd.title(), "\", flags = 0x", std::hex, detail::to_bitmask<std::uint32_t>(flags));
 }
@@ -61,47 +61,27 @@ void renderer::clear()
 
 void renderer::draw_point(const sdl::coord_point& pt)
 {
-#ifdef HAL_INTEGRAL_COORD
-    ::SDL_RenderDrawPoint(this->ptr(), pt.x, pt.y);
-#else
-    ::SDL_RenderDrawPointF(this->ptr(), pt.x, pt.y);
-#endif
+    HAL_ASSERT_VITAL(::SDL_RenderPoint(this->ptr(), pt.x, pt.y) == 0, debug::last_error());
 }
 
 void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& to)
 {
-#ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderDrawLine(this->ptr(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
-#else
-    HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(this->ptr(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
-#endif
+    HAL_ASSERT_VITAL(::SDL_RenderLine(this->ptr(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
 }
 
 void renderer::draw_rect(const sdl::coord_rect& area)
 {
-#ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderDrawRect(this->ptr(), area.addr()) == 0, debug::last_error());
-#else
-    HAL_ASSERT_VITAL(::SDL_RenderDrawRectF(this->ptr(), area.addr()) == 0, debug::last_error());
-#endif
+    HAL_ASSERT_VITAL(::SDL_RenderRect(this->ptr(), area.addr()) == 0, debug::last_error());
 }
 
 void renderer::fill_rect(const sdl::coord_rect& area)
 {
-#ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(this->ptr(), area.addr()) == 0, debug::last_error());
-#else
-    HAL_ASSERT_VITAL(::SDL_RenderFillRectF(this->ptr(), area.addr()) == 0, debug::last_error());
-#endif
 }
 
 void renderer::fill_rects(const std::span<const sdl::coord_rect>& areas)
 {
-#ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderFillRects(ptr(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
-#else
-    HAL_ASSERT_VITAL(::SDL_RenderFillRectsF(ptr(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
-#endif
 }
 
 void renderer::fill_target()
@@ -113,17 +93,15 @@ void renderer::fill_target()
 hal::pixel_point renderer::size() const
 {
     point<int> sz;
-    ::SDL_RenderGetLogicalSize(this->ptr(), &sz.x, &sz.y);
 
-    if (sz.x == 0)
-        HAL_ASSERT_VITAL(::SDL_GetRendererOutputSize(this->ptr(), &sz.x, &sz.y) == 0, debug::last_error());
+    ::SDL_GetCurrentRenderOutputSize(ptr(), &sz.x, &sz.y);
 
-    return static_cast<pixel_point>(sz);
+    return sz;
 }
 
 void renderer::size(const pixel_point& sz)
 {
-    HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), sz.x, sz.y) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_RenderSetLogicalPresentation(this->ptr(), sz.x, sz.y) == 0, debug::last_error());
 }
 
 void renderer::target(target_texture& tx)
@@ -171,10 +149,10 @@ texture renderer::load(const surface& surf)
 
 target_texture renderer::load(pixel_point size)
 {
-    SDL_Window* wnd { ::SDL_RenderGetWindow(ptr()) };
+    SDL_Window* wnd { ::SDL_GetRenderWindow(ptr()) };
     HAL_ASSERT(wnd != nullptr, debug::last_error());
 
-    const std::uint32_t fmt { ::SDL_GetWindowPixelFormat(wnd) };
+    const SDL_PixelFormatEnum fmt { static_cast<SDL_PixelFormatEnum>(::SDL_GetWindowPixelFormat(wnd)) };
     HAL_ASSERT(fmt != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
 
     return { ::SDL_CreateTexture(ptr(), fmt, SDL_TEXTUREACCESS_STATIC, size.x, size.y), pass_key<renderer> {} };
@@ -206,21 +184,21 @@ void copyer::operator()()
 {
     if constexpr (sdl::integral_coord)
     {
-        HAL_ASSERT_VITAL(::SDL_RenderCopyEx(m_pass.ptr(), m_this.ptr(),
+        HAL_ASSERT_VITAL(::SDL_RenderTextureRotated(m_pass.ptr(), m_this.ptr(),
                              m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                              m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_dst.addr()),
                              m_angle,
-                             nullptr, static_cast<SDL_RendererFlip>(m_flip))
+                             nullptr, static_cast<SDL_FlipMode>(m_flip))
                 == 0,
             debug::last_error());
     }
 
     else
     {
-        HAL_ASSERT_VITAL(::SDL_RenderCopyExF(m_pass.ptr(), m_this.ptr(),
+        HAL_ASSERT_VITAL(::SDL_RenderTextureRotated(m_pass.ptr(), m_this.ptr(),
                              m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                              m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<const SDL_FRect*>(m_dst.addr()),
-                             m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip))
+                             m_angle, nullptr, static_cast<SDL_FlipMode>(m_flip))
                 == 0,
             debug::last_error());
     }

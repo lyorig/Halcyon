@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL_blendmode.h>
+#include <SDL3/SDL_blendmode.h>
 #include <halcyon/types/rectangle.hpp>
 
 // types/render.hpp:

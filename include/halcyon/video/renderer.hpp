@@ -2,7 +2,7 @@
 
 #include <span>
 
-#include <SDL_render.h>
+#include <SDL3/SDL_render.h>
 
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
@@ -47,10 +47,8 @@ namespace hal
         public:
             enum class flags : u8
             {
-                none        = 0,
-                software    = SDL_RENDERER_SOFTWARE,
-                accelerated = SDL_RENDERER_ACCELERATED,
-                vsync       = SDL_RENDERER_PRESENTVSYNC
+                none  = 0,
+                vsync = SDL_RENDERER_PRESENTVSYNC
             };
 
             // C-tor: Sets the renderer's draw color.
@@ -82,7 +80,7 @@ namespace hal
                 renderer& m_rnd;
             };
 
-            renderer(window& wnd, std::initializer_list<flags> flags = { flags::accelerated });
+            renderer(window& wnd, std::initializer_list<flags> flags);
 
             // Present the back-buffer and clear it.
             void present();

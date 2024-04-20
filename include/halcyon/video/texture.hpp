@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL_render.h>
+#include <SDL3/SDL_render.h>
 
 #include <halcyon/utility/pass_key.hpp>
 
@@ -42,7 +42,7 @@ namespace hal
             void reset(SDL_Texture* ptr);
 
         private:
-            void query(std::uint32_t* format, int* access, int* w, int* h) const;
+            void query(SDL_PixelFormatEnum* format, int* access, int* w, int* h) const;
         };
     }
 

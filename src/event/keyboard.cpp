@@ -10,7 +10,7 @@ keyboard::key keyboard::to_key(button btn)
 
 keyboard::button keyboard::to_button(key k)
 {
-    return static_cast<keyboard::button>(::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k)));
+    return static_cast<keyboard::button>(::SDL_GetScancodeFromKey(static_cast<SDL_Keycode>(k)));
 }
 
 keyboard::state_reference::state_reference()
@@ -25,7 +25,7 @@ bool keyboard::state_reference::operator[](button btn) const
 
 bool keyboard::state_reference::operator[](key k) const
 {
-    return m_arr[::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k))];
+    return m_arr[::SDL_GetScancodeFromKey(static_cast<SDL_Keycode>(k))];
 }
 
 std::string_view hal::to_string(keyboard::button btn)
@@ -35,5 +35,5 @@ std::string_view hal::to_string(keyboard::button btn)
 
 std::string_view hal::to_string(keyboard::key k)
 {
-    return ::SDL_GetKeyName(static_cast<SDL_KeyCode>(k));
+    return ::SDL_GetKeyName(static_cast<SDL_Keycode>(k));
 }

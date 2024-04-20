@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include <SDL_mouse.h>
+#include <SDL3/SDL_mouse.h>
 
 #include <halcyon/types/render.hpp>
 #include <halcyon/utility/pass_key.hpp>
@@ -51,8 +51,8 @@ namespace hal
             u8 m_state;
         };
 
-        pixel_point pos_rel();
-        pixel_point pos_abs();
+        coord_point pos_rel();
+        coord_point pos_abs();
     }
 
     constexpr std::string_view to_string(mouse::button btn)

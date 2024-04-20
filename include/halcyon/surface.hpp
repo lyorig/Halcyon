@@ -2,7 +2,7 @@
 
 #include <span>
 
-#include <SDL_surface.h>
+#include <SDL3/SDL_surface.h>
 
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
@@ -32,7 +32,7 @@ namespace hal
 
     HAL_TAG(keep_dst);
 
-    class surface : public sdl::object<SDL_Surface, &::SDL_FreeSurface>
+    class surface : public sdl::object<SDL_Surface, &::SDL_DestroySurface>
     {
     public:
         class blend_lock
@@ -83,10 +83,6 @@ namespace hal
         [[nodiscard]] blitter blit(surface& dst) const;
 
     private:
-        // [private] I'd rather use the pixel format enum, but SDL uses an integer
-        // in pretty much every API function, so I'll save myself the hassle.
-        surface(pixel_point sz, int depth, Uint32 format);
-
         // [private] Construct a new surface from a pointer.
         surface(SDL_Surface* ptr);
 

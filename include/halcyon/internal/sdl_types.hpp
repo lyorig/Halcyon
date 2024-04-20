@@ -2,7 +2,7 @@
 
 #include <halcyon/utility/concepts.hpp>
 
-#include <SDL_rect.h>
+#include <SDL3/SDL_rect.h>
 
 // sdl_types.hpp:
 // Type aliases for underlying library types.
@@ -18,7 +18,7 @@ namespace hal::sdl
     };
 
     using pixel_t = decltype(SDL_Rect::x);
-    using coord_t = std::conditional_t<integral_coord, pixel_t, decltype(SDL_FRect::x)>;
+    using coord_t = decltype(SDL_FRect::x);
 
     template <arithmetic T>
     using point_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Point, SDL_FPoint>;

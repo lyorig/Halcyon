@@ -6,51 +6,6 @@ using namespace hal;
 event::handler::handler(authority&)
     : m_event { { std::numeric_limits<std::uint32_t>::max() } } // Start with an invalid event.
 {
-    // Disable unused events.
-    for (SDL_EventType type : {
-             SDL_LOCALECHANGED,
-             SDL_SYSWMEVENT,
-             SDL_TEXTEDITING,
-             SDL_TEXTINPUT,
-             SDL_KEYMAPCHANGED,
-             SDL_TEXTEDITING_EXT,
-             SDL_JOYAXISMOTION,
-             SDL_JOYBALLMOTION,
-             SDL_JOYHATMOTION,
-             SDL_JOYBUTTONDOWN,
-             SDL_JOYBUTTONUP,
-             SDL_JOYDEVICEADDED,
-             SDL_JOYDEVICEREMOVED,
-             SDL_JOYBATTERYUPDATED,
-             SDL_CONTROLLERAXISMOTION,
-             SDL_CONTROLLERBUTTONDOWN,
-             SDL_CONTROLLERBUTTONUP,
-             SDL_CONTROLLERDEVICEADDED,
-             SDL_CONTROLLERDEVICEREMOVED,
-             SDL_CONTROLLERDEVICEREMAPPED,
-             SDL_CONTROLLERTOUCHPADDOWN,
-             SDL_CONTROLLERTOUCHPADMOTION,
-             SDL_CONTROLLERTOUCHPADUP,
-             SDL_CONTROLLERSENSORUPDATE,
-             SDL_CONTROLLERSTEAMHANDLEUPDATED,
-             SDL_FINGERDOWN,
-             SDL_FINGERUP,
-             SDL_FINGERMOTION,
-             SDL_DOLLARGESTURE,
-             SDL_DOLLARRECORD,
-             SDL_MULTIGESTURE,
-             SDL_DROPFILE,
-             SDL_DROPTEXT,
-             SDL_DROPBEGIN,
-             SDL_DROPCOMPLETE,
-             SDL_AUDIODEVICEADDED,
-             SDL_AUDIODEVICEREMOVED,
-             SDL_SENSORUPDATE,
-             SDL_RENDER_TARGETS_RESET,
-             SDL_RENDER_DEVICE_RESET })
-    {
-        ::SDL_EventState(type, SDL_IGNORE);
-    }
 }
 
 bool event::handler::poll()

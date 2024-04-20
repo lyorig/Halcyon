@@ -31,18 +31,18 @@ bool mouse::state::operator[](button btn) const
     return m_state & SDL_BUTTON(std::to_underlying(btn));
 }
 
-pixel_point mouse::pos_rel()
+coord_point mouse::pos_rel()
 {
-    hal::point<int> ret;
+    hal::point<float> ret;
 
     static_cast<void>(::SDL_GetMouseState(&ret.x, &ret.y));
 
     return ret;
 }
 
-pixel_point mouse::pos_abs()
+coord_point mouse::pos_abs()
 {
-    hal::point<int> ret;
+    hal::point<float> ret;
 
     static_cast<void>(::SDL_GetGlobalMouseState(&ret.x, &ret.y) != std::numeric_limits<std::uint32_t>::max());
 

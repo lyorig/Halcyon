@@ -2,8 +2,8 @@
 
 #include <string_view>
 
-#include <SDL_keyboard.h>
-#include <SDL_mouse.h>
+#include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_mouse.h>
 
 #include <halcyon/utility/pass_key.hpp>
 
@@ -85,7 +85,7 @@ namespace hal
         };
 
         // A representation of a locale- and layout-dependent key.
-        enum class key : detail::CFT<u32, std::underlying_type_t<SDL_KeyCode>>
+        enum class key : detail::CFT<u32, SDL_Keycode>
         {
             A = SDLK_a,
             B = SDLK_b,

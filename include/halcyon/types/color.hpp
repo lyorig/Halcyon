@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL_pixels.h>
+#include <SDL3/SDL_pixels.h>
 
 #include <halcyon/types/numeric.hpp>
 

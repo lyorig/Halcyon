@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL_image.h>
+#include <SDL3/SDL_image.h>
 
 #include <halcyon/internal/accessor.hpp>
 #include <halcyon/surface.hpp>

@@ -3,14 +3,11 @@
 #include <climits>
 #include <cstring>
 
-#include <SDL_image.h>
-
-#include <halcyon/ttf.hpp>
-
 using namespace hal;
 
 // Set the depth accordingly upon changing this value.
 constexpr SDL_PixelFormatEnum default_format { SDL_PIXELFORMAT_RGBA32 };
+constexpr SDL_ScaleMode       default_scale_mode { SDL_SCALEMODE_LINEAR };
 
 surface::blend_lock::blend_lock(surface& surf, blend_mode bm)
     : m_surf { surf }
@@ -30,7 +27,7 @@ void surface::blend_lock::set(blend_mode bm)
 }
 
 surface::surface(pixel_point sz)
-    : surface { sz, CHAR_BIT * 4, default_format }
+    : surface { ::SDL_CreateSurface(sz.x, sz.y, default_format) }
 {
 }
 
@@ -65,17 +62,17 @@ surface surface::resize(f64 scale)
 
 void surface::fill(color clr)
 {
-    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), nullptr, mapped(clr)) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_FillSurfaceRect(ptr(), nullptr, mapped(clr)) == 0, debug::last_error());
 }
 
 void surface::fill_rect(const sdl::pixel_rect& area, color clr)
 {
-    HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), area.addr(), mapped(clr)) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_FillSurfaceRect(ptr(), area.addr(), mapped(clr)) == 0, debug::last_error());
 }
 
 void surface::fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr)
 {
-    HAL_ASSERT_VITAL(::SDL_FillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_FillSurfaceRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, debug::last_error());
 }
 
 pixel_point surface::size() const
@@ -113,11 +110,6 @@ blitter surface::blit(surface& dst) const
     return { *this, dst, {} };
 }
 
-surface::surface(pixel_point sz, int depth, Uint32 fmt)
-    : surface { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, depth, fmt) }
-{
-}
-
 surface::surface(SDL_Surface* ptr)
     : object { ptr }
 {
@@ -125,7 +117,7 @@ surface::surface(SDL_Surface* ptr)
 
 surface surface::convert() const
 {
-    return ::SDL_ConvertSurfaceFormat(ptr(), default_format, 0);
+    return ::SDL_ConvertSurfaceFormat(ptr(), default_format);
 }
 
 std::uint32_t surface::mapped(color c) const
@@ -134,7 +126,7 @@ std::uint32_t surface::mapped(color c) const
 }
 
 pixel_reference::pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos)
-    : m_ptr { static_cast<std::byte*>(pixels) + pos.y * pitch + pos.x * fmt->BytesPerPixel }
+    : m_ptr { static_cast<std::byte*>(pixels) + pos.y * pitch + pos.x * fmt->bytes_per_pixel }
     , m_fmt { fmt }
 {
 }
@@ -157,12 +149,12 @@ std::uint32_t pixel_reference::get() const
     std::uint32_t ret { 0 };
 
     if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-        std::memcpy(&ret, m_ptr, m_fmt->BytesPerPixel);
+        std::memcpy(&ret, m_ptr, m_fmt->bytes_per_pixel);
 
     else
     {
-        const u8 offset = sizeof(std::uint32_t) - m_fmt->BytesPerPixel;
-        std::memcpy(&ret + offset, m_ptr + offset, m_fmt->BytesPerPixel);
+        const u8 offset = sizeof(std::uint32_t) - m_fmt->bytes_per_pixel;
+        std::memcpy(&ret + offset, m_ptr + offset, m_fmt->bytes_per_pixel);
     }
 
     return ret;
@@ -171,22 +163,23 @@ std::uint32_t pixel_reference::get() const
 void pixel_reference::set(std::uint32_t mapped)
 {
     if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-        std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
+        std::memcpy(m_ptr, &mapped, m_fmt->bytes_per_pixel);
 
     else
     {
-        const u8 offset = sizeof(std::uint32_t) - m_fmt->BytesPerPixel;
-        std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->BytesPerPixel);
+        const u8 offset = sizeof(std::uint32_t) - m_fmt->bytes_per_pixel;
+        std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->bytes_per_pixel);
     }
 }
 
 void blitter::operator()()
 {
-    HAL_ASSERT_VITAL(::SDL_BlitScaled(
+    HAL_ASSERT_VITAL(::SDL_BlitSurfaceScaled(
                          m_pass.ptr(),
                          m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                          m_this.ptr(),
-                         m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<SDL_Rect*>(m_dst.addr()))
+                         m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<SDL_Rect*>(m_dst.addr()),
+                         default_scale_mode)
             == 0,
         debug::last_error());
 }
@@ -195,11 +188,12 @@ void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
 {
     sdl::pixel_rect copy { m_dst };
 
-    HAL_ASSERT_VITAL(::SDL_BlitScaled(
+    HAL_ASSERT_VITAL(::SDL_BlitSurfaceScaled(
                          m_pass.ptr(),
                          reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                          m_this.ptr(),
-                         reinterpret_cast<SDL_Rect*>(copy.addr()))
+                         reinterpret_cast<SDL_Rect*>(copy.addr()),
+                         default_scale_mode)
             == 0,
         debug::last_error());
 }
