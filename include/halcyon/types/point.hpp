@@ -161,15 +161,19 @@ namespace hal
             case center:
                 ret -= sz / 2;
                 break;
+
             case top_left:
                 ret.y += sz.y;
                 break;
+
             case top_right:
                 ret += sz;
                 break;
+
             case bottom_left:
                 // Nothing to do.
                 break;
+
             case bottom_right:
                 ret.x += sz.x;
                 break;

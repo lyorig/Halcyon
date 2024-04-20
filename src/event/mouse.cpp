@@ -28,11 +28,20 @@ bool mouse::state::operator[](button btn) const
     return m_state & SDL_BUTTON(std::to_underlying(btn));
 }
 
-pixel_point mouse::pos()
+pixel_point mouse::pos_rel()
 {
     hal::point<int> ret;
 
     ::SDL_GetMouseState(&ret.x, &ret.y);
+
+    return ret;
+}
+
+pixel_point mouse::pos_abs()
+{
+    hal::point<int> ret;
+
+    ::SDL_GetGlobalMouseState(&ret.x, &ret.y);
 
     return ret;
 }

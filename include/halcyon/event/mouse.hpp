@@ -51,7 +51,8 @@ namespace hal
             u8 m_state;
         };
 
-        pixel_point pos();
+        pixel_point pos_rel();
+        pixel_point pos_abs();
     }
 
     constexpr std::string_view to_string(mouse::button btn)
