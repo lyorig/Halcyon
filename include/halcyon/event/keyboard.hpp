@@ -165,6 +165,7 @@ namespace hal
         public:
             using authority = hal::detail::subsystem<hal::detail::system::events>;
 
+            // [private] This constructor is called via hal::system::event::mouse_proxy::state().
             state_reference(pass_key<authority>);
 
             bool operator[](button btn) const;

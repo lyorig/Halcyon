@@ -39,10 +39,10 @@ namespace hal
         public:
             using authority = hal::detail::subsystem<hal::detail::system::events>;
 
-            // Default constructor that captures the mouse state at the time of construction.
+            // [private] This constructor is called via hal::system::event::keyboard_proxy::state_ref().
             state(pass_key<authority>);
 
-            // Private constructors meant for events.
+            // [private] Constructor meant for events.
             state(std::uint32_t mask, pass_key<event::mouse_motion>);
 
             bool operator[](button btn) const;
