@@ -20,7 +20,7 @@ namespace hal::video
     public:
         using authority = detail::subsystem<detail::system::video>;
 
-        using id_t = detail::cft<u8, SDL_DisplayID>;
+        using id_t = u8;
         using hz_t = u16;
 
         // [private] Display info is provided by the display proxy in hal::video::system.

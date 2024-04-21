@@ -9,18 +9,18 @@ hal::mouse::state sub::mouse_proxy::state() const
     return { {} };
 }
 
-hal::coord_point sub::mouse_proxy::pos_abs() const
+hal::pixel_point sub::mouse_proxy::pos_abs() const
 {
-    hal::point<float> ret;
+    sdl::pixel_point ret;
 
     static_cast<void>(::SDL_GetMouseState(&ret.x, &ret.y));
 
     return ret;
 }
 
-hal::coord_point sub::mouse_proxy::pos_rel() const
+hal::pixel_point sub::mouse_proxy::pos_rel() const
 {
-    hal::point<float> ret;
+    sdl::pixel_point ret;
 
     static_cast<void>(::SDL_GetGlobalMouseState(&ret.x, &ret.y));
 

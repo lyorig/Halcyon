@@ -19,7 +19,7 @@ namespace hal
     namespace keyboard
     {
         // A representation of a physical, layout- and locale-independent button.
-        enum class button : detail::CFT<u8, std::underlying_type_t<SDL_Scancode>>
+        enum class button : detail::cft<u8, std::underlying_type_t<SDL_Scancode>>
         {
             A = SDL_SCANCODE_A,
             B = SDL_SCANCODE_B,
@@ -87,7 +87,7 @@ namespace hal
         };
 
         // A representation of a locale- and layout-dependent key.
-        enum class key : detail::CFT<u32, std::underlying_type_t<SDL_KeyCode>>
+        enum class key : detail::cft<u32, std::underlying_type_t<SDL_KeyCode>>
         {
             A = SDLK_a,
             B = SDLK_b,

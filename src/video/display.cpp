@@ -6,7 +6,7 @@
 
 using namespace hal::video;
 
-display::display(id_t disp_idx, pass_key<system>)
+display::display(id_t disp_idx, pass_key<authority>)
     : m_index { disp_idx }
 {
     SDL_DisplayMode dm;
