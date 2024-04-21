@@ -20,11 +20,6 @@ namespace test
         // Failure should occur here.
         HAL_ASSERT(false, "This is intentional.");
 
-        hal::accessor a = hal::access("amogus");
-
-        hal::image::context c {};
-        hal::surface        s { c.load(std::move(a)) };
-
         return EXIT_SUCCESS;
     }
 
