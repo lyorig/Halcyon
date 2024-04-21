@@ -20,18 +20,23 @@ void window::sync()
     HAL_WARN_IF(ret > 0, "Window sync timed out before queued operations completed");
 }
 
+void window::raise()
+{
+    HAL_ASSERT_VITAL(::SDL_RaiseWindow(ptr()), debug::last_error());
+}
+
 hal::pixel_point window::pos() const
 {
     point<int> ret;
 
-    ::SDL_GetWindowPosition(ptr(), &ret.x, &ret.y);
+    HAL_ASSERT_VITAL(::SDL_GetWindowPosition(ptr(), &ret.x, &ret.y) == 0, debug::last_error());
 
     return ret;
 }
 
 void window::pos(hal::pixel_point ps)
 {
-    ::SDL_SetWindowPosition(ptr(), ps.x, ps.y);
+    HAL_ASSERT_VITAL(::SDL_SetWindowPosition(ptr(), ps.x, ps.y) == 0, debug::last_error());
 }
 
 hal::pixel_point window::size() const
@@ -85,9 +90,5 @@ bool window::fullscreen() const
 
 void window::fullscreen(bool set)
 {
-    HAL_ASSERT_VITAL(::SDL_SetWindowFullscreen(
-                         ptr(),
-                         static_cast<SDL_bool>(set))
-            == 0,
-        debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_SetWindowFullscreen(ptr(), static_cast<SDL_bool>(set)) == 0, debug::last_error());
 }

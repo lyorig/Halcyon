@@ -31,6 +31,7 @@ namespace hal::video
         window(authority&, std::string_view name, pixel_point size, std::initializer_list<flags> flags = {});
 
         void sync();
+        void raise();
 
         pixel_point pos() const;
         void        pos(pixel_point ps);
