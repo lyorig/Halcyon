@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include <SDL_mouse.h>
+#include <SDL2/SDL_mouse.h>
 
 #include <halcyon/types/render.hpp>
 #include <halcyon/utility/pass_key.hpp>

@@ -2,7 +2,7 @@
 
 #include <span>
 
-#include <SDL_render.h>
+#include <SDL2/SDL_render.h>
 
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>

@@ -3,7 +3,7 @@
 #include <climits>
 #include <cstring>
 
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 #include <halcyon/ttf.hpp>
 

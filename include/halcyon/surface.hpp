@@ -2,7 +2,7 @@
 
 #include <span>
 
-#include <SDL_surface.h>
+#include <SDL2/SDL_surface.h>
 
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
