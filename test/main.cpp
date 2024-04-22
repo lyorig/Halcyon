@@ -31,7 +31,7 @@ namespace test
         hal::context       ctx;
         hal::video::system vid { ctx };
 
-        hal::video::window wnd { vid, "HalTest: Window resize", { 640, 480 }, { hal::video::window::flags::hidden } };
+        hal::video::window wnd { vid.make_window("HalTest: Window resize", { 640, 480 }, { hal::video::window::flags::hidden }) };
 
         hal::event::handler e { vid.events };
 
@@ -64,8 +64,8 @@ namespace test
 
         HAL_ASSERT(hal::video::system::initialized(), "Video should report initialization by now");
 
-        hal::video::window   wnd { vid, "HalTest: Basic init", { 640, 480 }, { hal::video::window::flags::hidden } };
-        hal::video::renderer rnd { wnd, { hal::video::renderer::flags::accelerated } };
+        hal::video::window   wnd { vid.make_window("HalTest: Basic init", { 640, 480 }, { hal::video::window::flags::hidden }) };
+        hal::video::renderer rnd { wnd.make_renderer() };
 
         hal::event::handler e { vid.events };
         e.poll();
@@ -96,8 +96,8 @@ namespace test
         hal::context       ctx;
         hal::video::system vid { ctx };
 
-        hal::video::window   wnd { vid, "HalTest: Invalid texture", { 640, 480 }, { hal::video::window::flags::hidden } };
-        hal::video::renderer rnd { wnd };
+        hal::video::window   wnd { vid.make_window("HalTest: Invalid texture", { 640, 480 }, { hal::video::window::flags::hidden }) };
+        hal::video::renderer rnd { wnd.make_renderer() };
 
         hal::video::texture tex;
 

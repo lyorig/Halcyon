@@ -8,6 +8,11 @@ using namespace hal::video;
 
 using sub = hal::detail::subsystem<hal::detail::system::video>;
 
+window sub::make_window(std::string_view title, pixel_point size, std::initializer_list<video::window::flags> flags)
+{
+    return { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, to_bitmask<std::uint32_t>(flags)), {} };
+}
+
 std::string sub::clipboard_proxy::operator()() const
 {
     const auto text = ::SDL_GetClipboardText();

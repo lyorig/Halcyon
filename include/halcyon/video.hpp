@@ -46,6 +46,8 @@ namespace hal
         public:
             subsystem() = default;
 
+            video::window make_window(std::string_view title, pixel_point size, std::initializer_list<video::window::flags> flags = {});
+
             HAL_NO_SIZE event_proxy events;
 
             HAL_NO_SIZE clipboard_proxy clipboard;

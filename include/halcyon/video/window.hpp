@@ -1,16 +1,15 @@
 #pragma once
 
-#include <halcyon/internal/sdl_object.hpp>
-
 #include <halcyon/video/display.hpp>
-
-#include <halcyon/internal/subsystem.hpp>
+#include <halcyon/video/renderer.hpp>
 
 // video/window.hpp:
 // A window. Can't do much by itself.
 
 namespace hal::video
 {
+    class system;
+
     // A window. Not much more to say.
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {
@@ -29,7 +28,10 @@ namespace hal::video
             maximized             = SDL_WINDOW_MAXIMIZED
         };
 
-        window(authority&, std::string_view name, pixel_point size, std::initializer_list<flags> flags = {});
+        window() = default;
+        window(SDL_Window* ptr, pass_key<authority> sys);
+
+        renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated });
 
         pixel_point pos() const;
         void        pos(pixel_point ps);

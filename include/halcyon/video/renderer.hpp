@@ -82,7 +82,8 @@ namespace hal
                 renderer& m_rnd;
             };
 
-            renderer(window& wnd, std::initializer_list<flags> flags = { flags::accelerated });
+            renderer() = default;
+            renderer(SDL_Renderer* obj, pass_key<window>);
 
             // Present the back-buffer and clear it.
             void present();

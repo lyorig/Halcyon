@@ -42,10 +42,9 @@ void renderer::target_lock::set(target_texture& tgt)
     m_rnd.target(tgt);
 }
 
-renderer::renderer(window& wnd, std::initializer_list<flags> flags)
-    : object { ::SDL_CreateRenderer(wnd.ptr(), -1, hal::detail::to_bitmask<std::uint32_t>(flags)) }
+renderer::renderer(SDL_Renderer* obj, pass_key<window>)
+    : object { obj }
 {
-    HAL_PRINT(debug::severity::init, "Created renderer for window \"", wnd.title(), "\", flags = 0x", std::hex, detail::to_bitmask<std::uint32_t>(flags));
 }
 
 void renderer::present()

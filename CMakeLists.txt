@@ -26,16 +26,18 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
     target_link_options(HalTest PRIVATE -flto)
 endif()
 
-add_test(NAME AssertFail        COMMAND $<TARGET_FILE:HalTest> --assert-fail)
-add_test(NAME WindowResize      COMMAND $<TARGET_FILE:HalTest> --window-resize)
-add_test(NAME BasicInit         COMMAND $<TARGET_FILE:HalTest> --basic-init)
-add_test(NAME InvalidBuffer     COMMAND $<TARGET_FILE:HalTest> --invalid-buffer)
-add_test(NAME Clipboard         COMMAND $<TARGET_FILE:HalTest> --clipboard)
-add_test(NAME SurfaceColor      COMMAND $<TARGET_FILE:HalTest> --surface-color)
-add_test(NAME InvalidTexture    COMMAND $<TARGET_FILE:HalTest> --invalid-texture)
-add_test(NAME QuitEvent         COMMAND $<TARGET_FILE:HalTest> --quit-event)
-add_test(NAME TTFInit           COMMAND $<TARGET_FILE:HalTest> --ttf-init)
-add_test(NAME RValues           COMMAND $<TARGET_FILE:HalTest> --rvalues)
+set(ExeName $<TARGET_FILE:HalTest>)
+
+add_test(NAME AssertFail        COMMAND ${ExeName} --assert-fail)
+add_test(NAME WindowResize      COMMAND ${ExeName} --window-resize)
+add_test(NAME BasicInit         COMMAND ${ExeName} --basic-init)
+add_test(NAME InvalidBuffer     COMMAND ${ExeName} --invalid-buffer)
+add_test(NAME Clipboard         COMMAND ${ExeName} --clipboard)
+add_test(NAME SurfaceColor      COMMAND ${ExeName} --surface-color)
+add_test(NAME InvalidTexture    COMMAND ${ExeName} --invalid-texture)
+add_test(NAME QuitEvent         COMMAND ${ExeName} --quit-event)
+add_test(NAME TTFInit           COMMAND ${ExeName} --ttf-init)
+add_test(NAME RValues           COMMAND ${ExeName} --rvalues)
 
 
 # Set which tests are expected to fail.
