@@ -4,7 +4,7 @@
 #include <span>
 #include <string_view>
 
-#include <SDL2/SDL_rwops.h>
+#include <SDL_rwops.h>
 
 #include <halcyon/utility/pass_key.hpp>
 

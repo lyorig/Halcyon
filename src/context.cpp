@@ -1,6 +1,6 @@
 #include <halcyon/debug.hpp>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <halcyon/context.hpp>
 

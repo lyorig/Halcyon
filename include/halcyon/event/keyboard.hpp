@@ -2,8 +2,8 @@
 
 #include <string_view>
 
-#include <SDL2/SDL_keyboard.h>
-#include <SDL2/SDL_mouse.h>
+#include <SDL_keyboard.h>
+#include <SDL_mouse.h>
 
 #include <halcyon/utility/pass_key.hpp>
 

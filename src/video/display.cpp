@@ -1,6 +1,6 @@
 #include <halcyon/video/display.hpp>
 
-#include <SDL2/SDL_video.h>
+#include <SDL_video.h>
 
 #include <halcyon/debug.hpp>
 

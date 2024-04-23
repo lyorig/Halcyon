@@ -2,7 +2,7 @@
 
 #include <halcyon/utility/concepts.hpp>
 
-#include <SDL2/SDL_rect.h>
+#include <SDL_rect.h>
 
 // sdl_types.hpp:
 // Type aliases for underlying library types.

@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 
 #include <halcyon/internal/accessor.hpp>
 #include <halcyon/surface.hpp>

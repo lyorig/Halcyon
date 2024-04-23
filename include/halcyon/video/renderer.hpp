@@ -2,7 +2,7 @@
 
 #include <span>
 
-#include <SDL2/SDL_render.h>
+#include <SDL_render.h>
 
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/sdl_object.hpp>
@@ -113,8 +113,8 @@ namespace hal
             void        size(const pixel_point& sz);
 
             // Texture creation functions.
-            [[nodiscard]] texture        load(const surface& surf);
-            [[nodiscard]] target_texture load(pixel_point size);
+            [[nodiscard]] texture        make_texture(const surface& surf);
+            [[nodiscard]] target_texture make_target_texture(pixel_point size);
 
             // Create a copyer.
             [[nodiscard]] copyer draw(const detail::texture_base& tex);

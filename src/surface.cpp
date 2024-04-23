@@ -3,10 +3,6 @@
 #include <climits>
 #include <cstring>
 
-#include <SDL2/SDL_image.h>
-
-#include <halcyon/ttf.hpp>
-
 using namespace hal;
 
 // Set the depth accordingly upon changing this value.
