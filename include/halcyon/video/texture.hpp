@@ -46,29 +46,26 @@ namespace hal
         };
     }
 
-    namespace video
+    // Forward declarations for parameters and return types.
+    class renderer;
+
+    // A texture that cannot be drawn onto, only reassigned.
+    class texture : public hal::detail::texture_base
     {
-        // Forward declarations for parameters and return types.
-        class renderer;
+    public:
+        texture() = default;
 
-        // A texture that cannot be drawn onto, only reassigned.
-        class texture : public hal::detail::texture_base
-        {
-        public:
-            texture() = default;
+        // [private] Textures are created with renderer::load().
+        texture(SDL_Texture* ptr, pass_key<renderer>);
+    };
 
-            // [private] Textures are created with renderer::load().
-            texture(SDL_Texture* ptr, pass_key<renderer>);
-        };
+    // A texture that can be drawn onto.
+    class target_texture : public hal::detail::texture_base
+    {
+    public:
+        target_texture() = default;
 
-        // A texture that can be drawn onto.
-        class target_texture : public hal::detail::texture_base
-        {
-        public:
-            target_texture() = default;
-
-            // [private] Target textures are created with renderer::load().
-            target_texture(SDL_Texture* ptr, pass_key<renderer>);
-        };
-    }
+        // [private] Target textures are created with renderer::load().
+        target_texture(SDL_Texture* ptr, pass_key<renderer>);
+    };
 }

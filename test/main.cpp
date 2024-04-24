@@ -29,11 +29,11 @@ namespace test
         constexpr hal::pixel_point new_size { 120, 120 };
 
         hal::context       ctx;
-        hal::video::system vid { ctx };
+        hal::system::video vid { ctx };
 
-        hal::video::window wnd { vid.make_window("HalTest: Window resize", { 640, 480 }, { hal::video::window::flags::hidden }) };
+        hal::window wnd { vid.make_window("HalTest: Window resize", { 640, 480 }, { hal::window::flags::hidden }) };
 
-        hal::event::handler e { vid.events };
+        hal::event e { vid.events };
 
         while (e.poll()) // Clear events.
             ;
@@ -44,7 +44,7 @@ namespace test
         if (e.event_type() != hal::event::type::window_event)
             return EXIT_FAILURE;
 
-        if (e.window().event_type() != hal::event::window::type::resized)
+        if (e.window().event_type() != hal::event::window_event::type::resized)
             return EXIT_FAILURE;
 
         if (e.window().new_point() != new_size)
@@ -58,16 +58,16 @@ namespace test
     {
         hal::context ctx;
 
-        HAL_ASSERT(!hal::video::system::initialized(), "Video should not be initialized at this point");
+        HAL_ASSERT(!hal::system::video::initialized(), "Video should not be initialized at this point");
 
-        hal::video::system vid { ctx };
+        hal::system::video vid { ctx };
 
-        HAL_ASSERT(hal::video::system::initialized(), "Video should report initialization by now");
+        HAL_ASSERT(hal::system::video::initialized(), "Video should report initialization by now");
 
-        hal::video::window   wnd { vid.make_window("HalTest: Basic init", { 640, 480 }, { hal::video::window::flags::hidden }) };
-        hal::video::renderer rnd { wnd.make_renderer() };
+        hal::window   wnd { vid.make_window("HalTest: Basic init", { 640, 480 }, { hal::window::flags::hidden }) };
+        hal::renderer rnd { wnd.make_renderer() };
 
-        hal::event::handler e { vid.events };
+        hal::event e { vid.events };
         e.poll();
 
         rnd.present();
@@ -94,12 +94,12 @@ namespace test
     int invalid_texture()
     {
         hal::context       ctx;
-        hal::video::system vid { ctx };
+        hal::system::video vid { ctx };
 
-        hal::video::window   wnd { vid.make_window("HalTest: Invalid texture", { 640, 480 }, { hal::video::window::flags::hidden }) };
-        hal::video::renderer rnd { wnd.make_renderer() };
+        hal::window   wnd { vid.make_window("HalTest: Invalid texture", { 640, 480 }, { hal::window::flags::hidden }) };
+        hal::renderer rnd { wnd.make_renderer() };
 
-        hal::video::texture tex;
+        hal::texture tex;
 
         // Failure should occur here.
         rnd.draw(tex)();
@@ -113,7 +113,7 @@ namespace test
         constexpr char text[] { "We can be heroes - just for one day." };
 
         hal::context       ctx;
-        hal::video::system vid { ctx };
+        hal::system::video vid { ctx };
 
         vid.clipboard(text);
 
@@ -140,9 +140,9 @@ namespace test
     int quit_event()
     {
         hal::context       ctx;
-        hal::event::system evt { ctx };
+        hal::system::event evt { ctx };
 
-        hal::event::handler eh { evt };
+        hal::event eh { evt };
 
         SDL_Event e;
         e.type = SDL_QUIT;
@@ -181,7 +181,7 @@ namespace test
     {
         hal::context c;
 
-        hal::video::system { c }.clipboard("Hello from HalTest!");
+        hal::system::video { c }.clipboard("Hello from HalTest!");
 
         return EXIT_SUCCESS;
     }

@@ -5,6 +5,7 @@
 #include <SDL_mouse.h>
 
 #include <halcyon/types/render.hpp>
+
 #include <halcyon/utility/pass_key.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
@@ -14,13 +15,6 @@
 
 namespace hal
 {
-    // Forward declarations for mouse::state's pass-key constructors.
-    namespace event
-    {
-        class mouse_motion;
-        class mouse_button;
-    }
-
     namespace mouse
     {
         enum class button : u8
@@ -42,8 +36,8 @@ namespace hal
             // Default constructor that captures the mouse state at the time of construction.
             state(pass_key<authority>);
 
-            // Private constructors meant for events.
-            state(std::uint32_t mask, pass_key<event::mouse_motion>);
+            // [private] Constructor meant for events.
+            state(std::uint32_t mask);
 
             bool operator[](button btn) const;
 

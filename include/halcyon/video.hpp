@@ -36,9 +36,9 @@ namespace hal
             class display_proxy
             {
             public:
-                video::display::id_t size() const;
+                display::id_t size() const;
 
-                video::display operator[](video::display::id_t idx) const;
+                display operator[](display::id_t idx) const;
             };
 
             using event_proxy = hal::detail::subsystem<hal::detail::system::events>;
@@ -46,7 +46,7 @@ namespace hal
         public:
             subsystem() = default;
 
-            video::window make_window(std::string_view title, pixel_point size, std::initializer_list<video::window::flags> flags = {});
+            window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {});
 
             HAL_NO_SIZE event_proxy events;
 
@@ -54,14 +54,15 @@ namespace hal
             HAL_NO_SIZE display_proxy   displays;
         };
     }
-    namespace video
+
+    namespace system
     {
-        class system : public hal::detail::subinit<hal::detail::system::video>
+        class video : public hal::detail::subinit<hal::detail::system::video>
         {
         public:
             using subinit::subinit;
         };
 
-        static_assert(std::is_empty_v<system>);
+        static_assert(std::is_empty_v<video>);
     }
 }

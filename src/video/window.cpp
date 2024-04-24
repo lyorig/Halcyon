@@ -1,10 +1,10 @@
 #include <halcyon/video/window.hpp>
 
-#include <halcyon/event/handler.hpp>
+#include <halcyon/event/event.hpp>
 
 #include <halcyon/internal/helpers.hpp>
 
-using namespace hal::video;
+using namespace hal;
 
 window::window(SDL_Window* obj, pass_key<authority>)
     : object { obj }

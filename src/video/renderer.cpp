@@ -7,7 +7,7 @@
 
 #include <halcyon/internal/helpers.hpp>
 
-using namespace hal::video;
+using namespace hal;
 
 renderer::color_lock::color_lock(renderer& rnd, color new_clr)
     : m_rnd { rnd }

@@ -1,7 +1,5 @@
 #include <halcyon/event.hpp>
 
-using namespace hal::event;
-
 using sub = hal::detail::subsystem<hal::detail::system::events>;
 
 hal::mouse::state sub::mouse_proxy::state() const

@@ -34,10 +34,7 @@ namespace hal
         return str << '{' << rect.pos << ' ' << rect.size << '}';
     }
 
-    namespace video
-    {
-        class display;
-    }
+    class display;
 
-    std::ostream& operator<<(std::ostream& std, const video::display& disp);
+    std::ostream& operator<<(std::ostream& std, const display& disp);
 }

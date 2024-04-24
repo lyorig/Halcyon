@@ -4,7 +4,7 @@
 #include <halcyon/surface.hpp>
 #include <halcyon/video/renderer.hpp>
 
-using namespace hal::video;
+using namespace hal;
 
 hal::pixel_point hal::detail::texture_base::size() const
 {

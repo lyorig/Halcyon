@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/event/handler.hpp>
+#include <halcyon/event/event.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
 
@@ -42,14 +42,14 @@ namespace hal
         };
     }
 
-    namespace event
+    namespace system
     {
-        class system : public detail::subinit<detail::system::events>
+        class event : public detail::subinit<detail::system::events>
         {
         public:
             using subinit::subinit;
         };
 
-        static_assert(std::is_empty_v<system>);
+        static_assert(std::is_empty_v<event>);
     }
 }

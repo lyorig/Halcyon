@@ -10,10 +10,8 @@
 // video/display.hpp:
 // A representation of a monitor.
 
-namespace hal::video
+namespace hal
 {
-    class system;
-
     // Display device data.
     class display
     {

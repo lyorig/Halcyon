@@ -4,7 +4,7 @@
 
 #include <halcyon/debug.hpp>
 
-using namespace hal::video;
+using namespace hal;
 
 display::display(id_t disp_idx, pass_key<authority>)
     : m_index { disp_idx }

@@ -6,10 +6,8 @@
 // video/window.hpp:
 // A window. Can't do much by itself.
 
-namespace hal::video
+namespace hal
 {
-    class system;
-
     // A window. Not much more to say.
     class window : public sdl::object<SDL_Window, &::SDL_DestroyWindow>
     {

@@ -10,10 +10,9 @@ set(HALCYON_INCLUDE_DIRS ${LYOSTL_INCLUDE_DIRS} ${CMAKE_CURRENT_LIST_DIR}/includ
 
 # Sources.
 set(HALCYON_SOURCES
-event/handler.cpp
+event/event.cpp
 event/keyboard.cpp
 event/mouse.cpp
-event/types.cpp
 internal/accessor.cpp
 types/templates.cpp
 utility/printing.cpp
