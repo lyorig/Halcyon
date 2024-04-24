@@ -1,7 +1,5 @@
 #pragma once
 
-#include <compare>
-
 #include <halcyon/internal/sdl_types.hpp>
 #include <halcyon/internal/tags.hpp>
 
@@ -10,7 +8,7 @@
 
 namespace hal
 {
-    enum class anchor
+    enum class anchor : u8
     {
         center,
         top_left,
@@ -67,6 +65,7 @@ namespace hal
                 x = std::fmod(x, mod.x);
                 y = std::fmod(y, mod.y);
             }
+
             else
             {
                 x %= mod.x;
@@ -77,38 +76,43 @@ namespace hal
         }
 
         // Arithmetic operations.
-        constexpr point operator+(const point& pt) const
+        template <arithmetic Add>
+        constexpr auto operator+(const point<Add>& pt) const
         {
             point<decltype(x + pt.x)> ret = *this;
             ret += pt;
             return ret;
         }
 
-        constexpr point operator-(const point& pt) const
+        template <arithmetic Mns>
+        constexpr auto operator-(const point<Mns>& pt) const
         {
             point<decltype(x - pt.x)> ret = *this;
             ret -= pt;
             return ret;
         }
 
-        constexpr point operator*(const point& mul) const
+        template <arithmetic Mul>
+        constexpr auto operator*(const point<Mul>& pt) const
         {
-            point ret { *this };
-            ret *= mul;
+            point<decltype(x * pt.x)> ret { *this };
+            ret *= pt;
             return ret;
         }
 
-        constexpr point operator/(const point& div) const
+        template <arithmetic Div>
+        constexpr auto operator/(const point<Div>& pt) const
         {
-            point ret { *this };
-            ret /= div;
+            point<decltype(x / pt.x)> ret { *this };
+            ret /= pt;
             return ret;
         }
 
-        constexpr point operator%(const point& mod) const
+        template <arithmetic Mod>
+        constexpr auto operator%(const point<Mod>& pt) const
         {
-            point ret { *this };
-            ret %= mod;
+            point<decltype(x % pt.x)> ret { *this };
+            ret %= pt;
             return ret;
         }
 
@@ -122,19 +126,21 @@ namespace hal
         }
 
         // Additional arithmetic operations.
-        constexpr point operator*(f64 mul) const
+        template <arithmetic Mul>
+        constexpr auto operator*(Mul mul) const
         {
-            return point {
-                static_cast<T>(x * mul),
-                static_cast<T>(y * mul)
+            return point<decltype(x * mul)> {
+                x * mul,
+                y * mul
             };
         }
 
-        constexpr point operator/(f64 div) const
+        template <arithmetic Div>
+        constexpr auto operator/(Div div) const
         {
-            return point {
-                static_cast<T>(x / div),
-                static_cast<T>(y / div)
+            return point<decltype(x / div)> {
+                x / div,
+                y / div
             };
         }
 
@@ -150,7 +156,7 @@ namespace hal
         // Get the origin of a rectangle anchored by a certain corner in this point.
         // Since the rendering origin is at the top left of the screen, the top and bottom
         // anchorings will have to be switched around.
-        constexpr point anchor(anchor a, const point<T>& sz) const
+        constexpr point anchor(anchor a, const point& sz) const
         {
             point ret { *this };
 
