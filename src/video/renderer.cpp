@@ -201,6 +201,12 @@ copyer& copyer::flip(enum flip f)
     return *this;
 }
 
+copyer& copyer::outline()
+{
+    m_pass.draw_rect(m_dst);
+    return *this;
+}
+
 void copyer::operator()()
 {
     if constexpr (sdl::integral_coord)

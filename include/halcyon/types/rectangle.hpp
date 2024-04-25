@@ -36,6 +36,8 @@ namespace hal
         {
         }
 
+        constexpr bool operator==(const rectangle&) const = default;
+
         template <arithmetic Convert>
         constexpr operator rectangle<Convert>() const
         {
@@ -99,12 +101,6 @@ namespace hal
 
     extern template struct rectangle<float>;
     extern template struct rectangle<double>;
-
-    template <arithmetic T>
-    constexpr bool operator==(const rectangle<T>& r1, const rectangle<T>& r2)
-    {
-        return r1.pos == r2.pos && r1.size == r2.size;
-    }
 
     template <arithmetic T>
     constexpr bool operator|(const rectangle<T>& r1, const rectangle<T>& r2)

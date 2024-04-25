@@ -137,6 +137,11 @@ namespace hal
         // Can be called at any time.
         [[nodiscard]] copyer& flip(enum flip f);
 
+        // Outlines the current destination with the renderer's draw color.
+        // Can be called at any time, but you probably want to call this
+        // after properly setting the destination rectangle.
+        [[nodiscard]] copyer& outline();
+
         void operator()();
 
     private:
