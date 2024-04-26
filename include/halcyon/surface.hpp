@@ -69,7 +69,7 @@ namespace hal
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
-        surface resize(scaler<pixel_t> scl);
+        surface resize(scaler scl);
 
         // Get pixel at position.
         // This functionality is exclusive to surfaces, as textures

@@ -38,7 +38,7 @@ namespace hal
 
         // Get/set this window's size. Expect weird behavior in fullscreen mode.
         pixel_point size() const;
-        void        size(scaler<pixel_t> scl);
+        void        size(scaler scl);
 
         // Get the index of the display this window is currently on.
         display::id_t display_index() const;

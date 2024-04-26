@@ -63,7 +63,7 @@ pixel_point surface::size() const
     };
 }
 
-surface surface::resize(scaler<pixel_t> scl)
+surface surface::resize(scaler scl)
 {
     surface    ret { scl.process(size()) };
     blend_lock bl { *this, blend_mode::none };

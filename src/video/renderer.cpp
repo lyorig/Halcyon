@@ -120,7 +120,7 @@ hal::pixel_point renderer::size() const
     return static_cast<pixel_point>(sz);
 }
 
-void renderer::size(scaler<pixel_t> scl)
+void renderer::size(scaler scl)
 {
     auto ns = scl.process(size());
     HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), ns.x, ns.y) == 0, debug::last_error());

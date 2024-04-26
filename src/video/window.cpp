@@ -40,7 +40,7 @@ hal::pixel_point window::size() const
     return size;
 }
 
-void window::size(scaler<pixel_t> scl)
+void window::size(scaler scl)
 {
     HAL_WARN_IF(fullscreen(), "Setting size of fullscreen window - this does nothing");
 

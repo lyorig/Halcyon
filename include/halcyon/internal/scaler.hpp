@@ -1,77 +1,55 @@
 #pragma once
 
-#include <halcyon/types/point.hpp>
+#include <halcyon/types/render.hpp>
 
 // internal/scaler.hpp:
 // I don't really know how to describe this class, but it's necessary.
 
 namespace hal
 {
-    enum class scale_type
-    {
-        width,
-        height,
-        multiply,
-        custom
-    };
-
-    template <arithmetic T>
     class scaler
     {
     public:
-        scale_type type;
+        using mul_t = f32;
 
-        point<T> process(const point<T>& src) const
+        enum class type
         {
-            switch (type)
-            {
-                using enum scale_type;
+            width,
+            height,
+            multiply,
+            custom
+        };
 
-            case width:
-                return src * (data.pt.x / src.x);
+        // Scale based on width.
+        scaler(pixel_t val);
 
-            case height:
-                return src * (data.pt.y / src.y);
+        // Scale based on height.
+        scaler(pixel_t val, int);
 
-            case multiply:
-                return src * data.mul;
+        // Scale by multiplying both dimensions.
+        scaler(mul_t mul);
 
-            case custom:
-                return data.pt;
-            }
-        }
+        // Use a custom size.
+        scaler(pixel_point sz);
 
+        // Get the resulting point.
+        pixel_point process(pixel_point src) const;
+
+    private:
         union
         {
-            point<T> pt;
-            f32      mul;
-        } data;
+            pixel_point pt;
+            mul_t       mul;
+        } m_data;
+
+        type m_type;
     };
 
     namespace scale
     {
-        template <arithmetic T>
-        scaler<T> width(T val)
-        {
-            return { scale_type::width, point<T> { .x = val } };
-        }
-
-        template <arithmetic T>
-        scaler<T> height(T val)
-        {
-            return { scale_type::height, point<T> { .y = val } };
-        }
-
-        template <arithmetic T>
-        scaler<T> mul(f32 val)
-        {
-            return { scale_type::multiply, val };
-        }
-
-        template <arithmetic T>
-        scaler<T> custom(const point<T>& val)
-        {
-            return { scale_type::custom, val };
-        }
+        scaler width(pixel_t val);
+        scaler height(pixel_t val);
+        scaler mult(scaler::mul_t val);
+        scaler custom(pixel_point val);
     }
 }
