@@ -63,9 +63,9 @@ pixel_point surface::size() const
     };
 }
 
-surface surface::resize(scaler scl)
+surface surface::resize(pixel_point sz)
 {
-    surface    ret { scl.process(size()) };
+    surface    ret { sz };
     blend_lock bl { *this, blend_mode::none };
 
     if (ptr()->format->format == default_format)
@@ -75,6 +75,11 @@ surface surface::resize(scaler scl)
         convert().blit(ret).to(tag::fill)();
 
     return ret;
+}
+
+surface surface::resize(scaler scl)
+{
+    return resize(scl(size()));
 }
 
 pixel_reference surface::operator[](const pixel_point& pos) const

@@ -3,43 +3,43 @@
 #include <halcyon/types/render.hpp>
 
 // internal/scaler.hpp:
-// I don't really know how to describe this class, but it's necessary.
+// A way to modify pixel sizes in-place.
 
 namespace hal
 {
+    HAL_TAG(scale_width);
+    HAL_TAG(scale_height);
+
     class scaler
     {
     public:
+        using val_t = pixel_t;
         using mul_t = f32;
 
         enum class type
         {
             width,
             height,
-            multiply,
-            custom
+            multiply
         };
 
         // Scale based on width.
-        scaler(pixel_t val);
+        scaler(val_t val, HAL_TAG_NAME(scale_width));
 
         // Scale based on height.
-        scaler(pixel_t val, int);
+        scaler(val_t val, HAL_TAG_NAME(scale_height));
 
         // Scale by multiplying both dimensions.
         scaler(mul_t mul);
 
-        // Use a custom size.
-        scaler(pixel_point sz);
-
         // Get the resulting point.
-        pixel_point process(pixel_point src) const;
+        point<val_t> operator()(point<val_t> src) const;
 
     private:
         union
         {
-            pixel_point pt;
-            mul_t       mul;
+            val_t val;
+            mul_t mul;
         } m_data;
 
         type m_type;
@@ -47,9 +47,8 @@ namespace hal
 
     namespace scale
     {
-        scaler width(pixel_t val);
-        scaler height(pixel_t val);
-        scaler mult(scaler::mul_t val);
-        scaler custom(pixel_point val);
+        scaler width(scaler::val_t val);
+        scaler height(scaler::val_t val);
+        scaler mul(scaler::mul_t mul);
     }
 }

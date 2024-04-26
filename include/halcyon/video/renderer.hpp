@@ -110,6 +110,7 @@ namespace hal
 
         // Get/set the size of the "drawing board."
         pixel_point size() const;
+        void        size(pixel_point sz);
         void        size(scaler scl);
 
         // Texture creation functions.

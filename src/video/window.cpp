@@ -40,13 +40,16 @@ hal::pixel_point window::size() const
     return size;
 }
 
-void window::size(scaler scl)
+void window::size(pixel_point sz)
 {
     HAL_WARN_IF(fullscreen(), "Setting size of fullscreen window - this does nothing");
 
-    const auto ns = scl.process(size());
+    ::SDL_SetWindowSize(this->ptr(), sz.x, sz.y);
+}
 
-    ::SDL_SetWindowSize(this->ptr(), ns.x, ns.y);
+void window::size(scaler scl)
+{
+    size(scl(size()));
 }
 
 display::id_t window::display_index() const

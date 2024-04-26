@@ -109,7 +109,7 @@ void renderer::fill_target()
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(this->ptr(), nullptr) == 0, debug::last_error());
 }
 
-hal::pixel_point renderer::size() const
+pixel_point renderer::size() const
 {
     point<int> sz;
     ::SDL_RenderGetLogicalSize(this->ptr(), &sz.x, &sz.y);
@@ -120,10 +120,14 @@ hal::pixel_point renderer::size() const
     return static_cast<pixel_point>(sz);
 }
 
+void renderer::size(pixel_point sz)
+{
+    HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), sz.x, sz.y) == 0, debug::last_error());
+}
+
 void renderer::size(scaler scl)
 {
-    auto ns = scl.process(size());
-    HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), ns.x, ns.y) == 0, debug::last_error());
+    size(scl(size()));
 }
 
 void renderer::target(target_texture& tx)
@@ -136,7 +140,7 @@ void renderer::retarget()
     this->internal_target(nullptr);
 }
 
-hal::color renderer::draw_color() const
+color renderer::draw_color() const
 {
     color ret;
 
@@ -150,7 +154,7 @@ void renderer::draw_color(color clr)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawColor(this->ptr(), clr.r, clr.g, clr.b, clr.a) == 0, debug::last_error());
 }
 
-hal::blend_mode renderer::blend() const
+blend_mode renderer::blend() const
 {
     SDL_BlendMode bm;
 

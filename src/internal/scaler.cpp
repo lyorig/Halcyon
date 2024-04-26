@@ -2,14 +2,14 @@
 
 using namespace hal;
 
-scaler::scaler(pixel_t val)
-    : m_data { .pt = { .x = val } }
+scaler::scaler(pixel_t val, HAL_TAG_NAME(scale_width))
+    : m_data { .val = val }
     , m_type { type::width }
 {
 }
 
-scaler::scaler(pixel_t val, int)
-    : m_data { .pt = { .x = val } }
+scaler::scaler(pixel_t val, HAL_TAG_NAME(scale_height))
+    : m_data { .val = val }
     , m_type { type::height }
 {
 }
@@ -20,47 +20,34 @@ scaler::scaler(mul_t mul)
 {
 }
 
-scaler::scaler(pixel_point sz)
-    : m_data { .pt = sz }
-    , m_type { type::custom }
-{
-}
-pixel_point scaler::process(pixel_point src) const
+point<scaler::val_t> scaler::operator()(point<val_t> src) const
 {
     switch (m_type)
     {
         using enum type;
 
     case width:
-        return src * (static_cast<mul_t>(m_data.pt.x) / src.x);
+        return src * (static_cast<mul_t>(m_data.val) / src.x);
 
     case height:
-        return src * (static_cast<mul_t>(m_data.pt.x) / src.y);
+        return src * (static_cast<mul_t>(m_data.val) / src.y);
 
     case multiply:
         return src * m_data.mul;
-
-    case custom:
-        return m_data.pt;
     }
 }
 
-scaler scale::width(pixel_t val)
+scaler scale::width(scaler::val_t val)
 {
-    return { val };
+    return { val, tag::scale_width };
 }
 
-scaler scale::height(pixel_t val)
+scaler scale::height(scaler::val_t val)
 {
-    return { val, 69420 };
+    return { val, tag::scale_height };
 }
 
-scaler scale::mult(scaler::mul_t val)
-{
-    return { val };
-}
-
-scaler scale::custom(pixel_point val)
+scaler scale::mul(scaler::mul_t val)
 {
     return { val };
 }
