@@ -120,9 +120,10 @@ hal::pixel_point renderer::size() const
     return static_cast<pixel_point>(sz);
 }
 
-void renderer::size(const pixel_point& sz)
+void renderer::size(scaler<pixel_t> scl)
 {
-    HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), sz.x, sz.y) == 0, debug::last_error());
+    auto ns = scl.process(size());
+    HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(this->ptr(), ns.x, ns.y) == 0, debug::last_error());
 }
 
 void renderer::target(target_texture& tx)

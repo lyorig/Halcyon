@@ -3,6 +3,8 @@
 #include <halcyon/video/display.hpp>
 #include <halcyon/video/renderer.hpp>
 
+#include <halcyon/internal/scaler.hpp>
+
 // video/window.hpp:
 // A window. Can't do much by itself.
 
@@ -36,7 +38,7 @@ namespace hal
 
         // Get/set this window's size. Expect weird behavior in fullscreen mode.
         pixel_point size() const;
-        void        size(pixel_point sz);
+        void        size(scaler<pixel_t> scl);
 
         // Get the index of the display this window is currently on.
         display::id_t display_index() const;

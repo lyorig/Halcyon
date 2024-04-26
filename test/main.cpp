@@ -38,7 +38,7 @@ namespace test
         while (e.poll()) // Clear events.
             ;
 
-        wnd.size(new_size);
+        wnd.size(hal::scale::custom(new_size));
         e.poll();
 
         if (e.event_type() != hal::event::type::window_event)

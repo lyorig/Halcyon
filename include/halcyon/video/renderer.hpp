@@ -5,7 +5,9 @@
 #include <SDL_render.h>
 
 #include <halcyon/internal/drawer.hpp>
+#include <halcyon/internal/scaler.hpp>
 #include <halcyon/internal/sdl_object.hpp>
+
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 
@@ -108,7 +110,7 @@ namespace hal
 
         // Get/set the size of the "drawing board."
         pixel_point size() const;
-        void        size(const pixel_point& sz);
+        void        size(scaler<pixel_t> scl);
 
         // Texture creation functions.
         [[nodiscard]] texture        make_texture(const surface& surf);

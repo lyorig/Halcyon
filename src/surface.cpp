@@ -40,25 +40,6 @@ surface::surface(SDL_Surface* ptr, pass_key<ttf::font>)
 {
 }
 
-surface surface::resize(pixel_point sz)
-{
-    surface    ret { sz };
-    blend_lock bl { *this, blend_mode::none };
-
-    if (ptr()->format->format == default_format)
-        blit(ret).to(tag::fill)();
-
-    else
-        convert().blit(ret).to(tag::fill)();
-
-    return ret;
-}
-
-surface surface::resize(f64 scale)
-{
-    return this->resize(this->size() * scale);
-}
-
 void surface::fill(color clr)
 {
     HAL_ASSERT_VITAL(::SDL_FillRect(ptr(), nullptr, mapped(clr)) == 0, debug::last_error());
@@ -80,6 +61,20 @@ pixel_point surface::size() const
         pixel_t(this->ptr()->w),
         pixel_t(this->ptr()->h)
     };
+}
+
+surface surface::resize(scaler<pixel_t> scl)
+{
+    surface    ret { scl.process(size()) };
+    blend_lock bl { *this, blend_mode::none };
+
+    if (ptr()->format->format == default_format)
+        blit(ret).to(tag::fill)();
+
+    else
+        convert().blit(ret).to(tag::fill)();
+
+    return ret;
 }
 
 pixel_reference surface::operator[](const pixel_point& pos) const

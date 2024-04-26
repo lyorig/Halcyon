@@ -5,6 +5,7 @@
 #include <SDL_surface.h>
 
 #include <halcyon/internal/drawer.hpp>
+#include <halcyon/internal/scaler.hpp>
 #include <halcyon/internal/sdl_object.hpp>
 
 #include <halcyon/types/color.hpp>
@@ -60,16 +61,15 @@ namespace hal
         // [private] Text is rendered with ttf::font::render().
         surface(SDL_Surface* ptr, pass_key<ttf::font>);
 
-        // Get a resized copy of the surface. Useful for saving
-        // memory after converting to a texture.
-        surface resize(pixel_point sz);
-        surface resize(f64 scale);
-
         void fill(color clr);
         void fill_rect(const sdl::pixel_rect& area, color clr);
         void fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr);
 
         pixel_point size() const;
+
+        // Get a resized copy of the surface. Useful for saving
+        // memory after converting to a texture.
+        surface resize(scaler<pixel_t> scl);
 
         // Get pixel at position.
         // This functionality is exclusive to surfaces, as textures
