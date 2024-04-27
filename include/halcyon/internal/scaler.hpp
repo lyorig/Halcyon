@@ -3,13 +3,17 @@
 #include <halcyon/types/render.hpp>
 
 // internal/scaler.hpp:
-// A way to modify pixel sizes in-place.
+// A way to scale points in-place.
 
 namespace hal
 {
     HAL_TAG(scale_width);
     HAL_TAG(scale_height);
 
+    // A class that enables in-place scaling. This is desirable when creating
+    // a surface and wanting to resize it immediately, such as:
+    // font.render("Hello!").resize(hal::scale::width(128));
+    // The other option isn't that desirable, as 
     class scaler
     {
     public:

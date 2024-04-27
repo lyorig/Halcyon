@@ -26,6 +26,9 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
     target_link_options(HalTest PRIVATE -flto)
 endif()
 
+set_target_properties(HalTest PROPERTIES
+RUNTIME_OUTPUT_DIRECTORY test/)
+
 set(ExeName $<TARGET_FILE:HalTest>)
 
 add_test(NAME AssertFail        COMMAND ${ExeName} --assert-fail)

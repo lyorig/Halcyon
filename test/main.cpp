@@ -171,7 +171,7 @@ namespace test
     {
         hal::ttf::context tctx;
 
-        const hal::ttf::font x { tctx.load(hal::access("m5x7.ttf"), 48) };
+        const hal::ttf::font x { tctx.load(hal::access("files/m5x7.ttf"), 48) };
         const hal::surface   surf { x.render("I hate you for what you did - and I miss you like a little kid") };
 
         return EXIT_SUCCESS;
