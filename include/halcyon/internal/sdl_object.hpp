@@ -1,8 +1,10 @@
 #pragma once
 
-#include <halcyon/debug.hpp>
-#include <halcyon/types/numeric.hpp>
 #include <memory>
+
+#include <halcyon/debug.hpp>
+
+#include <halcyon/types/numeric.hpp>
 
 namespace hal
 {

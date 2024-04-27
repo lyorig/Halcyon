@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <halcyon/context.hpp>
 
 #include <halcyon/image.hpp>
