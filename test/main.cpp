@@ -212,12 +212,12 @@ namespace test
     {
         hal::surface s { { 2, 2 } };
 
-        s[{ 0, 0 }] = hal::palette::red;
-        s[{ 0, 1 }] = hal::palette::green;
-        s[{ 1, 0 }] = hal::palette::blue;
-        s[{ 1, 1 }] = hal::palette::transparent;
+        s[{ 0, 0 }] = 0xF25022;
+        s[{ 1, 0 }] = 0x7FBA00;
+        s[{ 0, 1 }] = 0x00A4EF;
+        s[{ 1, 1 }] = 0xFFB900;
 
-        s.save(hal::surface::save_format::bmp, hal::output("amogus.bmp"));
+        s.save(hal::surface::save_format::bmp, hal::output("DontSueMeDaddyGates.bmp"));
 
         std::byte buf[1000];
 
