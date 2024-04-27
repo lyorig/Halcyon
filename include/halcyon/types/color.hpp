@@ -50,9 +50,11 @@ namespace hal
         {
         }
 
-        constexpr SDL_Color to_sdl_color() const
+        // Negate this color.
+        constexpr color operator-() const
         {
-            return static_cast<SDL_Color>(*this);
+            constexpr value_t max { std::numeric_limits<value_t>::max() };
+            return { static_cast<value_t>(max - r), static_cast<value_t>(max - g), static_cast<value_t>(max - b), a };
         }
 
         constexpr friend bool operator==(color a, color b)

@@ -43,7 +43,7 @@ font::~font()
 
 hal::surface font::render(std::string_view text, hal::color color) const
 {
-    return { ::TTF_RenderUTF8_Solid_Wrapped(ptr(), text.data(), color.to_sdl_color(), 0), pass_key<font> {} };
+    return { ::TTF_RenderUTF8_Solid_Wrapped(ptr(), text.data(), static_cast<SDL_Color>(color), 0), pass_key<font> {} };
 }
 
 hal::pixel_point font::size_text(const std::string_view& text) const
