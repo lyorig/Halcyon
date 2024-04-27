@@ -3,6 +3,8 @@
 #include <climits>
 #include <cstring>
 
+#include <SDL_image.h>
+
 using namespace hal;
 
 // Set the depth accordingly upon changing this value.
@@ -26,7 +28,7 @@ void surface::blend_lock::set(blend_mode bm)
 }
 
 surface::surface(pixel_point sz)
-    : surface { sz, CHAR_BIT * 4, default_format }
+    : surface { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, default_format) }
 {
 }
 
@@ -55,14 +57,6 @@ void surface::fill_rects(const std::span<const sdl::pixel_rect>& areas, color cl
     HAL_ASSERT_VITAL(::SDL_FillRects(ptr(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, debug::last_error());
 }
 
-pixel_point surface::size() const
-{
-    return {
-        pixel_t(this->ptr()->w),
-        pixel_t(this->ptr()->h)
-    };
-}
-
 surface surface::resize(pixel_point sz)
 {
     surface    ret { sz };
@@ -82,12 +76,39 @@ surface surface::resize(scaler scl)
     return resize(scl(size()));
 }
 
-pixel_reference surface::operator[](const pixel_point& pos) const
+void surface::save(save_format fmt, outputter out) const
 {
-    HAL_ASSERT(pos.x < ptr()->w, "Out-of-range width");
-    HAL_ASSERT(pos.y < ptr()->h, "Out-of-range height");
+    constexpr u8 jpg_quality { 90 };
 
-    return { ptr()->pixels, ptr()->pitch, ptr()->format, pos };
+    switch (fmt)
+    {
+        using enum save_format;
+
+    case bmp:
+        HAL_ASSERT_VITAL(::SDL_SaveBMP_RW(ptr(), out.get({}), true) == 0, debug::last_error());
+        break;
+
+    case png:
+        HAL_ASSERT_VITAL(::IMG_SavePNG_RW(ptr(), out.get({}), true) == 0, debug::last_error());
+        break;
+
+    case jpg:
+        HAL_ASSERT_VITAL(::IMG_SaveJPG_RW(ptr(), out.get({}), true, jpg_quality) == 0, debug::last_error());
+        break;
+    }
+}
+
+blitter surface::blit(surface& dst) const
+{
+    return { *this, dst, {} };
+}
+
+pixel_point surface::size() const
+{
+    return {
+        pixel_t(this->ptr()->w),
+        pixel_t(this->ptr()->h)
+    };
 }
 
 blend_mode surface::blend() const
@@ -104,14 +125,12 @@ void surface::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(this->ptr(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-blitter surface::blit(surface& dst) const
+pixel_reference surface::operator[](const pixel_point& pos) const
 {
-    return { *this, dst, {} };
-}
+    HAL_ASSERT(pos.x < ptr()->w, "Out-of-range width");
+    HAL_ASSERT(pos.y < ptr()->h, "Out-of-range height");
 
-surface::surface(pixel_point sz, int depth, Uint32 fmt)
-    : surface { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, depth, fmt) }
-{
+    return { ptr()->pixels, ptr()->pitch, ptr()->format, pos, {} };
 }
 
 surface::surface(SDL_Surface* ptr)
@@ -129,7 +148,7 @@ std::uint32_t surface::mapped(color c) const
     return ::SDL_MapRGBA(ptr()->format, c.r, c.g, c.b, c.a);
 }
 
-pixel_reference::pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos)
+pixel_reference::pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>)
     : m_ptr { static_cast<std::byte*>(pixels) + pos.y * pitch + pos.x * fmt->BytesPerPixel }
     , m_fmt { fmt }
 {

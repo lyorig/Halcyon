@@ -207,6 +207,24 @@ namespace test
 
         return EXIT_SUCCESS;
     }
+
+    int outputter()
+    {
+        hal::surface s { { 2, 2 } };
+
+        s[{ 0, 0 }] = hal::palette::red;
+        s[{ 0, 1 }] = hal::palette::green;
+        s[{ 1, 0 }] = hal::palette::blue;
+        s[{ 1, 1 }] = hal::palette::transparent;
+
+        s.save(hal::surface::save_format::bmp, hal::output("amogus.bmp"));
+
+        std::byte buf[1000];
+
+        s.save(hal::surface::save_format::bmp, hal::output(buf));
+
+        return EXIT_SUCCESS;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -222,7 +240,8 @@ int main(int argc, char* argv[])
         { "--quit-event", test::quit_event },
         { "--ttf-init", test::ttf_init },
         { "--rvalues", test::rvalues },
-        { "--scaler", test::scaler }
+        { "--scaler", test::scaler },
+        { "--outputter", test::outputter }
     };
 
     if (argc == 1)

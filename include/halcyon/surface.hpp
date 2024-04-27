@@ -5,6 +5,7 @@
 #include <SDL_surface.h>
 
 #include <halcyon/internal/drawer.hpp>
+#include <halcyon/internal/outputter.hpp>
 #include <halcyon/internal/scaler.hpp>
 #include <halcyon/internal/sdl_object.hpp>
 
@@ -49,6 +50,13 @@ namespace hal
             blend_mode m_old;
         };
 
+        enum class save_format : u8
+        {
+            bmp,
+            png,
+            jpg
+        };
+
         // Create an invalid surface.
         surface() = default;
 
@@ -65,30 +73,29 @@ namespace hal
         void fill_rect(const sdl::pixel_rect& area, color clr);
         void fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr);
 
-        pixel_point size() const;
-
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
         surface resize(pixel_point sz);
         surface resize(scaler scl);
+
+        void save(save_format fmt, outputter out) const;
+
+        // Create a blitter.
+        [[nodiscard]] blitter blit(surface& dst) const;
+
+        pixel_point size() const;
+
+        blend_mode blend() const;
+        void       blend(blend_mode bm);
 
         // Get pixel at position.
         // This functionality is exclusive to surfaces, as textures
         // are extremely slow to retrieve pixel information.
         pixel_reference operator[](const pixel_point& pos) const;
 
-        blend_mode blend() const;
-        void       blend(blend_mode bm);
-
-        // Create a blitter.
-        [[nodiscard]] blitter blit(surface& dst) const;
-
     private:
-        // [private] I'd rather use the pixel format enum, but SDL uses an integer
-        // in pretty much every API function, so I'll save myself the hassle.
-        surface(pixel_point sz, int depth, Uint32 format);
-
         // [private] Construct a new surface from a pointer.
+        // Currently used in convert().
         surface(SDL_Surface* ptr);
 
         surface convert() const;
@@ -101,7 +108,7 @@ namespace hal
     class pixel_reference
     {
     public:
-        pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos);
+        pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>);
 
         operator color() const;
 

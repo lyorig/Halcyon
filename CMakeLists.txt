@@ -39,8 +39,7 @@ add_test(NAME QuitEvent         COMMAND ${ExeName} --quit-event)
 add_test(NAME TTFInit           COMMAND ${ExeName} --ttf-init)
 add_test(NAME RValues           COMMAND ${ExeName} --rvalues)
 add_test(NAME Scaler            COMMAND ${ExeName} --scaler)
-
-
+add_test(NAME Outputter         COMMAND ${ExeName} --outputter)
 
 # Set which tests are expected to fail.
 set_tests_properties(AssertFail InvalidBuffer InvalidTexture PROPERTIES WILL_FAIL TRUE)
