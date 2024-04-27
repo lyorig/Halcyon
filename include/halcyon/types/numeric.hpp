@@ -7,16 +7,6 @@
 
 #define HAL_NO_SIZE [[no_unique_address]]
 
-#define HAL_TAG_NAME(name) tag::name##_t
-
-#define HAL_TAG(name)            \
-    namespace tag                \
-    {                            \
-        struct name##_t          \
-        {                        \
-        } inline constexpr name; \
-    }
-
 // types/numeric.hpp:
 // Various type aliases and related stuff. These are not guaranteed to be
 // as large as the types they represent due to the fast type switch, so if

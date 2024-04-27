@@ -3,7 +3,24 @@
 #include <halcyon/types/numeric.hpp>
 
 // tags.hpp:
-// For internal use only. This file is required to fix some circular dependencies.
+// Tag macros and shared tag names.
+
+#define HAL_TAG_NAMESPACE      tag
+#define HAL_TAG_IMPL_NAMESPACE impl
+
+#define HAL_TAG_NAME(name) HAL_TAG_NAMESPACE ::HAL_TAG_IMPL_NAMESPACE::name
+
+#define HAL_TAG(name)                                       \
+    namespace tag                                           \
+    {                                                       \
+        namespace HAL_TAG_IMPL_NAMESPACE                    \
+        {                                                   \
+            struct name                                     \
+            {                                               \
+            };                                              \
+        }                                                   \
+        inline constexpr HAL_TAG_IMPL_NAMESPACE::name name; \
+    }
 
 namespace hal
 {
@@ -11,5 +28,5 @@ namespace hal
 
     HAL_TAG(infinite_loop);
 
-    HAL_TAG(fill);
+    HAL_TAG(fill)
 }
