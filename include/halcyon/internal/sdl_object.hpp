@@ -11,22 +11,15 @@ namespace hal
         template <typename Type, func_ptr<void, Type*> Deleter>
         class object
         {
-            struct deleter
-            {
-                void operator()(Type* ptr)
-                {
-                    Deleter(ptr);
-                }
-            };
-
         public:
-            // A default constructor that doesn't check for null.
+            // A default constructor that doesn't perform a null check.
             object() = default;
 
+            // A constructor that expects a valid object pointer.
             object(Type* object)
                 : m_object { object }
             {
-                HAL_ASSERT(ptr() != nullptr, debug::last_error());
+                HAL_ASSERT(valid(), debug::last_error());
             }
 
             // Return the underlying pointer to the object. Intended for internal
@@ -37,7 +30,7 @@ namespace hal
                 return m_object.get();
             }
 
-            // Check whether the object is valid and useable (a.k.a. non-null).;
+            // Check whether the object is valid and useable (a.k.a. non-null).
             bool valid() const
             {
                 return ptr() != nullptr;
@@ -49,14 +42,15 @@ namespace hal
                 m_object.reset();
             }
 
-        protected:
-            void reset(Type* object)
-            {
-                m_object.reset(object);
-                HAL_ASSERT(m_object.get() != nullptr, debug::last_error());
-            }
-
         private:
+            struct deleter
+            {
+                void operator()(Type* ptr)
+                {
+                    Deleter(ptr);
+                }
+            };
+
             std::unique_ptr<Type, deleter> m_object;
         };
     }

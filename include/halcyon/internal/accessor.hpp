@@ -4,7 +4,7 @@
 #include <span>
 #include <string_view>
 
-#include <SDL_rwops.h>
+#include <halcyon/internal/sdl_rwops.hpp>
 
 #include <halcyon/utility/pass_key.hpp>
 
@@ -29,24 +29,14 @@ namespace hal
 
     // A proxy to various methods of accessing a file. Only meant for use in
     // constructors and functions; creation anywhere else will cause a memory leak.
-    class accessor
+    class accessor : public sdl::rwops
     {
     public:
-        // Non-copyable.
-        accessor(const accessor&) = delete;
-        accessor(accessor&&)      = default;
-
         accessor(std::string_view path);
         accessor(std::span<const std::byte> data);
 
         SDL_RWops* get(pass_key<image::context>) const;
         SDL_RWops* get(pass_key<ttf::context>) const;
-
-    private:
-        // [private] Delegating constructor.
-        accessor(SDL_RWops* ptr);
-
-        SDL_RWops* m_ops;
     };
 
     [[nodiscard]] accessor access(std::string_view path);

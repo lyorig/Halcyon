@@ -5,30 +5,24 @@
 using namespace hal;
 
 outputter::outputter(std::string_view file)
-    : outputter { ::SDL_RWFromFile(file.data(), "w") }
+    : rwops { ::SDL_RWFromFile(file.data(), "w") }
 {
 }
 
 outputter::outputter(std::span<std::byte> data)
-    : outputter { ::SDL_RWFromMem(data.data(), data.size()) }
+    : rwops { ::SDL_RWFromMem(data.data(), data.size()) }
 {
 }
 
 outputter::outputter(std::span<std::uint8_t> data)
-    : outputter { ::SDL_RWFromMem(data.data(), data.size()) }
+    : rwops { ::SDL_RWFromMem(data.data(), data.size()) }
 
 {
 }
 
 SDL_RWops* outputter::get(pass_key<surface>)
 {
-    return m_ops;
-}
-
-outputter::outputter(SDL_RWops* ptr)
-    : m_ops { ptr }
-{
-    HAL_ASSERT(m_ops != nullptr, debug::last_error());
+    return m_ptr;
 }
 
 outputter hal::output(std::string_view file)

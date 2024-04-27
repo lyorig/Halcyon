@@ -78,12 +78,6 @@ hal::detail::texture_base::texture_base(SDL_Texture* ptr)
     this->blend(blend_mode::blend);
 }
 
-void hal::detail::texture_base::reset(SDL_Texture* ptr)
-{
-    object::reset(ptr);
-    this->blend(blend_mode::blend);
-}
-
 void hal::detail::texture_base::query(std::uint32_t* format, int* access, int* w, int* h) const
 {
     HAL_ASSERT_VITAL(::SDL_QueryTexture(this->ptr(), format, access, w, h) == 0, debug::last_error());

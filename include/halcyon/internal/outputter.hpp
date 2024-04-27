@@ -3,7 +3,7 @@
 #include <span>
 #include <string_view>
 
-#include <SDL_rwops.h>
+#include <halcyon/internal/sdl_rwops.hpp>
 
 #include <halcyon/utility/pass_key.hpp>
 
@@ -14,7 +14,7 @@ namespace hal
 {
     class surface;
 
-    class outputter
+    class outputter : public sdl::rwops
     {
     public:
         outputter(std::string_view file);
@@ -25,12 +25,6 @@ namespace hal
         outputter(std::span<std::uint8_t> data);
 
         SDL_RWops* get(pass_key<surface>);
-
-    private:
-        // [private] Delegating constructor.
-        outputter(SDL_RWops* ptr);
-
-        SDL_RWops* m_ops;
     };
 
     [[nodiscard]] outputter output(std::string_view file);

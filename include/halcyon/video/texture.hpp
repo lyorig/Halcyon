@@ -39,8 +39,6 @@ namespace hal
             texture_base() = default;
             texture_base(SDL_Texture* ptr);
 
-            void reset(SDL_Texture* ptr);
-
         private:
             void query(std::uint32_t* format, int* access, int* w, int* h) const;
         };
