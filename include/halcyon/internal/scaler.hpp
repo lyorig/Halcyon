@@ -13,14 +13,13 @@ namespace hal
     // A class that enables in-place scaling. This is desirable when creating
     // a surface and wanting to resize it immediately, such as:
     // font.render("Hello!").resize(hal::scale::width(128));
-    // The other option isn't that desirable, as 
     class scaler
     {
     public:
         using val_t = pixel_t;
         using mul_t = f32;
 
-        enum class type
+        enum class type : u8
         {
             width,
             height,
@@ -40,13 +39,13 @@ namespace hal
         point<val_t> operator()(point<val_t> src) const;
 
     private:
+        type m_type;
+
         union
         {
             val_t val;
             mul_t mul;
         } m_data;
-
-        type m_type;
     };
 
     namespace scale

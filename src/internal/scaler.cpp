@@ -3,20 +3,20 @@
 using namespace hal;
 
 scaler::scaler(pixel_t val, HAL_TAG_NAME(scale_width))
-    : m_data { .val = val }
-    , m_type { type::width }
+    : m_type { type::width }
+    , m_data { .val = val }
 {
 }
 
 scaler::scaler(pixel_t val, HAL_TAG_NAME(scale_height))
-    : m_data { .val = val }
-    , m_type { type::height }
+    : m_type { type::height }
+    , m_data { .val = val }
 {
 }
 
 scaler::scaler(mul_t mul)
-    : m_data { .mul = mul }
-    , m_type { type::multiply }
+    : m_type { type::multiply }
+    , m_data { .mul = mul }
 {
 }
 
@@ -27,10 +27,16 @@ point<scaler::val_t> scaler::operator()(point<val_t> src) const
         using enum type;
 
     case width:
-        return src * (static_cast<mul_t>(m_data.val) / src.x);
+        return {
+            m_data.val,
+            static_cast<val_t>(src.y * (static_cast<mul_t>(m_data.val) / src.x))
+        };
 
     case height:
-        return src * (static_cast<mul_t>(m_data.val) / src.y);
+        return {
+            static_cast<val_t>(src.x * (static_cast<mul_t>(m_data.val) / src.y)),
+            m_data.val
+        };
 
     case multiply:
         return src * m_data.mul;

@@ -38,7 +38,7 @@ namespace test
         while (e.poll()) // Clear events.
             ;
 
-        wnd.size(hal::scale::custom(new_size));
+        wnd.size(new_size);
         e.poll();
 
         if (e.event_type() != hal::event::type::window_event)
@@ -169,10 +169,15 @@ namespace test
     // Basic TTF initialization.
     int ttf_init()
     {
-        hal::ttf::context tctx;
+        {
+            hal::ttf::context tctx;
 
-        const hal::ttf::font x { tctx.load(hal::access("files/m5x7.ttf"), 48) };
-        const hal::surface   surf { x.render("I hate you for what you did - and I miss you like a little kid") };
+            if (!hal::ttf::context::initialized())
+                return EXIT_FAILURE;
+        }
+
+        if (hal::ttf::context::initialized())
+            return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
     }
@@ -182,6 +187,23 @@ namespace test
         hal::context c;
 
         hal::system::video { c }.clipboard("Hello from HalTest!");
+
+        return EXIT_SUCCESS;
+    }
+
+    int scaler()
+    {
+        constexpr hal::pixel_point src { 50, 100 };
+        constexpr hal::pixel_point dst { 100, 200 };
+
+        if (hal::scale::width(100)(src) != dst)
+            return EXIT_FAILURE;
+
+        if (hal::scale::height(200)(src) != dst)
+            return EXIT_FAILURE;
+
+        if (hal::scale::mul(2.0)(src) != dst)
+            return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
     }
@@ -199,7 +221,8 @@ int main(int argc, char* argv[])
         { "--invalid-textire", test::invalid_texture },
         { "--quit-event", test::quit_event },
         { "--ttf-init", test::ttf_init },
-        { "--rvalues", test::rvalues }
+        { "--rvalues", test::rvalues },
+        { "--scaler", test::scaler }
     };
 
     if (argc == 1)

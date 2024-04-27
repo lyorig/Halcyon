@@ -26,9 +26,6 @@ if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
     target_link_options(HalTest PRIVATE -flto)
 endif()
 
-set_target_properties(HalTest PROPERTIES
-RUNTIME_OUTPUT_DIRECTORY test/)
-
 set(ExeName $<TARGET_FILE:HalTest>)
 
 add_test(NAME AssertFail        COMMAND ${ExeName} --assert-fail)
@@ -41,6 +38,8 @@ add_test(NAME InvalidTexture    COMMAND ${ExeName} --invalid-texture)
 add_test(NAME QuitEvent         COMMAND ${ExeName} --quit-event)
 add_test(NAME TTFInit           COMMAND ${ExeName} --ttf-init)
 add_test(NAME RValues           COMMAND ${ExeName} --rvalues)
+add_test(NAME Scaler            COMMAND ${ExeName} --scaler)
+
 
 
 # Set which tests are expected to fail.
