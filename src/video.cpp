@@ -6,7 +6,7 @@
 
 using namespace hal;
 
-using sub = hal::detail::subsystem<hal::detail::system::video>;
+using sub = detail::subsystem<detail::system::video>;
 
 window sub::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags)
 {

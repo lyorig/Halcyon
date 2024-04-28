@@ -78,13 +78,16 @@ namespace hal
         surface resize(pixel_point sz);
         surface resize(scaler scl);
 
+        // Save this surface to a file or memory.
         void save(save_format fmt, outputter out) const;
 
         // Create a blitter.
         [[nodiscard]] blitter blit(surface& dst) const;
 
+        // Get surface dimensions.
         pixel_point size() const;
 
+        // Get/set this surface's blend mode.
         blend_mode blend() const;
         void       blend(blend_mode bm);
 
@@ -94,11 +97,9 @@ namespace hal
         pixel_reference operator[](const pixel_point& pos) const;
 
     private:
-        // [private] Construct a new surface from a pointer.
-        // Currently used in convert().
-        surface(SDL_Surface* ptr);
-
-        surface convert() const;
+        // [private] Construct a new surface from an existing one
+        // and convert it to a specified format.
+        surface(const surface& cvt, SDL_PixelFormatEnum fmt);
 
         // Convert a color to a mapped value using this surface's pixel format.
         std::uint32_t mapped(color c) const;
@@ -125,6 +126,7 @@ namespace hal
         const SDL_PixelFormat* m_fmt;
     };
 
+    // A builder pattern drawing proxy for surfaces.
     class blitter : public detail::drawer<surface, sdl::pixel_t, const surface, blitter>
     {
     public:

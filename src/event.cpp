@@ -1,13 +1,15 @@
 #include <halcyon/event.hpp>
 
-using sub = hal::detail::subsystem<hal::detail::system::events>;
+using namespace hal;
 
-hal::mouse::state sub::mouse_proxy::state() const
+using sub = detail::subsystem<detail::system::events>;
+
+mouse::state sub::mouse_proxy::state() const
 {
     return { {} };
 }
 
-hal::pixel_point sub::mouse_proxy::pos_abs() const
+pixel_point sub::mouse_proxy::pos_abs() const
 {
     sdl::pixel_point ret;
 
@@ -16,7 +18,7 @@ hal::pixel_point sub::mouse_proxy::pos_abs() const
     return ret;
 }
 
-hal::pixel_point sub::mouse_proxy::pos_rel() const
+pixel_point sub::mouse_proxy::pos_rel() const
 {
     sdl::pixel_point ret;
 
@@ -25,7 +27,7 @@ hal::pixel_point sub::mouse_proxy::pos_rel() const
     return ret;
 }
 
-hal::keyboard::state_reference sub::keyboard_proxy::state_ref() const
+keyboard::state_reference sub::keyboard_proxy::state_ref() const
 {
     return { {} };
 }
