@@ -10,12 +10,38 @@
 
 namespace hal::image
 {
-    enum class format : u8
+    enum class init
     {
         jpg  = IMG_INIT_JPG,
         png  = IMG_INIT_PNG,
         tif  = IMG_INIT_TIF,
-        webp = IMG_INIT_WEBP
+        webp = IMG_INIT_WEBP,
+        jxl  = IMG_INIT_JXL,
+        avif = IMG_INIT_AVIF
+    };
+
+    enum class format : u8
+    {
+        avif,
+        ico,
+        cur,
+        bmp,
+        gif,
+        jpg,
+        jxl,
+        lbm,
+        pcx,
+        png,
+        pnm,
+        svg,
+        qoi,
+        tif,
+        xcf,
+        xpm,
+        xv,
+        webp,
+
+        unknown
     };
 
     // Loads the necessary libraries for image loading.
@@ -23,7 +49,7 @@ namespace hal::image
     {
     public:
         // Initialize the image loader context with chosen types.
-        context(std::initializer_list<format> types);
+        context(std::initializer_list<init> types);
 
         context(const context&) = delete;
         context(context&&)      = delete;
@@ -32,6 +58,10 @@ namespace hal::image
 
         // Image loading functions.
         [[nodiscard]] surface load(accessor data) const;
+
+        // Check an image's format.
+        // This sets the accessor back to where it started, so const ref it is.
+        format check(const accessor& data) const;
 
         static bool initialized();
     };

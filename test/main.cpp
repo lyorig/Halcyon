@@ -81,7 +81,7 @@ namespace test
     {
         constexpr std::uint8_t data[1024] {};
 
-        hal::image::context ictx { hal::image::format::png };
+        hal::image::context ictx { hal::image::init::png };
 
         // Failure should occur here.
         const hal::surface s { ictx.load(hal::access(data)) };
@@ -126,7 +126,7 @@ namespace test
     // Checking pixel colors in a 2x1 surface.
     int surface_color()
     {
-        hal::image::context ictx { hal::image::format::png };
+        hal::image::context ictx { hal::image::init::png };
 
         hal::surface s { ictx.load(hal::access(two_by_one)) };
 
@@ -225,6 +225,16 @@ namespace test
 
         return EXIT_SUCCESS;
     }
+
+    int png_check()
+    {
+        hal::image::context ictx { hal::image::init::png };
+
+        if (ictx.check(hal::access(two_by_one)) != hal::image::format::png)
+            return EXIT_FAILURE;
+
+        return EXIT_SUCCESS;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -241,7 +251,8 @@ int main(int argc, char* argv[])
         { "--ttf-init", test::ttf_init },
         { "--rvalues", test::rvalues },
         { "--scaler", test::scaler },
-        { "--outputter", test::outputter }
+        { "--outputter", test::outputter },
+        { "--png-check", test::png_check }
     };
 
     if (argc == 1)

@@ -15,6 +15,8 @@ namespace hal::sdl
 
         rwops(SDL_RWops* ptr);
 
+        void free() const;
+
     protected:
         SDL_RWops* m_ptr;
     };
