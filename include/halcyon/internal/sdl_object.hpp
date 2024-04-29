@@ -10,10 +10,19 @@ namespace hal
 {
     namespace sdl
     {
-        template <typename Type, func_ptr<void, Type*> Deleter>
+        template <typename Type, auto Deleter>
+            requires std::is_invocable_v<decltype(Deleter), Type*>
         class object
         {
-        public:
+            struct deleter
+            {
+                void operator()(Type* ptr)
+                {
+                    static_cast<void>(Deleter(ptr));
+                }
+            };
+
+        protected:
             // A default constructor that doesn't perform a null check.
             object() = default;
 
@@ -23,6 +32,9 @@ namespace hal
             {
                 HAL_ASSERT(valid(), debug::last_error());
             }
+
+        public:
+            using unique_ptr = std::unique_ptr<Type, deleter>;
 
             // Return the underlying pointer to the object. Intended for internal
             // use, or for when you want to interface with SDL to use functions not
@@ -44,16 +56,14 @@ namespace hal
                 m_object.reset();
             }
 
-        private:
-            struct deleter
+            // Move the unique_ptr holding the object.
+            unique_ptr move()
             {
-                void operator()(Type* ptr)
-                {
-                    Deleter(ptr);
-                }
-            };
+                return std::move(m_object);
+            }
 
-            std::unique_ptr<Type, deleter> m_object;
+        private:
+            unique_ptr m_object;
         };
     }
 }

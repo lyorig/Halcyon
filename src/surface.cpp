@@ -78,7 +78,7 @@ surface surface::resize(scaler scl)
 
 void surface::save(outputter dst) const
 {
-    HAL_ASSERT_VITAL(::SDL_SaveBMP_RW(ptr(), dst.get(pass_key<surface> {}), true), debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_SaveBMP_RW(ptr(), dst.use(pass_key<surface> {}).get(), false) == 0, debug::last_error());
 }
 
 blitter surface::blit(surface& dst) const

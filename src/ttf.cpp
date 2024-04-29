@@ -22,7 +22,7 @@ context::~context()
 
 font context::load(accessor data, u8 pt) &
 {
-    return { ::TTF_OpenFontRW(data.get(pass_key<context> {}), true, pt), pass_key<context> {} };
+    return { ::TTF_OpenFontRW(data.use(pass_key<context> {}).get(), false, pt), pass_key<context> {} };
 }
 
 bool context::initialized()

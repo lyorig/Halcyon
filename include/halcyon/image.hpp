@@ -13,7 +13,7 @@ namespace hal
 {
     namespace image
     {
-        enum class load_format
+        enum class load_format : u8
         {
             jpg  = IMG_INIT_JPG,
             png  = IMG_INIT_PNG,
@@ -23,7 +23,7 @@ namespace hal
             avif = IMG_INIT_AVIF
         };
 
-        enum class save_format
+        enum class save_format : u8
         {
             png,
             jpg
@@ -66,10 +66,10 @@ namespace hal
             ~context();
 
             // Load an image, automatically deducing the format.
-            [[nodiscard]] surface load(accessor data) const;
+            [[nodiscard]] surface load(accessor src) const;
 
             // Load an image, knowing the format in advance.
-            [[nodiscard]] surface load(accessor data, load_format fmt) const;
+            [[nodiscard]] surface load(accessor src, load_format fmt) const;
 
             // Save a surface with a specified format.
             // JPEG files are currently saved at a hard-coded 90 quality.
@@ -77,7 +77,7 @@ namespace hal
 
             // Check an image's format.
             // This sets the accessor back to where it started, so const ref it is.
-            query_format query(const accessor& data) const;
+            query_format query(const accessor& src) const;
 
             static bool initialized();
         };

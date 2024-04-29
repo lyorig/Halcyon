@@ -4,23 +4,28 @@
 using namespace hal;
 
 accessor::accessor(std::string_view path)
-    : rwops { ::SDL_RWFromFile(path.data(), "r") }
+    : object { ::SDL_RWFromFile(path.data(), "r") }
 {
 }
 
 accessor::accessor(std::span<const std::byte> data)
-    : rwops { ::SDL_RWFromConstMem(data.data(), data.size_bytes()) }
+    : object { ::SDL_RWFromConstMem(data.data(), data.size_bytes()) }
 {
 }
 
 SDL_RWops* accessor::get(pass_key<image::context>) const
 {
-    return m_ptr;
+    return ptr();
 }
 
-SDL_RWops* accessor::get(pass_key<ttf::context>) const
+accessor::unique_ptr accessor::use(pass_key<image::context>)
 {
-    return m_ptr;
+    return move();
+}
+
+accessor::unique_ptr accessor::use(pass_key<ttf::context>)
+{
+    return move();
 }
 
 accessor hal::access(std::string_view path)

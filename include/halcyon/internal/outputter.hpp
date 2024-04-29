@@ -1,9 +1,10 @@
 #pragma once
 
+#include <cstdint>
 #include <span>
 #include <string_view>
 
-#include <halcyon/internal/sdl_rwops.hpp>
+#include <halcyon/internal/sdl_object.hpp>
 
 #include <halcyon/utility/pass_key.hpp>
 
@@ -19,7 +20,7 @@ namespace hal
         class context;
     }
 
-    class outputter : public sdl::rwops
+    class outputter : sdl::object<SDL_RWops, ::SDL_RWclose> // Private inheritance by design.
     {
     public:
         outputter(std::string_view file);
@@ -29,8 +30,8 @@ namespace hal
         outputter(std::span<std::byte> data);
         outputter(std::span<std::uint8_t> data);
 
-        SDL_RWops* get(pass_key<surface>);
-        SDL_RWops* get(pass_key<image::context>);
+        unique_ptr use(pass_key<surface>);
+        unique_ptr use(pass_key<image::context>);
     };
 
     [[nodiscard]] outputter output(std::string_view file);
