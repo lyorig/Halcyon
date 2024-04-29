@@ -8,66 +8,85 @@
 // image.hpp:
 // SDL_image wrappers for image loading.
 
-namespace hal::image
+namespace hal
+
 {
-    enum class format
+    namespace image
     {
-        jpg  = IMG_INIT_JPG,
-        png  = IMG_INIT_PNG,
-        tif  = IMG_INIT_TIF,
-        webp = IMG_INIT_WEBP,
-        jxl  = IMG_INIT_JXL,
-        avif = IMG_INIT_AVIF
-    };
+        enum class load_format
+        {
+            jpg  = IMG_INIT_JPG,
+            png  = IMG_INIT_PNG,
+            tif  = IMG_INIT_TIF,
+            webp = IMG_INIT_WEBP,
+            jxl  = IMG_INIT_JXL,
+            avif = IMG_INIT_AVIF
+        };
 
-    enum class query_format : u8
-    {
-        avif,
-        ico,
-        cur,
-        bmp,
-        gif,
-        jpg,
-        jxl,
-        lbm,
-        pcx,
-        png,
-        pnm,
-        svg,
-        qoi,
-        tif,
-        xcf,
-        xpm,
-        xv,
-        webp,
+        enum class save_format
+        {
+            png,
+            jpg
+        };
 
-        unknown
-    };
+        enum class query_format : u8
+        {
+            avif,
+            ico,
+            cur,
+            bmp,
+            gif,
+            jpg,
+            jxl,
+            lbm,
+            pcx,
+            png,
+            pnm,
+            svg,
+            qoi,
+            tif,
+            xcf,
+            xpm,
+            xv,
+            webp,
 
-    // Loads the necessary libraries for image loading.
-    class context
-    {
-    public:
-        // Initialize the image loader context with chosen types.
-        context(std::initializer_list<format> types);
+            unknown
+        };
 
-        context(const context&) = delete;
-        context(context&&)      = delete;
+        // Loads, and provides, image manipulation functionality.
+        class context
+        {
+        public:
+            // Initialize the image context with chosen types.
+            context(std::initializer_list<load_format> types);
 
-        ~context();
+            context(const context&) = delete;
+            context(context&&)      = delete;
 
-        // Image loading functions.
-        [[nodiscard]] surface load(accessor data) const;
+            ~context();
 
-        // Check an image's format.
-        // This sets the accessor back to where it started, so const ref it is.
-        query_format query(const accessor& data) const;
+            // Load an image, automatically deducing the format.
+            [[nodiscard]] surface load(accessor data) const;
 
-        static bool initialized();
-    };
+            // Load an image, knowing the format in advance.
+            [[nodiscard]] surface load(accessor data, load_format fmt) const;
 
-    static_assert(std::is_empty_v<context>);
+            // Save a surface with a specified format.
+            // JPEG files are currently saved at a hard-coded 90 quality.
+            void save(const surface& surf, save_format fmt, outputter dst) const;
 
-    // Ensure calling debug::last_error() gives accurate information.
-    static_assert(::IMG_GetError == ::SDL_GetError);
+            // Check an image's format.
+            // This sets the accessor back to where it started, so const ref it is.
+            query_format query(const accessor& data) const;
+
+            static bool initialized();
+        };
+
+        static_assert(std::is_empty_v<context>);
+
+        // Ensure calling debug::last_error() gives accurate information.
+        static_assert(::IMG_GetError == ::SDL_GetError);
+    }
+
+    std::string_view to_string(image::load_format fmt);
 }

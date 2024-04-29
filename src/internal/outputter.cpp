@@ -25,6 +25,11 @@ SDL_RWops* outputter::get(pass_key<surface>)
     return m_ptr;
 }
 
+SDL_RWops* outputter::get(pass_key<image::context>)
+{
+    return m_ptr;
+}
+
 outputter hal::output(std::string_view file)
 {
     return file;

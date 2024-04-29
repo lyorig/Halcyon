@@ -76,26 +76,9 @@ surface surface::resize(scaler scl)
     return resize(scl(size()));
 }
 
-void surface::save(save_format fmt, outputter out) const
+void surface::save(outputter dst) const
 {
-    constexpr u8 jpg_quality { 90 };
-
-    switch (fmt)
-    {
-        using enum save_format;
-
-    case bmp:
-        HAL_ASSERT_VITAL(::SDL_SaveBMP_RW(ptr(), out.get({}), true) == 0, debug::last_error());
-        break;
-
-    case png:
-        HAL_ASSERT_VITAL(::IMG_SavePNG_RW(ptr(), out.get({}), true) == 0, debug::last_error());
-        break;
-
-    case jpg:
-        HAL_ASSERT_VITAL(::IMG_SaveJPG_RW(ptr(), out.get({}), true, jpg_quality) == 0, debug::last_error());
-        break;
-    }
+    HAL_ASSERT_VITAL(::SDL_SaveBMP_RW(ptr(), dst.get(pass_key<surface> {}), true), debug::last_error());
 }
 
 blitter surface::blit(surface& dst) const

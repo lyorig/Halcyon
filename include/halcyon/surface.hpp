@@ -50,13 +50,6 @@ namespace hal
             blend_mode m_old;
         };
 
-        enum class save_format : u8
-        {
-            bmp,
-            png,
-            jpg
-        };
-
         // Create an invalid surface.
         surface() = default;
 
@@ -69,8 +62,13 @@ namespace hal
         // [private] Text is rendered with ttf::font::render().
         surface(SDL_Surface* ptr, pass_key<ttf::font>);
 
+        // Fill the entire surface with a color.
         void fill(color clr);
+
+        // Fill a rectangle with a color.
         void fill_rect(const sdl::pixel_rect& area, color clr);
+
+        // Fill an array of rectangles with a color.
         void fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr);
 
         // Get a resized copy of the surface. Useful for saving
@@ -78,8 +76,9 @@ namespace hal
         surface resize(pixel_point sz);
         surface resize(scaler scl);
 
-        // Save this surface to a file or memory.
-        void save(save_format fmt, outputter out) const;
+        // Save this surface in a BMP format.
+        // More formats are made available by the image context.
+        void save(outputter dst) const;
 
         // Create a blitter.
         [[nodiscard]] blitter blit(surface& dst) const;

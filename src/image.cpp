@@ -4,7 +4,7 @@
 
 using namespace hal::image;
 
-context::context(std::initializer_list<format> types)
+context::context(std::initializer_list<load_format> types)
 {
     HAL_WARN_IF(initialized(), "Image context already exists");
 
@@ -27,9 +27,32 @@ hal::surface context::load(accessor data) const
     return { ::IMG_Load_RW(data.get(pass_key<context> {}), true), pass_key<context> {} };
 }
 
+hal::surface context::load(accessor src, load_format fmt) const
+{
+    return { ::IMG_LoadTyped_RW(src.get(pass_key<context> {}), true, to_string(fmt).data()), pass_key<context> {} };
+}
+
+void context::save(const surface& surf, save_format fmt, outputter dst) const
+{
+    constexpr u8 jpg_quality { 90 };
+
+    switch (fmt)
+    {
+        using enum save_format;
+    case png:
+        HAL_ASSERT_VITAL(::IMG_SavePNG_RW(surf.ptr(), dst.get(pass_key<context> {}), true) == 0, debug::last_error());
+        break;
+
+    case jpg:
+        HAL_ASSERT_VITAL(::IMG_SaveJPG_RW(surf.ptr(), dst.get(pass_key<context> {}), true, jpg_quality) == 0, debug::last_error());
+        break;
+    }
+}
+
 query_format context::query(const accessor& data) const
 {
     using enum query_format;
+
     constexpr std::pair<func_ptr<int, SDL_RWops*>, query_format> checks[] {
         { ::IMG_isAVIF, avif },
         { ::IMG_isICO, ico },
@@ -61,4 +84,30 @@ query_format context::query(const accessor& data) const
 bool context::initialized()
 {
     return ::IMG_Init(0) > 0;
+}
+
+std::string_view hal::to_string(image::load_format fmt)
+{
+    using enum image::load_format;
+
+    switch (fmt)
+    {
+    case jpg:
+        return "JPG";
+
+    case png:
+        return "PNG";
+
+    case tif:
+        return "TIF";
+
+    case webp:
+        return "WEBP";
+
+    case jxl:
+        return "JXL";
+
+    case avif:
+        return "AVIF";
+    }
 }

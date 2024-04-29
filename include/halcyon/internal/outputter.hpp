@@ -14,6 +14,11 @@ namespace hal
 {
     class surface;
 
+    namespace image
+    {
+        class context;
+    }
+
     class outputter : public sdl::rwops
     {
     public:
@@ -25,6 +30,7 @@ namespace hal
         outputter(std::span<std::uint8_t> data);
 
         SDL_RWops* get(pass_key<surface>);
+        SDL_RWops* get(pass_key<image::context>);
     };
 
     [[nodiscard]] outputter output(std::string_view file);
