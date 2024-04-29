@@ -111,16 +111,15 @@ namespace hal
     public:
         pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>);
 
-        operator color() const;
-
-        pixel_reference& operator=(color c);
+        color color() const;
+        void  color(hal::color c);
 
     private:
         // Retrieve the color in a mapped format.
-        std::uint32_t get() const;
+        std::uint32_t get_mapped() const;
 
         // Set the color to a mapped value.
-        void set(std::uint32_t mv);
+        void set_mapped(std::uint32_t mv);
 
         std::byte*             m_ptr; // A pointer to the current color.
         const SDL_PixelFormat* m_fmt;

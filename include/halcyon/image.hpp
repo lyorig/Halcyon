@@ -10,7 +10,7 @@
 
 namespace hal::image
 {
-    enum class init
+    enum class format
     {
         jpg  = IMG_INIT_JPG,
         png  = IMG_INIT_PNG,
@@ -20,7 +20,7 @@ namespace hal::image
         avif = IMG_INIT_AVIF
     };
 
-    enum class format : u8
+    enum class query_format : u8
     {
         avif,
         ico,
@@ -49,7 +49,7 @@ namespace hal::image
     {
     public:
         // Initialize the image loader context with chosen types.
-        context(std::initializer_list<init> types);
+        context(std::initializer_list<format> types);
 
         context(const context&) = delete;
         context(context&&)      = delete;
@@ -61,7 +61,7 @@ namespace hal::image
 
         // Check an image's format.
         // This sets the accessor back to where it started, so const ref it is.
-        format check(const accessor& data) const;
+        query_format query(const accessor& data) const;
 
         static bool initialized();
     };

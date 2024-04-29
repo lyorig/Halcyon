@@ -35,6 +35,8 @@ namespace hal
     }
 
     class display;
+    struct color;
 
-    std::ostream& operator<<(std::ostream& std, const display& disp);
+    std::ostream& operator<<(std::ostream& str, const display& disp);
+    std::ostream& operator<<(std::ostream& str, color c);
 }

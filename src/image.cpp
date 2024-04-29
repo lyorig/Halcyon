@@ -4,7 +4,7 @@
 
 using namespace hal::image;
 
-context::context(std::initializer_list<init> types)
+context::context(std::initializer_list<format> types)
 {
     HAL_WARN_IF(initialized(), "Image context already exists");
 
@@ -27,10 +27,10 @@ hal::surface context::load(accessor data) const
     return { ::IMG_Load_RW(data.get(pass_key<context> {}), true), pass_key<context> {} };
 }
 
-format context::check(const accessor& data) const
+query_format context::query(const accessor& data) const
 {
-    using enum format;
-    constexpr std::pair<func_ptr<int, SDL_RWops*>, format> checks[] {
+    using enum query_format;
+    constexpr std::pair<func_ptr<int, SDL_RWops*>, query_format> checks[] {
         { ::IMG_isAVIF, avif },
         { ::IMG_isICO, ico },
         { ::IMG_isCUR, cur },

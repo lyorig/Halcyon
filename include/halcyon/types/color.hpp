@@ -59,7 +59,7 @@ namespace hal
 
         constexpr friend bool operator==(color a, color b)
         {
-            return a.r == b.r && a.g == b.g && a.g == b.g && a.a == b.a;
+            return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
         }
 
         constexpr friend diff operator-(color a, color b)

@@ -1,3 +1,4 @@
+#include <halcyon/types/color.hpp>
 #include <halcyon/utility/printing.hpp>
 #include <halcyon/video/display.hpp>
 
@@ -7,4 +8,9 @@ using namespace hal;
 std::ostream& hal::operator<<(std::ostream& str, const display& disp)
 {
     return str << '[' << disp.name() << ", index " << hal::to_printable_int(disp.index()) << ", size " << disp.size() << ", " << disp.hz() << " Hz]";
+}
+
+std::ostream& hal::operator<<(std::ostream& str, color c)
+{
+    return str << "[r" << to_printable_int(c.r) << " g" << to_printable_int(c.g) << " b" << to_printable_int(c.b) << " a" << to_printable_int(c.a) << ']';
 }

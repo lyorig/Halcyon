@@ -149,20 +149,19 @@ pixel_reference::pixel_reference(void* pixels, int pitch, const SDL_PixelFormat*
 {
 }
 
-pixel_reference::operator color() const
+color pixel_reference::color() const
 {
-    color c;
-    ::SDL_GetRGBA(get(), m_fmt, &c.r, &c.g, &c.b, &c.a);
+    hal::color c;
+    ::SDL_GetRGBA(get_mapped(), m_fmt, &c.r, &c.g, &c.b, &c.a);
     return c;
 }
 
-pixel_reference& pixel_reference::operator=(color c)
+void pixel_reference::color(struct color c)
 {
-    set(::SDL_MapRGBA(m_fmt, c.r, c.g, c.b, c.a));
-    return *this;
+    set_mapped(::SDL_MapRGBA(m_fmt, c.r, c.g, c.b, c.a));
 }
 
-std::uint32_t pixel_reference::get() const
+std::uint32_t pixel_reference::get_mapped() const
 {
     std::uint32_t ret { 0 };
 
@@ -178,7 +177,7 @@ std::uint32_t pixel_reference::get() const
     return ret;
 }
 
-void pixel_reference::set(std::uint32_t mapped)
+void pixel_reference::set_mapped(std::uint32_t mapped)
 {
     if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
         std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
