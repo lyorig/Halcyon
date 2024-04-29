@@ -81,7 +81,7 @@ namespace test
     {
         constexpr std::uint8_t data[1024] {};
 
-        hal::image::context ictx { hal::image::init::png };
+        hal::image::context ictx { hal::image::format::png };
 
         // Failure should occur here.
         const hal::surface s { ictx.load(hal::access(data)) };
@@ -126,11 +126,11 @@ namespace test
     // Checking pixel colors in a 2x1 surface.
     int surface_color()
     {
-        hal::image::context ictx { hal::image::init::png };
+        hal::image::context ictx { hal::image::format::png };
 
         hal::surface s { ictx.load(hal::access(two_by_one)) };
 
-        if (s[{ 0, 0 }] != hal::palette::red || s[{ 1, 0 }] != hal::palette::blue)
+        if (s[{ 0, 0 }].color() != hal::palette::red || s[{ 1, 0 }].color() != hal::palette::blue)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
@@ -212,10 +212,10 @@ namespace test
     {
         hal::surface s { { 2, 2 } };
 
-        s[{ 0, 0 }] = 0xF25022;
-        s[{ 1, 0 }] = 0x7FBA00;
-        s[{ 0, 1 }] = 0x00A4EF;
-        s[{ 1, 1 }] = 0xFFB900;
+        s[{ 0, 0 }].color(0xF25022);
+        s[{ 1, 0 }].color(0x7FBA00);
+        s[{ 0, 1 }].color(0x00A4EF);
+        s[{ 1, 1 }].color(0xFFB900);
 
         s.save(hal::surface::save_format::bmp, hal::output("DontSueMeDaddyGates.bmp"));
 
@@ -228,9 +228,9 @@ namespace test
 
     int png_check()
     {
-        hal::image::context ictx { hal::image::init::png };
+        hal::image::context ictx { hal::image::format::png };
 
-        if (ictx.check(hal::access(two_by_one)) != hal::image::format::png)
+        if (ictx.query(hal::access(two_by_one)) != hal::image::query_format::png)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
