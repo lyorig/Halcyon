@@ -81,7 +81,7 @@ namespace test
     {
         constexpr std::uint8_t data[1024] {};
 
-        hal::image::context ictx { hal::image::load_format::png };
+        hal::image::context ictx { hal::image::init_format::png };
 
         // Failure should occur here.
         const hal::surface s { ictx.load(hal::access(data)) };
@@ -126,7 +126,7 @@ namespace test
     // Checking pixel colors in a 2x1 surface.
     int surface_color()
     {
-        hal::image::context ictx { hal::image::load_format::png };
+        hal::image::context ictx { hal::image::init_format::png };
 
         hal::surface s { ictx.load(hal::access(two_by_one)) };
 
@@ -228,9 +228,9 @@ namespace test
 
     int png_check()
     {
-        hal::image::context ictx { hal::image::load_format::png };
+        hal::image::context ictx { hal::image::init_format::png };
 
-        if (ictx.query(hal::access(two_by_one)) != hal::image::query_format::png)
+        if (ictx.query(hal::access(two_by_one)) != hal::image::load_format::png)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
