@@ -20,14 +20,14 @@ outputter::outputter(std::span<std::uint8_t> data)
 {
 }
 
-outputter::unique_ptr outputter::use(pass_key<surface>)
+SDL_RWops* outputter::get(pass_key<surface>)
 {
-    return move();
+    return ptr();
 }
 
-outputter::unique_ptr outputter::use(pass_key<image::context>)
+SDL_RWops* outputter::get(pass_key<image::context>)
 {
-    return move();
+    return ptr();
 }
 
 outputter hal::output(std::string_view file)

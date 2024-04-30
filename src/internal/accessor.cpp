@@ -13,19 +13,19 @@ accessor::accessor(std::span<const std::byte> data)
 {
 }
 
+SDL_RWops* accessor::get(pass_key<surface>)
+{
+    return ptr();
+}
+
 SDL_RWops* accessor::get(pass_key<image::context>) const
 {
     return ptr();
 }
 
-accessor::unique_ptr accessor::use(pass_key<image::context>)
+SDL_RWops* accessor::get(pass_key<ttf::context>)
 {
-    return move();
-}
-
-accessor::unique_ptr accessor::use(pass_key<ttf::context>)
-{
-    return move();
+    return ptr();
 }
 
 accessor hal::access(std::string_view path)

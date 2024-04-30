@@ -13,7 +13,7 @@ namespace hal
 {
     namespace image
     {
-        enum class load_format : u8
+        enum class init_format : u8
         {
             jpg  = IMG_INIT_JPG,
             png  = IMG_INIT_PNG,
@@ -29,7 +29,7 @@ namespace hal
             jpg
         };
 
-        enum class query_format : u8
+        enum class load_format : u8
         {
             avif,
             ico,
@@ -58,7 +58,7 @@ namespace hal
         {
         public:
             // Initialize the image context with chosen types.
-            context(std::initializer_list<load_format> types);
+            context(std::initializer_list<init_format> types);
 
             context(const context&) = delete;
             context(context&&)      = delete;
@@ -77,7 +77,7 @@ namespace hal
 
             // Check an image's format.
             // This sets the accessor back to where it started, so const ref it is.
-            query_format query(const accessor& src) const;
+            load_format query(const accessor& src) const;
 
             static bool initialized();
         };
@@ -88,5 +88,5 @@ namespace hal
         static_assert(::IMG_GetError == ::SDL_GetError);
     }
 
-    std::string_view to_string(image::load_format fmt);
+    std::string_view to_string(image::init_format fmt);
 }

@@ -4,6 +4,7 @@
 
 #include <SDL_surface.h>
 
+#include <halcyon/internal/accessor.hpp>
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/outputter.hpp>
 #include <halcyon/internal/scaler.hpp>
@@ -55,6 +56,9 @@ namespace hal
 
         // Create a sized surface.
         surface(pixel_point sz);
+
+        // Load a BMP image. This works natively without having to initialize anything.
+        surface(accessor src);
 
         // [private] Images are loaded with image::context::load().
         surface(SDL_Surface* ptr, pass_key<image::context>);

@@ -34,8 +34,6 @@ namespace hal
             }
 
         public:
-            using unique_ptr = std::unique_ptr<Type, deleter>;
-
             // Return the underlying pointer to the object. Intended for internal
             // use, or for when you want to interface with SDL to use functions not
             // yet implemented in Halcyon.
@@ -56,14 +54,8 @@ namespace hal
                 m_object.reset();
             }
 
-            // Move the unique_ptr holding the object.
-            unique_ptr move()
-            {
-                return std::move(m_object);
-            }
-
         private:
-            unique_ptr m_object;
+            std::unique_ptr<Type, deleter> m_object;
         };
     }
 }

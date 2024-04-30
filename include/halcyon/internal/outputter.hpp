@@ -4,6 +4,8 @@
 #include <span>
 #include <string_view>
 
+#include <SDL_rwops.h>
+
 #include <halcyon/internal/sdl_object.hpp>
 
 #include <halcyon/utility/pass_key.hpp>
@@ -30,8 +32,11 @@ namespace hal
         outputter(std::span<std::byte> data);
         outputter(std::span<std::uint8_t> data);
 
-        unique_ptr use(pass_key<surface>);
-        unique_ptr use(pass_key<image::context>);
+        outputter(const outputter&) = delete;
+        outputter(outputter&&)      = default;
+
+        SDL_RWops* get(pass_key<surface>);
+        SDL_RWops* get(pass_key<image::context>);
     };
 
     [[nodiscard]] outputter output(std::string_view file);

@@ -4,6 +4,8 @@
 #include <span>
 #include <string_view>
 
+#include <SDL_rwops.h>
+
 #include <halcyon/internal/sdl_object.hpp>
 
 #include <halcyon/utility/pass_key.hpp>
@@ -17,6 +19,8 @@
 
 namespace hal
 {
+    class surface;
+
     namespace image
     {
         class context;
@@ -35,10 +39,13 @@ namespace hal
         accessor(std::string_view path);
         accessor(std::span<const std::byte> data);
 
-        SDL_RWops* get(pass_key<image::context>) const;
+        accessor(const accessor&) = delete;
+        accessor(accessor&&)      = default;
 
-        unique_ptr use(pass_key<image::context>);
-        unique_ptr use(pass_key<ttf::context>);
+        SDL_RWops* get(pass_key<surface>);
+
+        SDL_RWops* get(pass_key<image::context>) const;
+        SDL_RWops* get(pass_key<ttf::context>);
     };
 
     [[nodiscard]] accessor access(std::string_view path);

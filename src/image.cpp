@@ -4,7 +4,7 @@
 
 using namespace hal::image;
 
-context::context(std::initializer_list<load_format> types)
+context::context(std::initializer_list<init_format> types)
 {
     HAL_WARN_IF(initialized(), "Image context already exists");
 
@@ -24,12 +24,76 @@ context::~context()
 
 hal::surface context::load(accessor src) const
 {
-    return { ::IMG_Load_RW(src.use(pass_key<context> {}).get(), false), pass_key<context> {} };
+    return { ::IMG_Load_RW(src.get(pass_key<context> {}), false), pass_key<context> {} };
 }
 
 hal::surface context::load(accessor src, load_format fmt) const
 {
-    return { ::IMG_LoadTyped_RW(src.use(pass_key<context> {}).get(), false, to_string(fmt).data()), pass_key<context> {} };
+    constexpr pass_key<context> pk;
+
+    SDL_RWops* const ptr { src.get(pk) };
+
+    switch (fmt)
+    {
+        using enum load_format;
+
+    case jpg:
+        return { ::IMG_LoadJPG_RW(ptr), pk };
+
+    case png:
+        return { ::IMG_LoadPNG_RW(ptr), pk };
+
+    case tif:
+        return { ::IMG_LoadTIF_RW(ptr), pk };
+
+    case webp:
+        return { ::IMG_LoadWEBP_RW(ptr), pk };
+
+    case jxl:
+        return { ::IMG_LoadJXL_RW(ptr), pk };
+
+    case avif:
+        return { ::IMG_LoadAVIF_RW(ptr), pk };
+
+    case ico:
+        return { ::IMG_LoadICO_RW(ptr), pk };
+
+    case cur:
+        return { ::IMG_LoadCUR_RW(ptr), pk };
+
+    case bmp:
+        return { ::IMG_LoadBMP_RW(ptr), pk };
+
+    case gif:
+        return { ::IMG_LoadGIF_RW(ptr), pk };
+
+    case lbm:
+        return { ::IMG_LoadLBM_RW(ptr), pk };
+
+    case pcx:
+        return { ::IMG_LoadPCX_RW(ptr), pk };
+
+    case pnm:
+        return { ::IMG_LoadPNM_RW(ptr), pk };
+
+    case svg:
+        return { ::IMG_LoadSVG_RW(ptr), pk };
+
+    case qoi:
+        return { ::IMG_LoadQOI_RW(ptr), pk };
+
+    case xcf:
+        return { ::IMG_LoadXCF_RW(ptr), pk };
+
+    case xpm:
+        return { ::IMG_LoadXPM_RW(ptr), pk };
+
+    case xv:
+        return { ::IMG_LoadXV_RW(ptr), pk };
+
+    case unknown:
+        HAL_PANIC("Cannot load image of type \"unknown\"");
+    };
 }
 
 void context::save(const surface& surf, save_format fmt, outputter dst) const
@@ -40,20 +104,20 @@ void context::save(const surface& surf, save_format fmt, outputter dst) const
     {
         using enum save_format;
     case png:
-        HAL_ASSERT_VITAL(::IMG_SavePNG_RW(surf.ptr(), dst.use(pass_key<context> {}).get(), false) == 0, debug::last_error());
+        HAL_ASSERT_VITAL(::IMG_SavePNG_RW(surf.ptr(), dst.get(pass_key<context> {}), false) == 0, debug::last_error());
         break;
 
     case jpg:
-        HAL_ASSERT_VITAL(::IMG_SaveJPG_RW(surf.ptr(), dst.use(pass_key<context> {}).get(), false, jpg_quality) == 0, debug::last_error());
+        HAL_ASSERT_VITAL(::IMG_SaveJPG_RW(surf.ptr(), dst.get(pass_key<context> {}), false, jpg_quality) == 0, debug::last_error());
         break;
     }
 }
 
-query_format context::query(const accessor& src) const
+load_format context::query(const accessor& src) const
 {
-    using enum query_format;
+    using enum load_format;
 
-    constexpr std::pair<func_ptr<int, SDL_RWops*>, query_format> checks[] {
+    constexpr std::pair<func_ptr<int, SDL_RWops*>, load_format> checks[] {
         { ::IMG_isAVIF, avif },
         { ::IMG_isICO, ico },
         { ::IMG_isCUR, cur },
@@ -86,9 +150,9 @@ bool context::initialized()
     return ::IMG_Init(0) > 0;
 }
 
-std::string_view hal::to_string(image::load_format fmt)
+std::string_view hal::to_string(image::init_format fmt)
 {
-    using enum image::load_format;
+    using enum image::init_format;
 
     switch (fmt)
     {
