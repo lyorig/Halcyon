@@ -113,7 +113,7 @@ namespace hal
     class pixel_reference
     {
     public:
-        pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>);
+        pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>);
 
         color color() const;
         void  color(hal::color c);

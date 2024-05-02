@@ -118,7 +118,7 @@ pixel_reference surface::operator[](const pixel_point& pos) const
     HAL_ASSERT(pos.x < ptr()->w, "Out-of-range width");
     HAL_ASSERT(pos.y < ptr()->h, "Out-of-range height");
 
-    return { ptr()->pixels, ptr()->pitch, ptr()->format, pos, {} };
+    return { static_cast<std::byte*>(ptr()->pixels), ptr()->pitch, ptr()->format, pos, {} };
 }
 
 surface::surface(const surface& cvt, SDL_PixelFormatEnum fmt)
@@ -131,8 +131,8 @@ std::uint32_t surface::mapped(color c) const
     return ::SDL_MapRGBA(ptr()->format, c.r, c.g, c.b, c.a);
 }
 
-pixel_reference::pixel_reference(void* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>)
-    : m_ptr { static_cast<std::byte*>(pixels) + pos.y * pitch + pos.x * fmt->BytesPerPixel }
+pixel_reference::pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>)
+    : m_ptr { pixels + pos.y * pitch + pos.x * fmt->BytesPerPixel }
     , m_fmt { fmt }
 {
 }
@@ -153,7 +153,7 @@ std::uint32_t pixel_reference::get_mapped() const
 {
     std::uint32_t ret { 0 };
 
-    if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+    if constexpr (SDL_BYTEORDER == SDL_LIL_ENDIAN)
         std::memcpy(&ret, m_ptr, m_fmt->BytesPerPixel);
 
     else
@@ -167,7 +167,7 @@ std::uint32_t pixel_reference::get_mapped() const
 
 void pixel_reference::set_mapped(std::uint32_t mapped)
 {
-    if constexpr (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+    if constexpr (SDL_BYTEORDER == SDL_LIL_ENDIAN)
         std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
 
     else
