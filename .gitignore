@@ -3,3 +3,6 @@
 
 build/
 Testing/
+
+examples/bin/
+!examples/bin/assets/

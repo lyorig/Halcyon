@@ -2,6 +2,8 @@
 
 #include <span>
 
+#include <SDL_rwops.h>
+
 #include <halcyon/internal/sdl_object.hpp>
 #include <halcyon/utility/pass_key.hpp>
 

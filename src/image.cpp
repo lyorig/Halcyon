@@ -92,7 +92,7 @@ hal::surface context::load(accessor src, load_format fmt) const
         return { ::IMG_LoadXV_RW(ptr), pk };
 
     case unknown:
-        HAL_PANIC("Cannot load image of type \"unknown\"");
+        std::unreachable();
     };
 }
 

@@ -8,22 +8,19 @@ project(HalTest VERSION 1.0 LANGUAGES CXX)
 include(config.cmake)
 include(CTest)
 
-# Setup compiler for tests.
 include_directories(${HALCYON_INCLUDE_DIRS})
 link_libraries(${HALCYON_LIBRARIES})
 
-# Create the test runner.
-add_executable(HalTest test/main.cpp ${HALCYON_SOURCES})
+# Tests.
 
-target_include_directories(HalTest PRIVATE ${HALCYON_INCLUDE_DIRS})
-target_link_libraries(HalTest PRIVATE ${HALCYON_LIBRARIES})
+add_executable(HalTest test/main.cpp ${HALCYON_SOURCES})
 
 # These tests require assertions present in Halcyon. Make sure they're on.
 if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
-    target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED)
+   target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED)
     
-    target_compile_options(HalTest PRIVATE -flto)
-    target_link_options(HalTest PRIVATE -flto)
+    add_compile_options(-flto)
+    add_link_options(-flto)
 endif()
 
 set(ExeName $<TARGET_FILE:HalTest>)
@@ -44,3 +41,14 @@ add_test(NAME PngCheck          COMMAND ${ExeName} --png-check)
 
 # Set which tests are expected to fail.
 set_tests_properties(AssertFail InvalidBuffer InvalidTexture PROPERTIES WILL_FAIL TRUE)
+
+# Examples.
+
+file(GLOB EXAMPLE_SOURCES CONFIGURE_DEPENDS examples/*.cpp)
+
+foreach(SRC IN LISTS EXAMPLE_SOURCES)
+    get_filename_component(TGT_NAME ${SRC} NAME_WE)
+    add_executable(${TGT_NAME} ${SRC} ${HALCYON_SOURCES})
+    set_target_properties(${TGT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/bin/)
+endforeach()
