@@ -27,16 +27,49 @@ namespace hal
         };
 
         // Scale based on width.
-        scaler(val_t val, HAL_TAG_NAME(scale_width));
+        constexpr scaler(val_t val, HAL_TAG_NAME(scale_width))
+            : m_type { type::width }
+            , m_data { .val = val }
+        {
+        }
 
         // Scale based on height.
-        scaler(val_t val, HAL_TAG_NAME(scale_height));
+        constexpr scaler(val_t val, HAL_TAG_NAME(scale_height))
+            : m_type { type::height }
+            , m_data { .val = val }
+        {
+        }
 
         // Scale by multiplying both dimensions.
-        scaler(mul_t mul);
+        constexpr scaler(mul_t mul)
+            : m_type { type::multiply }
+            , m_data { .mul = mul }
+        {
+        }
 
         // Get the resulting point.
-        point<val_t> operator()(point<val_t> src) const;
+        constexpr point<val_t> operator()(point<val_t> src) const
+        {
+            switch (m_type)
+            {
+                using enum type;
+
+            case width:
+                return {
+                    m_data.val,
+                    static_cast<val_t>(src.y * (static_cast<mul_t>(m_data.val) / src.x))
+                };
+
+            case height:
+                return {
+                    static_cast<val_t>(src.x * (static_cast<mul_t>(m_data.val) / src.y)),
+                    m_data.val
+                };
+
+            case multiply:
+                return src * m_data.mul;
+            }
+        }
 
     private:
         type m_type;
@@ -50,8 +83,17 @@ namespace hal
 
     namespace scale
     {
-        scaler width(scaler::val_t val);
-        scaler height(scaler::val_t val);
-        scaler mul(scaler::mul_t mul);
+        constexpr scaler width(scaler::val_t val)
+        {
+            return { val, tag::scale_width };
+        }
+        constexpr scaler height(scaler::val_t val)
+        {
+            return { val, tag::scale_height };
+        }
+        constexpr scaler mul(scaler::mul_t mul)
+        {
+            return { mul };
+        }
     }
 }

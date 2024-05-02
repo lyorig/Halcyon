@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
     if (!surf.valid())
     {
-        std::cout << "Could not load: " << hal::debug::last_error() << '\n';
+        std::cout << "Could not load file: " << hal::debug::last_error() << '\n';
         return EXIT_FAILURE;
     }
 
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    surf.save(hal::output("invert.bmp"));
+    ctx.save(surf, hal::image::save_format::png, hal::output("invert.png"));
 
     return EXIT_SUCCESS;
 }
