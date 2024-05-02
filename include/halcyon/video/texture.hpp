@@ -15,6 +15,8 @@ namespace hal
 {
     class surface;
 
+    extern template class sdl::object<SDL_Texture, ::SDL_DestroyTexture>;
+
     namespace detail
     {
         // Common texture functionality.
@@ -48,7 +50,7 @@ namespace hal
     class renderer;
 
     // A texture that cannot be drawn onto, only reassigned.
-    class texture : public hal::detail::texture_base
+    class texture : public detail::texture_base
     {
     public:
         texture() = default;
@@ -58,7 +60,7 @@ namespace hal
     };
 
     // A texture that can be drawn onto.
-    class target_texture : public hal::detail::texture_base
+    class target_texture : public detail::texture_base
     {
     public:
         target_texture() = default;

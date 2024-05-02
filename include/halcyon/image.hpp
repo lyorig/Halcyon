@@ -2,7 +2,7 @@
 
 #include <SDL_image.h>
 
-#include <halcyon/internal/accessor.hpp>
+#include <halcyon/internal/rwops.hpp>
 #include <halcyon/surface.hpp>
 
 // image.hpp:

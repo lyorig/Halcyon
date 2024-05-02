@@ -1,7 +1,13 @@
+#include <SDL_render.h>
+#include <SDL_surface.h>
+
 #include <halcyon/types/rectangle.hpp>
+
+#include <halcyon/internal/sdl_object.hpp>
 
 namespace hal
 {
+    // Points.
     template struct point<std::int8_t>;
     template struct point<std::int16_t>;
     template struct point<std::int32_t>;
@@ -15,6 +21,7 @@ namespace hal
     template struct point<float>;
     template struct point<double>;
 
+    // Rectangles.
     template struct rectangle<std::int8_t>;
     template struct rectangle<std::int16_t>;
     template struct rectangle<std::int32_t>;
@@ -27,4 +34,13 @@ namespace hal
 
     template struct rectangle<float>;
     template struct rectangle<double>;
+
+    // SDL RAII objects.
+    template class sdl::object<SDL_Window, ::SDL_DestroyWindow>;
+    template class sdl::object<SDL_Renderer, ::SDL_DestroyRenderer>;
+
+    template class sdl::object<SDL_Surface, ::SDL_FreeSurface>;
+    template class sdl::object<SDL_Texture, ::SDL_DestroyTexture>;
+
+    template class sdl::object<SDL_RWops, ::SDL_RWclose>;
 }

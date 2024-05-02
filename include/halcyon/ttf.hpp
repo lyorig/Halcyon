@@ -4,7 +4,7 @@
 
 #include <SDL_ttf.h>
 
-#include <halcyon/internal/accessor.hpp>
+#include <halcyon/internal/rwops.hpp>
 #include <halcyon/surface.hpp>
 
 // ttf.hpp:
