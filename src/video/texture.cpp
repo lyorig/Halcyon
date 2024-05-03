@@ -73,7 +73,7 @@ hal::u8 hal::detail::texture_base::opacity() const
 }
 
 hal::detail::texture_base::texture_base(SDL_Texture* ptr)
-    : object { ptr }
+    : raii_object { ptr }
 {
     this->blend(blend_mode::blend);
 }

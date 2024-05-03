@@ -38,7 +38,7 @@ namespace hal::ttf
 
     static_assert(std::is_empty_v<context>);
 
-    class font : public sdl::object<TTF_Font, &::TTF_CloseFont>
+    class font : public detail::raii_object<TTF_Font, &::TTF_CloseFont>
     {
     public:
         // [private] Fonts are loaded with ttf::context::load().

@@ -31,7 +31,7 @@ bool context::initialized()
 }
 
 font::font(TTF_Font* ptr, pass_key<context>)
-    : object { ptr }
+    : raii_object { ptr }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }

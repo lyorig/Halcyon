@@ -2,7 +2,7 @@
 
 namespace test
 {
-    constexpr std::uint8_t two_by_one[] {
+    constexpr std::uint8_t png_2x1[] {
         0x89,
         0x50,
         0x4e,

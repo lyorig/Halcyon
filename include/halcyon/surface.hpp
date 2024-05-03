@@ -34,9 +34,9 @@ namespace hal
 
     HAL_TAG(keep_dst);
 
-    extern template class sdl::object<SDL_Surface, ::SDL_FreeSurface>;
+    extern template class detail::raii_object<SDL_Surface, ::SDL_FreeSurface>;
 
-    class surface : public sdl::object<SDL_Surface, ::SDL_FreeSurface>
+    class surface : public detail::raii_object<SDL_Surface, ::SDL_FreeSurface>
     {
     public:
         class blend_lock

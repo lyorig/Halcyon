@@ -7,7 +7,7 @@
 using namespace hal;
 
 window::window(SDL_Window* obj, pass_key<authority>)
-    : object { obj }
+    : raii_object { obj }
 {
     HAL_PRINT(debug::severity::init, "Created window \"", title(), "\", flags = 0x", std::hex, ::SDL_GetWindowFlags(ptr()), ", ID = ", to_printable_int(id()));
 }

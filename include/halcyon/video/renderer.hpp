@@ -38,13 +38,13 @@ namespace hal
         both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
     };
 
-    extern template class sdl::object<SDL_Renderer, ::SDL_DestroyRenderer>;
+    extern template class detail::raii_object<SDL_Renderer, ::SDL_DestroyRenderer>;
 
     // A wrapper of SDL_Renderer. Essentially, this is the thing that does the rendering, and
     // is attached to a window. Multiple renderers can exist for a single window, i.e. a hardware-
     // accelerated one, plus a software fallback in case the former isn't available.
     // By default, renderers use hardware acceleration. You can override this via renderer flags.
-    class renderer : public sdl::object<SDL_Renderer, &::SDL_DestroyRenderer>
+    class renderer : public detail::raii_object<SDL_Renderer, &::SDL_DestroyRenderer>
     {
     public:
         enum class flags : u8

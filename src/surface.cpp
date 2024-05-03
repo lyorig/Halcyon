@@ -28,22 +28,22 @@ void surface::blend_lock::set(blend_mode bm)
 }
 
 surface::surface(pixel_point sz)
-    : object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, default_format) }
+    : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, default_format) }
 {
 }
 
 surface::surface(accessor src)
-    : object { ::SDL_LoadBMP_RW(src.get(pass_key<surface> {}), false) }
+    : raii_object { ::SDL_LoadBMP_RW(src.get(pass_key<surface> {}), false) }
 {
 }
 
 surface::surface(SDL_Surface* ptr, pass_key<image::context>)
-    : object { ptr }
+    : raii_object { ptr }
 {
 }
 
 surface::surface(SDL_Surface* ptr, pass_key<ttf::font>)
-    : object { ptr }
+    : raii_object { ptr }
 {
 }
 
@@ -122,7 +122,7 @@ pixel_reference surface::operator[](const pixel_point& pos) const
 }
 
 surface::surface(const surface& cvt, SDL_PixelFormatEnum fmt)
-    : object { ::SDL_ConvertSurfaceFormat(cvt.ptr(), fmt, 0) }
+    : raii_object { ::SDL_ConvertSurfaceFormat(cvt.ptr(), fmt, 0) }
 {
 }
 

@@ -21,11 +21,21 @@ namespace hal
         class context;
     }
 
-    extern template class sdl::object<SDL_RWops, ::SDL_RWclose>;
+    namespace detail
+    {
+        extern template class raii_object<SDL_RWops, ::SDL_RWclose>;
+
+        // RWops base class. Exists for potential extensibility later on.
+        class rwops : public raii_object<SDL_RWops, ::SDL_RWclose>
+        {
+        protected:
+            using raii_object::raii_object;
+        };
+    }
 
     // A proxy to various methods of accessing a file.
     // Loading functions "consume" this object, after which it is no longer useable.
-    class accessor : public sdl::object<SDL_RWops, ::SDL_RWclose> // Private inheritance by design.
+    class accessor : public detail::rwops
     {
     public:
         accessor(std::string_view path);
@@ -43,7 +53,7 @@ namespace hal
 
     // A proxy to various methods to outputting to a file.
     // Saving functions "consume" this object, after which it is no longer useable.
-    class outputter : public sdl::object<SDL_RWops, ::SDL_RWclose> // Private inheritance by design.
+    class outputter : public detail::rwops
     {
     public:
         outputter(std::string_view file);

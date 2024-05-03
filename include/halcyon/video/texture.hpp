@@ -15,12 +15,12 @@ namespace hal
 {
     class surface;
 
-    extern template class sdl::object<SDL_Texture, ::SDL_DestroyTexture>;
+    extern template class detail::raii_object<SDL_Texture, ::SDL_DestroyTexture>;
 
     namespace detail
     {
         // Common texture functionality.
-        class texture_base : public sdl::object<SDL_Texture, &::SDL_DestroyTexture>
+        class texture_base : public detail::raii_object<SDL_Texture, &::SDL_DestroyTexture>
         {
         public:
             pixel_point size() const;

@@ -8,11 +8,11 @@
 
 namespace hal
 {
-    namespace sdl
+    namespace detail
     {
         template <typename Type, auto Deleter>
             requires std::is_invocable_v<decltype(Deleter), Type*>
-        class object
+        class raii_object
         {
             struct deleter
             {
@@ -24,10 +24,10 @@ namespace hal
 
         protected:
             // A default constructor that doesn't perform a null check.
-            object() = default;
+            raii_object() = default;
 
             // A constructor that expects a valid object pointer.
-            object(Type* object)
+            raii_object(Type* object)
                 : m_object { object }
             {
                 HAL_ASSERT(valid(), debug::last_error());

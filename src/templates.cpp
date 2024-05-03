@@ -36,11 +36,11 @@ namespace hal
     template struct rectangle<double>;
 
     // SDL RAII objects.
-    template class sdl::object<SDL_Window, ::SDL_DestroyWindow>;
-    template class sdl::object<SDL_Renderer, ::SDL_DestroyRenderer>;
+    template class detail::raii_object<SDL_Window, ::SDL_DestroyWindow>;
+    template class detail::raii_object<SDL_Renderer, ::SDL_DestroyRenderer>;
 
-    template class sdl::object<SDL_Surface, ::SDL_FreeSurface>;
-    template class sdl::object<SDL_Texture, ::SDL_DestroyTexture>;
+    template class detail::raii_object<SDL_Surface, ::SDL_FreeSurface>;
+    template class detail::raii_object<SDL_Texture, ::SDL_DestroyTexture>;
 
-    template class sdl::object<SDL_RWops, ::SDL_RWclose>;
+    template class detail::raii_object<SDL_RWops, ::SDL_RWclose>;
 }

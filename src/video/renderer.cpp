@@ -43,7 +43,7 @@ void renderer::target_lock::set(target_texture& tgt)
 }
 
 renderer::renderer(SDL_Renderer* obj, pass_key<window>)
-    : object { obj }
+    : raii_object { obj }
 {
 }
 

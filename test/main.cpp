@@ -128,7 +128,7 @@ namespace test
     {
         hal::image::context ictx { hal::image::init_format::png };
 
-        hal::surface s { ictx.load(hal::access(two_by_one)) };
+        hal::surface s { ictx.load(hal::access(png_2x1)) };
 
         if (s[{ 0, 0 }].color() != hal::palette::red || s[{ 1, 0 }].color() != hal::palette::blue)
             return EXIT_FAILURE;
@@ -230,7 +230,7 @@ namespace test
     {
         hal::image::context ictx { hal::image::init_format::png };
 
-        if (ictx.query(hal::access(two_by_one)) != hal::image::load_format::png)
+        if (ictx.query(hal::access(png_2x1)) != hal::image::load_format::png)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;

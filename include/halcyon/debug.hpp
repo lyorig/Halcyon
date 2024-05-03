@@ -57,9 +57,11 @@ namespace hal
 #endif
         };
 
-        // No clue why someone would want to do this, but it's not allowed either way.
-        debug(const debug&)            = delete;
-        debug& operator=(const debug&) = delete;
+        // This is a class just for the purpose of using private variables.
+        // It is not meant to be constructed.
+        debug()             = delete;
+        debug(const debug&) = delete;
+        debug(debug&&)      = delete;
 
         static std::string_view last_error();
 

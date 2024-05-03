@@ -26,7 +26,5 @@ namespace hal
 {
     HAL_TAG(as_size);
 
-    HAL_TAG(infinite_loop);
-
     HAL_TAG(fill)
 }

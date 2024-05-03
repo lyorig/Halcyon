@@ -10,10 +10,10 @@
 
 namespace hal
 {
-    extern template class sdl::object<SDL_Window, ::SDL_DestroyWindow>;
+    extern template class detail::raii_object<SDL_Window, ::SDL_DestroyWindow>;
 
     // A window. Not much more to say.
-    class window : public sdl::object<SDL_Window, ::SDL_DestroyWindow>
+    class window : public detail::raii_object<SDL_Window, ::SDL_DestroyWindow>
     {
     public:
         using id_t      = u8;
