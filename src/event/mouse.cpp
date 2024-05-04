@@ -6,12 +6,12 @@
 
 using namespace hal;
 
-mouse::state::state(pass_key<authority>)
+mouse::state::state(pass_key<authority_t>)
     : m_state { static_cast<u8>(::SDL_GetMouseState(nullptr, nullptr)) }
 {
 }
 
-mouse::state::state(std::uint32_t mask)
+mouse::state::state(std::uint32_t mask, pass_key<events::mouse_motion_event>)
     : m_state { static_cast<u8>(mask) }
 {
 }

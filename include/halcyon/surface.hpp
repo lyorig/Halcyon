@@ -5,9 +5,9 @@
 #include <SDL_surface.h>
 
 #include <halcyon/internal/drawer.hpp>
+#include <halcyon/internal/raii_object.hpp>
 #include <halcyon/internal/rwops.hpp>
 #include <halcyon/internal/scaler.hpp>
-#include <halcyon/internal/sdl_object.hpp>
 
 #include <halcyon/types/color.hpp>
 

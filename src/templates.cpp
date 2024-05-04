@@ -3,7 +3,7 @@
 
 #include <halcyon/types/rectangle.hpp>
 
-#include <halcyon/internal/sdl_object.hpp>
+#include <halcyon/internal/raii_object.hpp>
 
 namespace hal
 {

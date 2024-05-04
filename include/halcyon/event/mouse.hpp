@@ -15,6 +15,11 @@
 
 namespace hal
 {
+    namespace events
+    {
+        class mouse_motion_event;
+    }
+
     namespace mouse
     {
         enum class button : u8
@@ -31,13 +36,13 @@ namespace hal
         class state
         {
         public:
-            using authority = hal::detail::subsystem<hal::detail::system::events>;
+            using authority_t = hal::detail::subsystem<hal::detail::system::events>;
 
-            // Default constructor that captures the mouse state at the time of construction.
-            state(pass_key<authority>);
+            // [private] A snapshot of the current mouse state is provided by the event subsystem.
+            state(pass_key<authority_t>);
 
             // [private] Constructor meant for events.
-            state(std::uint32_t mask);
+            state(std::uint32_t mask, pass_key<events::mouse_motion_event>);
 
             bool operator[](button btn) const;
 

@@ -2,44 +2,34 @@
 
 using namespace hal;
 
-SDL_RWops* detail::rwops::get() const
-{
-    return ptr();
-}
-
-SDL_RWops* detail::rwops::use()
-{
-    return release();
-}
-
 accessor::accessor(std::string_view path)
-    : rwops { ::SDL_RWFromFile(path.data(), "r") }
+    : raii_object { ::SDL_RWFromFile(path.data(), "r") }
 {
 }
 
 accessor::accessor(std::span<const std::byte> data)
-    : rwops { ::SDL_RWFromConstMem(data.data(), data.size_bytes()) }
+    : raii_object { ::SDL_RWFromConstMem(data.data(), data.size_bytes()) }
 {
 }
 
 SDL_RWops* accessor::get(pass_key<image::context>) const
 {
-    return rwops::get();
+    return raii_object::get();
 }
 
 SDL_RWops* accessor::use(pass_key<surface>)
 {
-    return rwops::use();
+    return raii_object::release();
 }
 
 SDL_RWops* accessor::use(pass_key<image::context>)
 {
-    return rwops::use();
+    return raii_object::release();
 }
 
 SDL_RWops* accessor::use(pass_key<ttf::context>)
 {
-    return rwops::use();
+    return raii_object::release();
 }
 
 accessor hal::access(std::string_view path)
@@ -58,29 +48,29 @@ accessor hal::access(std::span<const std::uint8_t> data)
 }
 
 outputter::outputter(std::string_view file)
-    : rwops { ::SDL_RWFromFile(file.data(), "w") }
+    : raii_object { ::SDL_RWFromFile(file.data(), "w") }
 {
 }
 
 outputter::outputter(std::span<std::byte> data)
-    : rwops { ::SDL_RWFromMem(data.data(), data.size()) }
+    : raii_object { ::SDL_RWFromMem(data.data(), data.size()) }
 {
 }
 
 outputter::outputter(std::span<std::uint8_t> data)
-    : rwops { ::SDL_RWFromMem(data.data(), data.size()) }
+    : raii_object { ::SDL_RWFromMem(data.data(), data.size()) }
 
 {
 }
 
 SDL_RWops* outputter::use(pass_key<surface>)
 {
-    return rwops::use();
+    return raii_object::release();
 }
 
 SDL_RWops* outputter::use(pass_key<image::context>)
 {
-    return rwops::use();
+    return raii_object::get();
 }
 
 outputter hal::output(std::string_view file)

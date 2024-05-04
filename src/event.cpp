@@ -6,7 +6,7 @@ using sub = detail::subsystem<detail::system::events>;
 
 mouse::state sub::mouse_proxy::state() const
 {
-    return { {} };
+    return { pass_key<sub> {} };
 }
 
 pixel_point sub::mouse_proxy::pos_abs() const
@@ -29,5 +29,5 @@ pixel_point sub::mouse_proxy::pos_rel() const
 
 keyboard::state_reference sub::keyboard_proxy::state_ref() const
 {
-    return { {} };
+    return { pass_key<sub> {} };
 }

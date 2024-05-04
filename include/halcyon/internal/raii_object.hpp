@@ -6,6 +6,9 @@
 
 #include <halcyon/types/numeric.hpp>
 
+// internal/raii_object.hpp:
+// An SDL resource base class.
+
 namespace hal
 {
     namespace detail
@@ -14,27 +17,25 @@ namespace hal
             requires std::is_invocable_v<decltype(Deleter), Type*>
         class raii_object
         {
-            struct deleter
-            {
-                void operator()(Type* ptr)
-                {
-                    static_cast<void>(Deleter(ptr));
-                }
-            };
+        public:
+            using value_type = Type;
+
+            using pointer       = value_type*;
+            using const_pointer = const value_type*;
 
         protected:
             // A default constructor that doesn't perform a null check.
             raii_object() = default;
 
             // A constructor that expects a valid object pointer.
-            raii_object(Type* object)
-                : m_object { object }
+            raii_object(pointer ptr)
+                : m_object { ptr }
             {
                 HAL_ASSERT(valid(), debug::last_error());
             }
 
             // Release the object.
-            Type* release()
+            pointer release()
             {
                 return m_object.release();
             }
@@ -49,7 +50,7 @@ namespace hal
             // Return the underlying pointer to the object. Intended for internal
             // use, or for when you want to interface with SDL to use functions not
             // yet implemented in Halcyon.
-            Type* ptr() const
+            pointer get() const
             {
                 return m_object.get();
             }
@@ -57,11 +58,19 @@ namespace hal
             // Check whether the object is valid and useable (a.k.a. non-null).
             bool valid() const
             {
-                return ptr() != nullptr;
+                return get() != nullptr;
             }
 
         private:
-            std::unique_ptr<Type, deleter> m_object;
+            struct deleter
+            {
+                void operator()(pointer ptr)
+                {
+                    static_cast<void>(Deleter(ptr));
+                }
+            };
+
+            std::unique_ptr<value_type, deleter> m_object;
         };
     }
 }

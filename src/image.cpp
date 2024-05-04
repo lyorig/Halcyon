@@ -104,11 +104,11 @@ void context::save(const surface& surf, save_format fmt, outputter dst) const
     {
         using enum save_format;
     case png:
-        HAL_ASSERT_VITAL(::IMG_SavePNG_RW(surf.ptr(), dst.use(pass_key<context> {}), true) == 0, debug::last_error());
+        HAL_ASSERT_VITAL(::IMG_SavePNG_RW(const_cast<surface::pointer>(surf.get()), dst.use(pass_key<context> {}), true) == 0, debug::last_error());
         break;
 
     case jpg:
-        HAL_ASSERT_VITAL(::IMG_SaveJPG_RW(surf.ptr(), dst.use(pass_key<context> {}), true, jpg_quality) == 0, debug::last_error());
+        HAL_ASSERT_VITAL(::IMG_SaveJPG_RW(const_cast<surface::pointer>(surf.get()), dst.use(pass_key<context> {}), true, jpg_quality) == 0, debug::last_error());
         break;
     }
 }

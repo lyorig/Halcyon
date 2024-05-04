@@ -5,35 +5,35 @@ using namespace hal;
 
 // Display event.
 
-enum event::display_event::type event::display_event::event_type() const
+enum events::display_event::type events::display_event::event_type() const
 {
     return static_cast<type>(event);
 }
 
-display::id_t event::display_event::display_index() const
+display::id_t events::display_event::display_index() const
 {
     return static_cast<display::id_t>(SDL_DisplayEvent::display);
 }
 
 // Window event.
 
-window::id_t event::window_event::window_id() const
+window::id_t events::window_event::window_id() const
 {
     return static_cast<window::id_t>(windowID);
 }
 
-enum event::window_event::type event::window_event::event_type() const
+enum events::window_event::type events::window_event::event_type() const
 {
     return static_cast<type>(event);
 }
 
-display::id_t event::window_event::new_display_index() const
+display::id_t events::window_event::new_display_index() const
 {
     HAL_ASSERT(event_type() == type::display_changed, "Invalid event type");
     return static_cast<display::id_t>(data1);
 }
 
-pixel_point event::window_event::new_point() const
+pixel_point events::window_event::new_point() const
 {
     HAL_ASSERT(event_type() == type::resized || event_type() == type::moved, "Invalid event type");
     return { static_cast<pixel_t>(data1), static_cast<pixel_t>(data2) };
@@ -41,98 +41,98 @@ pixel_point event::window_event::new_point() const
 
 // Keyboard event.
 
-window::id_t event::keyboard_event::window_id() const
+window::id_t events::keyboard_event::window_id() const
 {
     return static_cast<window::id_t>(windowID);
 }
 
-keyboard::button event::keyboard_event::button() const
+keyboard::button events::keyboard_event::button() const
 {
     return static_cast<keyboard::button>(keysym.scancode);
 }
 
-keyboard::key event::keyboard_event::key() const
+keyboard::key events::keyboard_event::key() const
 {
     return static_cast<keyboard::key>(keysym.sym);
 }
 
-bool event::keyboard_event::repeat() const
+bool events::keyboard_event::repeat() const
 {
     return static_cast<bool>(SDL_KeyboardEvent::repeat);
 }
 
 // Mouse motion event.
 
-window::id_t event::mouse_motion_event::window_id() const
+window::id_t events::mouse_motion_event::window_id() const
 {
     return static_cast<window::id_t>(windowID);
 }
 
-mouse::state event::mouse_motion_event::state() const
+mouse::state events::mouse_motion_event::state() const
 {
-    return SDL_MouseMotionEvent::state;
+    return { SDL_MouseMotionEvent::state, pass_key<mouse_motion_event> {} };
 }
 
-pixel_point event::mouse_motion_event::pos() const
+pixel_point events::mouse_motion_event::pos() const
 {
     return { static_cast<pixel_t>(x), static_cast<pixel_t>(y) };
 }
 
-pixel_point event::mouse_motion_event::rel() const
+pixel_point events::mouse_motion_event::rel() const
 {
     return { static_cast<pixel_t>(xrel), static_cast<pixel_t>(yrel) };
 }
 
 // Mouse button event.
 
-window::id_t event::mouse_button_event::window_id() const
+window::id_t events::mouse_button_event::window_id() const
 {
     return static_cast<window::id_t>(windowID);
 }
 
-mouse::button event::mouse_button_event::button() const
+mouse::button events::mouse_button_event::button() const
 {
     return static_cast<mouse::button>(SDL_MouseButtonEvent::button);
 }
 
-u8 event::mouse_button_event::click_amount() const
+u8 events::mouse_button_event::click_amount() const
 {
     return static_cast<u8>(clicks);
 }
 
-pixel_point event::mouse_button_event::pos() const
+pixel_point events::mouse_button_event::pos() const
 {
     return { static_cast<pixel_t>(x), static_cast<pixel_t>(y) };
 }
 
 // Mouse wheel event.
 
-window::id_t event::mouse_wheel_event::window_id() const
+window::id_t events::mouse_wheel_event::window_id() const
 {
     return static_cast<window::id_t>(windowID);
 }
 
-point<i16> event::mouse_wheel_event::scroll() const
+point<i16> events::mouse_wheel_event::scroll() const
 {
     return { static_cast<i16>(x), static_cast<i16>(y) };
 }
 
-point<f32> event::mouse_wheel_event::scroll_precise() const
+point<f32> events::mouse_wheel_event::scroll_precise() const
 {
     return { static_cast<f32>(preciseX), static_cast<f32>(preciseY) };
 }
 
-pixel_point event::mouse_wheel_event::pos() const
+pixel_point events::mouse_wheel_event::pos() const
 {
     return { static_cast<pixel_t>(x), static_cast<pixel_t>(y) };
 }
 
-bool event::mouse_wheel_event::scroll_flipped() const
+bool events::mouse_wheel_event::scroll_flipped() const
 {
     return direction == SDL_MOUSEWHEEL_FLIPPED;
 }
 
-event::event(authority&)
+event_handler::event_handler(authority&)
     : m_event { { std::numeric_limits<std::uint32_t>::max() } } // Start with an invalid event.
 {
     // Disable unused events.
@@ -182,60 +182,60 @@ event::event(authority&)
     }
 }
 
-bool event::poll()
+bool event_handler::poll()
 {
     return ::SDL_PollEvent(reinterpret_cast<SDL_Event*>(&m_event.m_data)) == 1;
 }
 
-event::type event::event_type() const
+event_handler::type event_handler::event_type() const
 {
-    return static_cast<event::type>(m_event.m_data.m_type);
+    return static_cast<event_handler::type>(m_event.m_data.m_type);
 }
 
-bool event::pending()
+bool event_handler::pending()
 {
     return ::SDL_PollEvent(nullptr) == 1;
 }
 
-const event::display_event& event::display() const
+const events::display_event& event_handler::display() const
 {
     HAL_ASSERT(event_type() == type::display_event, "Invalid type");
     return m_event.m_data.m_display;
 }
 
-const event::window_event& event::window() const
+const events::window_event& event_handler::window() const
 {
     HAL_ASSERT(event_type() == type::window_event, "Invalid type");
     return m_event.m_data.m_window;
 }
 
-const event::keyboard_event& event::keyboard() const
+const events::keyboard_event& event_handler::keyboard() const
 {
     HAL_ASSERT(event_type() == type::key_pressed || event_type() == type::key_released, "Invalid type");
     return m_event.m_data.m_key;
 }
 
-const event::mouse_motion_event& event::mouse_motion() const
+const events::mouse_motion_event& event_handler::mouse_motion() const
 {
     HAL_ASSERT(event_type() == type::mouse_moved, "Invalid type");
     return m_event.m_data.m_motion;
 }
 
-const event::mouse_button_event& event::mouse_button() const
+const events::mouse_button_event& event_handler::mouse_button() const
 {
     HAL_ASSERT(event_type() == type::mouse_pressed || event_type() == type::mouse_released, "Invalid type");
     return m_event.m_data.m_button;
 }
 
-const event::mouse_wheel_event& event::mouse_wheel() const
+const events::mouse_wheel_event& event_handler::mouse_wheel() const
 {
     HAL_ASSERT(event_type() == type::mouse_wheel_moved, "Invalid type");
     return m_event.m_data.m_wheel;
 }
 
-std::string_view to_string(event::type evt)
+std::string_view to_string(event_handler::type evt)
 {
-    using enum event::type;
+    using enum event_handler::type;
 
     switch (evt)
     {
@@ -289,9 +289,9 @@ std::string_view to_string(event::type evt)
     }
 }
 
-std::string_view to_string(enum event::display_event::type evt)
+std::string_view to_string(enum events::display_event::type evt)
 {
-    using enum event::display_event::type;
+    using enum events::display_event::type;
 
     switch (evt)
     {
@@ -309,9 +309,9 @@ std::string_view to_string(enum event::display_event::type evt)
     }
 }
 
-std::string_view to_string(enum event::window_event::type evt)
+std::string_view to_string(enum events::window_event::type evt)
 {
-    using enum event::window_event::type;
+    using enum events::window_event::type;
 
     switch (evt)
     {

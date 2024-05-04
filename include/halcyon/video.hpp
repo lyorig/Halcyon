@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include <halcyon/context.hpp>
 
 #include <halcyon/image.hpp>
@@ -13,6 +11,7 @@
 #include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>
 
+#include <halcyon/internal/string.hpp>
 #include <halcyon/internal/subsystem.hpp>
 
 namespace hal
@@ -27,8 +26,8 @@ namespace hal
             clipboard_proxy(pass_key<authority_t>);
 
             // Get current clipboard text.
-            // This has to be freed, so a std::string is provided instead.
-            std::string operator()() const;
+            // This has to be freed, so a custom wrapper is returned.
+            sdl::string operator()() const;
 
             // Set clipboard text.
             void operator()(std::string_view text);

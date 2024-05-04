@@ -18,19 +18,16 @@ detail::display_proxy::display_proxy(pass_key<authority_t>)
 
 window sub::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags)
 {
-    return { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, to_bitmask<std::uint32_t>(flags)), {} };
+    return { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, to_bitmask<std::uint32_t>(flags)), pass_key<sub> {} };
 }
 
-std::string detail::clipboard_proxy::operator()() const
+sdl::string detail::clipboard_proxy::operator()() const
 {
     char* text { ::SDL_GetClipboardText() };
 
     HAL_ASSERT(text[0] != '\0' || has_text(), debug::last_error());
 
-    std::string ret { text };
-    ::SDL_free(text);
-
-    return ret;
+    return { text, pass_key<clipboard_proxy> {} };
 };
 
 void detail::clipboard_proxy::operator()(std::string_view text)
@@ -54,5 +51,5 @@ display::id_t detail::display_proxy::size() const
 
 display detail::display_proxy::operator[](display::id_t idx) const
 {
-    return { idx, {} };
+    return { idx, pass_key<display_proxy> {} };
 }

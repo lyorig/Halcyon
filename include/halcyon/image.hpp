@@ -76,7 +76,7 @@ namespace hal
             void save(const surface& surf, save_format fmt, outputter dst) const;
 
             // Check an image's format.
-            // This sets the accessor back to where it started, so const ref it is.
+            // This modifies the accessor, but ultimately sets it back where it was.
             load_format query(const accessor& src) const;
 
             static bool initialized();

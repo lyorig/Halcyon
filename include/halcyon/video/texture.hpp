@@ -4,7 +4,7 @@
 
 #include <halcyon/utility/pass_key.hpp>
 
-#include <halcyon/internal/sdl_object.hpp>
+#include <halcyon/internal/raii_object.hpp>
 #include <halcyon/types/color.hpp>
 #include <halcyon/types/render.hpp>
 

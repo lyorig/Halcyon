@@ -43,34 +43,34 @@ font::~font()
 
 hal::surface font::render(std::string_view text, hal::color color) const
 {
-    return { ::TTF_RenderUTF8_Solid_Wrapped(ptr(), text.data(), static_cast<SDL_Color>(color), 0), pass_key<font> {} };
+    return { ::TTF_RenderUTF8_Solid_Wrapped(get(), text.data(), static_cast<SDL_Color>(color), 0), pass_key<font> {} };
 }
 
 hal::pixel_point font::size_text(const std::string_view& text) const
 {
     point<int> size;
 
-    ::TTF_SizeUTF8(this->ptr(), text.data(), &size.x, &size.y);
+    ::TTF_SizeUTF8(get(), text.data(), &size.x, &size.y);
 
     return pixel_point(size);
 }
 
 hal::pixel_t font::height() const
 {
-    return static_cast<pixel_t>(::TTF_FontHeight(this->ptr()));
+    return static_cast<pixel_t>(::TTF_FontHeight(get()));
 }
 
 hal::pixel_t font::skip() const
 {
-    return static_cast<pixel_t>(::TTF_FontLineSkip(this->ptr()));
+    return static_cast<pixel_t>(::TTF_FontLineSkip(get()));
 }
 
 std::string_view font::family() const
 {
-    return ::TTF_FontFaceFamilyName(ptr());
+    return ::TTF_FontFaceFamilyName(get());
 }
 
 std::string_view font::style() const
 {
-    return ::TTF_FontFaceStyleName(ptr());
+    return ::TTF_FontFaceStyleName(get());
 }

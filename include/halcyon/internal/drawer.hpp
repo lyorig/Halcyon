@@ -33,7 +33,7 @@ namespace hal::detail
         consteval static U unset_pos() { return std::numeric_limits<U>::max(); }
 
     public:
-        [[nodiscard]] drawer(Pass& ths, const T& src, pass_key<Pass>)
+        [[nodiscard]] drawer(Pass& ths, const T& src, pass_key<std::remove_const_t<Pass>>)
             : m_pass { ths }
             , m_this { src }
             , m_dst { tag::as_size, src.size() }

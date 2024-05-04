@@ -4,7 +4,7 @@
 
 #include <SDL_rwops.h>
 
-#include <halcyon/internal/sdl_object.hpp>
+#include <halcyon/internal/raii_object.hpp>
 #include <halcyon/utility/pass_key.hpp>
 
 namespace hal
@@ -21,24 +21,9 @@ namespace hal
         class context;
     }
 
-    namespace detail
-    {
-        extern template class raii_object<SDL_RWops, ::SDL_RWclose>;
-
-        // RWops base class. Exists for potential extensibility later on.
-        class rwops : public raii_object<SDL_RWops, ::SDL_RWclose>
-        {
-        protected:
-            using raii_object::raii_object;
-
-            SDL_RWops* get() const;
-            SDL_RWops* use();
-        };
-    }
-
     // A proxy to various methods of accessing a file.
     // Loading functions "consume" this object, after which it is no longer useable.
-    class accessor : public detail::rwops
+    class accessor : public detail::raii_object<SDL_RWops, ::SDL_RWclose>
     {
     public:
         accessor(std::string_view path);
@@ -60,7 +45,7 @@ namespace hal
 
     // A proxy to various methods to outputting to a file.
     // Saving functions "consume" this object, after which it is no longer useable.
-    class outputter : public detail::rwops
+    class outputter : public detail::raii_object<SDL_RWops, ::SDL_RWclose>
     {
     public:
         outputter(std::string_view file);
