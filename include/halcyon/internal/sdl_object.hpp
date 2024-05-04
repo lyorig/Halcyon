@@ -33,7 +33,19 @@ namespace hal
                 HAL_ASSERT(valid(), debug::last_error());
             }
 
+            // Release the object.
+            Type* release()
+            {
+                return m_object.release();
+            }
+
         public:
+            // Free the object.
+            void reset()
+            {
+                return m_object.reset();
+            }
+
             // Return the underlying pointer to the object. Intended for internal
             // use, or for when you want to interface with SDL to use functions not
             // yet implemented in Halcyon.
@@ -46,12 +58,6 @@ namespace hal
             bool valid() const
             {
                 return ptr() != nullptr;
-            }
-
-            // Release (reset) the object.
-            void release()
-            {
-                m_object.reset();
             }
 
         private:

@@ -30,6 +30,9 @@ namespace hal
         {
         protected:
             using raii_object::raii_object;
+
+            SDL_RWops* get() const;
+            SDL_RWops* use();
         };
     }
 
@@ -41,9 +44,13 @@ namespace hal
         accessor(std::string_view path);
         accessor(std::span<const std::byte> data);
 
-        SDL_RWops* get(pass_key<surface>) const;
+        // Functions that use get seek the RWops back where they started.
         SDL_RWops* get(pass_key<image::context>) const;
-        SDL_RWops* get(pass_key<ttf::context>) const;
+
+        // Getter functions call release(), so the class gets "consumed".
+        SDL_RWops* use(pass_key<surface>);
+        SDL_RWops* use(pass_key<image::context>);
+        SDL_RWops* use(pass_key<ttf::context>);
     };
 
     [[nodiscard]] accessor access(std::string_view path);
@@ -63,8 +70,10 @@ namespace hal
         outputter(std::span<std::byte> data);
         outputter(std::span<std::uint8_t> data);
 
-        SDL_RWops* get(pass_key<surface>) const;
-        SDL_RWops* get(pass_key<image::context>) const;
+        // use() functions call release(), so the class gets "consumed".
+
+        SDL_RWops* use(pass_key<surface>);
+        SDL_RWops* use(pass_key<image::context>);
     };
 
     [[nodiscard]] outputter output(std::string_view file);
