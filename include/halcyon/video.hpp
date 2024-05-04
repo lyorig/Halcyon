@@ -50,28 +50,27 @@ namespace hal
         template <>
         class subsystem<system::video>
         {
-            using event_proxy = hal::detail::subsystem<hal::detail::system::events>;
+            using event_proxy = subsystem<system::events>;
 
         public:
-            subsystem() = default;
+            using parent_t = subinit<system::video>;
+
+            subsystem(pass_key<parent_t>);
 
             window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {});
 
             HAL_NO_SIZE event_proxy events;
 
-            HAL_NO_SIZE clipboard_proxy clipboard { {} };
-            HAL_NO_SIZE display_proxy   displays { {} };
+            HAL_NO_SIZE clipboard_proxy clipboard;
+            HAL_NO_SIZE display_proxy   displays;
+
+        private:
+            subsystem();
         };
     }
 
     namespace system
     {
-        class video : public hal::detail::subinit<hal::detail::system::video>
-        {
-        public:
-            using subinit::subinit;
-        };
-
-        static_assert(std::is_empty_v<video>);
+        using video = detail::subinit<detail::system::video>;
     }
 }

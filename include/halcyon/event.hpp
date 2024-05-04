@@ -11,45 +11,54 @@ namespace hal
 {
     namespace detail
     {
+        class mouse_proxy
+        {
+        public:
+            using authority_t = subsystem<system::events>;
+
+            mouse_proxy(pass_key<authority_t>);
+
+            // Get a snapshot of the current mouse state.
+            mouse::state state() const;
+
+            // Get the current mouse state relative to the desktop.
+            hal::pixel_point pos_abs() const;
+
+            // Get the current mouse state relative to the focus window.
+            hal::pixel_point pos_rel() const;
+        };
+
+        class keyboard_proxy
+        {
+        public:
+            using authority_t = subsystem<system::events>;
+
+            keyboard_proxy(pass_key<authority_t>);
+
+            // Get a reference to the keyboard state.
+            keyboard::state_reference state_ref() const;
+        };
+
         template <>
         class subsystem<system::events>
         {
-            class mouse_proxy
-            {
-            public:
-                // Get a snapshot of the current mouse state.
-                mouse::state state() const;
-
-                // Get the current mouse state relative to the desktop.
-                hal::pixel_point pos_abs() const;
-
-                // Get the current mouse state relative to the focus window.
-                hal::pixel_point pos_rel() const;
-            };
-
-            class keyboard_proxy
-            {
-            public:
-                // Get a reference to the keyboard state.
-                keyboard::state_reference state_ref() const;
-            };
-
         public:
-            subsystem() = default;
+            using authority_t = subsystem<system::video>;
+            using parent_t    = subinit<system::events>;
+
+            subsystem(pass_key<authority_t>);
+            subsystem(pass_key<parent_t>);
 
             HAL_NO_SIZE mouse_proxy    mouse;
             HAL_NO_SIZE keyboard_proxy keyboard;
+
+        private:
+            subsystem();
         };
     }
 
     namespace system
     {
-        class event : public detail::subinit<detail::system::events>
-        {
-        public:
-            using subinit::subinit;
-        };
-
-        static_assert(std::is_empty_v<event>);
+        using event = detail::subinit<detail::system::events>;
     }
 }

@@ -6,6 +6,8 @@
 
 #include <halcyon/debug.hpp>
 
+#include <halcyon/utility/pass_key.hpp>
+
 namespace hal
 {
     class context;
@@ -35,17 +37,17 @@ namespace hal
             }
         }
 
+        template <system S>
+        class subinit;
+
         // A subsystem that doesn't actually (de)initialize anything.
         // This is more of a base class to ensure dependent classes
         // accept proxies as well as actual self-initialized systems.
         template <system S>
         class subsystem
         {
-        public:
-            subsystem() = default;
-
-            subsystem(const subsystem&) = delete;
-            subsystem(subsystem&&)      = delete;
+            // Specialized classes provide their own constructors.
+            subsystem() = delete;
         };
 
         // A subsystem that initializes itself.
@@ -54,6 +56,7 @@ namespace hal
         {
         public:
             explicit subinit(context&)
+                : subsystem<S> { pass_key<subinit<S>> {} }
             {
                 HAL_WARN_IF(initialized(), to_string(S), " subsystem is already initialized");
                 HAL_ASSERT_VITAL(::SDL_InitSubSystem(static_cast<std::uint32_t>(S)) == 0, debug::last_error());

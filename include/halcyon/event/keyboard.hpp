@@ -16,6 +16,11 @@
 
 namespace hal
 {
+    namespace detail
+    {
+        class keyboard_proxy;
+    }
+
     namespace keyboard
     {
         // A representation of a physical, layout- and locale-independent button.
@@ -163,9 +168,9 @@ namespace hal
         class state_reference
         {
         public:
-            using authority = hal::detail::subsystem<hal::detail::system::events>;
+            using authority_t = detail::keyboard_proxy;
 
-            state_reference(pass_key<authority>);
+            state_reference(pass_key<authority_t>);
 
             bool operator[](button btn) const;
             bool operator[](key k) const;

@@ -1,3 +1,4 @@
+#include <halcyon/event.hpp>
 #include <halcyon/video.hpp>
 
 #include <string>
@@ -52,4 +53,17 @@ display::id_t detail::display_proxy::size() const
 display detail::display_proxy::operator[](display::id_t idx) const
 {
     return { idx, pass_key<display_proxy> {} };
+}
+
+sub::subsystem(pass_key<parent_t>)
+    : subsystem {}
+
+{
+}
+
+sub::subsystem()
+    : events { pass_key<sub> {} }
+    , clipboard { pass_key<sub> {} }
+    , displays { pass_key<sub> {} }
+{
 }

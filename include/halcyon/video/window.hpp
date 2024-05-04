@@ -16,8 +16,8 @@ namespace hal
     class window : public detail::raii_object<SDL_Window, ::SDL_DestroyWindow>
     {
     public:
-        using id_t      = u8;
-        using authority = hal::detail::subsystem<hal::detail::system::video>;
+        using id_t        = u8;
+        using authority_t = hal::detail::subsystem<hal::detail::system::video>;
 
         enum class flags : u16
         {
@@ -31,7 +31,7 @@ namespace hal
         };
 
         window() = default;
-        window(SDL_Window* ptr, pass_key<authority> sys);
+        window(SDL_Window* ptr, pass_key<authority_t> sys);
 
         renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated });
 

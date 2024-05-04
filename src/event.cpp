@@ -4,12 +4,16 @@ using namespace hal;
 
 using sub = detail::subsystem<detail::system::events>;
 
-mouse::state sub::mouse_proxy::state() const
+detail::mouse_proxy::mouse_proxy(pass_key<authority_t>)
 {
-    return { pass_key<sub> {} };
 }
 
-pixel_point sub::mouse_proxy::pos_abs() const
+mouse::state detail::mouse_proxy::state() const
+{
+    return { pass_key<mouse_proxy> {} };
+}
+
+pixel_point detail::mouse_proxy::pos_abs() const
 {
     sdl::pixel_point ret;
 
@@ -18,7 +22,7 @@ pixel_point sub::mouse_proxy::pos_abs() const
     return ret;
 }
 
-pixel_point sub::mouse_proxy::pos_rel() const
+pixel_point detail::mouse_proxy::pos_rel() const
 {
     sdl::pixel_point ret;
 
@@ -27,7 +31,27 @@ pixel_point sub::mouse_proxy::pos_rel() const
     return ret;
 }
 
-keyboard::state_reference sub::keyboard_proxy::state_ref() const
+detail::keyboard_proxy::keyboard_proxy(pass_key<authority_t>)
 {
-    return { pass_key<sub> {} };
+}
+
+keyboard::state_reference detail::keyboard_proxy::state_ref() const
+{
+    return pass_key<keyboard_proxy> {};
+}
+
+sub::subsystem(pass_key<authority_t>)
+    : subsystem {}
+{
+}
+
+sub::subsystem(pass_key<parent_t>)
+    : subsystem {}
+{
+}
+
+sub::subsystem()
+    : mouse { pass_key<sub> {} }
+    , keyboard { pass_key<sub> {} }
+{
 }

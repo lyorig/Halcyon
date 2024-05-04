@@ -20,6 +20,11 @@ namespace hal
         class mouse_motion_event;
     }
 
+    namespace detail
+    {
+        class mouse_proxy;
+    }
+
     namespace mouse
     {
         enum class button : u8
@@ -36,7 +41,7 @@ namespace hal
         class state
         {
         public:
-            using authority_t = hal::detail::subsystem<hal::detail::system::events>;
+            using authority_t = detail::mouse_proxy;
 
             // [private] A snapshot of the current mouse state is provided by the event subsystem.
             state(pass_key<authority_t>);
