@@ -161,7 +161,7 @@ event_handler::event_handler(authority&)
              SDL_CONTROLLERTOUCHPADMOTION,
              SDL_CONTROLLERTOUCHPADUP,
              SDL_CONTROLLERSENSORUPDATE,
-             SDL_CONTROLLERSTEAMHANDLEUPDATED,
+             // SDL_CONTROLLERSTEAMHANDLEUPDATED, <- Unsupported on Windows, apparently
              SDL_FINGERDOWN,
              SDL_FINGERUP,
              SDL_FINGERMOTION,

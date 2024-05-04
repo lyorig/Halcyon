@@ -13,11 +13,11 @@ link_libraries(${HALCYON_LIBRARIES})
 
 # Tests.
 
-add_executable(HalTest test/main.cpp ${HALCYON_SOURCES})
+add_executable(HalTest WIN32 test/main.cpp ${HALCYON_SOURCES})
 
 # These tests require assertions present in Halcyon. Make sure they're on.
 if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
-   target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED)
+    target_compile_definitions(HalTest PRIVATE HAL_DEBUG_ENABLED)
     
     target_compile_options(HalTest PRIVATE -flto)
     target_link_options(HalTest PRIVATE -flto)

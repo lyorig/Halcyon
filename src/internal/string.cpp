@@ -1,4 +1,5 @@
 #include <halcyon/internal/string.hpp>
+#include <cstring>
 
 using namespace hal::sdl;
 

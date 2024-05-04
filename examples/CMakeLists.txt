@@ -15,5 +15,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/)
 
 foreach(FILE IN LISTS EXAMPLE_SOURCES)
     get_filename_component(TGT_NAME ${FILE} NAME_WE)
-    add_executable(${TGT_NAME} ${FILE} $<TARGET_OBJECTS:Halcyon>)
+    add_executable(${TGT_NAME} WIN32 ${FILE} $<TARGET_OBJECTS:Halcyon>)
 endforeach()
