@@ -7,8 +7,6 @@
 
 namespace hal::detail
 {
-    template <arithmetic T>
-    constexpr T unset_pos { std::numeric_limits<T>::max() };
 
     // A base drawer class, implementing the builder method for drawing textures.
     // Designed to be used as an rvalue - all functions should only be called once.
@@ -31,13 +29,16 @@ namespace hal::detail
 
         using this_ref = std::conditional_t<std::is_void_v<This>, drawer, This>&;
 
+        template <arithmetic U>
+        consteval static U unset_pos() { return std::numeric_limits<U>::max(); }
+
     public:
         [[nodiscard]] drawer(Pass& ths, const T& src, pass_key<Pass>)
             : m_pass { ths }
             , m_this { src }
             , m_dst { tag::as_size, src.size() }
         {
-            m_src.pos.x = unset_pos<src_t>;
+            m_src.pos.x = unset_pos<src_t>();
         }
 
         // Set where to draw.
@@ -60,7 +61,7 @@ namespace hal::detail
         // Do not use with scaling and anchoring.
         [[nodiscard]] this_ref to(HAL_TAG_NAME(fill))
         {
-            m_dst.pos.x = unset_pos<dst_t>;
+            m_dst.pos.x = unset_pos<dst_t>();
             return get_this();
         }
 
@@ -77,7 +78,7 @@ namespace hal::detail
         // Call after setting the destination and before anchoring.
         [[nodiscard]] this_ref scale(f64 mul)
         {
-            if (m_dst.pos.x != unset_pos<dst_t>)
+            if (m_dst.pos.x != unset_pos<dst_t>())
                 m_dst.size *= mul;
             return get_this();
         }
@@ -86,7 +87,7 @@ namespace hal::detail
         // Call after setting the destination and scaling.
         [[nodiscard]] this_ref anchor(anchor anch)
         {
-            if (m_dst.pos.x != unset_pos<dst_t>)
+            if (m_dst.pos.x != unset_pos<dst_t>())
                 m_dst.pos = m_dst.pos.anchor(anch, m_dst.size);
             return get_this();
         }

@@ -181,9 +181,9 @@ void blitter::operator()()
 {
     HAL_ASSERT_VITAL(::SDL_BlitScaled(
                          m_pass.ptr(),
-                         m_src.pos.x == detail::unset_pos<src_t> ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                          m_this.ptr(),
-                         m_dst.pos.x == detail::unset_pos<dst_t> ? nullptr : reinterpret_cast<SDL_Rect*>(m_dst.addr()))
+                         m_dst.pos.x == unset_pos<dst_t>() ? nullptr : reinterpret_cast<SDL_Rect*>(m_dst.addr()))
             == 0,
         debug::last_error());
 }

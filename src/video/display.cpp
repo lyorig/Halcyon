@@ -6,7 +6,7 @@
 
 using namespace hal;
 
-display::display(id_t disp_idx, pass_key<authority>)
+display::display(id_t disp_idx, pass_key<authority_t>)
     : m_index { disp_idx }
 {
     SDL_DisplayMode dm;

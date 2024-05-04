@@ -12,17 +12,22 @@
 
 namespace hal
 {
+    namespace detail
+    {
+        class display_proxy;
+    }
+
     // Display device data.
     class display
     {
     public:
-        using authority = detail::subsystem<detail::system::video>;
-
         using id_t = u8;
         using hz_t = u16;
 
+        using authority_t = detail::display_proxy;
+
         // [private] Display info is provided by the display proxy in hal::system::video.
-        display(id_t disp_idx, pass_key<authority>);
+        display(id_t disp_idx, pass_key<authority_t>);
 
         pixel_point size() const;
         hz_t        hz() const;
