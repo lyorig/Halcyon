@@ -2,6 +2,16 @@
 
 using namespace hal;
 
+SDL_RWops* detail::rwops::get() const
+{
+    return ptr();
+}
+
+SDL_RWops* detail::rwops::use()
+{
+    return release();
+}
+
 accessor::accessor(std::string_view path)
     : rwops { ::SDL_RWFromFile(path.data(), "r") }
 {
@@ -12,19 +22,24 @@ accessor::accessor(std::span<const std::byte> data)
 {
 }
 
-SDL_RWops* accessor::get(pass_key<surface>) const
-{
-    return ptr();
-}
-
 SDL_RWops* accessor::get(pass_key<image::context>) const
 {
-    return ptr();
+    return rwops::get();
 }
 
-SDL_RWops* accessor::get(pass_key<ttf::context>) const
+SDL_RWops* accessor::use(pass_key<surface>)
 {
-    return ptr();
+    return rwops::use();
+}
+
+SDL_RWops* accessor::use(pass_key<image::context>)
+{
+    return rwops::use();
+}
+
+SDL_RWops* accessor::use(pass_key<ttf::context>)
+{
+    return rwops::use();
 }
 
 accessor hal::access(std::string_view path)
@@ -58,14 +73,14 @@ outputter::outputter(std::span<std::uint8_t> data)
 {
 }
 
-SDL_RWops* outputter::get(pass_key<surface>) const
+SDL_RWops* outputter::use(pass_key<surface>)
 {
-    return ptr();
+    return rwops::use();
 }
 
-SDL_RWops* outputter::get(pass_key<image::context>) const
+SDL_RWops* outputter::use(pass_key<image::context>)
 {
-    return ptr();
+    return rwops::use();
 }
 
 outputter hal::output(std::string_view file)
