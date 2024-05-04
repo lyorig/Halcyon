@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/event/event.hpp>
+#include <halcyon/event/handler.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
 

@@ -26,6 +26,8 @@ namespace hal
                 reoriented   = SDL_DISPLAYEVENT_ORIENTATION
             };
 
+            display_event() = delete;
+
             type event_type() const;
 
             hal::display::id_t display_index() const;
@@ -59,6 +61,8 @@ namespace hal
                 display_changed     = SDL_WINDOWEVENT_DISPLAY_CHANGED
             };
 
+            window_event() = delete;
+
             type event_type() const;
 
             hal::window::id_t window_id() const;
@@ -75,6 +79,8 @@ namespace hal
         class keyboard_event : SDL_KeyboardEvent
         {
         public:
+            keyboard_event() = delete;
+
             hal::window::id_t window_id() const;
 
             hal::keyboard::button button() const;
@@ -87,6 +93,8 @@ namespace hal
         class mouse_motion_event : SDL_MouseMotionEvent
         {
         public:
+            mouse_motion_event() = delete;
+
             hal::window::id_t window_id() const;
 
             mouse::state state() const;
@@ -99,6 +107,8 @@ namespace hal
         class mouse_button_event : SDL_MouseButtonEvent
         {
         public:
+            mouse_button_event() = delete;
+
             hal::window::id_t window_id() const;
 
             mouse::button button() const;
@@ -111,6 +121,8 @@ namespace hal
         class mouse_wheel_event : SDL_MouseWheelEvent
         {
         public:
+            mouse_wheel_event() = delete;
+
             hal::window::id_t window_id() const;
 
             point<i16>  scroll() const;

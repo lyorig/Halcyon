@@ -1,7 +1,5 @@
 #include <halcyon/video/window.hpp>
 
-#include <halcyon/event/event.hpp>
-
 #include <halcyon/internal/helpers.hpp>
 
 using namespace hal;

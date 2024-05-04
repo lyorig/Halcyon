@@ -1,5 +1,5 @@
 #include <halcyon/debug.hpp>
-#include <halcyon/event/event.hpp>
+#include <halcyon/event/handler.hpp>
 
 using namespace hal;
 
