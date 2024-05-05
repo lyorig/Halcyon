@@ -2,7 +2,6 @@
 
 #include <cmath>
 #include <cstdint>
-
 #include <type_traits>
 
 #define HAL_NO_SIZE [[no_unique_address]]

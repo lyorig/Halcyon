@@ -1,15 +1,12 @@
 #include <iostream>
 
 #include <halcyon/image.hpp>
-#include <halcyon/utility/printing.hpp>
 
 int main(int argc, char* argv[])
 {
-    std::ios_base::sync_with_stdio(false);
-
     if (argc == 1)
     {
-        std::cout << "No file specified.\n";
+        std::cout << "Usage: " << argv[0] << " [image path]\n";
         return EXIT_FAILURE;
     }
 
