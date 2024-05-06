@@ -1,7 +1,5 @@
 #pragma once
 
-#include <type_traits>
-
 namespace hal
 {
     template <typename T>
