@@ -122,7 +122,7 @@ pixel_reference surface::operator[](const pixel_point& pos) const
 }
 
 surface::surface(const surface& cvt, SDL_PixelFormatEnum fmt)
-    : raii_object { ::SDL_ConvertSurfaceFormat(get(), fmt, 0) }
+    : raii_object { ::SDL_ConvertSurfaceFormat(cvt.get(), fmt, 0) }
 {
 }
 

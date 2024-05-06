@@ -61,7 +61,7 @@ void renderer::clear()
 void renderer::draw_point(const sdl::coord_point& pt)
 {
 #ifdef HAL_INTEGRAL_COORD
-    ::SDL_RenderDrawPoint(ptr(), pt.x, pt.y);
+    ::SDL_RenderDrawPoint(get(), pt.x, pt.y);
 #else
     ::SDL_RenderDrawPointF(get(), pt.x, pt.y);
 #endif
@@ -70,7 +70,7 @@ void renderer::draw_point(const sdl::coord_point& pt)
 void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& to)
 {
 #ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderDrawLine(ptr(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_RenderDrawLine(get(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
 #else
     HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(get(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
 #endif
@@ -79,7 +79,7 @@ void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& t
 void renderer::draw_rect(const sdl::coord_rect& area)
 {
 #ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderDrawRect(ptr(), area.addr()) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_RenderDrawRect(get(), area.addr()) == 0, debug::last_error());
 #else
     HAL_ASSERT_VITAL(::SDL_RenderDrawRectF(get(), area.addr()) == 0, debug::last_error());
 #endif
@@ -88,7 +88,7 @@ void renderer::draw_rect(const sdl::coord_rect& area)
 void renderer::fill_rect(const sdl::coord_rect& area)
 {
 #ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderFillRect(ptr(), area.addr()) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_RenderFillRect(get(), area.addr()) == 0, debug::last_error());
 #else
     HAL_ASSERT_VITAL(::SDL_RenderFillRectF(get(), area.addr()) == 0, debug::last_error());
 #endif
@@ -97,7 +97,7 @@ void renderer::fill_rect(const sdl::coord_rect& area)
 void renderer::fill_rects(const std::span<const sdl::coord_rect>& areas)
 {
 #ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderFillRects(ptr(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_RenderFillRects(get(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
 #else
     HAL_ASSERT_VITAL(::SDL_RenderFillRectsF(get(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
 #endif
