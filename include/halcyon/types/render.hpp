@@ -23,7 +23,7 @@ namespace hal
 
     // A drawing coordinate. Floating point by default, but you can define HAL_INTEGRAL_COORD to
     // make it be integral and potentially improve performance.
-    using coord_t = detail::cft<std::conditional_t<sdl::integral_coord, pixel_t, f32>, sdl::coord_t>;
+    using coord_t = detail::cft<std::conditional_t<compile_settings::integral_coord, pixel_t, f32>, sdl::coord_t>;
 
     using pixel_point = point<pixel_t>;
     using pixel_rect  = rectangle<pixel_t>;

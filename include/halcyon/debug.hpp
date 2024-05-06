@@ -37,6 +37,17 @@
 
 namespace hal
 {
+    namespace compile_settings
+    {
+        constexpr bool debug_enabled {
+#ifdef HAL_DEBUG_ENABLED
+            true
+#else
+            false
+#endif
+        };
+    }
+
     class debug
     {
     public:
@@ -47,14 +58,6 @@ namespace hal
             error,
             init,
             load
-        };
-
-        static constexpr bool enabled {
-#ifdef HAL_DEBUG_ENABLED
-            true
-#else
-            false
-#endif
         };
 
         // This is a class just for the purpose of using private variables.

@@ -13,21 +13,24 @@
 
 namespace hal
 {
-    // Use potentially faster types (e.g. int_fastN_t instead of intN_t).
-    // I say potentially, because some platforms (for example macOS on ARM)
-    // have no difference between fixed-size and fast types.
-    constexpr bool fast_types {
+    namespace compile_settings
+    {
+        // Use potentially faster types (e.g. int_fastN_t instead of intN_t).
+        // I say potentially, because some platforms (for example macOS on ARM)
+        // have no difference between fixed-size and fast types.
+        constexpr bool fast_types {
 #ifdef HAL_FAST_TYPES
-        true
+            true
 #else
-        false
+            false
 #endif
-    };
+        };
+    }
 
     namespace detail
     {
         template <typename Normal_type, typename Fast_type>
-        using cft = std::conditional_t<fast_types, Fast_type, Normal_type>; // Conditional Fast Type.
+        using cft = std::conditional_t<compile_settings::fast_types, Fast_type, Normal_type>; // Conditional Fast Type.
     }
 
     // Integral types.

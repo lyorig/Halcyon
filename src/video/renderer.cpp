@@ -214,7 +214,7 @@ copyer& copyer::outline()
 
 void copyer::operator()()
 {
-    if constexpr (sdl::integral_coord)
+    if constexpr (compile_settings::integral_coord)
     {
         HAL_ASSERT_VITAL(::SDL_RenderCopyEx(m_pass.get(), m_this.get(),
                              m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
