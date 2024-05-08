@@ -70,7 +70,7 @@ SDL_RWops* outputter::use(pass_key<surface>)
 
 SDL_RWops* outputter::use(pass_key<image::context>)
 {
-    return raii_object::get();
+    return raii_object::release();
 }
 
 outputter hal::output(std::string_view file)
