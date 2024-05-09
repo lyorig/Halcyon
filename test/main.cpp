@@ -237,6 +237,20 @@ int main(int argc, char* argv[])
 {
     static_assert(hal::compile_settings::debug_enabled, "HalTest requires debug mode to be enabled");
 
+    // Metaprogramming checks.
+    using T1        = std::tuple<int, double, short>;
+    using T2        = std::vector<double>;
+    using type_list = hal::type_list<T1, T2>;
+
+    static_assert(std::is_same_v<type_list::at_index<0>, T1> && std::is_same_v<type_list::at_index<1>, T2>);
+    static_assert(type_list::index_of<T1> == 0 && type_list::index_of<T2> == 1);
+
+    using ret_t  = std::string;
+    using func_t = ret_t(T1, T2);
+
+    using func_info = hal::function_info<func_t>;
+    static_assert(std::is_same_v<func_info::return_type, ret_t> && std::is_same_v<func_info::arguments::at_index<0>, T1> && std::is_same_v<func_info::arguments::at_index<1>, T2>);
+
     constexpr std::pair<std::string_view, hal::func_ptr<int>> tests[] {
         { "--assert-fail", test::assert_fail },
         { "--window-resize", test::window_resize },

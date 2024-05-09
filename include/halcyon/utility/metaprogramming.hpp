@@ -76,4 +76,14 @@ namespace hal
         template <template <typename...> typename T>
         using wrap = T<Ts...>;
     };
+
+    template <typename>
+    struct function_info;
+
+    template <typename Ret, typename... Args>
+    struct function_info<Ret(Args...)>
+    {
+        using return_type = Ret;
+        using arguments   = type_list<Args...>;
+    };
 }
