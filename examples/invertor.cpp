@@ -2,6 +2,9 @@
 
 #include <halcyon/image.hpp>
 
+// invertor.cpp:
+// Inverts a given image.
+
 int main(int argc, char* argv[])
 {
     if (argc == 1)

@@ -65,11 +65,13 @@ namespace hal
     {
         constexpr static std::size_t size { sizeof...(Ts) };
 
+        // Get the index of a type.
         template <typename T>
-        constexpr static std::size_t index_of { index_of_v<T, Ts...> };
+        constexpr static std::size_t find { index_of_v<T, Ts...> };
 
+        // Get the type at index N.
         template <std::size_t N>
-        using at_index = type_at_t<N, Ts...>;
+        using at = type_at_t<N, Ts...>;
 
         // Wrap the provided type list in a type that takes a parameter pack.
         // Hopefully, that's understandable to you, 'cause it sure ain't to me.
@@ -77,6 +79,7 @@ namespace hal
         using wrap = T<Ts...>;
     };
 
+    // A neat way to get type information about a function.
     template <typename>
     struct function_info;
 
@@ -84,6 +87,12 @@ namespace hal
     struct function_info<Ret(Args...)>
     {
         using return_type = Ret;
-        using arguments   = type_list<Args...>;
+        using args        = type_list<Args...>;
     };
+
+    // Check whether the main function is correctly written out.
+    // This is due to SDL's cross-platform hackery; on Windows, it redefines "main"
+    // to be SDL_main, which hides away the OS' custom GUI application main function.
+    template <auto MainFunc>
+    constexpr inline bool is_correct_main_v = std::is_same_v<function_info<std::remove_pointer_t<decltype(MainFunc)>>, function_info<int(int, char**)>>;
 }

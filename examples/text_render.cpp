@@ -3,6 +3,11 @@
 #include <halcyon/event.hpp>
 #include <halcyon/video.hpp>
 
+#include <source_location>
+
+// text_render.cpp:
+// Renders the first command-line argument as text into a window.
+
 constexpr hal::pixel_point padding { 20, 20 };
 
 int main(int argc, char* argv[])
