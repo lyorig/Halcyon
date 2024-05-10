@@ -14,7 +14,7 @@ namespace hal::detail
     // a) constant textures, and
     // b) those who know what they're doing. I'm sure you do, though.
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
-    template <typename T, one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename Pass, typename This>
+    template <typename T, meta::one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename Pass, typename This>
     class drawer
     {
     protected:
@@ -29,7 +29,7 @@ namespace hal::detail
 
         using this_ref = std::conditional_t<std::is_void_v<This>, drawer, This>&;
 
-        template <arithmetic U>
+        template <meta::arithmetic U>
         consteval static U unset_pos() { return std::numeric_limits<U>::max(); }
 
     public:

@@ -5,7 +5,7 @@
 // concepts.hpp:
 // An extension of STL concepts.
 
-namespace hal
+namespace hal::meta
 {
     template <typename T>
     concept arithmetic = std::is_arithmetic_v<T> || std::is_enum_v<T>;

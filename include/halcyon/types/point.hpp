@@ -19,10 +19,10 @@ namespace hal
         bottom_right
     };
 
-    template <arithmetic T>
+    template <meta::arithmetic T>
     struct rectangle;
 
-    template <arithmetic T>
+    template <meta::arithmetic T>
     struct point
     {
         T x {}, y {};
@@ -78,7 +78,7 @@ namespace hal
         }
 
         // Arithmetic operations.
-        template <arithmetic Add>
+        template <meta::arithmetic Add>
         constexpr auto operator+(const point<Add>& pt) const
         {
             point<decltype(x + pt.x)> ret = *this;
@@ -86,7 +86,7 @@ namespace hal
             return ret;
         }
 
-        template <arithmetic Mns>
+        template <meta::arithmetic Mns>
         constexpr auto operator-(const point<Mns>& pt) const
         {
             point<decltype(x - pt.x)> ret = *this;
@@ -94,7 +94,7 @@ namespace hal
             return ret;
         }
 
-        template <arithmetic Mul>
+        template <meta::arithmetic Mul>
         constexpr auto operator*(const point<Mul>& pt) const
         {
             point<decltype(x * pt.x)> ret { *this };
@@ -102,7 +102,7 @@ namespace hal
             return ret;
         }
 
-        template <arithmetic Div>
+        template <meta::arithmetic Div>
         constexpr auto operator/(const point<Div>& pt) const
         {
             point<decltype(x / pt.x)> ret { *this };
@@ -110,7 +110,7 @@ namespace hal
             return ret;
         }
 
-        template <arithmetic Mod>
+        template <meta::arithmetic Mod>
         constexpr auto operator%(const point<Mod>& pt) const
         {
             point<decltype(x % pt.x)> ret { *this };
@@ -128,7 +128,7 @@ namespace hal
         }
 
         // Additional arithmetic operations.
-        template <arithmetic Mul>
+        template <meta::arithmetic Mul>
         constexpr auto operator*(Mul mul) const
         {
             return point<decltype(x * mul)> {
@@ -137,7 +137,7 @@ namespace hal
             };
         }
 
-        template <arithmetic Div>
+        template <meta::arithmetic Div>
         constexpr auto operator/(Div div) const
         {
             return point<decltype(x / div)> {
@@ -194,7 +194,7 @@ namespace hal
         constexpr auto operator<=>(const point& cmp) const = default;
 
         // Conversions.
-        template <arithmetic Convert>
+        template <meta::arithmetic Convert>
         constexpr operator point<Convert>() const
         {
             return point<Convert> { static_cast<Convert>(x),
@@ -202,13 +202,13 @@ namespace hal
         }
 
         constexpr sdl::point_t<T>* addr()
-            requires(is_present_v<T, sdl::pixel_t, sdl::coord_t>)
+            requires(meta::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<sdl::point_t<T>*>(this);
         }
 
         constexpr const sdl::point_t<T>* addr() const
-            requires(is_present_v<T, sdl::pixel_t, sdl::coord_t>)
+            requires(meta::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<const sdl::point_t<T>*>(this);
         }
@@ -227,7 +227,7 @@ namespace hal
     extern template struct point<float>;
     extern template struct point<double>;
 
-    template <arithmetic T>
+    template <meta::arithmetic T>
     constexpr f64 distance(const point<T>& lhs, const point<T>& rhs)
     {
         const point<T> dist { lhs - rhs };

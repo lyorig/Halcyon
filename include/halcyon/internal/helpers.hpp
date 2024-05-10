@@ -12,7 +12,7 @@ namespace hal::detail
 {
     // OR together a set of values.
     // The name stands for "initializer list to bit mask".
-    template <arithmetic Cvt, typename T>
+    template <meta::arithmetic Cvt, typename T>
         requires std::is_enum_v<T>
     constexpr Cvt to_bitmask(std::initializer_list<T> list)
     {

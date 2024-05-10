@@ -7,7 +7,7 @@
 
 namespace hal
 {
-    template <arithmetic T>
+    template <meta::arithmetic T>
     struct rectangle
     {
         point<T> pos, size;
@@ -38,7 +38,7 @@ namespace hal
 
         constexpr bool operator==(const rectangle&) const = default;
 
-        template <arithmetic Convert>
+        template <meta::arithmetic Convert>
         constexpr operator rectangle<Convert>() const
         {
             return rectangle<Convert> { static_cast<point<Convert>>(pos),
@@ -77,13 +77,13 @@ namespace hal
         }
 
         constexpr sdl::rect_t<T>* addr()
-            requires(is_present_v<T, sdl::pixel_t, sdl::coord_t>)
+            requires(meta::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<sdl::rect_t<T>*>(this);
         }
 
         constexpr const sdl::rect_t<T>* addr() const
-            requires(is_present_v<T, sdl::pixel_t, sdl::coord_t>)
+            requires(meta::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<const sdl::rect_t<T>*>(this);
         }
@@ -102,13 +102,13 @@ namespace hal
     extern template struct rectangle<float>;
     extern template struct rectangle<double>;
 
-    template <arithmetic T>
+    template <meta::arithmetic T>
     constexpr bool operator|(const rectangle<T>& r1, const rectangle<T>& r2)
     {
         return r1.pos.x + r1.size.x >= r2.pos.x && r1.pos.x <= r2.pos.x + r2.size.x && r1.pos.y <= r2.pos.y + r2.size.y && r1.pos.y + r1.size.y >= r2.pos.y;
     }
 
-    template <arithmetic T>
+    template <meta::arithmetic T>
     constexpr bool operator|(const point<T>& pt, const rectangle<T> rect)
     {
         return pt.x >= rect.pos.x && pt.x <= rect.pos.x + rect.size.x && pt.y >= rect.pos.y && pt.y <= rect.pos.y + rect.size.y;

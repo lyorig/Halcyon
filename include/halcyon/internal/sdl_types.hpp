@@ -26,10 +26,10 @@ namespace hal
         using pixel_t = decltype(SDL_Rect::x);
         using coord_t = std::conditional_t<compile_settings::integral_coord, pixel_t, decltype(SDL_FRect::x)>;
 
-        template <arithmetic T>
+        template <meta::arithmetic T>
         using point_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Point, SDL_FPoint>;
 
-        template <arithmetic T>
+        template <meta::arithmetic T>
         using rect_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Rect, SDL_FRect>;
 
         namespace literals

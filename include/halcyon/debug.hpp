@@ -70,7 +70,7 @@ namespace hal
 
 #ifdef HAL_DEBUG_ENABLED
         // Output any amount of arguments to stdout/stderr and an output file.
-        template <printable... Args>
+        template <meta::printable... Args>
         static void print(Args&&... extra_info)
         {
             debug::print_severity(severity::info, std::forward<Args>(extra_info)...);
@@ -78,14 +78,14 @@ namespace hal
 
         // Output any amount of arguments to stdout/stderr and an output file.
         // This overload additionally specifies the type of message to output.
-        template <printable... Args>
+        template <meta::printable... Args>
         static void print(severity sev, Args&&... extra_info)
         {
             debug::print_severity(sev, std::forward<Args>(extra_info)...);
         }
 
         // Show a message box with an error message.
-        template <printable... Args>
+        template <meta::printable... Args>
         [[noreturn]] static void panic(std::string_view function, std::string_view file, u32 line, Args&&... extra_info)
         {
             debug::print_severity(severity::error, "In file ", file, ", line ", line, ", function ", function);
@@ -94,7 +94,7 @@ namespace hal
             std::exit(EXIT_FAILURE);
         }
 
-        template <printable... Args>
+        template <meta::printable... Args>
         static void warn_if(bool condition, Args&&... extra_info)
         {
             if (condition) [[unlikely]]
@@ -102,7 +102,7 @@ namespace hal
         }
 
         // Check a condition, and panic if it's false.
-        template <printable... Args>
+        template <meta::printable... Args>
         static void verify(bool condition, std::string_view cond_string, std::string_view func, std::string_view file, u32 line,
             Args&&... extra_info)
         {
@@ -111,7 +111,7 @@ namespace hal
         }
 
     private:
-        template <printable... Args>
+        template <meta::printable... Args>
         static void print_severity(severity type, Args&&... extra_info)
         {
             std::stringstream fwd;

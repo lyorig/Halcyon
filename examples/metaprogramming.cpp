@@ -10,9 +10,9 @@ constexpr inline bool eq = std::is_same_v<L, R>;
 
 int main(int argc, char* argv[])
 {
-    using info = hal::function_info<decltype(main)>;
+    using info = hal::meta::func_info<decltype(main)>;
 
-    static_assert(hal::is_correct_main_v<main>);
+    static_assert(hal::meta::is_correct_main_v<main>);
 
     static_assert(
         eq<int, info::return_type>
@@ -21,9 +21,9 @@ int main(int argc, char* argv[])
 
     info::args::wrap<std::variant> var;
 
-    using list = hal::type_list<short, double>;
+    using list = hal::meta::type_list<short, double>;
 
-    using concat = hal::join_t<list, info::args>;
+    using concat = hal::meta::join_t<list, info::args>;
 
     concat::back x = argv;
 
