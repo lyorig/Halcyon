@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <type_traits>
 
+#include <SDL_endian.h>
+
 #define HAL_NO_SIZE [[no_unique_address]]
 
 // types/numeric.hpp:
@@ -13,6 +15,12 @@
 
 namespace hal
 {
+    enum class byte_order : bool
+    {
+        lil_endian,
+        big_endian
+    };
+
     namespace compile_settings
     {
         // Use potentially faster types (e.g. int_fastN_t instead of intN_t).
@@ -23,6 +31,16 @@ namespace hal
             true
 #else
             false
+#endif
+        };
+
+        constexpr byte_order byte_order {
+#ifdef SDL_LIL_ENDIAN
+            byte_order::lil_endian
+#elifdef SDL_BIG_ENDIAN
+            byte_order::big_endian
+#else
+    #error "No byte order specified by SDL"
 #endif
         };
     }
