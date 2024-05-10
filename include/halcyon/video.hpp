@@ -57,7 +57,7 @@ namespace hal
 
             subsystem(pass_key<parent_t>);
 
-            window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {});
+            window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {}) &;
 
             HAL_NO_SIZE event_proxy events;
 

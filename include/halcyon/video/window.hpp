@@ -33,7 +33,7 @@ namespace hal
         window() = default;
         window(SDL_Window* ptr, pass_key<authority_t> sys);
 
-        renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated });
+        renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated }) &;
 
         pixel_point pos() const;
         void        pos(pixel_point ps);

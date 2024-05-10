@@ -17,7 +17,7 @@ detail::display_proxy::display_proxy(pass_key<authority_t>)
 {
 }
 
-window sub::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags)
+window sub::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags) &
 {
     return { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, to_bitmask<std::uint32_t>(flags)), pass_key<sub> {} };
 }

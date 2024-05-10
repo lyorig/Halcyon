@@ -66,8 +66,6 @@ namespace hal
     using f32 = detail::cft<float, std::float_t>;
     using f64 = detail::cft<double, std::double_t>;
 
-    template <typename Return_type, typename... Args>
-    using func_ptr = Return_type (*)(Args...);
-
+    // Pure paranoia, but it never hurts to check stuff at compile time.
     static_assert(std::numeric_limits<f32>::is_iec559 && std::numeric_limits<f64>::is_iec559);
 }

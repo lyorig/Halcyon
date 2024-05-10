@@ -168,12 +168,12 @@ void renderer::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-texture renderer::make_texture(const surface& surf)
+texture renderer::make_texture(const surface& surf) &
 {
     return { ::SDL_CreateTextureFromSurface(get(), surf.get()), pass_key<renderer> {} };
 }
 
-target_texture renderer::make_target_texture(pixel_point size)
+target_texture renderer::make_target_texture(pixel_point size) &
 {
     SDL_Window* wnd { ::SDL_RenderGetWindow(get()) };
     HAL_ASSERT(wnd != nullptr, debug::last_error());

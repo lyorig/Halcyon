@@ -7,6 +7,9 @@
 
 namespace hal
 {
+    template <typename Return_type, typename... Args>
+    using func_ptr = Return_type (*)(Args...);
+
     namespace detail
     {
         // Primary template.
@@ -113,27 +116,15 @@ namespace hal
             using return_type = Ret;
             using args        = type_list<Args...>;
         };
-    }
 
-    namespace detail
-    {
-        template <typename T>
-        struct is_correct_main : std::false_type
-        {
-        };
+        // A shortcut to get function info straight from a function pointer.
+        template <auto Func>
+        using func_info_t = func_info<std::remove_pointer_t<decltype(Func)>>;
 
-        template <>
-        struct is_correct_main<int(int, char**)> : std::true_type
-        {
-        };
-    }
-
-    namespace meta
-    {
         // Check whether the main function is correctly written out.
         // This is due to SDL's cross-platform hackery; on Windows, it redefines "main"
         // to be SDL_main, which hides away the OS' custom GUI application main function.
         template <auto MainFunc>
-        constexpr inline bool is_correct_main_v = detail::is_correct_main<std::remove_pointer_t<decltype(MainFunc)>>::value;
+        constexpr inline bool is_correct_main_v = std::is_same_v<decltype(MainFunc), func_ptr<int, int, char**>>;
     }
 }

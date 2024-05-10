@@ -10,7 +10,7 @@ window::window(SDL_Window* ptr, pass_key<authority_t>)
     HAL_PRINT(debug::severity::init, "Created window \"", title(), "\", flags = 0x", std::hex, ::SDL_GetWindowFlags(get()), ", ID = ", to_printable_int(id()));
 }
 
-renderer window::make_renderer(std::initializer_list<renderer::flags> flags)
+renderer window::make_renderer(std::initializer_list<renderer::flags> flags) &
 {
     return { ::SDL_CreateRenderer(get(), -1, detail::to_bitmask<std::uint32_t>(flags)), pass_key<window> {} };
 }

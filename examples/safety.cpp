@@ -3,18 +3,12 @@
 
 int main(int argc, char* argv[])
 {
-    // A simple way to check whether your main function is correct.
-    static_assert(hal::is_correct_main_v<main>);
+    hal::context ctx;
 
-    // SDL:
-    // Are the necessary systems initialized? Are the parameters correct?
-    SDL_Surface* ptr = ::IMG_Load(nullptr);
+    // Nelze využít systém jednorázově pro tvorbu objektů.
+    // hal::window no = hal::system::video { ctx }.make_window();
 
-    ptr = nullptr; // oops, memory leak!
-    ++ptr;         // what are you doing??
-
-    // Halcyon:
-    hal::image::context img { hal::image::init_format::jpg }; // can't initialize without a context
-
-    hal::surface surf = img.load(hal::access("[file name here]"));
+    // Takto je to správně. Systém se takto vypne až po zničení okna.
+    hal::system::video vid { ctx };
+    hal::window        yes = vid.make_window("Okno", { 640, 480 });
 }
