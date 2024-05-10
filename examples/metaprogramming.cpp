@@ -21,6 +21,12 @@ int main(int argc, char* argv[])
 
     info::args::wrap<std::variant> var;
 
+    using list = hal::type_list<short, double>;
+
+    using concat = hal::join_t<list, info::args>;
+
+    concat::back x = argv;
+
     if (std::time(nullptr) % 2 == 0)
         var = 69;
 

@@ -26,8 +26,6 @@ namespace hal
         {
             std::stringstream stream;
 
-            stream << std::fixed;
-
             (stream << ... << std::forward<Args>(args));
 
             return stream.str();

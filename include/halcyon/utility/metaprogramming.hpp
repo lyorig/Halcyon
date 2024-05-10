@@ -73,11 +73,29 @@ namespace hal
         template <std::size_t N>
         using at = type_at_t<N, Ts...>;
 
+        using front = at<0>;
+        using back  = at<size - 1>;
+
         // Wrap the provided type list in a type that takes a parameter pack.
         // Hopefully, that's understandable to you, 'cause it sure ain't to me.
         template <template <typename...> typename T>
         using wrap = T<Ts...>;
     };
+
+    namespace detail
+    {
+        template <typename...>
+        struct join;
+
+        template <typename... ArgsL, typename... ArgsR>
+        struct join<type_list<ArgsL...>, type_list<ArgsR...>>
+        {
+            using type = type_list<ArgsL..., ArgsR...>;
+        };
+    }
+
+    template <typename Pack1, typename Pack2>
+    using join_t = detail::join<Pack1, Pack2>::type;
 
     // A neat way to get type information about a function.
     template <typename>
