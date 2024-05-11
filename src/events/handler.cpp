@@ -1,5 +1,5 @@
 #include <halcyon/debug.hpp>
-#include <halcyon/event/handler.hpp>
+#include <halcyon/events/handler.hpp>
 
 using namespace hal;
 
@@ -187,7 +187,7 @@ bool event::handler::poll()
     return ::SDL_PollEvent(reinterpret_cast<SDL_Event*>(&m_event.m_data)) == 1;
 }
 
-event::handler::type event::handler::event_type() const
+event::type event::handler::event_type() const
 {
     return static_cast<type>(m_event.m_data.m_type);
 }
@@ -233,9 +233,9 @@ const event::mouse_wheel_event& event::handler::mouse_wheel() const
     return m_event.m_data.m_wheel;
 }
 
-std::string_view hal::to_string(event::handler::type evt)
+std::string_view hal::to_string(event::type evt)
 {
-    using enum event::handler::type;
+    using enum event::type;
 
     switch (evt)
     {
@@ -287,6 +287,8 @@ std::string_view hal::to_string(event::handler::type evt)
     case clipboard_updated:
         return "Clipboard updated";
     }
+
+    std::unreachable();
 }
 
 std::string_view hal::to_string(enum event::display_event::type evt)
@@ -307,6 +309,8 @@ std::string_view hal::to_string(enum event::display_event::type evt)
     case moved:
         return "Moved";
     }
+
+    std::unreachable();
 }
 
 std::string_view hal::to_string(enum event::window_event::type evt)
@@ -366,4 +370,6 @@ std::string_view hal::to_string(enum event::window_event::type evt)
     case display_changed:
         return "Display changed";
     }
+
+    std::unreachable();
 }

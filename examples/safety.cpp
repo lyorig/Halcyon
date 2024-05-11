@@ -1,4 +1,4 @@
-#include <halcyon/event.hpp>
+#include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
 int main(int, char*[])
@@ -15,4 +15,6 @@ int main(int, char*[])
     // [destruktor okna, zničí se]
     // [destruktor systému, vypne se]
     // [destruktor kontextu, konečný cleanup]
+
+    return EXIT_SUCCESS;
 }

@@ -90,10 +90,9 @@ hal::surface context::load(accessor src, load_format fmt) const
 
     case xv:
         return { ::IMG_LoadXV_RW(ptr), pk };
-
-    case unknown:
-        std::unreachable();
     };
+
+    std::unreachable();
 }
 
 void context::save(const surface& surf, save_format fmt, outputter dst) const
@@ -174,4 +173,6 @@ std::string_view hal::to_string(image::init_format fmt)
     case avif:
         return "AVIF";
     }
+
+    std::unreachable();
 }

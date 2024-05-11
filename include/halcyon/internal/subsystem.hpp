@@ -35,6 +35,8 @@ namespace hal
             case events:
                 return "Events";
             }
+
+            std::unreachable();
         }
 
         template <system S>

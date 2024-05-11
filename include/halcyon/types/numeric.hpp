@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cstdint>
+#include <limits>
 #include <type_traits>
 
 #include <SDL_endian.h>
@@ -37,7 +38,7 @@ namespace hal
         constexpr byte_order byte_order {
 #ifdef SDL_LIL_ENDIAN
             byte_order::lil_endian
-#elifdef SDL_BIG_ENDIAN
+#elif defined(SDL_BIG_ENDIAN)
             byte_order::big_endian
 #else
     #error "No byte order specified by SDL"

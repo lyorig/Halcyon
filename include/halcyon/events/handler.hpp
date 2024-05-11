@@ -1,14 +1,14 @@
 #pragma once
 
-#include <halcyon/event/keyboard.hpp>
-#include <halcyon/event/mouse.hpp>
+#include <halcyon/events/keyboard.hpp>
+#include <halcyon/events/mouse.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
 
 #include <halcyon/video/display.hpp>
 #include <halcyon/video/window.hpp>
 
-// event/event.hpp:
+// event/events.hpp:
 // A thin wrapper of SDL's event handling system.
 
 namespace hal
@@ -133,38 +133,38 @@ namespace hal
 
         static_assert(sizeof(mouse_wheel_event) == sizeof(SDL_MouseWheelEvent));
 
+        // Top-level event types.
+        enum class type : u16
+        {
+            quit_requested = SDL_QUIT,
+            terminated     = SDL_APP_TERMINATING,
+
+            low_memory = SDL_APP_LOWMEMORY,
+
+            will_enter_background = SDL_APP_WILLENTERBACKGROUND,
+            entered_background    = SDL_APP_DIDENTERBACKGROUND,
+
+            will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
+            entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
+
+            display_event = SDL_DISPLAYEVENT,
+            window_event  = SDL_WINDOWEVENT,
+
+            key_pressed  = SDL_KEYDOWN,
+            key_released = SDL_KEYUP,
+
+            mouse_moved       = SDL_MOUSEMOTION,
+            mouse_pressed     = SDL_MOUSEBUTTONDOWN,
+            mouse_released    = SDL_MOUSEBUTTONUP,
+            mouse_wheel_moved = SDL_MOUSEWHEEL,
+
+            clipboard_updated = SDL_CLIPBOARDUPDATE
+        };
+
         class handler
         {
         public:
             using authority = detail::subsystem<detail::system::events>;
-
-            // Top-level event types.
-            enum class type : u16
-            {
-                quit_requested = SDL_QUIT,
-                terminated     = SDL_APP_TERMINATING,
-
-                low_memory = SDL_APP_LOWMEMORY,
-
-                will_enter_background = SDL_APP_WILLENTERBACKGROUND,
-                entered_background    = SDL_APP_DIDENTERBACKGROUND,
-
-                will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
-                entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
-
-                display_event = SDL_DISPLAYEVENT,
-                window_event  = SDL_WINDOWEVENT,
-
-                key_pressed  = SDL_KEYDOWN,
-                key_released = SDL_KEYUP,
-
-                mouse_moved       = SDL_MOUSEMOTION,
-                mouse_pressed     = SDL_MOUSEBUTTONDOWN,
-                mouse_released    = SDL_MOUSEBUTTONUP,
-                mouse_wheel_moved = SDL_MOUSEWHEEL,
-
-                clipboard_updated = SDL_CLIPBOARDUPDATE
-            };
 
             // Constructor that disables unused events.
             // This should reduce heap allocations on SDL's part.
@@ -224,7 +224,7 @@ namespace hal
         };
     }
 
-    std::string_view to_string(event::handler::type evt);
+    std::string_view to_string(event::type evt);
     std::string_view to_string(event::display_event::type evt);
     std::string_view to_string(event::window_event::type evt);
 }

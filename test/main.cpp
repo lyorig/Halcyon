@@ -1,4 +1,4 @@
-#include <halcyon/event.hpp>
+#include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
 #include "data.hpp"
@@ -37,7 +37,7 @@ namespace test
         wnd.size(new_size);
         e.poll();
 
-        if (e.event_type() != hal::event::handler::type::window_event)
+        if (e.event_type() != hal::event::type::window_event)
             return EXIT_FAILURE;
 
         if (e.window().event_type() != hal::event::window_event::type::resized)
@@ -135,8 +135,8 @@ namespace test
     // Sending a quit event and checking whether it gets caught.
     int quit_event()
     {
-        hal::context       ctx;
-        hal::system::event evt { ctx };
+        hal::context        ctx;
+        hal::system::events evt { ctx };
 
         hal::event::handler eh { evt };
 
@@ -149,7 +149,7 @@ namespace test
         {
             switch (eh.event_type())
             {
-            case hal::event::handler::type::quit_requested:
+            case hal::event::type::quit_requested:
                 return EXIT_SUCCESS;
 
             default:

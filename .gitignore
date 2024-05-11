@@ -6,3 +6,5 @@ Testing/
 
 examples/bin/
 !examples/bin/assets/
+
+CMakeUserPresets.json

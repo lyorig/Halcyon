@@ -20,3 +20,4 @@ SDL2_ttf::SDL2_ttf
 
 # Halcyon uses C++23 features.
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
