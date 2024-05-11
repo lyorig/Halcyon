@@ -1,4 +1,4 @@
-#include <halcyon/event.hpp>
+#include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
 int main(int, char*[])

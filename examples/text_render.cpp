@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
 
-#include <halcyon/event.hpp>
+#include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
 // text_render.cpp:
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
         {
             switch (evt.event_type())
             {
-                using enum hal::event::handler::type;
+                using enum hal::event::type;
 
             case quit_requested:
                 return EXIT_SUCCESS;

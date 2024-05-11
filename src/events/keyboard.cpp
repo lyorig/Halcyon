@@ -1,4 +1,4 @@
-#include <halcyon/event/keyboard.hpp>
+#include <halcyon/events/keyboard.hpp>
 #include <utility>
 
 using namespace hal;

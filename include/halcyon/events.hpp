@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/event/handler.hpp>
+#include <halcyon/events/handler.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
 
@@ -59,6 +59,6 @@ namespace hal
 
     namespace system
     {
-        using event = detail::subinit<detail::system::events>;
+        using events = detail::subinit<detail::system::events>;
     }
 }
