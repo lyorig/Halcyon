@@ -29,19 +29,19 @@ This library is still under heavy developement; some namespaces etc. might not b
 #include <halcyon/events.hpp>
 
 int main(int argc, char* argv[]) {
-  static_assert(hal::is_correct_main<decltype(main)>);
+  static_assert(hal::meta::is_correct_main<decltype(main)>);
 
   hal::context       ctx;
   hal::system::video vid{ctx};
 
-  hal::window   wnd{vid.make_window("Example", {640, 480});
+  hal::window   wnd{vid.make_window("Example", {640, 480})};
   hal::renderer rnd{wnd.make_renderer()};
 
   hal::event::handler evt{vid.events};
 
   while (true) {
     while (evt.poll()) {
-      if (evt.type() == hal::event::type::quit_requested)
+      if (evt.event_type() == hal::event::type::quit_requested)
         return EXIT_SUCCESS; // Normal termination.
     }
 
