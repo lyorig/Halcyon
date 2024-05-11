@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     {
         hal::message_box::builder()
             .title(hal::string_from_pack("Could not load ", argv[1]))
-            .message(hal::debug::last_error())
+            .body(hal::debug::last_error())
             .type(hal::message_box::type::error)();
 
         return EXIT_FAILURE;

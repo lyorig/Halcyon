@@ -29,7 +29,7 @@ msbb& msbb::title(std::string_view text)
     return *this;
 }
 
-msbb& msbb::message(std::string_view text)
+msbb& msbb::body(std::string_view text)
 {
     m_data.message = text.data();
 
@@ -64,20 +64,20 @@ msbb& msbb::buttons(std::initializer_list<std::string_view> names)
     return *this;
 }
 
-msbb& msbb::enter(message_box::button_t id)
+msbb& msbb::enter(message_box::button_t idx)
 {
-    HAL_ASSERT(id < m_data.numbuttons, "Out of range button ID");
+    HAL_ASSERT(idx < m_data.numbuttons, "Out of range button ID");
 
-    m_btn[id].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+    m_btn[idx].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
 
     return *this;
 }
 
-msbb& msbb::escape(message_box::button_t id)
+msbb& msbb::escape(message_box::button_t idx)
 {
-    HAL_ASSERT(id < m_data.numbuttons, "Out of range button ID");
+    HAL_ASSERT(idx < m_data.numbuttons, "Out of range button ID");
 
-    m_btn[id].flags |= SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+    m_btn[idx].flags |= SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
 
     return *this;
 }

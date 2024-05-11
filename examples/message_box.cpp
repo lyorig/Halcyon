@@ -18,9 +18,10 @@ constexpr std::string_view
         "This post was made by M14 gang"
     };
 
-std::string_view random(std::span<const std::string_view> span)
+template <std::size_t N>
+std::string_view random(std::string_view (&span)[N])
 {
-    return span[std::time(nullptr) % span.size()];
+    return span[std::time(nullptr) % N];
 }
 
 int main(int, char*[])
@@ -35,7 +36,7 @@ int main(int, char*[])
             hal::to_printable_int(
                 msgb.type(type)
                     .title(random(titles))
-                    .message(random(messages))()));
+                    .body(random(messages))()));
 
     return EXIT_SUCCESS;
 }
