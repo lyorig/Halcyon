@@ -11,7 +11,7 @@ mouse::state::state(pass_key<authority_t>)
 {
 }
 
-mouse::state::state(std::uint32_t mask, pass_key<events::mouse_motion_event>)
+mouse::state::state(std::uint32_t mask, pass_key<event::mouse_motion_event>)
     : m_state { static_cast<u8>(mask) }
 {
 }

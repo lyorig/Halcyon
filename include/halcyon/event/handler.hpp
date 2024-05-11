@@ -13,7 +13,7 @@
 
 namespace hal
 {
-    namespace events
+    namespace event
     {
         class display_event : SDL_DisplayEvent
         {
@@ -30,7 +30,7 @@ namespace hal
 
             type event_type() const;
 
-            hal::display::id_t display_index() const;
+            display::id_t display_index() const;
 
             // As of April 2024, there are no events using the "data1" member.
         };
@@ -65,10 +65,10 @@ namespace hal
 
             type event_type() const;
 
-            hal::window::id_t window_id() const;
+            window::id_t window_id() const;
 
             // Valid for: display_changed
-            hal::display::id_t new_display_index() const;
+            display::id_t new_display_index() const;
 
             // Valid for: resized, moved
             pixel_point new_point() const;
@@ -81,11 +81,11 @@ namespace hal
         public:
             keyboard_event() = delete;
 
-            hal::window::id_t window_id() const;
+            window::id_t window_id() const;
 
-            hal::keyboard::button button() const;
-            hal::keyboard::key    key() const;
-            bool                  repeat() const;
+            keyboard::button button() const;
+            keyboard::key    key() const;
+            bool             repeat() const;
         };
 
         static_assert(sizeof(keyboard_event) == sizeof(SDL_KeyboardEvent));
@@ -95,7 +95,7 @@ namespace hal
         public:
             mouse_motion_event() = delete;
 
-            hal::window::id_t window_id() const;
+            window::id_t window_id() const;
 
             mouse::state state() const;
             pixel_point  pos() const;
@@ -109,7 +109,7 @@ namespace hal
         public:
             mouse_button_event() = delete;
 
-            hal::window::id_t window_id() const;
+            window::id_t window_id() const;
 
             mouse::button button() const;
             u8            click_amount() const;
@@ -123,7 +123,7 @@ namespace hal
         public:
             mouse_wheel_event() = delete;
 
-            hal::window::id_t window_id() const;
+            window::id_t window_id() const;
 
             point<i16>  scroll() const;
             point<f32>  scroll_precise() const;
@@ -132,99 +132,99 @@ namespace hal
         };
 
         static_assert(sizeof(mouse_wheel_event) == sizeof(SDL_MouseWheelEvent));
+
+        class handler
+        {
+        public:
+            using authority = detail::subsystem<detail::system::events>;
+
+            // Top-level event types.
+            enum class type : u16
+            {
+                quit_requested = SDL_QUIT,
+                terminated     = SDL_APP_TERMINATING,
+
+                low_memory = SDL_APP_LOWMEMORY,
+
+                will_enter_background = SDL_APP_WILLENTERBACKGROUND,
+                entered_background    = SDL_APP_DIDENTERBACKGROUND,
+
+                will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
+                entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
+
+                display_event = SDL_DISPLAYEVENT,
+                window_event  = SDL_WINDOWEVENT,
+
+                key_pressed  = SDL_KEYDOWN,
+                key_released = SDL_KEYUP,
+
+                mouse_moved       = SDL_MOUSEMOTION,
+                mouse_pressed     = SDL_MOUSEBUTTONDOWN,
+                mouse_released    = SDL_MOUSEBUTTONUP,
+                mouse_wheel_moved = SDL_MOUSEWHEEL,
+
+                clipboard_updated = SDL_CLIPBOARDUPDATE
+            };
+
+            // Constructor that disables unused events.
+            // This should reduce heap allocations on SDL's part.
+            handler(authority&);
+
+            // Get an event from the event queue.
+            // Returns true if the polled event is valid, false if there are no more to process.
+            bool poll();
+
+            // Get the last polled event's type.
+            type event_type() const;
+
+            // Valid for: display
+            const display_event& display() const;
+
+            // Valid for: window
+            const window_event& window() const;
+
+            // Valid for: key_pressed, key_released
+            const keyboard_event& keyboard() const;
+
+            // Valid for: mouse_moved
+            const mouse_motion_event& mouse_motion() const;
+
+            // Valid for: mouse_pressed, mouse_released
+            const mouse_button_event& mouse_button() const;
+
+            // Valid for: mouse_wheel_moved
+            const mouse_wheel_event& mouse_wheel() const;
+
+            // Check whether there are any pending event in the event queue.
+            static bool pending();
+
+        private:
+            // A union that impersonates SDL_Event.
+            struct
+            {
+                union
+                {
+                    std::uint32_t m_type;
+
+                    SDL_CommonEvent m_common;
+
+                    display_event  m_display;
+                    window_event   m_window;
+                    keyboard_event m_key;
+
+                    mouse_motion_event m_motion;
+                    mouse_button_event m_button;
+                    mouse_wheel_event  m_wheel;
+                } m_data;
+
+                std::byte padding[sizeof(SDL_Event) - sizeof(m_data)] {};
+            } m_event;
+
+            static_assert(sizeof(m_event) == sizeof(SDL_Event));
+        };
     }
 
-    class event_handler
-    {
-    public:
-        using authority = detail::subsystem<detail::system::events>;
-
-        // Top-level event types.
-        enum class type : u16
-        {
-            quit_requested = SDL_QUIT,
-            terminated     = SDL_APP_TERMINATING,
-
-            low_memory = SDL_APP_LOWMEMORY,
-
-            will_enter_background = SDL_APP_WILLENTERBACKGROUND,
-            entered_background    = SDL_APP_DIDENTERBACKGROUND,
-
-            will_enter_foreground = SDL_APP_WILLENTERFOREGROUND,
-            entered_foreground    = SDL_APP_DIDENTERFOREGROUND,
-
-            display_event = SDL_DISPLAYEVENT,
-            window_event  = SDL_WINDOWEVENT,
-
-            key_pressed  = SDL_KEYDOWN,
-            key_released = SDL_KEYUP,
-
-            mouse_moved       = SDL_MOUSEMOTION,
-            mouse_pressed     = SDL_MOUSEBUTTONDOWN,
-            mouse_released    = SDL_MOUSEBUTTONUP,
-            mouse_wheel_moved = SDL_MOUSEWHEEL,
-
-            clipboard_updated = SDL_CLIPBOARDUPDATE
-        };
-
-        // Constructor that disables unused event.
-        // This should reduce heap allocations on SDL's part.
-        event_handler(authority&);
-
-        // Get an event from the event queue.
-        // Returns true if the polled event is valid, false if there are no more to process.
-        bool poll();
-
-        // Get the last polled event's type.
-        type event_type() const;
-
-        // Valid for: display
-        const events::display_event& display() const;
-
-        // Valid for: window
-        const events::window_event& window() const;
-
-        // Valid for: key_pressed, key_released
-        const events::keyboard_event& keyboard() const;
-
-        // Valid for: mouse_moved
-        const events::mouse_motion_event& mouse_motion() const;
-
-        // Valid for: mouse_pressed, mouse_released
-        const events::mouse_button_event& mouse_button() const;
-
-        // Valid for: mouse_wheel_moved
-        const events::mouse_wheel_event& mouse_wheel() const;
-
-        // Check whether there are any pending event in the event queue.
-        static bool pending();
-
-    private:
-        // A union that impersonates SDL_Event.
-        struct
-        {
-            union
-            {
-                std::uint32_t m_type;
-
-                SDL_CommonEvent m_common;
-
-                events::display_event  m_display;
-                events::window_event   m_window;
-                events::keyboard_event m_key;
-
-                events::mouse_motion_event m_motion;
-                events::mouse_button_event m_button;
-                events::mouse_wheel_event  m_wheel;
-            } m_data;
-
-            std::byte padding[sizeof(SDL_Event) - sizeof(m_data)] {};
-        } m_event;
-
-        static_assert(sizeof(m_event) == sizeof(SDL_Event));
-    };
-
-    std::string_view to_string(event_handler::type evt);
-    std::string_view to_string(events::display_event::type evt);
-    std::string_view to_string(events::window_event::type evt);
+    std::string_view to_string(event::handler::type evt);
+    std::string_view to_string(event::display_event::type evt);
+    std::string_view to_string(event::window_event::type evt);
 }

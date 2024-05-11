@@ -29,7 +29,7 @@ namespace test
 
         hal::window wnd { vid.make_window("HalTest: Window resize", { 640, 480 }, { hal::window::flags::hidden }) };
 
-        hal::event_handler e { vid.events };
+        hal::event::handler e { vid.events };
 
         while (e.poll()) // Clear events.
             ;
@@ -37,10 +37,10 @@ namespace test
         wnd.size(new_size);
         e.poll();
 
-        if (e.event_type() != hal::event_handler::type::window_event)
+        if (e.event_type() != hal::event::handler::type::window_event)
             return EXIT_FAILURE;
 
-        if (e.window().event_type() != hal::events::window_event::type::resized)
+        if (e.window().event_type() != hal::event::window_event::type::resized)
             return EXIT_FAILURE;
 
         if (e.window().new_point() != new_size)
@@ -63,7 +63,7 @@ namespace test
         hal::window   wnd { vid.make_window("HalTest: Basic init", { 640, 480 }, { hal::window::flags::hidden }) };
         hal::renderer rnd { wnd.make_renderer() };
 
-        hal::event_handler e { vid.events };
+        hal::event::handler e { vid.events };
         e.poll();
 
         rnd.present();
@@ -138,7 +138,7 @@ namespace test
         hal::context       ctx;
         hal::system::event evt { ctx };
 
-        hal::event_handler eh { evt };
+        hal::event::handler eh { evt };
 
         SDL_Event e;
         e.type = SDL_QUIT;
@@ -149,7 +149,7 @@ namespace test
         {
             switch (eh.event_type())
             {
-            case hal::event_handler::type::quit_requested:
+            case hal::event::handler::type::quit_requested:
                 return EXIT_SUCCESS;
 
             default:
