@@ -233,7 +233,7 @@ const events::mouse_wheel_event& event_handler::mouse_wheel() const
     return m_event.m_data.m_wheel;
 }
 
-std::string_view to_string(event_handler::type evt)
+std::string_view hal::to_string(event_handler::type evt)
 {
     using enum event_handler::type;
 
@@ -289,7 +289,7 @@ std::string_view to_string(event_handler::type evt)
     }
 }
 
-std::string_view to_string(enum events::display_event::type evt)
+std::string_view hal::to_string(enum events::display_event::type evt)
 {
     using enum events::display_event::type;
 
@@ -309,7 +309,7 @@ std::string_view to_string(enum events::display_event::type evt)
     }
 }
 
-std::string_view to_string(enum events::window_event::type evt)
+std::string_view hal::to_string(enum events::window_event::type evt)
 {
     using enum events::window_event::type;
 
