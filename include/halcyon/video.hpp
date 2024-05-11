@@ -7,6 +7,8 @@
 #include <halcyon/ttf.hpp>
 
 #include <halcyon/video/display.hpp>
+#include <halcyon/video/driver.hpp>
+#include <halcyon/video/message_box.hpp>
 #include <halcyon/video/renderer.hpp>
 #include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>

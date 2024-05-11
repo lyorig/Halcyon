@@ -23,9 +23,9 @@ int main(int argc, char* argv[])
 
     hal::system::video vid { ctx };
 
-    hal::window        wnd { vid.make_window("Text renderer", { 100, 100 }) };
-    hal::renderer      rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
-    hal::event_handler evt { vid.events };
+    hal::window         wnd { vid.make_window("Text renderer", { 100, 100 }) };
+    hal::renderer       rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
+    hal::event::handler evt { vid.events };
 
     const hal::texture tex { rnd.make_texture(tctx.load(hal::access("../assets/m5x7.ttf"), 16).render(argv[1], hal::palette::black)) };
 
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
         {
             switch (evt.event_type())
             {
-                using enum hal::event_handler::type;
+                using enum hal::event::handler::type;
 
             case quit_requested:
                 return EXIT_SUCCESS;
