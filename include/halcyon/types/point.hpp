@@ -202,13 +202,13 @@ namespace hal
         }
 
         constexpr sdl::point_t<T>* addr()
-            requires(meta::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
+            requires(meta::is_present<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<sdl::point_t<T>*>(this);
         }
 
         constexpr const sdl::point_t<T>* addr() const
-            requires(meta::is_present_v<T, sdl::pixel_t, sdl::coord_t>)
+            requires(meta::is_present<T, sdl::pixel_t, sdl::coord_t>)
         {
             return reinterpret_cast<const sdl::point_t<T>*>(this);
         }

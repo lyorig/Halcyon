@@ -11,4 +11,8 @@ int main(int argc, char* argv[])
     // Takto je to správně. Systém se takto vypne až po zničení okna.
     hal::system::video vid { ctx };
     hal::window        yes = vid.make_window("Okno", { 640, 480 });
+
+    // [destruktor okna, zničí se]
+    // [destruktor systému, vypne se]
+    // [destruktor kontextu, konečný cleanup]
 }

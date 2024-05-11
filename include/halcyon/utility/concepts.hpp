@@ -11,5 +11,5 @@ namespace hal::meta
     concept arithmetic = std::is_arithmetic_v<T> || std::is_enum_v<T>;
 
     template <typename T, typename... Ts>
-    concept one_of = is_present_v<T, Ts...>;
+    concept one_of = is_present<T, Ts...>;
 }

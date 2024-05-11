@@ -14,34 +14,34 @@ namespace hal
     {
         // Primary template.
         template <std::size_t I, std::size_t N, typename... Rest>
-        struct type_at;
+        struct at;
 
         // Not found.
         template <std::size_t I, std::size_t N, typename Current, typename... Rest>
-        struct type_at<I, N, Current, Rest...> : type_at<I + 1, N, Rest...>
+        struct at<I, N, Current, Rest...> : at<I + 1, N, Rest...>
         {
         };
 
         // Found.
         template <std::size_t N, typename Current, typename... Rest>
-        struct type_at<N, N, Current, Rest...>
+        struct at<N, N, Current, Rest...>
         {
             using type = Current;
         };
 
         // Primary template.
         template <std::size_t I, typename What, typename... Rest>
-        struct index_of;
+        struct find;
 
         // Not found.
         template <std::size_t I, typename What, typename Current, typename... Ts>
-        struct index_of<I, What, Current, Ts...> : index_of<I + 1, What, Ts...>
+        struct find<I, What, Current, Ts...> : find<I + 1, What, Ts...>
         {
         };
 
         // Found.
         template <std::size_t I, typename What, typename... Ts>
-        struct index_of<I, What, What, Ts...>
+        struct find<I, What, What, Ts...>
         {
             constexpr static std::size_t value { I };
         };
@@ -51,18 +51,18 @@ namespace hal
     {
         // Check whether a type is present in a parameter pack.
         template <typename What, typename... Where>
-        constexpr inline bool is_present_v { (std::is_same_v<What, Where> || ...) };
+        constexpr inline bool is_present { (std::is_same_v<What, Where> || ...) };
 
         // Get the index at which a type resides in a parameter pack that contains it.
         // This will report the index of the first occurrence.
         template <typename What, typename... Where>
-            requires is_present_v<What, Where...>
-        constexpr inline std::size_t index_of_v { detail::index_of<0, What, Where...>::value };
+            requires is_present<What, Where...>
+        constexpr inline std::size_t find { detail::find<0, What, Where...>::value };
 
         // Get the type residing at an index in a parameter pack.
         template <std::size_t I, typename... Ts>
             requires(I < sizeof...(Ts))
-        using type_at_t = detail::type_at<0, I, Ts...>::type;
+        using at = detail::at<0, I, Ts...>::type;
 
         // A holder, of sorts, of a parameter pack.
         // Provides basic functionality.
@@ -73,11 +73,11 @@ namespace hal
 
             // Get the index of a type.
             template <typename T>
-            constexpr static std::size_t find { index_of_v<T, Ts...> };
+            constexpr static std::size_t find { meta::find<T, Ts...> };
 
             // Get the type at index N.
             template <std::size_t N>
-            using at = type_at_t<N, Ts...>;
+            using at = meta::at<N, Ts...>;
 
             using front = at<0>;
             using back  = at<size - 1>;
@@ -104,27 +104,30 @@ namespace hal
     namespace meta
     {
         template <typename Pack1, typename Pack2>
-        using join_t = detail::join<Pack1, Pack2>::type;
+        using join = detail::join<Pack1, Pack2>::type;
 
-        // A neat way to get type information about a function.
         template <typename>
         struct func_info;
 
+        // A neat way to get type information about a function.
         template <typename Ret, typename... Args>
         struct func_info<Ret(Args...)>
         {
-            using return_type = Ret;
-            using args        = type_list<Args...>;
+            using function_type = Ret(Args...);
+            using return_type   = Ret;
+            using args          = type_list<Args...>;
         };
 
-        // A shortcut to get function info straight from a function pointer.
-        template <auto Func>
-        using func_info_t = func_info<std::remove_pointer_t<decltype(Func)>>;
+        // Adapter to get the info from a function pointer.
+        template <typename Ret, typename... Args>
+        struct func_info<func_ptr<Ret, Args...>> : func_info<Ret(Args...)>
+        {
+        };
 
         // Check whether the main function is correctly written out.
         // This is due to SDL's cross-platform hackery; on Windows, it redefines "main"
         // to be SDL_main, which hides away the OS' custom GUI application main function.
         template <auto MainFunc>
-        constexpr inline bool is_correct_main_v = std::is_same_v<decltype(MainFunc), func_ptr<int, int, char**>>;
+        constexpr inline bool is_correct_main = std::is_same_v<decltype(MainFunc), func_ptr<int, int, char**>>;
     }
 }

@@ -10,22 +10,21 @@ constexpr inline bool eq = std::is_same_v<L, R>;
 
 int main(int argc, char* argv[])
 {
-    using info = hal::meta::func_info_t<main>;
+    using info_main  = hal::meta::func_info<decltype(main)>;
+    using info_qsort = hal::meta::func_info<decltype(std::qsort)>;
 
-    static_assert(hal::meta::is_correct_main_v<main>);
-    static_assert(eq<info, hal::meta::func_info<int(int, char**)>>);
+    using joined = hal::meta::join<info_main::args, info_qsort::args>;
+    static_assert(joined::size == info_main::args::size + info_qsort::args::size);
 
-    info::args::wrap<std::variant> var;
+    using variant = joined::wrap<std::variant>;
 
-    using list = hal::meta::type_list<short, double>;
-
-    using concat = hal::meta::join_t<list, info::args>;
+    variant var;
 
     if (std::time(nullptr) % 2 == 0)
         var = 69;
 
     else
-        var = nullptr;
+        var.emplace<joined::back>(nullptr);
 
     std::println("Variant holds a {}", std::holds_alternative<int>(var) ? "number" : "pointer");
 }
