@@ -1,7 +1,7 @@
 #include <halcyon/event.hpp>
 #include <halcyon/video.hpp>
 
-int main(int argc, char* argv[])
+int main(int, char*[])
 {
     hal::context ctx;
 

@@ -4,6 +4,8 @@
 
 #include <halcyon/video/message_box.hpp>
 
+#include <halcyon/utility/strutil.hpp>
+
 // invertor.cpp:
 // Inverts a given image.
 
@@ -20,7 +22,7 @@ int main(int argc, char* argv[])
 
     if (!surf.valid())
     {
-        hal::message_box::build()
+        hal::message_box::builder()
             .title(hal::string_from_pack("Could not load ", argv[1]))
             .message(hal::debug::last_error())
             .type(hal::message_box::type::error)();

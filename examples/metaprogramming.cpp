@@ -8,7 +8,7 @@
 template <typename L, typename R>
 constexpr inline bool eq = std::is_same_v<L, R>;
 
-int main(int argc, char* argv[])
+int main(int, char*[])
 {
     using info_main  = hal::meta::func_info<decltype(main)>;
     using info_qsort = hal::meta::func_info<decltype(std::qsort)>;

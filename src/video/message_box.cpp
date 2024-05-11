@@ -1,12 +1,14 @@
 #include <halcyon/video/message_box.hpp>
 
+#include <utility>
+
 #include <halcyon/debug.hpp>
 
 using namespace hal;
 
-using msbb = detail::message_box_builder;
+using msbb = message_box::builder;
 
-msbb::message_box_builder()
+msbb::builder()
     : m_btn { { { .flags = 0, .buttonid = 0, .text = "Ok" } } }
     , m_data {
         .flags       = SDL_MESSAGEBOX_INFORMATION,
@@ -94,9 +96,4 @@ message_box::button_t msbb::operator()()
     HAL_ASSERT_VITAL(::SDL_ShowMessageBox(&m_data, &ret) == 0, debug::last_error());
 
     return ret;
-}
-
-detail::message_box_builder message_box::build()
-{
-    return {};
 }
