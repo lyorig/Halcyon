@@ -49,6 +49,12 @@ namespace hal
 
     namespace meta
     {
+        template <bool... Preds>
+        constexpr inline bool all { (Preds && ...) };
+
+        template <bool... Preds>
+        constexpr inline bool any { (Preds || ...) };
+
         // Check whether a type is present in a parameter pack.
         template <typename What, typename... Where>
         constexpr inline bool is_present { (std::is_same_v<What, Where> || ...) };
@@ -58,6 +64,10 @@ namespace hal
         template <typename What, typename... Where>
             requires is_present<What, Where...>
         constexpr inline std::size_t find { detail::find<0, What, Where...>::value };
+
+        // Check if a type is "bare", as in, it is not a pointer, reference, and has no cv-qualifiers.
+        template <typename T>
+        constexpr inline bool is_bare { std::is_same_v<T, std::remove_cvref_t<std::remove_pointer_t<T>>> };
 
         // Get the type residing at an index in a parameter pack.
         template <std::size_t I, typename... Ts>

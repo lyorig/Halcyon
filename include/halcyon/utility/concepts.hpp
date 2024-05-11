@@ -12,4 +12,7 @@ namespace hal::meta
 
     template <typename T, typename... Ts>
     concept one_of = is_present<T, Ts...>;
+
+    template <typename T>
+    concept bare = is_bare<T>;
 }
