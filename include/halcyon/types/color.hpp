@@ -1,5 +1,7 @@
 #pragma once
 
+#include <limits> // MSVC wants this.
+
 #include <SDL_pixels.h>
 
 #include <halcyon/types/numeric.hpp>

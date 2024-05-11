@@ -15,4 +15,6 @@ int main(int, char*[])
     // [destruktor okna, zničí se]
     // [destruktor systému, vypne se]
     // [destruktor kontextu, konečný cleanup]
+
+    return EXIT_SUCCESS;
 }

@@ -1,9 +1,8 @@
 #include <iostream>
+#include <thread>
 
 #include <halcyon/event.hpp>
 #include <halcyon/video.hpp>
-
-#include <source_location>
 
 // text_render.cpp:
 // Renders the first command-line argument as text into a window.
@@ -18,23 +17,32 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    hal::context      ctx;
-    hal::ttf::context tctx;
+    hal::context ctx;
 
     hal::system::video vid { ctx };
 
     hal::window         wnd { vid.make_window("Text renderer", { 100, 100 }) };
-    hal::renderer       rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
     hal::event::handler evt { vid.events };
 
-    const hal::texture tex { rnd.make_texture(tctx.load(hal::access("../assets/m5x7.ttf"), 16).render(argv[1], hal::palette::black)) };
+    // Destroy as much stuff as possible before the main loop.
+    {
+        hal::renderer     rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
+        hal::ttf::context tctx;
 
-    const hal::pixel_rect draw_rect {
-        padding / 2, hal::scale::width(512)(tex.size())
-    };
+        const hal::texture tex { rnd.make_texture(tctx.load(hal::access("../assets/m5x7.ttf"), 16).render(argv[1], hal::palette::black)) };
 
-    wnd.size(draw_rect.size + padding);
-    rnd.draw_color(hal::palette::weezer_blue);
+        const hal::pixel_rect draw_rect {
+            padding / 2, hal::scale::width(512)(tex.size())
+        };
+
+        wnd.size(draw_rect.size + padding);
+        rnd.draw_color(hal::palette::weezer_blue);
+
+        rnd.clear();
+
+        rnd.draw(tex).to(draw_rect)();
+        rnd.present();
+    }
 
     while (true)
     {
@@ -52,8 +60,8 @@ int main(int argc, char* argv[])
             }
         }
 
-        rnd.draw(tex).to(draw_rect)();
-        rnd.present();
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(20ms);
     }
 
     return EXIT_SUCCESS;

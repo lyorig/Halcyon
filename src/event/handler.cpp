@@ -287,6 +287,8 @@ std::string_view hal::to_string(event::handler::type evt)
     case clipboard_updated:
         return "Clipboard updated";
     }
+
+    std::unreachable();
 }
 
 std::string_view hal::to_string(enum event::display_event::type evt)
@@ -307,6 +309,8 @@ std::string_view hal::to_string(enum event::display_event::type evt)
     case moved:
         return "Moved";
     }
+
+    std::unreachable();
 }
 
 std::string_view hal::to_string(enum event::window_event::type evt)
@@ -366,4 +370,6 @@ std::string_view hal::to_string(enum event::window_event::type evt)
     case display_changed:
         return "Display changed";
     }
+
+    std::unreachable();
 }

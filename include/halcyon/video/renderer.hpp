@@ -87,6 +87,9 @@ namespace hal
         renderer() = default;
         renderer(SDL_Renderer* ptr, pass_key<window>);
 
+        // Clear (fill) the render target with the current draw color.
+        void clear();
+
         // Present the back-buffer and clear it.
         void present();
 
@@ -123,8 +126,6 @@ namespace hal
         [[nodiscard]] copyer draw(const detail::texture_base& tex);
 
     private:
-        void clear();
-
         // Helper for setting the render target.
         void internal_target(SDL_Texture* target);
     };
