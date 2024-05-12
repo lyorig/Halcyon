@@ -1,6 +1,7 @@
 #pragma once
 
 #include <limits> // MSVC wants this.
+#include <algorithm>
 
 #include <SDL_pixels.h>
 
@@ -23,6 +24,7 @@ namespace hal
         // A single R, G, B or A value.
         using value_t = std::uint8_t;
 
+        // Helper struct that represents the difference of two colors.
         struct diff
         {
             diff_t r, g, b;
@@ -69,9 +71,16 @@ namespace hal
             return { static_cast<diff_t>(a.r - b.r), static_cast<diff_t>(a.g - b.g), static_cast<diff_t>(a.b - b.b) };
         }
 
-        constexpr friend diff operator+(color a, color b)
+        constexpr friend color operator+(color a, color b)
         {
-            return { static_cast<diff_t>(a.r + b.r), static_cast<diff_t>(a.g + b.g), static_cast<diff_t>(a.b + b.b) };
+            constexpr int max { std::numeric_limits<value_t>::max() };
+            
+            return {
+                static_cast<value_t>(std::min(a.r + b.r, max)),
+                static_cast<value_t>(std::min(a.g + b.g, max)),
+                static_cast<value_t>(std::min(a.b + b.b, max)),
+                a.a
+            };
         }
 
         constexpr friend color operator+(color a, diff b)
