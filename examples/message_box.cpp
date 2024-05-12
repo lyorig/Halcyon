@@ -19,7 +19,7 @@ constexpr std::string_view
     };
 
 template <std::size_t N>
-std::string_view random(std::string_view (&span)[N])
+std::string_view random(const std::string_view (&span)[N])
 {
     return span[std::time(nullptr) % N];
 }
@@ -31,12 +31,13 @@ int main(int, char*[])
     auto msgb = hal::message_box::builder().buttons({ "Yes", "No", "Maybe" });
 
     for (auto type : { info, warning, error })
-        HAL_PRINT(
-            "User pressed button #",
-            hal::to_printable_int(
-                msgb.type(type)
-                    .title(random(titles))
-                    .body(random(messages))()));
+    {
+        const auto ret = msgb.type(type)
+                             .title(random(titles))
+                             .body(random(messages))();
+
+        HAL_PRINT("User pressed button ", hal::to_printable_int(ret));
+    }
 
     return EXIT_SUCCESS;
 }

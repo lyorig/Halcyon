@@ -8,17 +8,22 @@ using namespace hal;
 
 using msbb = message_box::builder;
 
+constexpr SDL_MessageBoxColor convert(color c)
+{
+    return { c.r, c.g, c.b };
+}
+
 msbb::builder()
-    : m_btn { { { .flags = 0, .buttonid = 0, .text = "Ok" } } }
-    , m_data {
+    : m_data {
         .flags       = SDL_MESSAGEBOX_INFORMATION,
         .window      = nullptr,
         .title       = "Halcyon Message Box",
         .message     = "No message provided.",
         .numbuttons  = 1,
-        .buttons     = m_btn.data(),
+        .buttons     = m_btn,
         .colorScheme = nullptr
     }
+    , m_btn { { .flags = 0, .buttonid = 0, .text = "Ok" } }
 {
 }
 
@@ -53,13 +58,24 @@ msbb& msbb::buttons(std::initializer_list<std::string_view> names)
 
     for (mb::button_t i { 0 }; i < m_data.numbuttons; ++i)
     {
-        auto btn_it = m_btn.begin() + i;
+        auto btn_it = m_btn + i;
         auto str_it = names.begin() + i;
 
         btn_it->buttonid = i;
         btn_it->flags    = 0;
         btn_it->text     = str_it->data();
     }
+
+    return *this;
+}
+
+msbb& msbb::colors(color bg, color text, color btn_border, color btn_bg, color btn_select)
+{
+    m_col = {
+        convert(bg), convert(text), convert(btn_border), convert(btn_bg), convert(btn_select)
+    };
+
+    m_data.colorScheme = &m_col;
 
     return *this;
 }
