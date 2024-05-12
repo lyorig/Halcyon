@@ -44,9 +44,6 @@ namespace hal::ttf
         // [private] Fonts are loaded with ttf::context::load().
         font(TTF_Font* ptr, pass_key<context>);
 
-        // Debug destructor to check whether the TTF context still exists.
-        ~font();
-
         // Convenience text rendering function.
         [[nodiscard]] surface render(std::string_view text, color color = palette::white) const;
 

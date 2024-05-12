@@ -36,11 +36,6 @@ font::font(TTF_Font* ptr, pass_key<context>)
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }
 
-font::~font()
-{
-    HAL_ASSERT(ttf::context::initialized(), "TTF context inactive in font destructor");
-}
-
 hal::surface font::render(std::string_view text, hal::color color) const
 {
     return { ::TTF_RenderUTF8_Solid_Wrapped(get(), text.data(), static_cast<SDL_Color>(color), 0), pass_key<font> {} };

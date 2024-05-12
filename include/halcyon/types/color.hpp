@@ -1,7 +1,8 @@
 #pragma once
 
-#include <limits> // MSVC wants this.
 #include <algorithm>
+#include <limits> // MSVC wants this.
+
 
 #include <SDL_pixels.h>
 
@@ -74,7 +75,7 @@ namespace hal
         constexpr friend color operator+(color a, color b)
         {
             constexpr int max { std::numeric_limits<value_t>::max() };
-            
+
             return {
                 static_cast<value_t>(std::min(a.r + b.r, max)),
                 static_cast<value_t>(std::min(a.g + b.g, max)),
@@ -107,15 +108,14 @@ namespace hal
     // Predefined colors in RGB form.
     namespace palette
     {
-        constexpr color black       = 0x000000,
-                        red         = 0xFF0000,
-                        green       = 0x00FF00,
-                        blue        = 0x0000FF,
-                        yellow      = 0xFFFF00,
-                        orange      = 0xFFA500,
-                        cyan        = 0x00FFFF,
-                        weezer_blue = 0x0099D3,
-                        white       = 0xFFFFFF,
-                        transparent = { 0x000000, 0 };
+        constexpr color::hex_t black       = 0x000000,
+                               red         = 0xFF0000,
+                               green       = 0x00FF00,
+                               blue        = 0x0000FF,
+                               yellow      = 0xFFFF00,
+                               orange      = 0xFFA500,
+                               cyan        = 0x00FFFF,
+                               weezer_blue = 0x0099D3,
+                               white       = 0xFFFFFF;
     }
 }
