@@ -109,8 +109,7 @@ namespace hal
         template <meta::printable... Args>
         HAL_DETAIL_PANIC_NORETURN static void panic(std::string_view function, std::string_view file, u32 line, Args&&... extra_info)
         {
-            debug::print_severity(severity::error, "In file ", file, ", line ", line, ", function ", function);
-            debug::print_severity(severity::info, string_from_pack(std::forward<Args>(extra_info)...));
+            debug::print_severity(severity::error, string_from_pack(std::forward<Args>(extra_info)...), " [", function, ", ", file, ':', line, "]");
 
             if constexpr (compile_settings::exit_on_panic)
                 std::exit(EXIT_FAILURE);
