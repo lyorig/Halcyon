@@ -28,7 +28,7 @@ int main(int, char*[])
 {
     using enum hal::message_box::type;
 
-    auto msgb = hal::message_box::builder().buttons({ "Yes", "No", "Maybe" });
+    auto msgb = hal::message_box::builder().buttons({ "Ok", "Yuh", "Nah", "Well", "I mean", "Probably", "Not really", "I'll see", "No idea" });
 
     for (auto type : { info, warning, error })
     {
