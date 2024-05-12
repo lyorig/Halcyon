@@ -8,6 +8,14 @@ using namespace hal;
 
 using msbb = message_box::builder;
 
+namespace
+{
+    SDL_MessageBoxColor convert(color c)
+    {
+        return {c.r, c.g, c.b};
+    }
+}
+
 void message_box::show(type tp, std::string_view title, std::string_view body)
 {
     HAL_ASSERT_VITAL(::SDL_ShowSimpleMessageBox(std::to_underlying(tp), title.data(), body.data(), nullptr) == 0, debug::last_error());
@@ -68,6 +76,18 @@ msbb& msbb::buttons(std::initializer_list<std::string_view> names)
 
     return *this;
 }
+
+msbb& msbb::colors(color bg, color text, color btn_border, color btn_bg, color btn_select)
+{
+    m_col = {
+        convert(bg), convert(text), convert(btn_border), convert(btn_bg), convert(btn_select)
+    };
+
+    m_data.colorScheme = &m_col;
+
+    return *this;
+}
+
 
 msbb& msbb::enter(message_box::button_t idx)
 {

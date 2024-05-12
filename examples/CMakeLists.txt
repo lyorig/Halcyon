@@ -7,6 +7,10 @@ include(../config.cmake)
 include_directories(${HALCYON_INCLUDE_DIRS})
 link_libraries(${HALCYON_LIBRARIES})
 
+if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
+    add_compile_definitions(HAL_DEBUG_ENABLED HAL_PANIC_NO_EXIT)
+endif()
+
 add_library(Halcyon OBJECT ${HALCYON_SOURCES})
 
 file(GLOB EXAMPLE_SOURCES CONFIGURE_DEPENDS *.cpp)

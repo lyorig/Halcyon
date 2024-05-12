@@ -15,7 +15,10 @@
 
 #ifdef HAL_DEBUG_ENABLED
 
-    #include <fstream>
+    #ifdef HAL_DEBUG_ADVANCED
+        #include <fstream>
+    #endif
+
     #include <iostream>
 
     #include <halcyon/utility/printing.hpp>
@@ -41,6 +44,15 @@ namespace hal
     {
         constexpr bool debug_enabled {
 #ifdef HAL_DEBUG_ENABLED
+            true
+#else
+            false
+#endif
+        };
+
+        constexpr bool exit_on_panic
+        {
+#ifndef HAL_PANIC_NO_EXIT
             true
 #else
             false
@@ -91,7 +103,9 @@ namespace hal
             debug::print_severity(severity::error, "In file ", file, ", line ", line, ", function ", function);
             debug::print_severity(severity::error, string_from_pack(std::forward<Args>(extra_info)...));
 
+#ifndef HAL_PANIC_NO_EXIT
             std::exit(EXIT_FAILURE);
+#endif
         }
 
         template <meta::printable... Args>

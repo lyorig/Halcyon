@@ -50,7 +50,12 @@ namespace hal
             [[nodiscard]] this_ref type(type tp);
 
             // Set the amount of buttons along with their contents.
+            // Call before setting enter/escape defaults.
             [[nodiscard]] this_ref buttons(std::initializer_list<std::string_view> names);
+
+            // Set the message box colors. Only works on certain platforms (e.g. X11, Android).
+            // Can be called at any time.
+            [[nodiscard]] this_ref colors(color bg, color text, color btn_border, color btn_bg, color btn_select);
 
             // Set which button is chosen by default upon hitting enter.
             // Call after setting up buttons.
@@ -72,6 +77,7 @@ namespace hal
             std::vector<SDL_MessageBoxButtonData> m_btn;
 
             SDL_MessageBoxData m_data;
+            SDL_MessageBoxColorScheme m_col;
         };
     };
 }
