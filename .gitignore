@@ -1,3 +1,4 @@
+.vs/
 .cache/
 .DS_Store
 
@@ -7,4 +8,4 @@ Testing/
 examples/bin/
 !examples/bin/assets/
 
-CMakeUserPresets.json
+CMakeSettings.json

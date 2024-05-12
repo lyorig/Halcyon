@@ -26,10 +26,11 @@ std::string_view random(const std::string_view (&span)[N])
 
 int main(int, char*[])
 {
+    static_assert(!hal::compile_settings::exit_on_panic);
+
+
     using enum hal::message_box::type;
     using namespace hal::palette;
-
-    static_assert(!hal::compile_settings::exit_on_panic);
 
     auto msgb = hal::message_box::builder()
                     .buttons({ "Ok", "Yuh", "Nah", "Well", "I mean", "Probably", "Not really", "I'll see", "No idea" })

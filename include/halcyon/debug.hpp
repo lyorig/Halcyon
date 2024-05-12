@@ -50,6 +50,14 @@ namespace hal
 #endif
         };
 
+        constexpr bool debug_advanced {
+#ifdef HAL_DEBUG_ADVANCED
+            true
+#else
+            false
+#endif
+        };
+
         constexpr bool exit_on_panic {
 #ifndef HAL_NO_EXIT_ON_PANIC
     #define HAL_DETAIL_PANIC_NORETURN [[noreturn]]
@@ -102,11 +110,10 @@ namespace hal
         HAL_DETAIL_PANIC_NORETURN static void panic(std::string_view function, std::string_view file, u32 line, Args&&... extra_info)
         {
             debug::print_severity(severity::error, "In file ", file, ", line ", line, ", function ", function);
-            debug::print_severity(severity::error, string_from_pack(std::forward<Args>(extra_info)...));
+            debug::print_severity(severity::info, string_from_pack(std::forward<Args>(extra_info)...));
 
-    #ifndef HAL_NO_EXIT_ON_PANIC
-            std::exit(EXIT_FAILURE);
-    #endif
+            if constexpr (compile_settings::exit_on_panic)
+                std::exit(EXIT_FAILURE);
         }
 
         template <meta::printable... Args>
