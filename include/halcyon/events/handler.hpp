@@ -133,6 +133,15 @@ namespace hal
 
         static_assert(sizeof(mouse_wheel_event) == sizeof(SDL_MouseWheelEvent));
 
+        class text_input_event : SDL_TextInputEvent
+        {
+        public:
+            window::id_t     window_id() const;
+            std::string_view text() const;
+        };
+
+        static_assert(sizeof(text_input_event) == sizeof(SDL_TextInputEvent));
+
         // Top-level event types.
         enum class type : u16
         {
@@ -152,6 +161,8 @@ namespace hal
 
             key_pressed  = SDL_KEYDOWN,
             key_released = SDL_KEYUP,
+
+            text_input = SDL_TEXTINPUT,
 
             mouse_moved       = SDL_MOUSEMOTION,
             mouse_pressed     = SDL_MOUSEBUTTONDOWN,
@@ -186,6 +197,9 @@ namespace hal
             // Valid for: key_pressed, key_released
             const keyboard_event& keyboard() const;
 
+            // Valid for: text_input
+            const text_input_event& text_input() const;
+
             // Valid for: mouse_moved
             const mouse_motion_event& mouse_motion() const;
 
@@ -211,6 +225,8 @@ namespace hal
                     display_event  m_display;
                     window_event   m_window;
                     keyboard_event m_key;
+
+                    text_input_event m_textInput;
 
                     mouse_motion_event m_motion;
                     mouse_button_event m_button;

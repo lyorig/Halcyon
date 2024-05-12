@@ -132,6 +132,20 @@ bool event::mouse_wheel_event::scroll_flipped() const
     return direction == SDL_MOUSEWHEEL_FLIPPED;
 }
 
+// Text editing event.
+
+window::id_t event::text_input_event::window_id() const
+{
+    return static_cast<window::id_t>(windowID);
+}
+
+std::string_view event::text_input_event::text() const
+{
+    return SDL_TextInputEvent::text;
+}
+
+// Event handler.
+
 event::handler::handler(authority&)
     : m_event { { std::numeric_limits<std::uint32_t>::max() } } // Start with an invalid event.
 {
@@ -139,7 +153,6 @@ event::handler::handler(authority&)
     for (SDL_EventType type : {
              SDL_LOCALECHANGED,
              SDL_SYSWMEVENT,
-             SDL_TEXTEDITING,
              SDL_TEXTINPUT,
              SDL_KEYMAPCHANGED,
              SDL_TEXTEDITING_EXT,
@@ -215,6 +228,12 @@ const event::keyboard_event& event::handler::keyboard() const
     return m_event.m_data.m_key;
 }
 
+const event::text_input_event& event::handler::text_input() const
+{
+    HAL_ASSERT(event_type() == type::text_input, "Invalid type");
+    return m_event.m_data.m_textInput;
+}
+
 const event::mouse_motion_event& event::handler::mouse_motion() const
 {
     HAL_ASSERT(event_type() == type::mouse_moved, "Invalid type");
@@ -271,6 +290,9 @@ std::string_view hal::to_string(event::type evt)
 
     case key_released:
         return "Key released";
+
+    case text_input:
+        return "Text input";
 
     case mouse_moved:
         return "Mouse moved";
