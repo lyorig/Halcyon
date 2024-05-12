@@ -8,8 +8,10 @@ include_directories(${HALCYON_INCLUDE_DIRS})
 link_libraries(${HALCYON_LIBRARIES})
 
 if(NOT CMAKE_BUILD_TYPE MATCHES Debug)
-    add_compile_definitions(HAL_DEBUG_ENABLED HAL_PANIC_NO_EXIT)
+    add_compile_definitions(HAL_DEBUG_ENABLED)
 endif()
+
+add_compile_definitions(HAL_NO_EXIT_ON_PANIC)
 
 add_library(Halcyon OBJECT ${HALCYON_SOURCES})
 

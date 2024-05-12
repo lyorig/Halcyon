@@ -50,11 +50,12 @@ namespace hal
 #endif
         };
 
-        constexpr bool exit_on_panic
-        {
-#ifndef HAL_PANIC_NO_EXIT
+        constexpr bool exit_on_panic {
+#ifndef HAL_NO_EXIT_ON_PANIC
+    #define HAL_DETAIL_PANIC_NORETURN [[noreturn]]
             true
 #else
+    #define HAL_DETAIL_PANIC_NORETURN
             false
 #endif
         };
@@ -98,14 +99,14 @@ namespace hal
 
         // Show a message box with an error message.
         template <meta::printable... Args>
-        [[noreturn]] static void panic(std::string_view function, std::string_view file, u32 line, Args&&... extra_info)
+        HAL_DETAIL_PANIC_NORETURN static void panic(std::string_view function, std::string_view file, u32 line, Args&&... extra_info)
         {
             debug::print_severity(severity::error, "In file ", file, ", line ", line, ", function ", function);
             debug::print_severity(severity::error, string_from_pack(std::forward<Args>(extra_info)...));
 
-#ifndef HAL_PANIC_NO_EXIT
+    #ifndef HAL_NO_EXIT_ON_PANIC
             std::exit(EXIT_FAILURE);
-#endif
+    #endif
         }
 
         template <meta::printable... Args>
