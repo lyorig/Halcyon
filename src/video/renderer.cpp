@@ -45,6 +45,7 @@ void renderer::target_lock::set(target_texture& tgt)
 renderer::renderer(SDL_Renderer* ptr, pass_key<window>)
     : raii_object { ptr }
 {
+    HAL_PRINT(debug::severity::init, "Created renderer for \"", window_title(), "\"");
 }
 
 void renderer::present()
@@ -192,6 +193,15 @@ copyer renderer::draw(const detail::texture_base& tex)
 void renderer::internal_target(SDL_Texture* target)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderTarget(get(), target) == 0, debug::last_error());
+}
+
+std::string_view renderer::window_title() const
+{
+    SDL_Window* ptr { ::SDL_RenderGetWindow(get()) };
+    HAL_ASSERT(ptr != nullptr, debug::last_error());
+
+    // No fail (nullptr) state documented.
+    return ::SDL_GetWindowTitle(ptr);
 }
 
 copyer& copyer::rotate(f64 angle)

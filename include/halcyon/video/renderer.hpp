@@ -128,6 +128,9 @@ namespace hal
     private:
         // Helper for setting the render target.
         void internal_target(SDL_Texture* target);
+
+        // Only used in constructor debug output.
+        std::string_view window_title() const;
     };
 
     class copyer : public hal::detail::drawer<detail::texture_base, sdl::coord_t, renderer, copyer>
