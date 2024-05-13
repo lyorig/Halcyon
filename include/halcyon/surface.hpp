@@ -27,10 +27,7 @@ namespace hal
         class context;
     }
 
-    namespace ttf
-    {
-        class font;
-    }
+    class font;
 
     HAL_TAG(keep_dst);
 
@@ -65,7 +62,7 @@ namespace hal
         surface(SDL_Surface* ptr, pass_key<image::context>);
 
         // [private] Text is rendered with ttf::font::render().
-        surface(SDL_Surface* ptr, pass_key<ttf::font>);
+        surface(SDL_Surface* ptr, pass_key<font>);
 
         // Fill the entire surface with a color.
         void fill(color clr);

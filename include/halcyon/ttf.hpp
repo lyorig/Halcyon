@@ -10,39 +10,42 @@
 // ttf.hpp:
 // SDL_ttf wrappers for font loading and text rendering.
 
-namespace hal::ttf
+namespace hal
 {
     class font;
 
-    // A class that makes sure everything TTF-related is loaded and
-    // ready to use. This includes not only loading fonts, but also
-    // their features - for example, font::render() will fail if a
-    // TTF engine doesn't exist. TL;DR: Ensure that this object outlives
-    // all fonts. This includes destructors!
-    class context
+    namespace ttf
     {
-    public:
-        // Initialize the TTF context.
-        context();
+        // A class that makes sure everything TTF-related is loaded and
+        // ready to use. This includes not only loading fonts, but also
+        // their features - for example, font::render() will fail if a
+        // TTF engine doesn't exist. TL;DR: Ensure that this object outlives
+        // all fonts. This includes destructors!
+        class context
+        {
+        public:
+            // Initialize the TTF context.
+            context();
 
-        context(const context&) = delete;
-        context(context&&)      = delete;
+            context(const context&) = delete;
+            context(context&&)      = delete;
 
-        ~context();
+            ~context();
 
-        // Font loading function.
-        [[nodiscard]] font load(accessor data, u8 pt) &;
+            // Font loading function.
+            [[nodiscard]] font load(accessor data, u8 pt) &;
 
-        static bool initialized();
-    };
+            static bool initialized();
+        };
 
-    static_assert(std::is_empty_v<context>);
+        static_assert(std::is_empty_v<context>);
+    }
 
     class font : public detail::raii_object<TTF_Font, &::TTF_CloseFont>
     {
     public:
         // [private] Fonts are loaded with ttf::context::load().
-        font(TTF_Font* ptr, pass_key<context>);
+        font(TTF_Font* ptr, pass_key<ttf::context>);
 
         // Convenience text rendering function.
         [[nodiscard]] surface render(std::string_view text, color color = palette::white) const;

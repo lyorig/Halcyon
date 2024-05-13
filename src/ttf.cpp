@@ -1,8 +1,8 @@
 #include <halcyon/ttf.hpp>
 
-using namespace hal::ttf;
+using namespace hal;
 
-context::context()
+ttf::context::context()
 {
     HAL_WARN_IF(initialized(), "TTF context already exists");
 
@@ -11,7 +11,7 @@ context::context()
     HAL_PRINT(debug::severity::init, "Initialized TTF context");
 }
 
-context::~context()
+ttf::context::~context()
 {
     HAL_ASSERT(initialized(), "TTF context not initialized at destruction");
 
@@ -20,17 +20,17 @@ context::~context()
     HAL_PRINT("Destroyed TTF context");
 }
 
-font context::load(accessor data, u8 pt) &
+font ttf::context::load(accessor data, u8 pt) &
 {
     return { ::TTF_OpenFontRW(data.use(pass_key<context> {}), true, pt), pass_key<context> {} };
 }
 
-bool context::initialized()
+bool ttf::context::initialized()
 {
     return ::TTF_WasInit() > 0;
 }
 
-font::font(TTF_Font* ptr, pass_key<context>)
+font::font(TTF_Font* ptr, pass_key<ttf::context>)
     : raii_object { ptr }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");

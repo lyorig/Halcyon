@@ -42,7 +42,7 @@ surface::surface(SDL_Surface* ptr, pass_key<image::context>)
 {
 }
 
-surface::surface(SDL_Surface* ptr, pass_key<ttf::font>)
+surface::surface(SDL_Surface* ptr, pass_key<font>)
     : raii_object { ptr }
 {
 }
