@@ -19,5 +19,5 @@ context::context()
 context::~context()
 {
     ::SDL_Quit();
-    HAL_PRINT("Destroyed Halcyon context. Last error: ", debug::last_error());
+    HAL_PRINT("Destroyed Halcyon context, last error = ", debug::last_error());
 }

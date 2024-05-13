@@ -151,11 +151,11 @@ namespace hal
                 break;
 
             case warning:
-                fwd << "[warn]  ";
+                fwd << "[WARN]  ";
                 break;
 
             case error:
-                fwd << "[error] ";
+                fwd << "[ERROR] ";
                 break;
 
             case init:
