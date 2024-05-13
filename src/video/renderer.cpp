@@ -186,7 +186,7 @@ target_texture renderer::make_target_texture(pixel_point size) &
     const std::uint32_t fmt { ::SDL_GetWindowPixelFormat(wnd) };
     HAL_ASSERT(fmt != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
 
-    return { ::SDL_CreateTexture(get(), fmt, SDL_TEXTUREACCESS_STATIC, size.x, size.y), pass_key<renderer> {} };
+    return { ::SDL_CreateTexture(get(), fmt, SDL_TEXTUREACCESS_TARGET, size.x, size.y), pass_key<renderer> {} };
 }
 
 copyer renderer::draw(const detail::texture_base& tex)
