@@ -40,18 +40,31 @@ namespace hal
 
         static_assert(std::is_empty_v<context>);
     }
+    namespace builder
+    {
+        class font_text;
+        class font_glyph;
+    }
 
     class font : public detail::raii_object<TTF_Font, &::TTF_CloseFont>
     {
     public:
+        enum class render_type : u8
+        {
+            solid,
+            shaded,
+            blended,
+            lcd
+        };
+
         // [private] Fonts are loaded with ttf::context::load().
         font(TTF_Font* ptr, pass_key<ttf::context>);
 
         // Render text to a surface.
-        [[nodiscard]] surface render(std::string_view text, color color = palette::white) const;
+        [[nodiscard]] builder::font_text render(std::string_view text) const;
 
         // Render a single glyph to a surface.
-        [[nodiscard]] surface render_glyph(std::uint32_t glyph, color color = palette::white) const;
+        [[nodiscard]] builder::font_glyph render(std::uint32_t glyph) const;
 
         // When sizing text, it's important to know that the vertical size
         // doesn't necessarily have to match that of the rendered surface.
@@ -63,6 +76,81 @@ namespace hal
         std::string_view family() const;
         std::string_view style() const;
     };
+
+    namespace detail
+    {
+        template <typename Derived>
+        class font_builder_base
+        {
+        public:
+            font_builder_base(const hal::font& fnt, pass_key<font>)
+                : m_font { fnt }
+                , m_fg { hal::palette::white }
+                , m_bg { hal::palette::black, 0 }
+            {
+            }
+
+            [[nodiscard]] Derived& fg(color c)
+            {
+                m_fg = c;
+
+                return get_this();
+            }
+
+            [[nodiscard]] Derived& bg(color c)
+            {
+                m_bg = c;
+
+                return get_this();
+            }
+
+        protected:
+            Derived& get_this()
+            {
+                return static_cast<Derived&>(*this);
+            }
+
+            const hal::font& m_font;
+            color            m_fg, m_bg;
+        };
+    };
+
+    namespace builder
+    {
+        class font_text : public detail::font_builder_base<font_text>
+        {
+        public:
+            using wrap_length_t = u16;
+
+            [[nodiscard]] font_text(const font& fnt, std::string_view text, pass_key<font>);
+
+            // How many characters to wrap this text at.
+            // Zero means only wrap on newlines.
+            [[nodiscard]] font_text& wrap(wrap_length_t wl);
+
+            [[nodiscard]] surface operator()(font::render_type rt = font::render_type::solid);
+
+        private:
+            consteval static wrap_length_t invalid()
+            {
+                return std::numeric_limits<wrap_length_t>::max();
+            }
+
+            const char*   m_text;
+            wrap_length_t m_wrapLength;
+        };
+
+        class font_glyph : public detail::font_builder_base<font_glyph>
+        {
+        public:
+            [[nodiscard]] font_glyph(const font& fnt, std::uint32_t glyph, pass_key<font>);
+
+            [[nodiscard]] surface operator()(font::render_type rt = font::render_type::solid);
+
+        private:
+            std::uint32_t m_glyph;
+        };
+    }
 
     // Ensure calling debug::last_error() gives accurate information.
     static_assert(::TTF_GetError == ::SDL_GetError);

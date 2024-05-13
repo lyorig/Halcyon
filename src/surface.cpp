@@ -5,27 +5,12 @@
 
 #include <SDL_image.h>
 
+#include <halcyon/utility/locks.hpp>
+
 using namespace hal;
 
 // Set the depth accordingly upon changing this value.
 constexpr SDL_PixelFormatEnum default_format { SDL_PIXELFORMAT_RGBA32 };
-
-surface::blend_lock::blend_lock(surface& surf, blend_mode bm)
-    : m_surf { surf }
-    , m_old { surf.blend() }
-{
-    m_surf.blend(bm);
-}
-
-surface::blend_lock::~blend_lock()
-{
-    m_surf.blend(m_old);
-}
-
-void surface::blend_lock::set(blend_mode bm)
-{
-    m_surf.blend(bm);
-}
 
 surface::surface(pixel_point sz)
     : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, default_format) }
@@ -42,7 +27,12 @@ surface::surface(SDL_Surface* ptr, pass_key<image::context>)
 {
 }
 
-surface::surface(SDL_Surface* ptr, pass_key<font>)
+surface::surface(SDL_Surface* ptr, pass_key<builder::font_text>)
+    : raii_object { ptr }
+{
+}
+
+surface::surface(SDL_Surface* ptr, pass_key<builder::font_glyph>)
     : raii_object { ptr }
 {
 }
@@ -64,8 +54,8 @@ void surface::fill_rects(const std::span<const sdl::pixel_rect>& areas, color cl
 
 surface surface::resize(pixel_point sz)
 {
-    surface    ret { sz };
-    blend_lock bl { *this, blend_mode::none };
+    surface     ret { sz };
+    lock::blend bl { *this, blend_mode::none };
 
     if (get()->format->format == default_format)
         blit(ret).to(tag::fill)();

@@ -9,39 +9,6 @@
 
 using namespace hal;
 
-renderer::color_lock::color_lock(renderer& rnd, color new_clr)
-    : m_rnd { rnd }
-    , m_old { rnd.draw_color() }
-{
-    set(new_clr);
-}
-
-renderer::color_lock::~color_lock()
-{
-    m_rnd.draw_color(m_old);
-}
-
-void renderer::color_lock::set(color clr)
-{
-    m_rnd.draw_color(clr);
-}
-
-renderer::target_lock::target_lock(renderer& rnd, target_texture& tgt)
-    : m_rnd { rnd }
-{
-    set(tgt);
-}
-
-renderer::target_lock::~target_lock()
-{
-    m_rnd.retarget();
-}
-
-void renderer::target_lock::set(target_texture& tgt)
-{
-    m_rnd.target(tgt);
-}
-
 renderer::renderer(SDL_Renderer* ptr, pass_key<window>)
     : raii_object { ptr }
 {
@@ -145,16 +112,16 @@ void renderer::retarget()
     this->internal_target(nullptr);
 }
 
-color renderer::draw_color() const
+color renderer::color() const
 {
-    color ret;
+    hal::color ret;
 
     HAL_ASSERT_VITAL(::SDL_GetRenderDrawColor(get(), &ret.r, &ret.g, &ret.b, &ret.a) == 0, debug::last_error());
 
     return ret;
 }
 
-void renderer::draw_color(color clr)
+void renderer::color(hal::color clr)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawColor(get(), clr.r, clr.g, clr.b, clr.a) == 0, debug::last_error());
 }

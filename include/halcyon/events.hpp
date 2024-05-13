@@ -65,6 +65,11 @@ namespace hal
         };
     }
 
+    namespace proxy
+    {
+        using events = detail::subsystem<detail::system::events>;
+    }
+
     namespace system
     {
         using events = detail::subinit<detail::system::events>;

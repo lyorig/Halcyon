@@ -71,6 +71,11 @@ namespace hal
         };
     }
 
+    namespace proxy
+    {
+        using video = detail::subsystem<detail::system::video>;
+    }
+
     namespace system
     {
         using video = detail::subinit<detail::system::video>;

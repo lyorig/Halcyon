@@ -55,35 +55,6 @@ namespace hal
             vsync       = SDL_RENDERER_PRESENTVSYNC
         };
 
-        // C-tor: Sets the renderer's draw color.
-        // D-tor: Sets the draw color back to the previous one.
-        class color_lock
-        {
-        public:
-            explicit color_lock(renderer& rnd, color new_clr);
-            ~color_lock();
-
-            void set(color clr);
-
-        private:
-            renderer&   m_rnd;
-            const color m_old;
-        };
-
-        // C-tor: Sets the renderer's target texture.
-        // D-tor: Sets the target back to the renderer's window.
-        class target_lock
-        {
-        public:
-            explicit target_lock(renderer& rnd, target_texture& tgt);
-            ~target_lock();
-
-            void set(target_texture& tgt);
-
-        private:
-            renderer& m_rnd;
-        };
-
         renderer() = default;
         renderer(SDL_Renderer* ptr, pass_key<window>);
 
@@ -106,8 +77,8 @@ namespace hal
         void retarget();
 
         // Get/set the color with which line/rect/fill drawing operations happen.
-        color draw_color() const;
-        void  draw_color(color clr);
+        hal::color color() const;
+        void       color(hal::color clr);
 
         // Get/set the way blending happens with line/rect/fill operations.
         blend_mode blend() const;

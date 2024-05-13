@@ -27,7 +27,11 @@ namespace hal
         class context;
     }
 
-    class font;
+    namespace builder
+    {
+        class font_text;
+        class font_glyph;
+    }
 
     HAL_TAG(keep_dst);
 
@@ -36,19 +40,6 @@ namespace hal
     class surface : public detail::raii_object<SDL_Surface, ::SDL_FreeSurface>
     {
     public:
-        class blend_lock
-        {
-        public:
-            explicit blend_lock(surface& surf, blend_mode bm);
-            ~blend_lock();
-
-            void set(blend_mode bm);
-
-        private:
-            surface&   m_surf;
-            blend_mode m_old;
-        };
-
         // Create an invalid surface.
         surface() = default;
 
@@ -62,7 +53,10 @@ namespace hal
         surface(SDL_Surface* ptr, pass_key<image::context>);
 
         // [private] Text is rendered with ttf::font::render().
-        surface(SDL_Surface* ptr, pass_key<font>);
+        surface(SDL_Surface* ptr, pass_key<builder::font_text>);
+
+        // [private] Glyphs are rendered with ttf::font::render();
+        surface(SDL_Surface* ptr, pass_key<builder::font_glyph>);
 
         // Fill the entire surface with a color.
         void fill(color clr);

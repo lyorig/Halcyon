@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <limits> // MSVC wants this.
 
-
 #include <SDL_pixels.h>
 
 #include <halcyon/types/numeric.hpp>
@@ -28,11 +27,11 @@ namespace hal
         // Helper struct that represents the difference of two colors.
         struct diff
         {
-            diff_t r, g, b;
+            diff_t r, g, b, a;
 
             constexpr friend diff operator*(diff d, f64 mul)
             {
-                return { static_cast<diff_t>(d.r * mul), static_cast<diff_t>(d.g * mul), static_cast<diff_t>(d.b * mul) };
+                return { static_cast<diff_t>(d.r * mul), static_cast<diff_t>(d.g * mul), static_cast<diff_t>(d.b * mul), static_cast<diff_t>(d.a * mul) };
             }
         };
 
@@ -69,7 +68,7 @@ namespace hal
 
         constexpr friend diff operator-(color a, color b)
         {
-            return { static_cast<diff_t>(a.r - b.r), static_cast<diff_t>(a.g - b.g), static_cast<diff_t>(a.b - b.b) };
+            return { static_cast<diff_t>(a.r - b.r), static_cast<diff_t>(a.g - b.g), static_cast<diff_t>(a.b - b.b), static_cast<diff_t>(a.a - b.a) };
         }
 
         constexpr friend color operator+(color a, color b)
@@ -90,7 +89,7 @@ namespace hal
                 static_cast<value_t>(a.r + b.r),
                 static_cast<value_t>(a.g + b.g),
                 static_cast<value_t>(a.b + b.b),
-                a.a
+                static_cast<value_t>(a.a + b.a),
             };
         }
 
@@ -100,7 +99,7 @@ namespace hal
                 static_cast<value_t>(a.r - b.r),
                 static_cast<value_t>(a.g - b.g),
                 static_cast<value_t>(a.b - b.b),
-                a.a
+                static_cast<value_t>(a.a - b.a),
             };
         }
     };
