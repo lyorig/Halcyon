@@ -51,3 +51,17 @@ int main(int argc, char* argv[]) {
   return EXIT_FAILURE; // Abnormal termination.
 }
 ```
+
+# Debugging
+Halcyon provides several macro functions for easing your debugging experience.  
+"Vital" variants preserve the condition in case debugging is disabled. Use when your condition has side effects.
+- `HAL_PRINT` - print a variadic amount of arguments (must support std::ostream::operator<<).
+- `HAL_ASSERT[_VITAL]` - Assert that a condition is true, panic if not.
+- `HAL_WARN_IF[_VITAL]` - Print a warning message if a condition is true.
+- `HAL_PANIC` - Print where the panic occurred along with variadic user-supplied information. Exits by default.
+
+Halcyon's debugging facilities are configured via several macros.  
+If NDEBUG is not defined, debugging is implicitly enabled in advanced mode.
+- `HAL_DEBUG_ENABLED`: Enables all debugging macros.
+- `HAL_DEBUG_ADVANCED`: Enables time logging, and outputs to an additional file.
+- `HAL_NO_EXIT_ON_PANIC`: Disables exit-on-panic behavior. Useful for when you want to roll your own error handling, but still want to trace what went wrong.
