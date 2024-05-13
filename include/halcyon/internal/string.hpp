@@ -5,9 +5,9 @@
 
 namespace hal
 {
-    namespace detail
+    namespace proxy
     {
-        class clipboard_proxy;
+        class clipboard;
     }
 
     namespace sdl
@@ -18,7 +18,8 @@ namespace hal
         class string : public detail::raii_object<char, ::SDL_free>
         {
         public:
-            using authority_t = detail::clipboard_proxy;
+            using authority_t = proxy::clipboard;
+
             string(char* ptr, pass_key<authority_t>);
 
             std::size_t size() const;
@@ -36,7 +37,5 @@ namespace hal
 
             operator std::string_view() const;
         };
-
-        bool operator==(string lhs, std::string_view rhs);
     }
 }

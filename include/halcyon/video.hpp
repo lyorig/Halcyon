@@ -6,6 +6,8 @@
 #include <halcyon/surface.hpp>
 #include <halcyon/ttf.hpp>
 
+#include <halcyon/events.hpp>
+
 #include <halcyon/video/display.hpp>
 #include <halcyon/video/driver.hpp>
 #include <halcyon/video/message_box.hpp>
@@ -18,14 +20,16 @@
 
 namespace hal
 {
-    namespace detail
+    namespace proxy
     {
-        class clipboard_proxy
+        using video = detail::subsystem<detail::system::video>;
+
+        class clipboard
         {
         public:
-            using authority_t = subsystem<system::video>;
+            using authority_t = video;
 
-            clipboard_proxy(pass_key<authority_t>);
+            clipboard(pass_key<authority_t>);
 
             // Get current clipboard text.
             // This has to be freed, so a custom wrapper is returned.
@@ -37,18 +41,21 @@ namespace hal
             bool has_text() const;
         };
 
-        class display_proxy
+        class display
         {
         public:
-            using authority_t = subsystem<system::video>;
+            using authority_t = video;
 
-            display_proxy(pass_key<authority_t>);
+            display(pass_key<authority_t>);
 
-            display::id_t size() const;
+            hal::display::id_t size() const;
 
-            display operator[](display::id_t idx) const;
+            hal::display operator[](hal::display::id_t idx) const;
         };
+    }
 
+    namespace detail
+    {
         template <>
         class subsystem<system::video>
         {
@@ -61,10 +68,10 @@ namespace hal
 
             window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {}) &;
 
-            HAL_NO_SIZE event_proxy events;
+            HAL_NO_SIZE proxy::events events;
 
-            HAL_NO_SIZE clipboard_proxy clipboard;
-            HAL_NO_SIZE display_proxy   displays;
+            HAL_NO_SIZE proxy::clipboard clipboard;
+            HAL_NO_SIZE proxy::display displays;
 
         private:
             subsystem();

@@ -20,9 +20,9 @@ namespace hal
         class mouse_motion_event;
     }
 
-    namespace detail
+    namespace proxy
     {
-        class mouse_proxy;
+        class mouse;
     }
 
     namespace mouse
@@ -41,7 +41,7 @@ namespace hal
         class state
         {
         public:
-            using authority_t = detail::mouse_proxy;
+            using authority_t = proxy::mouse;
 
             // [private] A snapshot of the current mouse state is provided by the event subsystem.
             state(pass_key<authority_t>);

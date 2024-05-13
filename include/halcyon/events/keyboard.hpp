@@ -16,9 +16,9 @@
 
 namespace hal
 {
-    namespace detail
+    namespace proxy
     {
-        class keyboard_proxy;
+        class keyboard;
     }
 
     namespace keyboard
@@ -195,7 +195,7 @@ namespace hal
         class state_reference : public detail::enum_bitset<button, const std::uint8_t*>
         {
         public:
-            using authority_t = detail::keyboard_proxy;
+            using authority_t = proxy::keyboard;
 
             state_reference(pass_key<authority_t>);
 
@@ -206,7 +206,7 @@ namespace hal
         class mod_state : public detail::enum_bitset<mod, SDL_Keymod>
         {
         public:
-            using authority_t = detail::keyboard_proxy;
+            using authority_t = proxy::keyboard;
 
             mod_state(pass_key<authority_t>);
         };

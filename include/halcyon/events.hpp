@@ -9,37 +9,42 @@
 
 namespace hal
 {
-    namespace detail
+    namespace proxy
     {
-        class mouse_proxy
+        using events = detail::subsystem<detail::system::events>;
+
+        class mouse
         {
         public:
-            using authority_t = subsystem<system::events>;
+            using authority_t = events;
 
-            mouse_proxy(pass_key<authority_t>);
+            mouse(pass_key<authority_t>);
 
             // Get a snapshot of the current mouse state.
-            mouse::state state() const;
+            hal::mouse::state state() const;
 
             // Get the current mouse state relative to the desktop.
-            hal::pixel_point pos_abs() const;
+            pixel_point pos_abs() const;
 
             // Get the current mouse state relative to the focus window.
-            hal::pixel_point pos_rel() const;
+            pixel_point pos_rel() const;
         };
 
-        class keyboard_proxy
+        class keyboard
         {
         public:
-            using authority_t = subsystem<system::events>;
+            using authority_t = events;
 
-            keyboard_proxy(pass_key<authority_t>);
+            keyboard(pass_key<authority_t>);
 
             // Get a reference to the keyboard state.
-            keyboard::state_reference state_ref() const;
-            keyboard::mod_state       mod() const;
+            hal::keyboard::state_reference state_ref() const;
+            hal::keyboard::mod_state       mod() const;
         };
+    }
 
+    namespace detail
+    {
         template <>
         class subsystem<system::events>
         {
@@ -56,18 +61,13 @@ namespace hal
             // Stop receiving text_input events.
             void text_input_stop();
 
-            HAL_NO_SIZE mouse_proxy    mouse;
-            HAL_NO_SIZE keyboard_proxy keyboard;
+            HAL_NO_SIZE proxy::mouse mouse;
+            HAL_NO_SIZE proxy::keyboard keyboard;
 
         private:
             // [private] Delegating constructor.
             subsystem();
         };
-    }
-
-    namespace proxy
-    {
-        using events = detail::subsystem<detail::system::events>;
     }
 
     namespace system

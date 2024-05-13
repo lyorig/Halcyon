@@ -2,18 +2,16 @@
 
 using namespace hal;
 
-using sub = detail::subsystem<detail::system::events>;
-
-detail::mouse_proxy::mouse_proxy(pass_key<authority_t>)
+proxy::mouse::mouse(pass_key<authority_t>)
 {
 }
 
-mouse::state detail::mouse_proxy::state() const
+mouse::state proxy::mouse::state() const
 {
-    return { pass_key<mouse_proxy> {} };
+    return { pass_key<proxy::mouse> {} };
 }
 
-pixel_point detail::mouse_proxy::pos_abs() const
+pixel_point proxy::mouse::pos_abs() const
 {
     sdl::pixel_point ret;
 
@@ -22,7 +20,7 @@ pixel_point detail::mouse_proxy::pos_abs() const
     return ret;
 }
 
-pixel_point detail::mouse_proxy::pos_rel() const
+pixel_point proxy::mouse::pos_rel() const
 {
     sdl::pixel_point ret;
 
@@ -31,42 +29,42 @@ pixel_point detail::mouse_proxy::pos_rel() const
     return ret;
 }
 
-detail::keyboard_proxy::keyboard_proxy(pass_key<authority_t>)
+proxy::keyboard::keyboard(pass_key<authority_t>)
 {
 }
 
-keyboard::state_reference detail::keyboard_proxy::state_ref() const
+keyboard::state_reference proxy::keyboard::state_ref() const
 {
-    return pass_key<keyboard_proxy> {};
+    return pass_key<proxy::keyboard> {};
 }
 
-keyboard::mod_state detail::keyboard_proxy::mod() const
+keyboard::mod_state proxy::keyboard::mod() const
 {
-    return pass_key<keyboard_proxy> {};
+    return pass_key<proxy::keyboard> {};
 }
 
-sub::subsystem(pass_key<authority_t>)
+proxy::events::subsystem(pass_key<authority_t>)
     : subsystem {}
 {
 }
 
-sub::subsystem(pass_key<parent_t>)
+proxy::events::subsystem(pass_key<parent_t>)
     : subsystem {}
 {
 }
 
-void sub::text_input_start()
+void proxy::events::text_input_start()
 {
     ::SDL_StartTextInput();
 }
 
-void sub::text_input_stop()
+void proxy::events::text_input_stop()
 {
     ::SDL_StopTextInput();
 }
 
-sub::subsystem()
-    : mouse { pass_key<sub> {} }
-    , keyboard { pass_key<sub> {} }
+proxy::events::subsystem()
+    : mouse { pass_key<proxy::events> {} }
+    , keyboard { pass_key<proxy::events> {} }
 {
 }

@@ -49,7 +49,7 @@ const char* string::c_str() const
     return get();
 }
 
-bool hal::sdl::operator==(string lhs, std::string_view rhs)
+string::operator std::string_view() const
 {
-    return hal::streq(lhs.c_str(), rhs.data());
+    return get();
 }

@@ -1,69 +1,65 @@
 #include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
-#include <string>
-
 #include <halcyon/internal/helpers.hpp>
 
 using namespace hal;
 
-using sub = detail::subsystem<detail::system::video>;
-
-detail::clipboard_proxy::clipboard_proxy(pass_key<authority_t>)
+proxy::clipboard::clipboard(pass_key<authority_t>)
 {
 }
 
-detail::display_proxy::display_proxy(pass_key<authority_t>)
+proxy::display::display(pass_key<authority_t>)
 {
 }
 
-window sub::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags) &
+window proxy::video::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags) &
 {
-    return { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, to_bitmask<std::uint32_t>(flags)), pass_key<sub> {} };
+    return { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, to_bitmask<std::uint32_t>(flags)), pass_key<proxy::video> {} };
 }
 
-sdl::string detail::clipboard_proxy::operator()() const
+sdl::string proxy::clipboard::operator()() const
 {
     char* text { ::SDL_GetClipboardText() };
 
     HAL_ASSERT(text[0] != '\0' || has_text(), debug::last_error());
 
-    return { text, pass_key<clipboard_proxy> {} };
+    return { text, pass_key<proxy::clipboard> {} };
 };
 
-void detail::clipboard_proxy::operator()(std::string_view text)
+void proxy::clipboard::operator()(std::string_view text)
 {
     HAL_ASSERT_VITAL(::SDL_SetClipboardText(text.data()) == 0, debug::last_error());
 }
 
-bool detail::clipboard_proxy::has_text() const
+bool proxy::clipboard::has_text() const
 {
     return ::SDL_HasClipboardText() == SDL_TRUE;
 }
 
-display::id_t detail::display_proxy::size() const
+display::id_t proxy::display::size() const
 {
     const auto ret = ::SDL_GetNumVideoDisplays();
 
     HAL_ASSERT(ret >= 1, debug::last_error());
 
-    return static_cast<display::id_t>(ret);
+    return static_cast<hal::display::id_t>(ret);
 }
 
-display detail::display_proxy::operator[](display::id_t idx) const
+display proxy::display::operator[](hal::display::id_t idx) const
 {
-    return { idx, pass_key<display_proxy> {} };
+    return { idx, pass_key<proxy::display> {} };
 }
 
-sub::subsystem(pass_key<parent_t>)
+proxy::video::subsystem(pass_key<parent_t>)
     : subsystem {}
 
 {
 }
 
-sub::subsystem()
-    : events { pass_key<sub> {} }
-    , clipboard { pass_key<sub> {} }
-    , displays { pass_key<sub> {} }
+proxy::video::subsystem()
+    : events { pass_key<proxy::video> {} }
+    , clipboard { pass_key<proxy::video> {} }
+    , displays { pass_key<proxy::video> {} }
 {
 }
