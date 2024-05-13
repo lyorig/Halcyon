@@ -8,7 +8,7 @@ accessor::accessor(std::string_view path)
 }
 
 accessor::accessor(std::span<const std::byte> data)
-    : raii_object { ::SDL_RWFromConstMem(data.data(), data.size_bytes()) }
+    : raii_object { ::SDL_RWFromConstMem(data.data(), static_cast<int>(data.size_bytes())) }
 {
 }
 
@@ -53,12 +53,13 @@ outputter::outputter(std::string_view file)
 }
 
 outputter::outputter(std::span<std::byte> data)
-    : raii_object { ::SDL_RWFromMem(data.data(), data.size()) }
+    : raii_object { ::SDL_RWFromMem(data.data(), static_cast<int>(data.size_bytes())) }
 {
 }
 
+// std::as_bytes only works for a span of const, so we have to repeat ourselves.
 outputter::outputter(std::span<std::uint8_t> data)
-    : raii_object { ::SDL_RWFromMem(data.data(), data.size()) }
+    : raii_object { ::SDL_RWFromMem(data.data(), static_cast<int>(data.size_bytes())) }
 
 {
 }

@@ -12,7 +12,7 @@ namespace
 {
     SDL_MessageBoxColor convert(color c)
     {
-        return {c.r, c.g, c.b};
+        return { c.r, c.g, c.b };
     }
 }
 
@@ -88,7 +88,6 @@ msbb& msbb::colors(color bg, color text, color btn_border, color btn_bg, color b
     return *this;
 }
 
-
 msbb& msbb::enter(message_box::button_t idx)
 {
     HAL_ASSERT(idx < m_data.numbuttons, "Out of range button ID");
@@ -122,5 +121,5 @@ message_box::button_t msbb::operator()()
 
     HAL_ASSERT_VITAL(::SDL_ShowMessageBox(&m_data, &ret) == 0, debug::last_error());
 
-    return ret;
+    return static_cast<button_t>(ret);
 }
