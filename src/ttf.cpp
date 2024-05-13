@@ -2,34 +2,6 @@
 
 using namespace hal;
 
-ttf::context::context()
-{
-    HAL_WARN_IF(initialized(), "TTF context already exists");
-
-    HAL_ASSERT_VITAL(::TTF_Init() == 0, debug::last_error());
-
-    HAL_PRINT(debug::severity::init, "Initialized TTF context");
-}
-
-ttf::context::~context()
-{
-    HAL_ASSERT(initialized(), "TTF context not initialized at destruction");
-
-    ::TTF_Quit();
-
-    HAL_PRINT("Destroyed TTF context");
-}
-
-font ttf::context::load(accessor data, u8 pt) &
-{
-    return { ::TTF_OpenFontRW(data.use(pass_key<context> {}), true, pt), pass_key<context> {} };
-}
-
-bool ttf::context::initialized()
-{
-    return ::TTF_WasInit() > 0;
-}
-
 font::font(TTF_Font* ptr, pass_key<ttf::context>)
     : raii_object { ptr }
 {
@@ -73,6 +45,34 @@ std::string_view font::family() const
 std::string_view font::style() const
 {
     return ::TTF_FontFaceStyleName(get());
+}
+
+ttf::context::context()
+{
+    HAL_WARN_IF(initialized(), "TTF context already exists");
+
+    HAL_ASSERT_VITAL(::TTF_Init() == 0, debug::last_error());
+
+    HAL_PRINT(debug::severity::init, "Initialized TTF context");
+}
+
+ttf::context::~context()
+{
+    HAL_ASSERT(initialized(), "TTF context not initialized at destruction");
+
+    ::TTF_Quit();
+
+    HAL_PRINT("Destroyed TTF context");
+}
+
+font ttf::context::load(accessor data, u8 pt) &
+{
+    return { ::TTF_OpenFontRW(data.use(pass_key<context> {}), true, pt), pass_key<context> {} };
+}
+
+bool ttf::context::initialized()
+{
+    return ::TTF_WasInit() > 0;
 }
 
 using bft = builder::font_text;

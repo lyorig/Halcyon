@@ -12,34 +12,6 @@
 
 namespace hal
 {
-    class font;
-
-    namespace ttf
-    {
-        // A class that makes sure everything TTF-related is loaded and
-        // ready to use. This includes not only loading fonts, but also
-        // their features - for example, font::render() will fail if a
-        // TTF engine doesn't exist. TL;DR: Ensure that this object outlives
-        // all fonts. This includes destructors!
-        class context
-        {
-        public:
-            // Initialize the TTF context.
-            context();
-
-            context(const context&) = delete;
-            context(context&&)      = delete;
-
-            ~context();
-
-            // Font loading function.
-            [[nodiscard]] font load(accessor data, u8 pt) &;
-
-            static bool initialized();
-        };
-
-        static_assert(std::is_empty_v<context>);
-    }
     namespace builder
     {
         class font_text;
@@ -49,6 +21,8 @@ namespace hal
     class font : public detail::raii_object<TTF_Font, &::TTF_CloseFont>
     {
     public:
+        using pt_t = u8;
+
         enum class render_type : u8
         {
             solid,
@@ -97,6 +71,33 @@ namespace hal
         }
 
         std::unreachable();
+    }
+
+    namespace ttf
+    {
+        // A class that makes sure everything TTF-related is loaded and
+        // ready to use. This includes not only loading fonts, but also
+        // their features - for example, font::render() will fail if a
+        // TTF engine doesn't exist. TL;DR: Ensure that this object outlives
+        // all fonts. This includes destructors!
+        class context
+        {
+        public:
+            // Initialize the TTF context.
+            context();
+
+            context(const context&) = delete;
+            context(context&&)      = delete;
+
+            ~context();
+
+            // Font loading function.
+            [[nodiscard]] font load(accessor data, font::pt_t pt) &;
+
+            static bool initialized();
+        };
+
+        static_assert(std::is_empty_v<context>);
     }
 
     namespace detail
