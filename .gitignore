@@ -1,6 +1,5 @@
 .vs/
 .cache/
-.DS_Store
 
 build/
 Testing/
@@ -8,4 +7,6 @@ Testing/
 examples/bin/
 !examples/bin/assets/
 
+.DS_Store
+.clangd
 CMakeSettings.json

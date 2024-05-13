@@ -28,6 +28,16 @@ bool keyboard::state_reference::operator[](key k) const
     return m_arr[::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k))];
 }
 
+keyboard::mod_state::mod_state(pass_key<authority_t>)
+    : m_state { ::SDL_GetModState() }
+{
+}
+
+bool keyboard::mod_state::operator[](mod m) const
+{
+    return static_cast<bool>(m_state & std::to_underlying(m));
+}
+
 std::string_view hal::to_string(keyboard::button btn)
 {
     return ::SDL_GetScancodeName(static_cast<SDL_Scancode>(btn));

@@ -106,6 +106,8 @@ namespace hal
         }
 
         // Show a message box with an error message.
+        // Do not rely on this function exiting the program, as this
+        // behavior can be overriden with HAL_NO_EXIT_ON_PANIC.
         template <meta::printable... Args>
         HAL_DETAIL_PANIC_NORETURN static void panic(std::string_view function, std::string_view file, u32 line, Args&&... extra_info)
         {

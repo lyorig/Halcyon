@@ -26,6 +26,7 @@ std::string_view random(const std::string_view (&span)[N])
 
 int main(int argc, char* argv[])
 {
+    // We're either in debug mode, or release mode with exit-on-panic disabled.
     static_assert(hal::compile_settings::debug_advanced || !hal::compile_settings::exit_on_panic);
 
     if (argc > 1 && hal::streq(argv[1], "-c"))

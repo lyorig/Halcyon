@@ -156,8 +156,6 @@ namespace hal
         }
 
         // Get the origin of a rectangle anchored by a certain corner in this point.
-        // Since the rendering origin is at the top left of the screen, the top and bottom
-        // anchorings will have to be switched around.
         constexpr point anchor(anchor a, const point& sz) const
         {
             point ret { *this };
@@ -171,19 +169,19 @@ namespace hal
                 break;
 
             case top_left:
-                ret.y += sz.y;
-                break;
-
-            case top_right:
-                ret += sz;
-                break;
-
-            case bottom_left:
                 // Nothing to do.
                 break;
 
-            case bottom_right:
+            case top_right:
                 ret.x += sz.x;
+                break;
+
+            case bottom_left:
+                ret.y += sz.y;
+                break;
+
+            case bottom_right:
+                ret += sz;
                 break;
             }
 

@@ -159,6 +159,33 @@ namespace hal
             right_alt = SDLK_RALT,
         };
 
+        enum class mod : u16
+        {
+            none = KMOD_NONE,
+
+            left_shift  = KMOD_LSHIFT,
+            right_shift = KMOD_RSHIFT,
+
+            left_ctrl  = KMOD_LCTRL,
+            right_ctrl = KMOD_RCTRL,
+
+            left_alt  = KMOD_LALT,
+            right_alt = KMOD_RALT,
+
+            left_gui  = KMOD_LGUI,
+            right_gui = KMOD_RGUI,
+
+            num_lock    = KMOD_NUM,
+            caps_lock   = KMOD_CAPS,
+            mode_lock   = KMOD_MODE, // What even is this?
+            scroll_lock = KMOD_SCROLL,
+
+            shift = KMOD_SHIFT,
+            ctrl  = KMOD_CTRL,
+            alt   = KMOD_ALT,
+            gui   = KMOD_GUI
+        };
+
         key    to_key(button btn);
         button to_button(key k);
 
@@ -177,6 +204,19 @@ namespace hal
 
         private:
             const std::uint8_t* m_arr;
+        };
+
+        class mod_state
+        {
+        public:
+            using authority_t = detail::keyboard_proxy;
+
+            mod_state(pass_key<authority_t>);
+
+            bool operator[](mod m) const;
+
+        private:
+            SDL_Keymod m_state;
         };
     }
 
