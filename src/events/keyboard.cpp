@@ -1,5 +1,4 @@
 #include <halcyon/events/keyboard.hpp>
-#include <utility>
 
 using namespace hal;
 
@@ -14,28 +13,18 @@ keyboard::button keyboard::to_button(key k)
 }
 
 keyboard::state_reference::state_reference(pass_key<authority_t>)
-    : m_arr { ::SDL_GetKeyboardState(nullptr) }
+    : enum_bitset { ::SDL_GetKeyboardState(nullptr) }
 {
-}
-
-bool keyboard::state_reference::operator[](button btn) const
-{
-    return m_arr[std::to_underlying(btn)];
 }
 
 bool keyboard::state_reference::operator[](key k) const
 {
-    return m_arr[::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k))];
+    return enum_bitset::operator[](static_cast<button>(::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k))));
 }
 
 keyboard::mod_state::mod_state(pass_key<authority_t>)
-    : m_state { ::SDL_GetModState() }
+    : enum_bitset { ::SDL_GetModState() }
 {
-}
-
-bool keyboard::mod_state::operator[](mod m) const
-{
-    return static_cast<bool>(m_state & std::to_underlying(m));
 }
 
 std::string_view hal::to_string(keyboard::button btn)

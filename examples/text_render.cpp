@@ -29,14 +29,14 @@ int main(int argc, char* argv[])
         hal::renderer     rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
         hal::ttf::context tctx;
 
-        const hal::texture tex { rnd.make_texture(tctx.load(hal::access("../assets/m5x7.ttf"), 16).render(argv[1], hal::palette::black)) };
+        const hal::texture tex { rnd.make_texture(tctx.load(hal::access("../assets/m5x7.ttf"), 16).render(argv[1]).fg(hal::palette::black)()) };
 
         const hal::pixel_rect draw_rect {
             padding / 2, hal::scale::width(512)(tex.size())
         };
 
         wnd.size(draw_rect.size + padding);
-        rnd.draw_color(hal::palette::weezer_blue);
+        rnd.color(hal::palette::weezer_blue);
 
         rnd.clear();
 
