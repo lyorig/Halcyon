@@ -3,6 +3,8 @@
 
 #include <halcyon/utility/pass_key.hpp>
 
+#include <halcyon/internal/scaler.hpp>
+
 #include <limits>
 
 namespace hal::detail
@@ -76,10 +78,10 @@ namespace hal::detail
 
         // Set the destination's scale.
         // Call after setting the destination and before anchoring.
-        [[nodiscard]] this_ref scale(f64 mul)
+        [[nodiscard]] this_ref scale(hal::scaler scl)
         {
             if (m_dst.pos.x != unset_pos<dst_t>())
-                m_dst.size *= mul;
+                m_dst.size = scl(m_dst.size);
             return get_this();
         }
 

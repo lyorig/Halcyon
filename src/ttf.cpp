@@ -41,6 +41,11 @@ hal::surface font::render(std::string_view text, hal::color color) const
     return { ::TTF_RenderUTF8_Solid_Wrapped(get(), text.data(), static_cast<SDL_Color>(color), 0), pass_key<font> {} };
 }
 
+hal::surface font::render_glyph(std::uint32_t glyph, hal::color color) const
+{
+    return { ::TTF_RenderGlyph32_Solid(get(), glyph, static_cast<SDL_Color>(color)), pass_key<font> {} };
+}
+
 hal::pixel_point font::size_text(const std::string_view& text) const
 {
     point<int> size;

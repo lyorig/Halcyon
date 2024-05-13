@@ -47,8 +47,11 @@ namespace hal
         // [private] Fonts are loaded with ttf::context::load().
         font(TTF_Font* ptr, pass_key<ttf::context>);
 
-        // Convenience text rendering function.
+        // Render text to a surface.
         [[nodiscard]] surface render(std::string_view text, color color = palette::white) const;
+
+        // Render a single glyph to a surface.
+        [[nodiscard]] surface render_glyph(std::uint32_t glyph, color color = palette::white) const;
 
         // When sizing text, it's important to know that the vertical size
         // doesn't necessarily have to match that of the rendered surface.

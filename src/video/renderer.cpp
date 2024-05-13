@@ -46,6 +46,10 @@ renderer::renderer(SDL_Renderer* ptr, pass_key<window>)
     : raii_object { ptr }
 {
     HAL_PRINT(debug::severity::init, "Created renderer for \"", window_title(), "\"");
+
+    SDL_RendererInfo inf;
+    HAL_ASSERT_VITAL(::SDL_GetRendererInfo(get(), &inf) == 0, debug::last_error());
+    HAL_WARN_IF(!(inf.flags & SDL_RENDERER_TARGETTEXTURE), "Created renderer doesn't support rendering to texture");
 }
 
 void renderer::present()
