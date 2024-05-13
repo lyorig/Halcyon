@@ -88,7 +88,12 @@ void surface::save(outputter dst) const
 
 blitter surface::blit(surface& dst) const
 {
-    return { *this, dst, pass_key<surface> {} };
+    return { dst, *this, pass_key<surface> {} };
+}
+
+surface surface::convert() const
+{
+    return { *this, default_format };
 }
 
 pixel_point surface::size() const
@@ -167,7 +172,7 @@ std::uint32_t pixel_reference::get_mapped() const
 
 void pixel_reference::set_mapped(std::uint32_t mapped)
 {
-    if constexpr (SDL_BYTEORDER == SDL_LIL_ENDIAN)
+    if constexpr (compile_settings::byte_order == byte_order::lil_endian)
         std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
 
     else
@@ -180,10 +185,10 @@ void pixel_reference::set_mapped(std::uint32_t mapped)
 void blitter::operator()()
 {
     HAL_ASSERT_VITAL(::SDL_BlitScaled(
-                         m_pass.get(),
-                         m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                          m_this.get(),
-                         reinterpret_cast<SDL_Rect*>(m_dst.addr()))
+                         m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_pass.get(),
+                         m_dst.pos.x == unset_pos<dst_t>() ? nullptr : reinterpret_cast<SDL_Rect*>(m_dst.addr()))
             == 0,
         debug::last_error());
 }
@@ -193,9 +198,9 @@ void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
     sdl::pixel_rect copy { m_dst };
 
     HAL_ASSERT_VITAL(::SDL_BlitScaled(
-                         m_pass.get(),
-                         reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                          m_this.get(),
+                         reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_pass.get(),
                          reinterpret_cast<SDL_Rect*>(copy.addr()))
             == 0,
         debug::last_error());

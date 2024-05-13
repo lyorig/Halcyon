@@ -85,6 +85,10 @@ namespace hal
         // Create a blitter.
         [[nodiscard]] blitter blit(surface& dst) const;
 
+        // Convert this surface into a blittable format.
+        // Use with text.
+        [[nodiscard]] surface convert() const;
+
         // Get surface dimensions.
         pixel_point size() const;
 
