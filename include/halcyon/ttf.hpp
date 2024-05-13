@@ -77,19 +77,42 @@ namespace hal
         std::string_view style() const;
     };
 
+    constexpr std::string_view to_string(font::render_type rt)
+    {
+        switch (rt)
+        {
+            using enum font::render_type;
+
+        case solid:
+            return "Solid";
+
+        case shaded:
+            return "Shaded";
+
+        case blended:
+            return "Blended";
+
+        case lcd:
+            return "LCD";
+        }
+
+        std::unreachable();
+    }
+
     namespace detail
     {
         template <typename Derived>
         class font_builder_base
         {
         public:
-            font_builder_base(const hal::font& fnt, pass_key<font>)
+            [[nodiscard]] font_builder_base(const hal::font& fnt, pass_key<font>)
                 : m_font { fnt }
                 , m_fg { hal::palette::white }
-                , m_bg { hal::palette::black, 0 }
+                , m_bg { hal::palette::transparent }
             {
             }
 
+            // Set the foreground (text) color.
             [[nodiscard]] Derived& fg(color c)
             {
                 m_fg = c;
@@ -97,6 +120,8 @@ namespace hal
                 return get_this();
             }
 
+            // Set the background color.
+            // Does not have an effect on all render types.
             [[nodiscard]] Derived& bg(color c)
             {
                 m_bg = c;

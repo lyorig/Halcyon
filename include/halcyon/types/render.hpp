@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string_view>
+
 #include <SDL_blendmode.h>
+
 #include <halcyon/types/rectangle.hpp>
 
 // types/render.hpp:
@@ -18,6 +21,30 @@ namespace hal
         blend = SDL_BLENDMODE_BLEND
     };
 
+    constexpr std::string_view to_string(blend_mode bm)
+    {
+        switch (bm)
+        {
+            using enum blend_mode;
+
+        case none:
+            return "None";
+
+        case blend:
+            return "Blend";
+
+        case add:
+            return "Add";
+
+        case mod:
+            return "Mod";
+
+        case mul:
+            return "Mul";
+        }
+
+        std::unreachable();
+    }
     // A measurement type for surface/texture pixels.
     using pixel_t = detail::cft<i16, sdl::pixel_t>;
 
