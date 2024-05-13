@@ -37,6 +37,7 @@ namespace hal
 
             // Get a reference to the keyboard state.
             keyboard::state_reference state_ref() const;
+            keyboard::mod_state       mod() const;
         };
 
         template <>
@@ -49,10 +50,17 @@ namespace hal
             subsystem(pass_key<authority_t>);
             subsystem(pass_key<parent_t>);
 
+            // Start receiving text_input events.
+            void text_input_start();
+
+            // Stop receiving text_input events.
+            void text_input_stop();
+
             HAL_NO_SIZE mouse_proxy    mouse;
             HAL_NO_SIZE keyboard_proxy keyboard;
 
         private:
+            // [private] Delegating constructor.
             subsystem();
         };
     }

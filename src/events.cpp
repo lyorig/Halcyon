@@ -40,6 +40,11 @@ keyboard::state_reference detail::keyboard_proxy::state_ref() const
     return pass_key<keyboard_proxy> {};
 }
 
+keyboard::mod_state detail::keyboard_proxy::mod() const
+{
+    return pass_key<keyboard_proxy> {};
+}
+
 sub::subsystem(pass_key<authority_t>)
     : subsystem {}
 {
@@ -48,6 +53,16 @@ sub::subsystem(pass_key<authority_t>)
 sub::subsystem(pass_key<parent_t>)
     : subsystem {}
 {
+}
+
+void sub::text_input_start()
+{
+    ::SDL_StartTextInput();
+}
+
+void sub::text_input_stop()
+{
+    ::SDL_StopTextInput();
 }
 
 sub::subsystem()
