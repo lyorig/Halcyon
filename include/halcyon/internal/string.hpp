@@ -37,5 +37,7 @@ namespace hal
 
             operator std::string_view() const;
         };
+
+        bool operator==(string lhs, std::string_view rhs);
     }
 }

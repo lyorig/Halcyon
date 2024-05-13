@@ -2,54 +2,59 @@
 
 #include <halcyon/utility/strutil.hpp>
 
-using namespace hal::sdl;
+using namespace hal;
 
-string::string(char* ptr, pass_key<authority_t>)
+sdl::string::string(char* ptr, pass_key<authority_t>)
     : raii_object { ptr }
 {
 }
 
-std::size_t string::size() const
+std::size_t sdl::string::size() const
 {
     return std::strlen(get());
 }
 
-char* string::begin()
+char* sdl::string::begin()
 {
     return get();
 }
 
-char* string::end()
+char* sdl::string::end()
 {
     return get() + size();
 }
 
-const char* string::begin() const
+const char* sdl::string::begin() const
 {
     return get();
 }
 
-const char* string::end() const
+const char* sdl::string::end() const
 {
     return get() + size();
 }
 
-char* string::data()
+char* sdl::string::data()
 {
     return get();
 }
 
-const char* string::data() const
+const char* sdl::string::data() const
 {
     return get();
 }
 
-const char* string::c_str() const
+const char* sdl::string::c_str() const
 {
     return get();
 }
 
-string::operator std::string_view() const
+sdl::string::operator std::string_view() const
 {
     return get();
+}
+
+bool sdl::operator==(string lhs, std::string_view rhs)
+{
+    return rhs == lhs.c_str();
 }
