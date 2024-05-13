@@ -80,8 +80,7 @@ namespace hal::detail
         // Call after setting the destination and before anchoring.
         [[nodiscard]] this_ref scale(hal::scaler scl)
         {
-            if (m_dst.pos.x != unset_pos<dst_t>())
-                m_dst.size = scl(m_dst.size);
+            m_dst.size = scl(m_dst.size);
             return get_this();
         }
 
@@ -89,8 +88,7 @@ namespace hal::detail
         // Call after setting the destination and scaling.
         [[nodiscard]] this_ref anchor(anchor anch)
         {
-            if (m_dst.pos.x != unset_pos<dst_t>())
-                m_dst.pos = m_dst.pos.anchor(anch, m_dst.size);
+            m_dst.pos = m_dst.pos.anchor(anch, m_dst.size);
             return get_this();
         }
 

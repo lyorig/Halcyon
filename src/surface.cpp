@@ -183,7 +183,7 @@ void blitter::operator()()
                          m_pass.get(),
                          m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                          m_this.get(),
-                         m_dst.pos.x == unset_pos<dst_t>() ? nullptr : reinterpret_cast<SDL_Rect*>(m_dst.addr()))
+                         reinterpret_cast<SDL_Rect*>(m_dst.addr()))
             == 0,
         debug::last_error());
 }
