@@ -115,7 +115,7 @@ info::renderer renderer::info() const
 
 texture renderer::make_texture(const surface& surf) &
 {
-    return { ::SDL_CreateTextureFromSurface(get(), surf.get()), pass_key<renderer> {} };
+    return { *this, surf, pass_key<renderer> {} };
 }
 
 target_texture renderer::make_target_texture(pixel_point size) &
@@ -123,10 +123,10 @@ target_texture renderer::make_target_texture(pixel_point size) &
     SDL_Window* wnd { ::SDL_RenderGetWindow(get()) };
     HAL_ASSERT(wnd != nullptr, debug::last_error());
 
-    const std::uint32_t fmt { ::SDL_GetWindowPixelFormat(wnd) };
+    const SDL_PixelFormatEnum fmt { static_cast<SDL_PixelFormatEnum>(::SDL_GetWindowPixelFormat(wnd)) };
     HAL_ASSERT(fmt != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
 
-    return { ::SDL_CreateTexture(get(), fmt, SDL_TEXTUREACCESS_TARGET, size.x, size.y), pass_key<renderer> {} };
+    return { *this, fmt, size, pass_key<renderer> {} };
 }
 
 color renderer::color() const

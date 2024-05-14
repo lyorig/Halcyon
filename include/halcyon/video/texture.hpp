@@ -39,7 +39,7 @@ namespace hal
 
         protected:
             texture_base() = default;
-            
+
             texture_base(SDL_Texture* ptr);
 
         private:
@@ -57,7 +57,7 @@ namespace hal
         texture() = default;
 
         // [private] Textures are created with renderer::load().
-        texture(SDL_Texture* ptr, pass_key<renderer>);
+        texture(const renderer& rnd, const surface& surf, pass_key<renderer>);
     };
 
     // A texture that can be drawn onto.
@@ -67,6 +67,6 @@ namespace hal
         target_texture() = default;
 
         // [private] Target textures are created with renderer::load().
-        target_texture(SDL_Texture* ptr, pass_key<renderer>);
+        target_texture(const renderer& rnd, SDL_PixelFormatEnum fmt, pixel_point size, pass_key<renderer>);
     };
 }
