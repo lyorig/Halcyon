@@ -12,9 +12,10 @@ Do a shallow clone, as there was a time when actual MP3 and WAV files were store
 3. Several variables now exist: `HAL_INCLUDE_DIRS`, `HALCYON_SOURCES` and `HALCYON_LIBRARIES`. Use these with your project and you're good to go.
 
 # Usage
-Halcyon wraps SDL using the concepts of *contexts* and *systems*.
+Halcyon wraps SDL with several concepts:
 - **Context:** A "top-level" class that manages a library's (de)initialization.
-- **System:** Initializes specific context functionality, if such separation is necessary.
+- **Proxy**: Provides access to specific context functionality.
+- **System:** Inherits from a proxy and manages (de)initialization of its functionality.
 > [!TIP]
 These are empty classes. You are encouraged to use them with `[[no_unique_address]]` (also defined as `HAL_NO_SIZE`).
 
@@ -63,5 +64,5 @@ Halcyon provides several macro functions for easing your debugging experience.
 Halcyon's debugging facilities are configured via several macros.  
 If NDEBUG is not defined, debugging is implicitly enabled in advanced mode.
 - `HAL_DEBUG_ENABLED`: Enables all debugging macros.
-- `HAL_DEBUG_ADVANCED`: Enables time logging, and outputs to an additional file.
+- `HAL_DEBUG_ADVANCED`: Enables time logging, and outputs to an additional file. This adds static variables to your program.
 - `HAL_NO_EXIT_ON_PANIC`: Disables exit-on-panic behavior. Useful for when you want to roll your own error handling, but still want to trace what went wrong.
