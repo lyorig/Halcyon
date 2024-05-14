@@ -112,6 +112,11 @@ window::id_t event::mouse_wheel_event::window_id() const
     return static_cast<window::id_t>(windowID);
 }
 
+pixel_point event::mouse_wheel_event::pos() const
+{
+    return { static_cast<pixel_t>(x), static_cast<pixel_t>(y) };
+}
+
 point<i16> event::mouse_wheel_event::scroll() const
 {
     return { static_cast<i16>(x), static_cast<i16>(y) };
@@ -120,11 +125,6 @@ point<i16> event::mouse_wheel_event::scroll() const
 point<f32> event::mouse_wheel_event::scroll_precise() const
 {
     return { static_cast<f32>(preciseX), static_cast<f32>(preciseY) };
-}
-
-pixel_point event::mouse_wheel_event::pos() const
-{
-    return { static_cast<pixel_t>(x), static_cast<pixel_t>(y) };
 }
 
 bool event::mouse_wheel_event::scroll_flipped() const

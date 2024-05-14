@@ -125,10 +125,12 @@ namespace hal
 
             window::id_t window_id() const;
 
-            point<i16>  scroll() const;
-            point<f32>  scroll_precise() const;
             pixel_point pos() const;
-            bool        scroll_flipped() const;
+
+            point<i16> scroll() const;
+            point<f32> scroll_precise() const;
+
+            bool scroll_flipped() const;
         };
 
         static_assert(sizeof(mouse_wheel_event) == sizeof(SDL_MouseWheelEvent));
