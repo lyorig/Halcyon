@@ -21,23 +21,25 @@ namespace hal
             video  = SDL_INIT_VIDEO,
             events = SDL_INIT_EVENTS
         };
+    }
 
-        // In the detail namespace; not meant to be seen by the end user.
-        constexpr std::string_view to_string(system s)
+    // In the detail namespace; not meant to be seen by the end user.
+    constexpr std::string_view to_string(detail::system s)
+    {
+        using enum detail::system;
+
+        switch (s)
         {
-            using enum system;
+        case video:
+            return "Video";
 
-            switch (s)
-            {
-            case video:
-                return "Video";
-
-            case events:
-                return "Events";
-            }
-
-            std::unreachable();
+        case events:
+            return "Events";
         }
+    }
+
+    namespace detail
+    {
 
         template <system S>
         class subinit;
@@ -77,4 +79,5 @@ namespace hal
             }
         };
     }
+
 }

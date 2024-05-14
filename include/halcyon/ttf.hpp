@@ -69,8 +69,6 @@ namespace hal
         case lcd:
             return "LCD";
         }
-
-        std::unreachable();
     }
 
     namespace ttf

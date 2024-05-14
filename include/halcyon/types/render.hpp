@@ -42,8 +42,6 @@ namespace hal
         case mul:
             return "Mul";
         }
-
-        std::unreachable();
     }
     // A measurement type for surface/texture pixels.
     using pixel_t = detail::cft<i16, sdl::pixel_t>;
