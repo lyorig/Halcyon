@@ -5,18 +5,12 @@
 #include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>
 
-#include <halcyon/internal/helpers.hpp>
-
 using namespace hal;
 
 renderer::renderer(SDL_Renderer* ptr, pass_key<window>)
     : raii_object { ptr }
 {
-    HAL_PRINT(debug::severity::init, "Created renderer for \"", window_title(), "\"");
-
-    SDL_RendererInfo inf;
-    HAL_ASSERT_VITAL(::SDL_GetRendererInfo(get(), &inf) == 0, debug::last_error());
-    HAL_WARN_IF(!(inf.flags & SDL_RENDERER_TARGETTEXTURE), "Created renderer doesn't support rendering to texture");
+    HAL_PRINT("Created renderer ", info());
 }
 
 void renderer::present()
@@ -81,6 +75,16 @@ void renderer::fill_target()
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(get(), nullptr) == 0, debug::last_error());
 }
 
+void renderer::target(target_texture& tx)
+{
+    this->internal_target(tx.get());
+}
+
+void renderer::retarget()
+{
+    this->internal_target(nullptr);
+}
+
 pixel_point renderer::size() const
 {
     point<int> sz;
@@ -102,14 +106,25 @@ void renderer::size(scaler scl)
     size(scl(size()));
 }
 
-void renderer::target(target_texture& tx)
+info::renderer renderer::info() const
 {
-    this->internal_target(tx.get());
+    return { *this, pass_key<renderer> {} };
 }
 
-void renderer::retarget()
+texture renderer::make_texture(const surface& surf) &
 {
-    this->internal_target(nullptr);
+    return { ::SDL_CreateTextureFromSurface(get(), surf.get()), pass_key<renderer> {} };
+}
+
+target_texture renderer::make_target_texture(pixel_point size) &
+{
+    SDL_Window* wnd { ::SDL_RenderGetWindow(get()) };
+    HAL_ASSERT(wnd != nullptr, debug::last_error());
+
+    const std::uint32_t fmt { ::SDL_GetWindowPixelFormat(wnd) };
+    HAL_ASSERT(fmt != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
+
+    return { ::SDL_CreateTexture(get(), fmt, SDL_TEXTUREACCESS_TARGET, size.x, size.y), pass_key<renderer> {} };
 }
 
 color renderer::color() const
@@ -140,22 +155,6 @@ void renderer::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-texture renderer::make_texture(const surface& surf) &
-{
-    return { ::SDL_CreateTextureFromSurface(get(), surf.get()), pass_key<renderer> {} };
-}
-
-target_texture renderer::make_target_texture(pixel_point size) &
-{
-    SDL_Window* wnd { ::SDL_RenderGetWindow(get()) };
-    HAL_ASSERT(wnd != nullptr, debug::last_error());
-
-    const std::uint32_t fmt { ::SDL_GetWindowPixelFormat(wnd) };
-    HAL_ASSERT(fmt != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
-
-    return { ::SDL_CreateTexture(get(), fmt, SDL_TEXTUREACCESS_TARGET, size.x, size.y), pass_key<renderer> {} };
-}
-
 copyer renderer::draw(const detail::texture_base& tex)
 {
     return { *this, tex, pass_key<renderer> {} };
@@ -166,14 +165,32 @@ void renderer::internal_target(SDL_Texture* target)
     HAL_ASSERT_VITAL(::SDL_SetRenderTarget(get(), target) == 0, debug::last_error());
 }
 
-std::string_view renderer::window_title() const
-{
-    SDL_Window* ptr { ::SDL_RenderGetWindow(get()) };
-    HAL_ASSERT(ptr != nullptr, debug::last_error());
+// Renderer information.
 
-    // No fail (nullptr) state documented.
-    return ::SDL_GetWindowTitle(ptr);
+info::renderer::renderer(const hal::renderer& rnd, pass_key<hal::renderer>)
+{
+    HAL_ASSERT_VITAL(::SDL_GetRendererInfo(rnd.get(), static_cast<SDL_RendererInfo*>(this)) == 0, debug::last_error());
 }
+
+std::string_view info::renderer::name() const
+{
+    return SDL_RendererInfo::name;
+}
+
+info::renderer::flag_bitset info::renderer::flags() const
+{
+    return SDL_RendererInfo::flags;
+}
+
+pixel_point info::renderer::max_texture_size() const
+{
+    return {
+        static_cast<pixel_t>(max_texture_width),
+        static_cast<pixel_t>(max_texture_height)
+    };
+}
+
+// Copyer.
 
 copyer& copyer::rotate(f64 angle)
 {
@@ -195,24 +212,10 @@ copyer& copyer::outline()
 
 void copyer::operator()()
 {
-    if constexpr (compile_settings::integral_coord)
-    {
-        HAL_ASSERT_VITAL(::SDL_RenderCopyEx(m_pass.get(), m_this.get(),
-                             m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
-                             reinterpret_cast<const SDL_Rect*>(m_dst.addr()),
-                             m_angle,
-                             nullptr, static_cast<SDL_RendererFlip>(m_flip))
-                == 0,
-            debug::last_error());
-    }
-
-    else
-    {
-        HAL_ASSERT_VITAL(::SDL_RenderCopyExF(m_pass.get(), m_this.get(),
-                             m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
-                             reinterpret_cast<const SDL_FRect*>(m_dst.addr()),
-                             m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip))
-                == 0,
-            debug::last_error());
-    }
+    HAL_ASSERT_VITAL(::SDL_RenderCopyExF(m_pass.get(), m_this.get(),
+                         m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         reinterpret_cast<const SDL_FRect*>(m_dst.addr()),
+                         m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip))
+            == 0,
+        debug::last_error());
 }

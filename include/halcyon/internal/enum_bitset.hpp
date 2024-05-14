@@ -29,6 +29,11 @@ namespace hal
                     return static_cast<bool>(m_value & std::to_underlying(e));
             }
 
+            Value value() const
+            {
+                return m_value;
+            }
+
         private:
             Value m_value;
         };

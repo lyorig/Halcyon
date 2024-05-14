@@ -8,12 +8,6 @@
 
 namespace hal
 {
-    namespace meta
-    {
-        template <typename T>
-        concept printable = requires(std::ostream& str, const T& val) { str << val; };
-    }
-
     // One-byte types get interpreted as characters. This tries to prevent that.
     template <meta::arithmetic T>
     using printable_int_t = std::conditional_t<sizeof(T) == 1, std::conditional_t<std::is_signed_v<T>, i16, u16>, T>;
@@ -40,6 +34,18 @@ namespace hal
     class display;
     struct color;
 
+    namespace info
+    {
+        class renderer;
+    }
+
     std::ostream& operator<<(std::ostream& str, const display& disp);
     std::ostream& operator<<(std::ostream& str, color c);
+    std::ostream& operator<<(std::ostream& str, const info::renderer& inf);
+
+    namespace meta
+    {
+        template <typename T>
+        concept printable = requires(std::ostream& str, const T& val) { str << val; };
+    }
 }

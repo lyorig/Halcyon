@@ -115,7 +115,7 @@ namespace hal
     // Wrappers for native SDL types.
     namespace sdl
     {
-        using pixel_rect = rectangle<sdl::pixel_t>;
-        using coord_rect = rectangle<sdl::coord_t>;
+        using pixel_rect = rectangle<pixel_t>;
+        using coord_rect = rectangle<coord_t>;
     }
 }
