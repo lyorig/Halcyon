@@ -84,7 +84,7 @@ bft::font_text(const font& fnt, std::string_view text, pass_key<font> pk)
 {
 }
 
-bft& bft::wrap(wrap_length_t wl)
+bft& bft::wrap(pixel_t wl)
 {
     m_wrapLength = wl;
 
