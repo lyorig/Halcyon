@@ -31,6 +31,8 @@ namespace hal
             lcd
         };
 
+        font() = default;
+
         // [private] Fonts are loaded with ttf::context::load().
         font(TTF_Font* ptr, pass_key<ttf::context>);
 
