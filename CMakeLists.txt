@@ -11,9 +11,11 @@ include(CTest)
 include_directories(${HALCYON_INCLUDE_DIRS})
 link_libraries(${HALCYON_LIBRARIES})
 
+add_library(Halcyon OBJECT ${HALCYON_SOURCES})
+
 # Tests.
 
-add_executable(HalTest test/main.cpp ${HALCYON_SOURCES})
+add_executable(HalTest test/main.cpp $<TARGET_OBJECTS:Halcyon>)
 
 # These tests require assertions present in Halcyon. Make sure they're on.
 if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
@@ -39,3 +41,20 @@ add_test(NAME Metaprogramming   COMMAND ${ExeName} --metaprogramming)
 
 # Set which tests are expected to fail.
 set_tests_properties(AssertFail InvalidBuffer InvalidTexture PROPERTIES WILL_FAIL TRUE)
+
+# Examples.
+
+set(EXAMPLE_SOURCES
+invertor.cpp
+message_box.cpp
+metaprogramming.cpp
+safety.cpp
+text_render.cpp)
+
+list(TRANSFORM EXAMPLE_SOURCES PREPEND examples/)
+
+foreach(FILE IN LISTS EXAMPLE_SOURCES)
+    get_filename_component(TGT_NAME ${FILE} NAME_WE)
+    add_executable(${TGT_NAME} ${FILE} $<TARGET_OBJECTS:Halcyon>)
+    set_target_properties(${TGT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/)
+endforeach()

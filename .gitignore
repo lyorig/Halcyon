@@ -4,8 +4,8 @@
 build/
 Testing/
 
-examples/bin/
-!examples/bin/assets/
+bin/*
+!bin/assets/
 
 .DS_Store
 .clangd
