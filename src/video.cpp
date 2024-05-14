@@ -15,7 +15,12 @@ proxy::display::display(pass_key<authority_t>)
 
 window proxy::video::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags) &
 {
-    return { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, to_bitmask<std::uint32_t>(flags)), pass_key<proxy::video> {} };
+    return { title, size, flags, pass_key<proxy::video> {} };
+}
+
+window proxy::video::make_window(std::string_view title, HAL_TAG_NAME(fullscreen)) &
+{
+    return { title, displays[0].size(), { hal::window::flags::fullscreen }, pass_key<proxy::video> {} };
 }
 
 sdl::string proxy::clipboard::operator()() const

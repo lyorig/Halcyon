@@ -54,6 +54,8 @@ namespace hal
         };
     }
 
+    HAL_TAG(fullscreen);
+
     namespace detail
     {
         template <>
@@ -66,7 +68,11 @@ namespace hal
 
             subsystem(pass_key<parent_t>);
 
+            // Create a window.
             window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {}) &;
+
+            // Warning: This has some issues on macOS due to its DPI scaling stuff.
+            window make_window(std::string_view title, HAL_TAG_NAME(fullscreen)) &;
 
             HAL_NO_SIZE proxy::events events;
 
@@ -76,15 +82,5 @@ namespace hal
         private:
             subsystem();
         };
-    }
-
-    namespace proxy
-    {
-        using video = detail::subsystem<detail::system::video>;
-    }
-
-    namespace system
-    {
-        using video = detail::subinit<detail::system::video>;
     }
 }

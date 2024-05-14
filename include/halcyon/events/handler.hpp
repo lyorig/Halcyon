@@ -29,8 +29,10 @@ namespace hal
             display_event() = delete;
 
             type event_type() const;
+            void event_type(type t);
 
             display::id_t display_index() const;
+            void          display_index(display::id_t);
 
             // As of April 2024, there are no events using the "data1" member.
         };
@@ -64,14 +66,18 @@ namespace hal
             window_event() = delete;
 
             type event_type() const;
+            void event_type(type t);
 
             window::id_t window_id() const;
+            void         window_id(window::id_t id);
 
             // Valid for: display_changed
-            display::id_t new_display_index() const;
+            display::id_t display_index() const;
+            void          display_index(display::id_t id);
 
             // Valid for: resized, moved
-            pixel_point new_point() const;
+            pixel_point point() const;
+            void        point(pixel_point pt);
         };
 
         static_assert(sizeof(window_event) == sizeof(SDL_WindowEvent));
@@ -82,10 +88,16 @@ namespace hal
             keyboard_event() = delete;
 
             window::id_t window_id() const;
+            void         window_id(window::id_t id);
 
             keyboard::button button() const;
-            keyboard::key    key() const;
-            bool             repeat() const;
+            void             button(keyboard::button btn);
+
+            keyboard::key key() const;
+            void          key(keyboard::key k);
+
+            bool repeat() const;
+            void repeat(bool r);
         };
 
         static_assert(sizeof(keyboard_event) == sizeof(SDL_KeyboardEvent));
@@ -96,10 +108,16 @@ namespace hal
             mouse_motion_event() = delete;
 
             window::id_t window_id() const;
+            void         window_id(window::id_t id);
 
             mouse::state state() const;
-            pixel_point  pos() const;
-            pixel_point  rel() const;
+            void         state(mouse::state s);
+
+            pixel_point pos() const;
+            void        pos(pixel_point p);
+
+            pixel_point rel() const;
+            void        rel(pixel_point rel);
         };
 
         static_assert(sizeof(mouse_motion_event) == sizeof(SDL_MouseMotionEvent));
@@ -110,10 +128,16 @@ namespace hal
             mouse_button_event() = delete;
 
             window::id_t window_id() const;
+            void         window_id(window::id_t id);
 
             mouse::button button() const;
-            u8            click_amount() const;
-            pixel_point   pos() const;
+            void          button(mouse::button btn);
+
+            u8   click_amount() const;
+            void click_amount(u8 amnt);
+
+            pixel_point pos() const;
+            void        pos(pixel_point pt);
         };
 
         static_assert(sizeof(mouse_button_event) == sizeof(SDL_MouseButtonEvent));
@@ -124,11 +148,19 @@ namespace hal
             mouse_wheel_event() = delete;
 
             window::id_t window_id() const;
+            void         window_id(window::id_t id);
 
-            point<i16>  scroll() const;
-            point<f32>  scroll_precise() const;
             pixel_point pos() const;
-            bool        scroll_flipped() const;
+            void        pos(pixel_point p);
+
+            point<i16> scroll() const;
+            void       scroll(point<i16> s);
+
+            point<f32> scroll_precise() const;
+            void       scroll_precise(point<f32> s);
+
+            bool scroll_flipped() const;
+            void scroll_flipped(bool f);
         };
 
         static_assert(sizeof(mouse_wheel_event) == sizeof(SDL_MouseWheelEvent));
@@ -136,8 +168,11 @@ namespace hal
         class text_input_event : SDL_TextInputEvent
         {
         public:
-            window::id_t     window_id() const;
+            window::id_t window_id() const;
+            void         window_id(window::id_t id);
+
             std::string_view text() const;
+            void             text(std::string_view t);
         };
 
         static_assert(sizeof(text_input_event) == sizeof(SDL_TextInputEvent));
@@ -185,32 +220,43 @@ namespace hal
             // Returns true if the polled event is valid, false if there are no more to process.
             bool poll();
 
-            // Get the last polled event's type.
+            // Push this event into the event queue.
+            void push();
+
+            // Get/set this event's current type.
             type event_type() const;
+            void event_type(type t);
 
             // Valid for: display
             const display_event& display() const;
+            display_event&       display();
 
             // Valid for: window
             const window_event& window() const;
+            window_event&       window();
 
             // Valid for: key_pressed, key_released
             const keyboard_event& keyboard() const;
+            keyboard_event&       keyboard();
 
             // Valid for: text_input
             const text_input_event& text_input() const;
+            text_input_event&       text_input();
 
             // Valid for: mouse_moved
             const mouse_motion_event& mouse_motion() const;
+            mouse_motion_event&       mouse_motion();
 
             // Valid for: mouse_pressed, mouse_released
             const mouse_button_event& mouse_button() const;
+            mouse_button_event&       mouse_button();
 
             // Valid for: mouse_wheel_moved
             const mouse_wheel_event& mouse_wheel() const;
+            mouse_wheel_event&       mouse_wheel();
 
             // Check whether there are any pending event in the event queue.
-            static bool pending();
+            bool pending() const;
 
         private:
             // A union that impersonates SDL_Event.

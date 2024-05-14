@@ -21,24 +21,25 @@ namespace hal
             video  = SDL_INIT_VIDEO,
             events = SDL_INIT_EVENTS
         };
+    }
 
-        // In the detail namespace; not meant to be seen by the end user.
-        constexpr std::string_view to_string(system s)
+    // In the detail namespace; not meant to be seen by the end user.
+    constexpr std::string_view to_string(detail::system s)
+    {
+        using enum detail::system;
+
+        switch (s)
         {
-            using enum system;
+        case video:
+            return "Video";
 
-            switch (s)
-            {
-            case video:
-                return "Video";
-
-            case events:
-                return "Events";
-            }
-
-            std::unreachable();
+        case events:
+            return "Events";
         }
+    }
 
+    namespace detail
+    {
         template <system S>
         class subinit;
 
@@ -68,7 +69,7 @@ namespace hal
             ~subinit()
             {
                 ::SDL_QuitSubSystem(static_cast<std::uint32_t>(S));
-                HAL_PRINT(to_string(S), " subsystem quit");
+                HAL_PRINT(to_string(S), " subsystem destroyed");
             }
 
             static bool initialized()
@@ -76,5 +77,17 @@ namespace hal
                 return ::SDL_WasInit(static_cast<std::uint32_t>(S)) == static_cast<std::uint32_t>(S);
             }
         };
+    }
+
+    namespace proxy
+    {
+        using video  = detail::subsystem<detail::system::video>;
+        using events = detail::subsystem<detail::system::events>;
+    }
+
+    namespace system
+    {
+        using video  = detail::subinit<detail::system::video>;
+        using events = detail::subinit<detail::system::events>;
     }
 }

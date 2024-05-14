@@ -2,8 +2,8 @@
 
 #include <compare>
 
-#include <halcyon/internal/sdl_types.hpp>
 #include <halcyon/internal/tags.hpp>
+#include <halcyon/types/sdl.hpp>
 
 // types/point.hpp:
 // A 2D point class, there's really not much more to say.
@@ -235,7 +235,7 @@ namespace hal
     // Wrappers for native SDL types.
     namespace sdl
     {
-        using pixel_point = point<sdl::pixel_t>;
-        using coord_point = point<sdl::coord_t>;
+        using pixel_point = point<pixel_t>;
+        using coord_point = point<coord_t>;
     }
 }

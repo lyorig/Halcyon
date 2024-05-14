@@ -2,6 +2,8 @@
 
 #include <halcyon/utility/strutil.hpp>
 
+#include <cstring>
+
 using namespace hal;
 
 sdl::string::string(char* ptr, pass_key<authority_t>)

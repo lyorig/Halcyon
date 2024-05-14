@@ -31,6 +31,8 @@ namespace hal
             lcd
         };
 
+        font() = default;
+
         // [private] Fonts are loaded with ttf::context::load().
         font(TTF_Font* ptr, pass_key<ttf::context>);
 
@@ -69,8 +71,6 @@ namespace hal
         case lcd:
             return "LCD";
         }
-
-        std::unreachable();
     }
 
     namespace ttf
@@ -146,24 +146,22 @@ namespace hal
         class font_text : public detail::font_builder_base<font_text>
         {
         public:
-            using wrap_length_t = u16;
-
             [[nodiscard]] font_text(const font& fnt, std::string_view text, pass_key<font>);
 
             // How many characters to wrap this text at.
             // Zero means only wrap on newlines.
-            [[nodiscard]] font_text& wrap(wrap_length_t wl);
+            [[nodiscard]] font_text& wrap(pixel_t wl);
 
             [[nodiscard]] surface operator()(font::render_type rt = font::render_type::solid);
 
         private:
-            consteval static wrap_length_t invalid()
+            consteval static pixel_t invalid()
             {
-                return std::numeric_limits<wrap_length_t>::max();
+                return std::numeric_limits<pixel_t>::max();
             }
 
-            const char*   m_text;
-            wrap_length_t m_wrapLength;
+            const char* m_text;
+            pixel_t     m_wrapLength;
         };
 
         class font_glyph : public detail::font_builder_base<font_glyph>

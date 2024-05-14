@@ -42,15 +42,15 @@ namespace hal
         case mul:
             return "Mul";
         }
-
-        std::unreachable();
     }
-    // A measurement type for surface/texture pixels.
-    using pixel_t = detail::cft<i16, sdl::pixel_t>;
 
-    // A drawing coordinate. Floating point by default, but you can define HAL_INTEGRAL_COORD to
-    // make it be integral and potentially improve performance.
-    using coord_t = detail::cft<std::conditional_t<compile_settings::integral_coord, pixel_t, f32>, sdl::coord_t>;
+    // Defining HAL_FAST_TYPES transforms these into native SDL types.
+
+    // A measurement unit for surfaces, textures, displays etc.
+    using pixel_t = detail::cft<i32, sdl::pixel_t>;
+
+    // A measurement unit for sub-pixel rendering of textures.
+    using coord_t = detail::cft<f32, sdl::coord_t>;
 
     using pixel_point = point<pixel_t>;
     using pixel_rect  = rectangle<pixel_t>;
@@ -79,6 +79,15 @@ namespace hal
         {
             return static_cast<coord_t>(v);
         }
+    }
+
+    namespace sdl
+    {
+        template <meta::arithmetic T>
+        using point_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Point, SDL_FPoint>;
+
+        template <meta::arithmetic T>
+        using rect_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Rect, SDL_FRect>;
     }
 
     // Paranoia.

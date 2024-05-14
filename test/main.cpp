@@ -43,7 +43,7 @@ namespace test
         if (e.window().event_type() != hal::event::window_event::type::resized)
             return EXIT_FAILURE;
 
-        if (e.window().new_point() != new_size)
+        if (e.window().point() != new_size)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
@@ -140,10 +140,8 @@ namespace test
 
         hal::event::handler eh { evt };
 
-        SDL_Event e;
-        e.type = SDL_QUIT;
-
-        ::SDL_PushEvent(&e);
+        eh.event_type(hal::event::type::quit_requested);
+        eh.push();
 
         while (eh.poll())
         {

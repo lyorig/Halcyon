@@ -53,7 +53,7 @@ ttf::context::context()
 
     HAL_ASSERT_VITAL(::TTF_Init() == 0, debug::last_error());
 
-    HAL_PRINT(debug::severity::init, "Initialized TTF context");
+    HAL_PRINT(debug::severity::init, "TTF context initialized");
 }
 
 ttf::context::~context()
@@ -62,7 +62,7 @@ ttf::context::~context()
 
     ::TTF_Quit();
 
-    HAL_PRINT("Destroyed TTF context");
+    HAL_PRINT("TTF context destroyed");
 }
 
 font ttf::context::load(accessor data, u8 pt) &
@@ -84,7 +84,7 @@ bft::font_text(const font& fnt, std::string_view text, pass_key<font> pk)
 {
 }
 
-bft& bft::wrap(wrap_length_t wl)
+bft& bft::wrap(pixel_t wl)
 {
     m_wrapLength = wl;
 
@@ -130,8 +130,6 @@ surface bft::operator()(font::render_type rt)
             return { ::TTF_RenderUTF8_LCD_Wrapped(m_font.get(), m_text, static_cast<SDL_Color>(m_fg), static_cast<SDL_Color>(m_bg), m_wrapLength), pass_key<font_text> {} };
         }
     }
-
-    std::unreachable();
 }
 
 using bfg = builder::font_glyph;
@@ -160,6 +158,4 @@ surface bfg::operator()(font::render_type rt)
     case lcd:
         return { ::TTF_RenderGlyph32_LCD(m_font.get(), m_glyph, static_cast<SDL_Color>(m_fg), static_cast<SDL_Color>(m_bg)), pass_key<font_glyph> {} };
     }
-
-    std::unreachable();
 }

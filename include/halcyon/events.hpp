@@ -69,9 +69,4 @@ namespace hal
             subsystem();
         };
     }
-
-    namespace system
-    {
-        using events = detail::subinit<detail::system::events>;
-    }
 }

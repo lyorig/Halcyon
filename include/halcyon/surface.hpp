@@ -40,7 +40,6 @@ namespace hal
     class surface : public detail::raii_object<SDL_Surface, ::SDL_FreeSurface>
     {
     public:
-        // Create an invalid surface.
         surface() = default;
 
         // Create a sized surface.

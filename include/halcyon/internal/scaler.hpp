@@ -69,8 +69,6 @@ namespace hal
             case multiply:
                 return src * m_data.mul;
             }
-
-            std::unreachable();
         }
 
     private:

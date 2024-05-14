@@ -16,11 +16,11 @@ namespace hal::detail
     // a) constant textures, and
     // b) those who know what they're doing. I'm sure you do, though.
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
-    template <typename T, meta::one_of<sdl::pixel_t, sdl::coord_t> Dst_type, typename Pass, typename This>
+    template <typename T, meta::one_of<pixel_t, coord_t> Dst_type, typename Pass, typename This>
     class drawer
     {
     protected:
-        using src_t = sdl::pixel_t;
+        using src_t = pixel_t;
         using dst_t = Dst_type;
 
         using src_point = point<src_t>;
