@@ -20,7 +20,7 @@ window proxy::video::make_window(std::string_view title, pixel_point size, std::
 
 window proxy::video::make_window(std::string_view title, HAL_TAG_NAME(fullscreen)) &
 {
-    return { title, {}, { hal::window::flags::fullscreen }, pass_key<proxy::video> {} };
+    return { title, displays[0].size(), { hal::window::flags::fullscreen }, pass_key<proxy::video> {} };
 }
 
 sdl::string proxy::clipboard::operator()() const
