@@ -5,12 +5,14 @@
 #include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>
 
+#include <halcyon/internal/helpers.hpp>
+
 using namespace hal;
 
-renderer::renderer(SDL_Renderer* ptr, pass_key<window>)
-    : raii_object { ptr }
+renderer::renderer(const hal::window& wnd, std::initializer_list<flags> f, pass_key<window>)
+    : raii_object { ::SDL_CreateRenderer(wnd.get(), -1, detail::to_bitmask<std::uint32_t>(f)) }
 {
-    HAL_PRINT("Created renderer ", info());
+    HAL_PRINT("Created renderer for \"", wnd.title(), "\" ", info());
 }
 
 void renderer::present()

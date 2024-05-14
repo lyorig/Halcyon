@@ -40,7 +40,6 @@ namespace hal
 
     namespace detail
     {
-
         template <system S>
         class subinit;
 
@@ -70,7 +69,7 @@ namespace hal
             ~subinit()
             {
                 ::SDL_QuitSubSystem(static_cast<std::uint32_t>(S));
-                HAL_PRINT(to_string(S), " subsystem quit");
+                HAL_PRINT(to_string(S), " subsystem destroyed");
             }
 
             static bool initialized()
@@ -80,4 +79,15 @@ namespace hal
         };
     }
 
+    namespace proxy
+    {
+        using video  = detail::subsystem<detail::system::video>;
+        using events = detail::subsystem<detail::system::events>;
+    }
+
+    namespace system
+    {
+        using video  = detail::subinit<detail::system::video>;
+        using events = detail::subinit<detail::system::events>;
+    }
 }

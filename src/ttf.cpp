@@ -53,7 +53,7 @@ ttf::context::context()
 
     HAL_ASSERT_VITAL(::TTF_Init() == 0, debug::last_error());
 
-    HAL_PRINT(debug::severity::init, "Initialized TTF context");
+    HAL_PRINT(debug::severity::init, "TTF context initialized");
 }
 
 ttf::context::~context()
@@ -62,7 +62,7 @@ ttf::context::~context()
 
     ::TTF_Quit();
 
-    HAL_PRINT("Destroyed TTF context");
+    HAL_PRINT("TTF context destroyed");
 }
 
 font ttf::context::load(accessor data, u8 pt) &

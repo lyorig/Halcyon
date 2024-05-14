@@ -39,6 +39,7 @@ namespace hal
 
         protected:
             texture_base() = default;
+            
             texture_base(SDL_Texture* ptr);
 
         private:

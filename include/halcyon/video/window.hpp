@@ -5,6 +5,8 @@
 
 #include <halcyon/internal/scaler.hpp>
 
+#include <halcyon/internal/subsystem.hpp>
+
 // video/window.hpp:
 // A window. Can't do much by itself.
 
@@ -16,8 +18,9 @@ namespace hal
     class window : public detail::raii_object<SDL_Window, ::SDL_DestroyWindow>
     {
     public:
-        using id_t        = u8;
-        using authority_t = hal::detail::subsystem<hal::detail::system::video>;
+        using id_t = u8;
+
+        using authority_t = hal::proxy::video;
 
         enum class flags : u16
         {
@@ -31,7 +34,8 @@ namespace hal
         };
 
         window() = default;
-        window(SDL_Window* ptr, pass_key<authority_t> sys);
+
+        window(std::string_view title, pixel_point size, std::initializer_list<flags> flags, pass_key<authority_t> sys);
 
         renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated }) &;
 

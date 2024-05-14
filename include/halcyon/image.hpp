@@ -2,8 +2,10 @@
 
 #include <SDL_image.h>
 
-#include <halcyon/internal/rwops.hpp>
 #include <halcyon/surface.hpp>
+
+#include <halcyon/internal/enum_bitset.hpp>
+#include <halcyon/internal/rwops.hpp>
 
 // image.hpp:
 // SDL_image wrappers for image loading.
@@ -57,6 +59,8 @@ namespace hal
         class context
         {
         public:
+            using enum_bitset = detail::enum_bitset<init_format, int>;
+
             // Initialize the image context with chosen types.
             context(std::initializer_list<init_format> types);
 
@@ -78,6 +82,8 @@ namespace hal
             // Check an image's format.
             // This modifies the accessor, but ultimately sets it back where it was.
             load_format query(const accessor& src) const;
+
+            enum_bitset flags() const;
 
             static bool initialized();
         };

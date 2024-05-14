@@ -1,7 +1,6 @@
 #pragma once
 
 #include <initializer_list>
-#include <utility>
 
 #include <halcyon/utility/concepts.hpp>
 
@@ -12,14 +11,14 @@ namespace hal::detail
 {
     // OR together a set of values.
     // The name stands for "initializer list to bit mask".
-    template <meta::arithmetic Cvt, typename T>
+    template <meta::arithmetic To, typename T>
         requires std::is_enum_v<T>
-    constexpr Cvt to_bitmask(std::initializer_list<T> list)
+    constexpr To to_bitmask(std::initializer_list<T> list)
     {
-        Cvt mask { 0 };
+        To mask { 0 };
 
         for (const auto value : list)
-            mask |= std::to_underlying(value);
+            mask |= static_cast<To>(value);
 
         return mask;
     }
