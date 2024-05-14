@@ -82,7 +82,7 @@ namespace hal
 
         // Get/set the rendering target.
         void target(target_texture& tx);
-        void retarget();
+        void reset_target();
 
         // Get/set the color with which line/rect/fill drawing operations happen.
         hal::color color() const;

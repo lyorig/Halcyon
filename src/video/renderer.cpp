@@ -82,7 +82,7 @@ void renderer::target(target_texture& tx)
     this->internal_target(tx.get());
 }
 
-void renderer::retarget()
+void renderer::reset_target()
 {
     this->internal_target(nullptr);
 }
