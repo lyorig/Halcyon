@@ -14,7 +14,7 @@ Do a shallow clone, as there was a time when actual MP3 and WAV files were store
 # Usage
 Halcyon wraps SDL with several concepts:
 - **Context:** A "top-level" class that manages a library's (de)initialization.
-- **Proxy**: Provides access to specific context functionality.
+- **Proxy**: Provides access to specific context functionality, if such separation is necessary.
 - **System:** Inherits from a proxy and manages (de)initialization of its functionality.
 > [!TIP]
 These are empty classes. You are encouraged to use them with `[[no_unique_address]]` (also defined as `HAL_NO_SIZE`).
