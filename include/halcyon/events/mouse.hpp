@@ -49,6 +49,8 @@ namespace hal
             // [private] Constructor meant for events.
             state(std::uint32_t mask, pass_key<event::mouse_motion_event>);
 
+            u8 mask() const;
+
             bool operator[](button btn) const;
 
         private:

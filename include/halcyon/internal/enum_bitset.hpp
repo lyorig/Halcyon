@@ -17,25 +17,25 @@ namespace hal
         {
         public:
             enum_bitset(Value val)
-                : m_value { val }
+                : m_mask { val }
             {
             }
 
             bool operator[](Enum e) const
             {
                 if constexpr (std::is_pointer_v<Value>)
-                    return static_cast<bool>(m_value[std::to_underlying(e)]);
+                    return static_cast<bool>(m_mask[std::to_underlying(e)]);
                 else
-                    return static_cast<bool>(m_value & std::to_underlying(e));
+                    return static_cast<bool>(m_mask & std::to_underlying(e));
             }
 
-            Value value() const
+            Value mask() const
             {
-                return m_value;
+                return m_mask;
             }
 
         private:
-            Value m_value;
+            Value m_mask;
         };
     }
 }
