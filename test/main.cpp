@@ -133,29 +133,29 @@ namespace test
     }
 
     // Sending a quit event and checking whether it gets caught.
-    int quit_event()
+    int events()
     {
         hal::context        ctx;
         hal::system::events evt { ctx };
 
         hal::event::handler eh { evt };
 
-        eh.event_type(hal::event::type::quit_requested);
+        using enum hal::event::type;
+
+        eh.event_type(quit_requested);
         eh.push();
 
-        while (eh.poll())
-        {
-            switch (eh.event_type())
-            {
-            case hal::event::type::quit_requested:
-                return EXIT_SUCCESS;
+        if (!(eh.poll() && eh.event_type() == quit_requested))
+            return EXIT_FAILURE;
 
-            default:
-                break;
-            }
-        }
+        constexpr std::string_view text { "badabing" };
 
-        HAL_PANIC("Reached unreachable point");
+        eh.event_type(text_input);
+        eh.text_input().text(text);
+        eh.push();
+
+        if (!(eh.poll() && eh.event_type() == text_input && eh.text_input().text() == text))
+            return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
     }
@@ -265,7 +265,7 @@ int main(int argc, char* argv[])
         { "--clipboard", test::clipboard },
         { "--surface-color", test::surface_color },
         { "--invalid-textire", test::invalid_texture },
-        { "--quit-event", test::quit_event },
+        { "--events", test::events },
         { "--ttf-init", test::ttf_init },
         { "--rvalues", test::rvalues },
         { "--scaler", test::scaler },

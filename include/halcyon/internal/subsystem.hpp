@@ -36,6 +36,8 @@ namespace hal
         case events:
             return "Events";
         }
+
+        return "[unknown]";
     }
 
     namespace detail

@@ -277,7 +277,7 @@ std::string_view event::text_input_event::text() const
 
 void event::text_input_event::text(std::string_view t)
 {
-    std::strncpy(SDL_TextInputEvent::text, t.data(), std::size(SDL_TextInputEvent::text));
+    strncpy_s(SDL_TextInputEvent::text, t.data(), std::size(SDL_TextInputEvent::text) - 1);
 }
 
 // Event handler.
