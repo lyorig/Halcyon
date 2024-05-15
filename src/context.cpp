@@ -13,11 +13,11 @@ std::string_view hal::platform()
 
 context::context()
 {
-    HAL_PRINT(debug::severity::init, "Halcyon context initialized, running on ", platform());
+    HAL_PRINT(debug::severity::init, "Halcyon context initialized, [platform: ", platform(), ']');
 }
 
 context::~context()
 {
     ::SDL_Quit();
-    HAL_PRINT("Halcyon context destroyed, last error = ", debug::last_error());
+    HAL_PRINT("Halcyon context destroyed, [last error: ", debug::last_error(), ']');
 }
