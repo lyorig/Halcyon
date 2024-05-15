@@ -27,7 +27,6 @@ Both of the above also act as factories for classes that depend on their initial
 This library is still under heavy developement; some namespaces etc. might not be up-to-date, but the structure should remain the same.
 ```
 #include <halcyon/video.hpp>
-#include <halcyon/events.hpp>
 
 int main(int argc, char* argv[]) {
   static_assert(hal::meta::is_correct_main<decltype(main)>);
@@ -70,5 +69,5 @@ If NDEBUG is not defined, debugging is implicitly enabled in advanced mode.
 # Wishlist
 Some things I'd like to eventually implement.  
 SDL3 should be the big break in this.
-- Event pushing
 - Constexpr variable indicating the platform
+- Overload accessing/outputting for lvalues & rvalues
