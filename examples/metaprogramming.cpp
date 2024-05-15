@@ -27,4 +27,6 @@ int main(int, char*[])
         var.emplace<joined::back>(nullptr);
 
     std::println("Variant holds a {}", std::holds_alternative<int>(var) ? "number" : "pointer");
+
+    return EXIT_SUCCESS;
 }

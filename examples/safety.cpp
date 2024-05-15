@@ -1,19 +1,14 @@
-#include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
 int main(int, char*[])
 {
     hal::context ctx;
 
-    // Nelze využít systém jednorázově pro tvorbu objektů.
-    // hal::window no = hal::system::video { ctx }.make_window();
+    hal::system::video vid { ctx /* nemůže být dočasný objekt */ };
+    hal::window        yes = vid /* nemůže být dočasný objekt */.make_window("Okno" /* nemůže být nullptr */, { 640, 480 });
 
-    // Takto je to správně. Systém se takto vypne až po zničení okna.
-    hal::system::video vid { ctx };
-    hal::window        yes = vid.make_window("Okno", { 640, 480 });
-
-    // [destruktor okna, zničí se]
-    // [destruktor systému, vypne se]
+    // [destruktor okna]
+    // [destruktor systému]
     // [destruktor kontextu, konečný cleanup]
 
     return EXIT_SUCCESS;
