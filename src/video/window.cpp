@@ -87,7 +87,7 @@ void window::fullscreen(bool set)
 {
     HAL_ASSERT_VITAL(::SDL_SetWindowFullscreen(
                          get(),
-                         set ? std::to_underlying(flags::fullscreen_borderless) : 0)
+                         set * std::to_underlying(flags::fullscreen))
             == 0,
         debug::last_error());
 }
