@@ -158,7 +158,6 @@ namespace test
         while (eh.poll())
             ;
 
-        eh.event_type(text_input);
         eh.text_input().text(text);
         eh.push();
 
