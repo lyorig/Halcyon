@@ -92,8 +92,11 @@ hal::surface context::load(accessor src, load_format fmt) const
         return { ::IMG_LoadXV_RW(ptr), pk };
 
     case unknown:
-        HAL_PANIC("Trying to load an image of type \"unknown\"");
+        break;
     };
+
+    HAL_PANIC("Trying to load image of unknown type");
+    return {};
 }
 
 void context::save(const surface& surf, save_format fmt, outputter dst) const
@@ -179,4 +182,6 @@ std::string_view hal::to_string(image::init_format fmt)
     case avif:
         return "AVIF";
     }
+
+    return "[unknown]";
 }

@@ -45,6 +45,15 @@ namespace hal
         {
             constexpr static std::size_t value { I };
         };
+
+        template <typename>
+        struct array_size;
+
+        template <typename T, std::size_t N>
+        struct array_size<T[N]>
+        {
+            constexpr static std::size_t value { N };
+        };
     }
 
     namespace meta
@@ -73,6 +82,9 @@ namespace hal
         template <std::size_t I, typename... Ts>
             requires(I < sizeof...(Ts))
         using at = detail::at<0, I, Ts...>::type;
+
+        template <typename T>
+        constexpr inline std::size_t array_size_v { detail::array_size<T>::value };
 
         // A holder, of sorts, of a parameter pack.
         // Provides basic functionality.

@@ -7,7 +7,7 @@ using namespace hal;
 window::window(std::string_view title, pixel_point size, std::initializer_list<flags> flags, pass_key<authority_t>)
     : raii_object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
 {
-    HAL_PRINT(debug::severity::init, "Created window \"", title, "\" [flags: 0x", std::hex, ::SDL_GetWindowFlags(get()), ", ID: ", to_printable_int(id()), ']');
+    HAL_PRINT(debug::severity::init, "Created window \"", title, "\" [size: ", size, ", flags: 0x", std::hex, ::SDL_GetWindowFlags(get()), ", ID: ", to_printable_int(id()), ']');
 }
 
 renderer window::make_renderer(std::initializer_list<renderer::flags> flags) &

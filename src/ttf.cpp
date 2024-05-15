@@ -130,6 +130,9 @@ surface bft::operator()(font::render_type rt)
             return { ::TTF_RenderUTF8_LCD_Wrapped(m_font.get(), m_text, static_cast<SDL_Color>(m_fg), static_cast<SDL_Color>(m_bg), m_wrapLength), pass_key<font_text> {} };
         }
     }
+
+    HAL_PANIC("Unknown render type given.");
+    return {};
 }
 
 using bfg = builder::font_glyph;
@@ -158,4 +161,6 @@ surface bfg::operator()(font::render_type rt)
     case lcd:
         return { ::TTF_RenderGlyph32_LCD(m_font.get(), m_glyph, static_cast<SDL_Color>(m_fg), static_cast<SDL_Color>(m_bg)), pass_key<font_glyph> {} };
     }
+
+    return {};
 }

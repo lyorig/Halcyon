@@ -1,3 +1,6 @@
+// Due to strcpy. Don't worry, it's used "safely" here.
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <halcyon/debug.hpp>
 #include <halcyon/events/handler.hpp>
 
@@ -277,7 +280,10 @@ std::string_view event::text_input_event::text() const
 
 void event::text_input_event::text(std::string_view t)
 {
-    std::strncpy(SDL_TextInputEvent::text, t.data(), std::size(SDL_TextInputEvent::text));
+    HAL_ASSERT(t.size() <= max_size(), "String too large at ", t.size(), " chars (max: ", max_size(), " chars)");
+
+    // We now know that it's safe to copy this string.
+    std::strcpy(SDL_TextInputEvent::text, t.data());
 }
 
 // Event handler.
@@ -285,11 +291,10 @@ void event::text_input_event::text(std::string_view t)
 event::handler::handler(authority&)
     : m_event { { std::numeric_limits<std::uint32_t>::max() } } // Start with an invalid event.
 {
-    // Disable unused event.
+    // Disable unused events.
     for (SDL_EventType type : {
              SDL_LOCALECHANGED,
              SDL_SYSWMEVENT,
-             SDL_TEXTINPUT,
              SDL_KEYMAPCHANGED,
              SDL_TEXTEDITING_EXT,
              SDL_JOYAXISMOTION,
