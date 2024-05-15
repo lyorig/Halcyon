@@ -108,6 +108,34 @@ void surface::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
+color surface::color_mod() const
+{
+    color ret;
+
+    HAL_ASSERT_VITAL(::SDL_GetSurfaceColorMod(get(), &ret.r, &ret.g, &ret.b) == 0, debug::last_error());
+
+    return ret;
+}
+
+void surface::color_mod(color col)
+{
+    HAL_ASSERT_VITAL(::SDL_SetSurfaceColorMod(get(), col.r, col.g, col.b) == 0, debug::last_error());
+}
+
+color::value_t surface::alpha_mod() const
+{
+    color::value_t ret;
+
+    HAL_ASSERT_VITAL(::SDL_GetSurfaceAlphaMod(get(), &ret) == 0, debug::last_error());
+
+    return ret;
+}
+
+void surface::alpha_mod(color::value_t val)
+{
+    HAL_ASSERT_VITAL(::SDL_SetSurfaceAlphaMod(get(), val) == 0, debug::last_error());
+}
+
 pixel_reference surface::operator[](const pixel_point& pos) const
 {
     HAL_ASSERT(pos.x < get()->w, "Out-of-range width");
@@ -189,9 +217,9 @@ void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
 
     HAL_ASSERT_VITAL(::SDL_BlitScaled(
                          m_this.get(),
-                         reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
                          m_pass.get(),
-                         reinterpret_cast<SDL_Rect*>(copy.addr()))
+                         m_dst.pos.x == unset_pos<dst_t>() ? nullptr : reinterpret_cast<SDL_Rect*>(copy.addr()))
             == 0,
         debug::last_error());
 }

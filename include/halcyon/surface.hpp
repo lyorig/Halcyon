@@ -89,6 +89,12 @@ namespace hal
         blend_mode blend() const;
         void       blend(blend_mode bm);
 
+        color color_mod() const;
+        void  color_mod(color col);
+
+        color::value_t alpha_mod() const;
+        void           alpha_mod(color::value_t val);
+
         // Get pixel at position.
         // This functionality is exclusive to surfaces, as textures
         // are extremely slow to retrieve pixel information.
