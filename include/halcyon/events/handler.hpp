@@ -168,6 +168,12 @@ namespace hal
         class text_input_event : SDL_TextInputEvent
         {
         public:
+            // The maximum string length this event can handle.
+            static constexpr std::size_t max_size()
+            {
+                return meta::array_size_v<decltype(SDL_TextInputEvent::text)> - 1;
+            }
+
             window::id_t window_id() const;
             void         window_id(window::id_t id);
 
