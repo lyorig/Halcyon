@@ -27,10 +27,8 @@ set(ExeName $<TARGET_FILE:HalTest>)
 add_test(NAME AssertFail        COMMAND ${ExeName} --assert-fail)
 add_test(NAME WindowResize      COMMAND ${ExeName} --window-resize)
 add_test(NAME BasicInit         COMMAND ${ExeName} --basic-init)
-add_test(NAME InvalidBuffer     COMMAND ${ExeName} --invalid-buffer)
 add_test(NAME Clipboard         COMMAND ${ExeName} --clipboard)
 add_test(NAME SurfaceColor      COMMAND ${ExeName} --surface-color)
-add_test(NAME InvalidTexture    COMMAND ${ExeName} --invalid-texture)
 add_test(NAME Events            COMMAND ${ExeName} --events)
 add_test(NAME TTFInit           COMMAND ${ExeName} --ttf-init)
 add_test(NAME RValues           COMMAND ${ExeName} --rvalues)
@@ -38,9 +36,12 @@ add_test(NAME Scaler            COMMAND ${ExeName} --scaler)
 add_test(NAME Outputter         COMMAND ${ExeName} --outputter)
 add_test(NAME PngCheck          COMMAND ${ExeName} --png-check)
 add_test(NAME Metaprogramming   COMMAND ${ExeName} --metaprogramming)
+add_test(NAME InvalidBuffer     COMMAND ${ExeName} --invalid-buffer)
+add_test(NAME InvalidTexture    COMMAND ${ExeName} --invalid-texture)
+add_test(NAME InvalidEvent      COMMAND ${ExeName} --invalid-event)
 
 # Set which tests are expected to fail.
-set_tests_properties(AssertFail InvalidBuffer InvalidTexture PROPERTIES WILL_FAIL TRUE)
+set_tests_properties(AssertFail InvalidBuffer InvalidTexture InvalidEvent PROPERTIES WILL_FAIL TRUE)
 
 # Examples.
 

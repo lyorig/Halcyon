@@ -421,7 +421,7 @@ const event::display_event& event::handler::display() const
 
 event::display_event& event::handler::display()
 {
-    event_type(type::display_event);
+    HAL_ASSERT(event_type() == type::display_event, "Invalid type");
 
     return m_event.m_data.m_display;
 }
@@ -435,7 +435,7 @@ const event::window_event& event::handler::window() const
 
 event::window_event& event::handler::window()
 {
-    event_type(type::window_event);
+    HAL_ASSERT(event_type() == type::window_event, "Invalid type");
 
     return m_event.m_data.m_window;
 }
@@ -447,11 +447,9 @@ const event::keyboard_event& event::handler::keyboard() const
     return m_event.m_data.m_key;
 }
 
-event::keyboard_event& event::handler::keyboard(type t)
+event::keyboard_event& event::handler::keyboard()
 {
-    HAL_ASSERT(t == type::key_pressed || t == type::key_released, "Invalid type setter");
-
-    event_type(t);
+    HAL_ASSERT(event_type() == type::key_pressed || event_type() == type::key_released, "Invalid type");
 
     return m_event.m_data.m_key;
 }
@@ -465,7 +463,7 @@ const event::text_input_event& event::handler::text_input() const
 
 event::text_input_event& event::handler::text_input()
 {
-    event_type(type::text_input);
+    HAL_ASSERT(event_type() == type::text_input, "Invalid type");
 
     return m_event.m_data.m_textInput;
 }
@@ -479,7 +477,7 @@ const event::mouse_motion_event& event::handler::mouse_motion() const
 
 event::mouse_motion_event& event::handler::mouse_motion()
 {
-    event_type(type::mouse_moved);
+    HAL_ASSERT(event_type() == type::mouse_moved, "Invalid type");
 
     return m_event.m_data.m_motion;
 }
@@ -491,11 +489,9 @@ const event::mouse_button_event& event::handler::mouse_button() const
     return m_event.m_data.m_button;
 }
 
-event::mouse_button_event& event::handler::mouse_button(type t)
+event::mouse_button_event& event::handler::mouse_button()
 {
-    HAL_ASSERT(t == type::mouse_pressed || t == type::mouse_released, "Invalid type setter");
-
-    event_type(t);
+    HAL_ASSERT(event_type() == type::mouse_pressed || event_type() == type::mouse_released, "Invalid type");
 
     return m_event.m_data.m_button;
 }
@@ -509,7 +505,7 @@ const event::mouse_wheel_event& event::handler::mouse_wheel() const
 
 event::mouse_wheel_event& event::handler::mouse_wheel()
 {
-    event_type(type::mouse_wheel_moved);
+    HAL_ASSERT(event_type() == type::mouse_wheel_moved, "Invalid type");
 
     return m_event.m_data.m_wheel;
 }

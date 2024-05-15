@@ -71,38 +71,6 @@ namespace test
         return EXIT_SUCCESS;
     }
 
-    // Passing a zeroed-out buffer to a function expecting valid image data.
-    // This test should fail.
-    int invalid_buffer()
-    {
-        constexpr std::uint8_t data[1024] {};
-
-        hal::image::context ictx { hal::image::init_format::png };
-
-        // Failure should occur here.
-        const hal::surface s { ictx.load(hal::access(data)) };
-
-        return EXIT_SUCCESS;
-    }
-
-    // Drawing a null texture.
-    // This test should fail.
-    int invalid_texture()
-    {
-        hal::context       ctx;
-        hal::system::video vid { ctx };
-
-        hal::window   wnd { vid.make_window("HalTest: Invalid texture", { 640, 480 }, { hal::window::flags::hidden }) };
-        hal::renderer rnd { wnd.make_renderer() };
-
-        hal::texture tex;
-
-        // Failure should occur here.
-        rnd.draw(tex)();
-
-        return EXIT_SUCCESS;
-    }
-
     // Setting and getting the clipboard.
     int clipboard()
     {
@@ -158,6 +126,7 @@ namespace test
         while (eh.poll())
             ;
 
+        eh.event_type(hal::event::type::text_input);
         eh.text_input().text(text);
         eh.push();
 
@@ -261,6 +230,51 @@ namespace test
 
         return EXIT_SUCCESS;
     }
+
+    // Passing a zeroed-out buffer to a function expecting valid image data.
+    // This test should fail.
+    int invalid_buffer()
+    {
+        constexpr std::uint8_t data[1024] {};
+
+        hal::image::context ictx { hal::image::init_format::png };
+
+        // Failure should occur here.
+        const hal::surface s { ictx.load(hal::access(data)) };
+
+        return EXIT_SUCCESS;
+    }
+
+    // Drawing a null texture.
+    // This test should fail.
+    int invalid_texture()
+    {
+        hal::context       ctx;
+        hal::system::video vid { ctx };
+
+        hal::window   wnd { vid.make_window("HalTest: Invalid texture", { 640, 480 }, { hal::window::flags::hidden }) };
+        hal::renderer rnd { wnd.make_renderer() };
+
+        hal::texture tex;
+
+        // Failure should occur here.
+        rnd.draw(tex)();
+
+        return EXIT_SUCCESS;
+    }
+
+    // Accessing an invalid event.
+    // This test should fail.
+    int invalid_event()
+    {
+        hal::context        ctx;
+        hal::system::events sys { ctx };
+
+        hal::event::handler eh { sys };
+        eh.text_input().text("amogus sus").window_id(69);
+
+        return EXIT_SUCCESS;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -271,17 +285,18 @@ int main(int argc, char* argv[])
         { "--assert-fail", test::assert_fail },
         { "--window-resize", test::window_resize },
         { "--basic-init", test::basic_init },
-        { "--invalid-buffer", test::invalid_buffer },
         { "--clipboard", test::clipboard },
         { "--surface-color", test::surface_color },
-        { "--invalid-textire", test::invalid_texture },
         { "--events", test::events },
         { "--ttf-init", test::ttf_init },
         { "--rvalues", test::rvalues },
         { "--scaler", test::scaler },
         { "--outputter", test::outputter },
         { "--png-check", test::png_check },
-        { "--metaprogramming", test::metaprogramming }
+        { "--metaprogramming", test::metaprogramming },
+        { "--invalid-buffer", test::invalid_buffer },
+        { "--invalid-texture", test::invalid_texture },
+        { "--invalid-event", test::invalid_event }
     };
 
     if (argc == 1)

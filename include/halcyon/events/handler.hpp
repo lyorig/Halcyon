@@ -247,7 +247,7 @@ namespace hal
 
             // Valid for: key_pressed, key_released
             const keyboard_event& keyboard() const;
-            keyboard_event&       keyboard(type t);
+            keyboard_event&       keyboard();
 
             // Valid for: text_input
             const text_input_event& text_input() const;
@@ -259,7 +259,7 @@ namespace hal
 
             // Valid for: mouse_pressed, mouse_released
             const mouse_button_event& mouse_button() const;
-            mouse_button_event&       mouse_button(type t);
+            mouse_button_event&       mouse_button();
 
             // Valid for: mouse_wheel_moved
             const mouse_wheel_event& mouse_wheel() const;
