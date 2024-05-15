@@ -74,11 +74,14 @@ namespace hal
             // Valid for: display_changed.
             display::id_t display_index() const;
 
-            // Calling this implicitly sets the event type to display_changed.
+            // This function automatically sets the event type to display_changed.
             window_event& display_index(display::id_t id);
 
             // Valid for: resized, moved
-            pixel_point   point() const;
+            pixel_point point() const;
+
+            // The provided type must be either resized or moved.
+            // This function automatically sets the event type.
             window_event& point(pixel_point pt, type t);
         };
 
