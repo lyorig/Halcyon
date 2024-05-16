@@ -38,13 +38,22 @@ namespace test
         e.poll();
 
         if (e.event_type() != hal::event::type::window_event)
+        {
+            HAL_PRINT("HalTest: Event type mismatch (desired window event, actually ", hal::to_string(e.event_type()), ')');
             return EXIT_FAILURE;
+        }
 
-        if (e.window().event_type() != hal::event::window_event::type::resized)
+        if (e.window().event_type() != hal::event::window::type::size_changed)
+        {
+            HAL_PRINT("HalTest: Window event type mismatch (desired resized, actually ", hal::to_string(e.window().event_type()), ')');
             return EXIT_FAILURE;
+        }
 
         if (e.window().point() != new_size)
+        {
+            HAL_PRINT("HalTest: Window size mismatch (desired ", new_size, ", actually ", e.window().point(), ')');
             return EXIT_FAILURE;
+        }
 
         return EXIT_SUCCESS;
     }
@@ -121,7 +130,7 @@ namespace test
 
         constexpr std::string_view text { "aaaaaaaaaabbbbbbbbbbccccccccccd" };
 
-        static_assert(text.size() <= hal::event::text_input_event::max_size());
+        static_assert(text.size() <= hal::event::text_input::max_size());
 
         while (eh.poll())
             ;
