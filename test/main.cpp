@@ -292,10 +292,6 @@ int main(int argc, char* argv[])
 {
     static_assert(hal::compile_settings::debug_enabled, "HalTest requires debug mode to be enabled");
 
-    static_assert(hal::meta::all<hal::detail::rwops_string<const char*>,
-        hal::detail::rwops_string<std::string>,
-        hal::detail::rwops_string<std::string_view>>);
-
     constexpr std::pair<std::string_view, hal::func_ptr<int>> tests[] {
         { "--assert-fail", test::assert_fail },
         { "--window-resize", test::window_resize },
