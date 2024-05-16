@@ -26,7 +26,7 @@ void renderer::clear()
     HAL_ASSERT_VITAL(::SDL_RenderClear(get()) == 0, debug::last_error());
 }
 
-void renderer::point(const sdl::coord_point& pt)
+void renderer::draw(coord_point pt)
 {
 #ifdef HAL_INTEGRAL_COORD
     ::SDL_RenderDrawPoint(get(), pt.x, pt.y);
@@ -35,7 +35,7 @@ void renderer::point(const sdl::coord_point& pt)
 #endif
 }
 
-void renderer::line(const sdl::coord_point& from, const sdl::coord_point& to)
+void renderer::draw(coord_point from, coord_point to)
 {
 #ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderDrawLine(get(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
@@ -44,7 +44,7 @@ void renderer::line(const sdl::coord_point& from, const sdl::coord_point& to)
 #endif
 }
 
-void renderer::rect(const sdl::coord_rect& area)
+void renderer::draw(coord_rect area)
 {
 #ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderDrawRect(get(), area.addr()) == 0, debug::last_error());
@@ -53,7 +53,7 @@ void renderer::rect(const sdl::coord_rect& area)
 #endif
 }
 
-void renderer::fill(const sdl::coord_rect& area)
+void renderer::fill(coord_rect area)
 {
 #ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(get(), area.addr()) == 0, debug::last_error());
@@ -62,7 +62,7 @@ void renderer::fill(const sdl::coord_rect& area)
 #endif
 }
 
-void renderer::fill(const std::span<const sdl::coord_rect>& areas)
+void renderer::fill(std::span<const coord_rect> areas)
 {
 #ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderFillRects(get(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
@@ -157,7 +157,7 @@ void renderer::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-copyer renderer::draw(const detail::texture_base& tex)
+copyer renderer::render(const detail::texture_base& tex)
 {
     return { *this, tex, pass_key<renderer> {} };
 }
@@ -208,15 +208,15 @@ copyer& copyer::flip(enum flip f)
 
 copyer& copyer::outline()
 {
-    m_pass.rect(m_dst);
+    m_pass.draw(m_dst);
     return *this;
 }
 
 void copyer::operator()()
 {
     HAL_ASSERT_VITAL(::SDL_RenderCopyExF(m_pass.get(), m_this.get(),
-                         m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
-                         m_dst.pos.x == unset_pos<dst_t>() ? nullptr : reinterpret_cast<const SDL_FRect*>(m_dst.addr()),
+                         m_src.pos.x == unset_pos<src_t>() ? nullptr : m_src.addr(),
+                         m_dst.pos.x == unset_pos<dst_t>() ? nullptr : m_dst.addr(),
                          m_angle, nullptr, static_cast<SDL_RendererFlip>(m_flip))
             == 0,
         debug::last_error());

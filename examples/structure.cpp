@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 
     hal::event::handler eh { vid.events };
 
+    // The application's main loop starts here.
     while (true) // As long as the program is running...
     {
         while (eh.poll()) // As long as there are events to process...
@@ -47,7 +48,8 @@ int main(int argc, char* argv[])
                 break;
 
             default:
-                HAL_PRINT("Unhandled event occurred: ", hal::to_string(eh.event_type()));
+                if (auto tp = eh.event_type(); tp != hal::event::type::mouse_moved)
+                    HAL_PRINT("Unhandled event occurred: ", hal::to_string(tp));
                 break;
             }
         }

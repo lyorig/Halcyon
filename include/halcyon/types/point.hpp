@@ -199,16 +199,16 @@ namespace hal
                 static_cast<Convert>(y) };
         }
 
-        constexpr sdl::point_t<T>* addr()
-            requires(meta::is_present<T, sdl::pixel_t, sdl::coord_t>)
+        constexpr detail::sdl_point<T>* addr()
+            requires(meta::is_present<T, pixel_t, coord_t>)
         {
-            return reinterpret_cast<sdl::point_t<T>*>(this);
+            return reinterpret_cast<detail::sdl_point<T>*>(this);
         }
 
-        constexpr const sdl::point_t<T>* addr() const
-            requires(meta::is_present<T, sdl::pixel_t, sdl::coord_t>)
+        constexpr const detail::sdl_point<T>* addr() const
+            requires(meta::is_present<T, pixel_t, coord_t>)
         {
-            return reinterpret_cast<const sdl::point_t<T>*>(this);
+            return reinterpret_cast<const detail::sdl_point<T>*>(this);
         }
     };
 

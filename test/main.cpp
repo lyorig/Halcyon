@@ -269,7 +269,7 @@ namespace test
         hal::texture tex;
 
         // Failure should occur here.
-        rnd.draw(tex)();
+        rnd.render(tex)();
 
         return EXIT_SUCCESS;
     }

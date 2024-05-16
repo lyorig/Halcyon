@@ -72,12 +72,17 @@ namespace hal
         // Present the back-buffer and clear it.
         void present();
 
-        void point(const sdl::coord_point& pt);
-        void line(const sdl::coord_point& from, const sdl::coord_point& to);
-        void rect(const sdl::coord_rect& area);
+        // Draw a single point (pixel) with the current color.
+        void draw(coord_point pt);
 
-        void fill(const sdl::coord_rect& area);
-        void fill(const std::span<const sdl::coord_rect>& areas);
+        // Draw a line with the current color.
+        void draw(coord_point from, coord_point to);
+
+        // Outline a rectangle with the current color.
+        void draw(coord_rect area);
+
+        void fill(coord_rect area);
+        void fill(std::span<const coord_rect> areas);
         void fill();
 
         // Get/set the rendering target.
@@ -103,8 +108,8 @@ namespace hal
         [[nodiscard]] texture        make_texture(const surface& surf) &;
         [[nodiscard]] target_texture make_target_texture(pixel_point size) &;
 
-        // Create a copyer.
-        [[nodiscard]] copyer draw(const detail::texture_base& tex);
+        // Render a texture via a builder.
+        [[nodiscard]] copyer render(const detail::texture_base& tex);
 
     private:
         // Helper for setting the render target.
@@ -128,7 +133,7 @@ namespace hal
         };
     }
 
-    class copyer : public hal::detail::drawer<detail::texture_base, sdl::coord_t, renderer, copyer>
+    class copyer : public hal::detail::drawer<detail::texture_base, coord_t, renderer, copyer>
     {
     public:
         using drawer::drawer;
@@ -146,6 +151,7 @@ namespace hal
         // after properly setting the destination rectangle.
         [[nodiscard]] copyer& outline();
 
+        // Finish the operation.
         void operator()();
 
     private:

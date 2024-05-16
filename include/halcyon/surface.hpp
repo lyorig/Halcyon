@@ -61,10 +61,10 @@ namespace hal
         void fill(color clr);
 
         // Fill a rectangle with a color.
-        void fill(sdl::pixel_rect, color clr);
+        void fill(pixel_rect area, color clr);
 
         // Fill an array of rectangles with a color.
-        void fill(std::span<const sdl::pixel_rect> areas, color clr);
+        void fill(std::span<const pixel_rect> areas, color clr);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
@@ -130,15 +130,19 @@ namespace hal
     };
 
     // A builder pattern drawing proxy for surfaces.
-    class blitter : public detail::drawer<surface, sdl::pixel_t, const surface, blitter>
+    class blitter : public detail::drawer<surface, pixel_t, const surface, blitter>
     {
     public:
         using drawer::drawer;
 
+        // Finish the operation.
+        // SDL's blitting function overwrites the destination rectangle.
+        // If you with to reuse this object, use the "keep_dst" overload.
         void operator()();
 
+        // Finish the operation.
         // SDL's blitting function overwrites the destination rectangle.
-        // This overload creates a copy to ensure it remains unchanged.
+        // This overload uses a copy to ensure it remains unchanged.
         void operator()(HAL_TAG_NAME(keep_dst)) const;
     };
 }

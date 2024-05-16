@@ -44,14 +44,6 @@ namespace hal
         }
     }
 
-    // Defining HAL_FAST_TYPES transforms these into native SDL types.
-
-    // A measurement unit for surfaces, textures, displays etc.
-    using pixel_t = detail::cft<i32, sdl::pixel_t>;
-
-    // A measurement unit for sub-pixel rendering of textures.
-    using coord_t = detail::cft<f32, sdl::coord_t>;
-
     using pixel_point = point<pixel_t>;
     using pixel_rect  = rectangle<pixel_t>;
 
@@ -92,5 +84,4 @@ namespace hal
 
     // Paranoia.
     static_assert(std::is_signed_v<pixel_t>);
-    static_assert(sizeof(sdl::pixel_point) == sizeof(SDL_Point) && sizeof(sdl::coord_point) == sizeof(SDL_FPoint) && sizeof(sdl::pixel_rect) == sizeof(SDL_Rect) && sizeof(sdl::coord_rect) == sizeof(SDL_FRect));
 }

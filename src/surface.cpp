@@ -42,12 +42,12 @@ void surface::fill(color clr)
     HAL_ASSERT_VITAL(::SDL_FillRect(get(), nullptr, mapped(clr)) == 0, debug::last_error());
 }
 
-void surface::fill(sdl::pixel_rect area, color clr)
+void surface::fill(pixel_rect area, color clr)
 {
     HAL_ASSERT_VITAL(::SDL_FillRect(get(), area.addr(), mapped(clr)) == 0, debug::last_error());
 }
 
-void surface::fill(std::span<const sdl::pixel_rect> areas, color clr)
+void surface::fill(std::span<const pixel_rect> areas, color clr)
 {
     HAL_ASSERT_VITAL(::SDL_FillRects(get(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, debug::last_error());
 }
@@ -213,13 +213,13 @@ void blitter::operator()()
 
 void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
 {
-    sdl::pixel_rect copy { m_dst };
+    pixel_rect copy { m_dst };
 
     HAL_ASSERT_VITAL(::SDL_BlitScaled(
                          m_this.get(),
-                         m_src.pos.x == unset_pos<src_t>() ? nullptr : reinterpret_cast<const SDL_Rect*>(m_src.addr()),
+                         m_src.pos.x == unset_pos<src_t>() ? nullptr : m_src.addr(),
                          m_pass.get(),
-                         m_dst.pos.x == unset_pos<dst_t>() ? nullptr : reinterpret_cast<SDL_Rect*>(copy.addr()))
+                         m_dst.pos.x == unset_pos<dst_t>() ? nullptr : copy.addr())
             == 0,
         debug::last_error());
 }

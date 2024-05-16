@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 
         rnd.clear();
 
-        rnd.draw(tex).to(draw_rect)();
+        rnd.render(tex).to(draw_rect)();
         rnd.present();
     }
 

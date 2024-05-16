@@ -74,16 +74,16 @@ namespace hal
             return ret;
         }
 
-        constexpr sdl::rect_t<T>* addr()
-            requires(meta::is_present<T, sdl::pixel_t, sdl::coord_t>)
+        constexpr detail::sdl_rect<T>* addr()
+            requires(meta::is_present<T, pixel_t, coord_t>)
         {
-            return reinterpret_cast<sdl::rect_t<T>*>(this);
+            return reinterpret_cast<detail::sdl_rect<T>*>(this);
         }
 
-        constexpr const sdl::rect_t<T>* addr() const
-            requires(meta::is_present<T, sdl::pixel_t, sdl::coord_t>)
+        constexpr const detail::sdl_rect<T>* addr() const
+            requires(meta::is_present<T, pixel_t, coord_t>)
         {
-            return reinterpret_cast<const sdl::rect_t<T>*>(this);
+            return reinterpret_cast<const detail::sdl_rect<T>*>(this);
         }
     };
 
@@ -110,12 +110,5 @@ namespace hal
     constexpr bool operator|(const point<T>& pt, const rectangle<T> rect)
     {
         return pt.x >= rect.pos.x && pt.x <= rect.pos.x + rect.size.x && pt.y >= rect.pos.y && pt.y <= rect.pos.y + rect.size.y;
-    }
-
-    // Wrappers for native SDL types.
-    namespace sdl
-    {
-        using pixel_rect = rectangle<pixel_t>;
-        using coord_rect = rectangle<coord_t>;
     }
 }
