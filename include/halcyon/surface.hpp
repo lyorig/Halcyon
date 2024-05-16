@@ -61,10 +61,10 @@ namespace hal
         void fill(color clr);
 
         // Fill a rectangle with a color.
-        void fill_rect(const sdl::pixel_rect& area, color clr);
+        void fill(sdl::pixel_rect, color clr);
 
         // Fill an array of rectangles with a color.
-        void fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr);
+        void fill(std::span<const sdl::pixel_rect> areas, color clr);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.

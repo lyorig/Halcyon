@@ -42,12 +42,12 @@ void surface::fill(color clr)
     HAL_ASSERT_VITAL(::SDL_FillRect(get(), nullptr, mapped(clr)) == 0, debug::last_error());
 }
 
-void surface::fill_rect(const sdl::pixel_rect& area, color clr)
+void surface::fill(sdl::pixel_rect area, color clr)
 {
     HAL_ASSERT_VITAL(::SDL_FillRect(get(), area.addr(), mapped(clr)) == 0, debug::last_error());
 }
 
-void surface::fill_rects(const std::span<const sdl::pixel_rect>& areas, color clr)
+void surface::fill(std::span<const sdl::pixel_rect> areas, color clr)
 {
     HAL_ASSERT_VITAL(::SDL_FillRects(get(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, debug::last_error());
 }
