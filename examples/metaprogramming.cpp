@@ -10,6 +10,8 @@ constexpr inline bool eq = std::is_same_v<L, R>;
 
 int main(int, char*[])
 {
+    static_assert(hal::meta::is_correct_main<main>);
+
     using info_main  = hal::meta::func_info<decltype(main)>;
     using info_qsort = hal::meta::func_info<decltype(std::qsort)>;
 
