@@ -71,4 +71,3 @@ Some things I'd like to eventually implement.
 SDL3 should be the big break in this.
 - Constexpr variable indicating the platform
 - Overload accessing/outputting for lvalues & rvalues
-- Remove integral coords

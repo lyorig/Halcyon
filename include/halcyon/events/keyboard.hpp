@@ -89,6 +89,12 @@ namespace hal
 
             left_alt  = SDL_SCANCODE_LALT,
             right_alt = SDL_SCANCODE_RALT,
+
+            up_arrow   = SDL_SCANCODE_UP,
+            down_arrow = SDL_SCANCODE_DOWN,
+
+            left_arrow  = SDL_SCANCODE_LEFT,
+            right_arrow = SDL_SCANCODE_RIGHT,
         };
 
         // A representation of a locale- and layout-dependent key.
@@ -157,6 +163,12 @@ namespace hal
 
             left_alt  = SDLK_LALT,
             right_alt = SDLK_RALT,
+
+            up_arrow   = SDLK_UP,
+            down_arrow = SDLK_DOWN,
+
+            left_arrow  = SDLK_LEFT,
+            right_arrow = SDLK_RIGHT,
         };
 
         enum class mod : u16

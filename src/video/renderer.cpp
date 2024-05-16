@@ -28,52 +28,31 @@ void renderer::clear()
 
 void renderer::draw(coord_point pt)
 {
-#ifdef HAL_INTEGRAL_COORD
-    ::SDL_RenderDrawPoint(get(), pt.x, pt.y);
-#else
     ::SDL_RenderDrawPointF(get(), pt.x, pt.y);
-#endif
 }
 
 void renderer::draw(coord_point from, coord_point to)
 {
-#ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderDrawLine(get(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
-#else
     HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(get(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
-#endif
 }
 
 void renderer::draw(coord_rect area)
 {
-#ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderDrawRect(get(), area.addr()) == 0, debug::last_error());
-#else
     HAL_ASSERT_VITAL(::SDL_RenderDrawRectF(get(), area.addr()) == 0, debug::last_error());
-#endif
 }
 
 void renderer::fill(coord_rect area)
 {
-#ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderFillRect(get(), area.addr()) == 0, debug::last_error());
-#else
     HAL_ASSERT_VITAL(::SDL_RenderFillRectF(get(), area.addr()) == 0, debug::last_error());
-#endif
 }
 
 void renderer::fill(std::span<const coord_rect> areas)
 {
-#ifdef HAL_INTEGRAL_COORD
-    HAL_ASSERT_VITAL(::SDL_RenderFillRects(get(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
-#else
     HAL_ASSERT_VITAL(::SDL_RenderFillRectsF(get(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
-#endif
 }
 
 void renderer::fill()
 {
-    // Coord types aren't relevant here.
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(get(), nullptr) == 0, debug::last_error());
 }
 
