@@ -23,11 +23,6 @@ namespace hal
 
     namespace detail
     {
-        using d = std::decay_t<const char[10]>;
-
-        template <std::size_t N, std::size_t M>
-        concept eq = (N == M);
-
         template <typename T>
         concept rwops_string = std::is_assignable_v<std::string_view, T>;
 
@@ -49,13 +44,13 @@ namespace hal
 
         template <typename T>
         concept outputter_array = accessor_array<T>
-            && requires(T& x) { x[0] = std::declval<std::remove_pointer_t<decltype(std::data(x))>>(); };
+            && requires(T& x) { *std::data(x) = std::declval<std::remove_pointer_t<decltype(std::data(x))>>(); };
 
         static_assert(outputter_array<std::uint8_t[10]>
             && !outputter_array<const std::uint8_t[10]>);
 
         template <typename T>
-        const char* data(const T& obj)
+        const char* string_data(const T& obj)
         {
             if constexpr (std::is_same_v<meta::remove_const_pointer<T>, char*>)
                 return obj;
@@ -73,7 +68,7 @@ namespace hal
         // Access a string. This accepts anything that can be assigned (not explicitly) to a std::string_view.
         template <detail::rwops_string T>
         accessor(const T& path)
-            : raii_object { ::SDL_RWFromFile(detail::data(path), "r") }
+            : raii_object { ::SDL_RWFromFile(detail::string_data(path), "r") }
         {
         }
 
@@ -102,7 +97,7 @@ namespace hal
     public:
         template <detail::rwops_string T>
         outputter(const T& path)
-            : raii_object { ::SDL_RWFromFile(detail::data(path), "w") }
+            : raii_object { ::SDL_RWFromFile(detail::string_data(path), "w") }
         {
         }
 
