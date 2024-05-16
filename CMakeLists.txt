@@ -50,7 +50,9 @@ invertor.cpp
 message_box.cpp
 metaprogramming.cpp
 safety.cpp
-text_render.cpp)
+structure.cpp
+text_render.cpp
+)
 
 list(TRANSFORM EXAMPLE_SOURCES PREPEND examples/)
 

@@ -1,12 +1,9 @@
-#include <ctime>
-
 #include <halcyon/utility/strutil.hpp>
 #include <halcyon/video/message_box.hpp>
 
 int main(int argc, char* argv[])
 {
-    if (argc > 1 && hal::streq(argv[1], "-c"))
-        HAL_PANIC("You asked for it");
+    static_assert(hal::meta::is_correct_main<main>);
 
     using enum hal::message_box::type;
     using namespace hal::palette;
@@ -24,6 +21,9 @@ int main(int argc, char* argv[])
 
         HAL_PRINT("User pressed button ", hal::to_printable_int(ret));
     }
+
+    // Vytvoření jednoduchého okna skrz funkci
+    hal::message_box::show(hal::message_box::type::info, "Hello", "World!");
 
     return EXIT_SUCCESS;
 }

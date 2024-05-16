@@ -7,10 +7,10 @@
 // text_render.cpp:
 // Renders the first command-line argument as text into a window.
 
-constexpr hal::pixel_point padding { 20, 20 };
-
 int main(int argc, char* argv[])
 {
+    constexpr hal::pixel_point padding { 20, 20 };
+
     if (argc == 1)
     {
         std::cout << "Usage: " << argv[0] << " [text]\n";
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     hal::window         wnd { vid.make_window("Text renderer", { 100, 100 }) };
     hal::event::handler evt { vid.events };
 
-    // Destroy as much stuff as possible before the main loop.
+    // Vrátíme maximum paměti před zahájením hlavní smyčky.
     {
         hal::renderer     rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
         hal::ttf::context tctx;

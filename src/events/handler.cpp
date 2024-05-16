@@ -571,6 +571,9 @@ std::string_view hal::to_string(event::type evt)
 
     case clipboard_updated:
         return "Clipboard updated";
+
+    default:
+        return "[unimplemented]";
     }
 
     std::unreachable();
@@ -593,6 +596,9 @@ std::string_view hal::to_string(enum event::display_event::type evt)
 
     case moved:
         return "Moved";
+
+    default:
+        return "[unimplemented]";
     }
 
     std::unreachable();
@@ -618,6 +624,9 @@ std::string_view hal::to_string(enum event::window_event::type evt)
 
     case resized:
         return "Resized";
+
+    case size_changed:
+        return "Size changed";
 
     case minimized:
         return "Minimized";
@@ -654,6 +663,9 @@ std::string_view hal::to_string(enum event::window_event::type evt)
 
     case display_changed:
         return "Display changed";
+
+    default:
+        return "[unimplemented]";
     }
 
     std::unreachable();

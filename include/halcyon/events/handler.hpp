@@ -48,7 +48,8 @@ namespace hal
                 hidden              = SDL_WINDOWEVENT_HIDDEN,
                 exposed             = SDL_WINDOWEVENT_EXPOSED,
                 moved               = SDL_WINDOWEVENT_MOVED,
-                resized             = SDL_WINDOWEVENT_SIZE_CHANGED, // The actual SDL resized event generates a duplicate event.
+                resized             = SDL_WINDOWEVENT_RESIZED, // The actual SDL resized event generates a duplicate event.
+                size_changed        = SDL_WINDOWEVENT_SIZE_CHANGED,
                 minimized           = SDL_WINDOWEVENT_MINIMIZED,
                 maximized           = SDL_WINDOWEVENT_MAXIMIZED,
                 restored            = SDL_WINDOWEVENT_RESTORED,

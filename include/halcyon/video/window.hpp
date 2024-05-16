@@ -28,7 +28,7 @@ namespace hal
             fullscreen            = SDL_WINDOW_FULLSCREEN,
             fullscreen_borderless = SDL_WINDOW_FULLSCREEN_DESKTOP,
             hidden                = SDL_WINDOW_HIDDEN,
-            resizeable            = SDL_WINDOW_RESIZABLE,
+            resizable             = SDL_WINDOW_RESIZABLE,
             minimized             = SDL_WINDOW_MINIMIZED,
             maximized             = SDL_WINDOW_MAXIMIZED
         };
