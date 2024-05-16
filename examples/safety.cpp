@@ -1,6 +1,6 @@
 #include <halcyon/video.hpp>
 
-int main()
+int main(int, char*[])
 {
     // static_assert(hal::meta::is_correct_main<main>);
 
