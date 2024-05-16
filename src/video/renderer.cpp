@@ -26,7 +26,7 @@ void renderer::clear()
     HAL_ASSERT_VITAL(::SDL_RenderClear(get()) == 0, debug::last_error());
 }
 
-void renderer::draw_point(const sdl::coord_point& pt)
+void renderer::point(const sdl::coord_point& pt)
 {
 #ifdef HAL_INTEGRAL_COORD
     ::SDL_RenderDrawPoint(get(), pt.x, pt.y);
@@ -35,7 +35,7 @@ void renderer::draw_point(const sdl::coord_point& pt)
 #endif
 }
 
-void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& to)
+void renderer::line(const sdl::coord_point& from, const sdl::coord_point& to)
 {
 #ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderDrawLine(get(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
@@ -44,7 +44,7 @@ void renderer::draw_line(const sdl::coord_point& from, const sdl::coord_point& t
 #endif
 }
 
-void renderer::draw_rect(const sdl::coord_rect& area)
+void renderer::rect(const sdl::coord_rect& area)
 {
 #ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderDrawRect(get(), area.addr()) == 0, debug::last_error());
@@ -53,7 +53,7 @@ void renderer::draw_rect(const sdl::coord_rect& area)
 #endif
 }
 
-void renderer::fill_rect(const sdl::coord_rect& area)
+void renderer::fill(const sdl::coord_rect& area)
 {
 #ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(get(), area.addr()) == 0, debug::last_error());
@@ -62,7 +62,7 @@ void renderer::fill_rect(const sdl::coord_rect& area)
 #endif
 }
 
-void renderer::fill_rects(const std::span<const sdl::coord_rect>& areas)
+void renderer::fill(const std::span<const sdl::coord_rect>& areas)
 {
 #ifdef HAL_INTEGRAL_COORD
     HAL_ASSERT_VITAL(::SDL_RenderFillRects(get(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
@@ -71,7 +71,7 @@ void renderer::fill_rects(const std::span<const sdl::coord_rect>& areas)
 #endif
 }
 
-void renderer::fill_target()
+void renderer::fill()
 {
     // Coord types aren't relevant here.
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(get(), nullptr) == 0, debug::last_error());
@@ -89,7 +89,7 @@ void renderer::reset_target()
 
 pixel_point renderer::size() const
 {
-    point<int> sz;
+    hal::point<int> sz;
     ::SDL_RenderGetLogicalSize(get(), &sz.x, &sz.y);
 
     if (sz.x == 0)
@@ -208,7 +208,7 @@ copyer& copyer::flip(enum flip f)
 
 copyer& copyer::outline()
 {
-    m_pass.draw_rect(m_dst);
+    m_pass.rect(m_dst);
     return *this;
 }
 

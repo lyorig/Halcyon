@@ -72,13 +72,13 @@ namespace hal
         // Present the back-buffer and clear it.
         void present();
 
-        void draw_point(const sdl::coord_point& pt);
-        void draw_line(const sdl::coord_point& from, const sdl::coord_point& to);
-        void draw_rect(const sdl::coord_rect& area);
+        void point(const sdl::coord_point& pt);
+        void line(const sdl::coord_point& from, const sdl::coord_point& to);
+        void rect(const sdl::coord_rect& area);
 
-        void fill_rect(const sdl::coord_rect& area);
-        void fill_rects(const std::span<const sdl::coord_rect>& areas);
-        void fill_target();
+        void fill(const sdl::coord_rect& area);
+        void fill(const std::span<const sdl::coord_rect>& areas);
+        void fill();
 
         // Get/set the rendering target.
         void target(target_texture& tx);
