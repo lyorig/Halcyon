@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
     }
 
     hal::image::context ctx { hal::image::init_format::png };
-    hal::surface        surf { ctx.load(hal::access(argv[1])) };
+    hal::surface        surf { ctx.load(argv[1]) };
 
     if (!surf.valid())
     {
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    ctx.save(surf, hal::image::save_format::png, hal::output("invert.png"));
+    ctx.save(surf, hal::image::save_format::png, "invert.png");
 
     return EXIT_SUCCESS;
 }

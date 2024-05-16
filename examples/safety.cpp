@@ -2,7 +2,7 @@
 
 int main()
 {
-    static_assert(hal::meta::is_correct_main<main>);
+    // static_assert(hal::meta::is_correct_main<main>);
 
     // Co funguje:
     hal::context ctx;
@@ -12,9 +12,9 @@ int main()
     hal::renderer      rnd { wnd.make_renderer() };
 
     // Co nefunguje:
-    hal::system::video vidx { hal::context {} };
-    hal::window        wndx { hal::system::video { ctx }.make_window("Okno", { 640, 480 }) };
-    hal::renderer      rndx { hal::window {}.make_renderer() };
+    // hal::system::video vidx { hal::context {} };
+    // hal::window        wndx { hal::system::video { ctx }.make_window("Okno", { 640, 480 }) };
+    // hal::renderer      rndx { hal::window {}.make_renderer() };
 
     return EXIT_SUCCESS;
 }

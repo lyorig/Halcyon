@@ -54,6 +54,18 @@ namespace hal
         {
             constexpr static std::size_t value { N };
         };
+
+        template <typename T>
+        struct remove_const_pointer
+        {
+            using type = T;
+        };
+
+        template <typename T>
+        struct remove_const_pointer<const T*>
+        {
+            using type = T*;
+        };
     }
 
     namespace meta
@@ -76,7 +88,7 @@ namespace hal
 
         // Check if a type is "bare", as in, it is not a pointer, reference, and has no cv-qualifiers.
         template <typename T>
-        constexpr inline bool is_bare { std::is_same_v<T, std::remove_cvref_t<std::remove_pointer_t<T>>> };
+        constexpr inline bool is_bare { !(std::is_const_v<T> || std::is_reference_v<T> || std::is_pointer_v<T> || std::is_volatile_v<T>)};
 
         // Get the type residing at an index in a parameter pack.
         template <std::size_t I, typename... Ts>
@@ -85,6 +97,9 @@ namespace hal
 
         template <typename T>
         constexpr inline std::size_t array_size_v { detail::array_size<T>::value };
+
+        template <typename T>
+        using remove_const_pointer = detail::remove_const_pointer<T>::type;
 
         // A holder, of sorts, of a parameter pack.
         // Provides basic functionality.

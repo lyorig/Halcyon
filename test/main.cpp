@@ -92,7 +92,7 @@ namespace test
     {
         hal::image::context ictx { hal::image::init_format::png };
 
-        hal::surface s { ictx.load(hal::access(png_2x1)) };
+        hal::surface s { ictx.load(png_2x1) };
 
         if (s[{ 0, 0 }].color() != hal::palette::red || s[{ 1, 0 }].color() != hal::palette::blue)
             return EXIT_FAILURE;
@@ -190,11 +190,11 @@ namespace test
         s[{ 0, 1 }].color(0x00A4EF);
         s[{ 1, 1 }].color(0xFFB900);
 
-        s.save(hal::output("DontSueMeDaddyGates.bmp"));
+        s.save("DontSueMeDaddyGates.bmp");
 
         std::byte buf[1000];
 
-        s.save(hal::output(buf));
+        s.save(buf);
 
         return EXIT_SUCCESS;
     }
@@ -203,7 +203,9 @@ namespace test
     {
         hal::image::context ictx { hal::image::init_format::png };
 
-        if (ictx.query(hal::access(png_2x1)) != hal::image::load_format::png)
+        hal::accessor ag { png_2x1 };
+
+        if (ictx.query(png_2x1) != hal::image::load_format::png)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
@@ -240,7 +242,7 @@ namespace test
         hal::image::context ictx { hal::image::init_format::png };
 
         // Failure should occur here.
-        const hal::surface s { ictx.load(hal::access(data)) };
+        const hal::surface s { ictx.load(data) };
 
         return EXIT_SUCCESS;
     }
@@ -280,6 +282,10 @@ namespace test
 int main(int argc, char* argv[])
 {
     static_assert(hal::compile_settings::debug_enabled, "HalTest requires debug mode to be enabled");
+
+    static_assert(hal::meta::all<hal::detail::rwops_string<const char*>,
+        hal::detail::rwops_string<std::string>,
+        hal::detail::rwops_string<std::string_view>>);
 
     constexpr std::pair<std::string_view, hal::func_ptr<int>> tests[] {
         { "--assert-fail", test::assert_fail },
