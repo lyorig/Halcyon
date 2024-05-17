@@ -3,6 +3,8 @@
 #include <SDL_rwops.h>
 
 #include <halcyon/internal/raii_object.hpp>
+
+#include <halcyon/utility/metaprogramming.hpp>
 #include <halcyon/utility/pass_key.hpp>
 
 namespace hal
