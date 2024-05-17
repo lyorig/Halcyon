@@ -56,13 +56,13 @@ namespace hal
         };
 
         template <typename T>
-        struct remove_const_pointer
+        struct remove_pointer_to_const
         {
             using type = T;
         };
 
         template <typename T>
-        struct remove_const_pointer<const T*>
+        struct remove_pointer_to_const<const T*>
         {
             using type = T*;
         };
@@ -99,7 +99,7 @@ namespace hal
         constexpr inline std::size_t array_size_v { detail::array_size<T>::value };
 
         template <typename T>
-        using remove_const_pointer = detail::remove_const_pointer<T>::type;
+        using remove_pointer_to_const = detail::remove_pointer_to_const<T>::type;
 
         // A holder, of sorts, of a parameter pack.
         // Provides basic functionality.

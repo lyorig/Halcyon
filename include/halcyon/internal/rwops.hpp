@@ -30,7 +30,7 @@ namespace hal
             template <typename T>
             static const char* string_data(const T& obj)
             {
-                if constexpr (std::is_same_v<meta::remove_const_pointer<T>, char*>)
+                if constexpr (std::is_same_v<meta::remove_pointer_to_const<T>, char*>)
                     return obj;
 
                 else
@@ -46,21 +46,23 @@ namespace hal
         concept string_like = std::is_assignable_v<std::string_view, T>;
 
         // A type that represents a static/dynamic array that can be read from.
+        // The element type must be 1 byte large.
         template <typename T>
         concept accessor_buffer = !string_like<T>
-            && requires(const T& x) {std::data(x); std::size(x); typename std::enable_if_t<sizeof(std::remove_pointer_t<decltype(std::data(x))>) == 1>; };
+            && requires(const T& x) {std::data(x); std::size(x); }
+            && sizeof(*std::data(std::declval<T&>())) == 1;
 
         // A type that represents a static/dynamic array that can be written to.
         template <typename T>
         concept outputter_buffer = accessor_buffer<T>
-            && requires(T& x) { *std::data(x) = std::declval<std::remove_pointer_t<decltype(std::data(x))>>(); };
+            && !std::is_const_v<decltype(*std::data(std::declval<T&>()))>;
     }
 
     // An abstraction of various methods of accessing data.
     class accessor : public detail::rwops
     {
     public:
-        // Access a file located at [path].
+        // Access a file.
         // This constructor accepts anything that can be non-explicitly assigned to a std::string_view.
         // Consult the meta::string_like concept for more info.
         template <meta::string_like T>
@@ -93,7 +95,7 @@ namespace hal
     class outputter : public detail::rwops
     {
     public:
-        // Output to a file at [path].
+        // Output to a file.
         // This accepts anything that can be assigned (not explicitly) to a std::string_view.
         // Consult the meta::string_like concept for more info.
         template <meta::string_like T>
