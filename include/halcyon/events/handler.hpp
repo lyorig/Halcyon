@@ -273,6 +273,8 @@ namespace hal
             bool pending() const;
 
         private:
+            void disable_unused();
+
             // A union that impersonates SDL_Event.
             struct
             {
