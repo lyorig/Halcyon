@@ -55,12 +55,6 @@ namespace hal
             subsystem(pass_key<authority_t>);
             subsystem(pass_key<parent_t>);
 
-            // Start receiving text_input events.
-            void text_input_start();
-
-            // Stop receiving text_input events.
-            void text_input_stop();
-
             HAL_NO_SIZE proxy::mouse mouse;
             HAL_NO_SIZE proxy::keyboard keyboard;
 

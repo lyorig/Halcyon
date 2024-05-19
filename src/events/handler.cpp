@@ -348,6 +348,7 @@ event::handler::handler(authority&)
     : m_event { { std::numeric_limits<std::uint32_t>::max() } } // Start with an invalid event.
 {
     disable_unused();
+    text_input_stop();
 }
 
 bool event::handler::poll()
@@ -358,6 +359,16 @@ bool event::handler::poll()
 void event::handler::push()
 {
     HAL_ASSERT_VITAL(::SDL_PushEvent(reinterpret_cast<SDL_Event*>(&m_event.m_data)) >= 0, debug::last_error());
+}
+
+void event::handler::text_input_start()
+{
+    ::SDL_StartTextInput();
+}
+
+void event::handler::text_input_stop()
+{
+    ::SDL_StopTextInput();
 }
 
 event::type event::handler::event_type() const

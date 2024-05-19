@@ -50,7 +50,7 @@ invertor.cpp
 message_box.cpp
 metaprogramming.cpp
 safety.cpp
-structure.cpp
+events.cpp
 text_render.cpp
 )
 

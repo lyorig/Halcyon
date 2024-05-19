@@ -53,16 +53,6 @@ proxy::events::subsystem(pass_key<parent_t>)
 {
 }
 
-void proxy::events::text_input_start()
-{
-    ::SDL_StartTextInput();
-}
-
-void proxy::events::text_input_stop()
-{
-    ::SDL_StopTextInput();
-}
-
 proxy::events::subsystem()
     : mouse { pass_key<proxy::events> {} }
     , keyboard { pass_key<proxy::events> {} }

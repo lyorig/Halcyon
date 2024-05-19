@@ -48,8 +48,8 @@ namespace hal
                 hidden              = SDL_WINDOWEVENT_HIDDEN,
                 exposed             = SDL_WINDOWEVENT_EXPOSED,
                 moved               = SDL_WINDOWEVENT_MOVED,
-                resized             = SDL_WINDOWEVENT_RESIZED, // The actual SDL resized event generates a duplicate event.
-                size_changed        = SDL_WINDOWEVENT_SIZE_CHANGED,
+                resized             = SDL_WINDOWEVENT_RESIZED,      // A window change caused by user interaction. Preceded by size_changed.
+                size_changed        = SDL_WINDOWEVENT_SIZE_CHANGED, // A window change caused by an API call.
                 minimized           = SDL_WINDOWEVENT_MINIMIZED,
                 maximized           = SDL_WINDOWEVENT_MAXIMIZED,
                 restored            = SDL_WINDOWEVENT_RESTORED,
@@ -234,6 +234,12 @@ namespace hal
 
             // Push this event into the event queue.
             void push();
+
+            // Start receiving text_input events.
+            void text_input_start();
+
+            // Stop receiving text_input events.
+            void text_input_stop();
 
             // Get/set this event's current type.
             // Setting is only useful for events which carry no important data;

@@ -95,6 +95,9 @@ namespace hal
 
             left_arrow  = SDL_SCANCODE_LEFT,
             right_arrow = SDL_SCANCODE_RIGHT,
+
+            plus  = SDL_SCANCODE_KP_PLUS,
+            minus = SDL_SCANCODE_KP_MINUS,
         };
 
         // A representation of a locale- and layout-dependent key.
@@ -169,6 +172,9 @@ namespace hal
 
             left_arrow  = SDLK_LEFT,
             right_arrow = SDLK_RIGHT,
+
+            plus  = SDLK_PLUS,
+            minus = SDLK_MINUS
         };
 
         enum class mod : u16
