@@ -8,6 +8,9 @@
 
 #include <halcyon/utility/pass_key.hpp>
 
+#define HAL_DETAIL_STRINGIFY(x)        #x
+#define HAL_DETAIL_STRINGIFY_EXPAND(x) HAL_DETAIL_STRINGIFY(x)
+
 namespace hal
 {
     class context;
@@ -91,5 +94,11 @@ namespace hal
     {
         using video  = detail::subinit<detail::system::video>;
         using events = detail::subinit<detail::system::events>;
+    }
+
+    namespace compile_settings
+    {
+        // Check whether SDL has redefined "main" to be its own SDL_main. Use hal::meta::is_correct_main to check.
+        constexpr bool main_redefined { std::string_view { HAL_DETAIL_STRINGIFY_EXPAND(main) } != "main" };
     }
 }
