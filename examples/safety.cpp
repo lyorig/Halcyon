@@ -4,7 +4,6 @@ int main(int, char*[])
 {
     // SDL enrolls its own main function on Windows, which is a common source of headaches.
     // A compile-time check is provided to ensure your program passes this part of the cross-platform check.
-    static_assert(hal::compile_settings::main_redefined);
     static_assert(hal::meta::is_correct_main<main>);
 
     // Halcyon employs some safeguards to make sure you don't use uninitialized systems.
