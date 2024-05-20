@@ -226,7 +226,7 @@ namespace hal
 
             // Constructor that disables unused events.
             // This should reduce heap allocations on SDL's part.
-            handler(authority&);
+            explicit handler(authority&);
 
             // Get an event from the event queue.
             // Returns true if the polled event is valid, false if there are no more to process.

@@ -4,14 +4,16 @@ constexpr hal::pixel_point window_size_mod { 20, 20 };
 
 int main(int argc, char* argv[])
 {
-    hal::context       ctx;
-    hal::system::video vid { ctx };
-
     using wf = hal::window::flags;
     using rf = hal::renderer::flags;
 
-    auto wnd = vid.make_window("Halcyon Structure Showcase", { 640, 480 }, { wf::resizable });
-    auto rnd = wnd.make_renderer({ rf::accelerated, rf::vsync });
+    static_assert(hal::meta::is_correct_main<main>);
+
+    hal::context       ctx;
+    hal::system::video vid { ctx };
+
+    hal::window   wnd { vid.make_window("Halcyon Structure Showcase", { 640, 480 }, { wf::resizable }) };
+    hal::renderer rnd { wnd.make_renderer({ rf::accelerated, rf::vsync }) };
 
     hal::event::handler eh { vid.events };
 

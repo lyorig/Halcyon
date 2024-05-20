@@ -168,8 +168,7 @@ namespace hal
         // while on Unix, you can have a main function with no parameters, this will not
         // build on Windows. Also note that, since SDL_main is a normal function that raturns int,
         // you must explicitly return an exit code - it doesn't have main's implicit "return 0".
-        // This is provided as a concept due to weird errors with missing arguments on Windows.
         template <auto MainFunc>
-        concept is_correct_main = std::is_same_v<decltype(MainFunc), func_ptr<int, int, char**>>;
+        constexpr bool is_correct_main = std::is_same_v<decltype(MainFunc), func_ptr<int, int, char*[]>>;
     }
 }
