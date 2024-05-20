@@ -1,13 +1,16 @@
 #include <halcyon/video.hpp>
 
+// events.cpp:
+// An example event loop in a game.
+
 constexpr hal::pixel_point window_size_mod { 20, 20 };
 
 int main(int argc, char* argv[])
 {
+    static_assert(hal::meta::is_correct_main<main>);
+
     using wf = hal::window::flags;
     using rf = hal::renderer::flags;
-
-    static_assert(hal::meta::is_correct_main<main>);
 
     hal::context       ctx;
     hal::system::video vid { ctx };
@@ -38,20 +41,20 @@ int main(int argc, char* argv[])
                 {
                     using enum hal::keyboard::key;
 
-                case esc:
+                case esc: // Quit.
                     eh.event_type(quit_requested);
                     eh.push();
                     break;
 
-                case W:
+                case W: // Increase window size.
                     wnd.size(wnd.size() + window_size_mod);
                     break;
 
-                case S:
+                case S: // Decrease window size.
                     wnd.size(wnd.size() - window_size_mod);
                     break;
 
-                case C:
+                case C: // Paint the background blue.
                     rnd.color(hal::palette::weezer_blue);
                     break;
 

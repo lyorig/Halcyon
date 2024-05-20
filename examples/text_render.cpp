@@ -9,6 +9,8 @@
 
 int main(int argc, char* argv[])
 {
+    static_assert(hal::meta::is_correct_main<main>);
+
     constexpr hal::pixel_point padding { 20, 20 };
 
     if (argc == 1)
