@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
     hal::window         wnd { vid.make_window("Text renderer", { 100, 100 }) };
     hal::event::handler evt { vid.events };
 
-    // Vrátíme maximum paměti před zahájením hlavní smyčky.
+    // Deallocate as much as we can before the main loop.
     {
         hal::renderer     rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
         hal::ttf::context tctx;
