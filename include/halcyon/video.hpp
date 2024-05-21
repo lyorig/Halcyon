@@ -69,10 +69,10 @@ namespace hal
             subsystem(pass_key<parent_t>);
 
             // Create a window.
-            window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {}) &;
+            [[nodiscard]] window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {}) &;
 
             // Warning: This has some issues on macOS due to its DPI scaling stuff.
-            window make_window(std::string_view title, HAL_TAG_NAME(fullscreen)) &;
+            [[nodiscard]] window make_window(std::string_view title, HAL_TAG_NAME(fullscreen)) &;
 
             HAL_NO_SIZE proxy::events events;
 

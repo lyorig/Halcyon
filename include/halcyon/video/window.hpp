@@ -37,7 +37,7 @@ namespace hal
 
         window(std::string_view title, pixel_point size, std::initializer_list<flags> flags, pass_key<authority_t> sys);
 
-        renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated }) &;
+        [[nodiscard]] renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated }) &;
 
         pixel_point pos() const;
         void        pos(pixel_point ps);
