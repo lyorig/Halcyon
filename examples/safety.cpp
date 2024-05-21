@@ -57,13 +57,14 @@ int main(int, char*[])
 
     // Deallocation + deinitialization is taken care of, so you can focus on the important part - coding!
     // You also don't have to work with pointers at all. But if your favorite SDL function isn't implemented,
-    // all relevant objects provide a get() method which, just like unique_ptr, returns the underlying pointer.
+    // all relevant objects provide a get() method which, just like std::unique_ptr, returns the underlying pointer.
 
     // Other things that improve the experience:
     // - type ecosystem (point, rectangle, color...)
+    // - disabled copying of SDL allocated objects
     // - builder patterns for creating/doing stuff with multiple paramaters (message boxes, rendering & blitting)
     // - metaprogramming library with additional checks for possible gotchas
-    // - HAL_FAST_TYPES switch for switching all integer types to fast variants (hal::i16 == std::int_fast16_t)
+    // - HAL_FAST_TYPES switch for switching all integer types to fast variants (hal::i16 -> std::int_fast16_t)
     // - compile time settings (hal::compile_settings)
 
     return EXIT_SUCCESS;
