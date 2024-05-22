@@ -4,7 +4,7 @@
 // message_box.cpp:
 // Examples of using message boxes in Halcyon.
 
-int main(int argc, char* argv[])
+int main(int, char*[])
 {
     static_assert(hal::meta::is_correct_main<main>);
 

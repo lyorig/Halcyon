@@ -5,7 +5,7 @@
 
 constexpr hal::pixel_point window_size_mod { 20, 20 };
 
-int main(int argc, char* argv[])
+int main(int, char*[])
 {
     static_assert(hal::meta::is_correct_main<main>);
 

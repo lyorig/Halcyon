@@ -36,11 +36,12 @@ int main(int, char*[])
     hal::system::video vid { ctx };
 
     // "vid" only makes this function available if it's an lvalue.
+    // Temporaries cannot create objects that rely on them.
     // Thus, subsystem initialization is guaranteed at this point, eliminating possible errors.
     hal::window wnd = vid.make_window("Okno", // std::string_view cannot be constructed from nullptr.
         { 640, 480 });
 
-    // Likewise for "wnd". Temporaries cannot create objects that rely on them.
+    // Likewise for "wnd".
     hal::renderer rnd { wnd.make_renderer() };
 
     // Image loading is only possible with an image context, however, it's only needed for
@@ -70,7 +71,9 @@ int main(int, char*[])
     return EXIT_SUCCESS;
 }
 
-// You can neatly wrap all this initialization into a class:
+// All of these "initializer" types are empty.
+// Use [[no_unique_address]] (defined as HAL_NO_SIZE)
+// For example, to wrap all this initialization into a class:
 class halcyon
 {
 public:
