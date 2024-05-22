@@ -1,7 +1,6 @@
 #include <iostream>
 #include <thread>
 
-#include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
 // text_render.cpp:

@@ -88,9 +88,9 @@ namespace test
         hal::context       ctx;
         hal::system::video vid { ctx };
 
-        vid.clipboard(text);
+        vid.clipboard.text(text);
 
-        if (!vid.clipboard.has_text() || vid.clipboard() != text)
+        if (!vid.clipboard.has_text() || vid.clipboard.text() != text)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
@@ -168,7 +168,7 @@ namespace test
     {
         hal::context c;
 
-        hal::system::video { c }.clipboard("Hello from HalTest!");
+        hal::system::video { c }.clipboard.text("Hello from HalTest!");
 
         return EXIT_SUCCESS;
     }

@@ -23,7 +23,7 @@ window proxy::video::make_window(std::string_view title, HAL_TAG_NAME(fullscreen
     return { title, displays[0].size(), { hal::window::flags::fullscreen }, pass_key<proxy::video> {} };
 }
 
-sdl::string proxy::clipboard::operator()() const
+sdl::string proxy::clipboard::text() const
 {
     char* text { ::SDL_GetClipboardText() };
 
@@ -32,7 +32,7 @@ sdl::string proxy::clipboard::operator()() const
     return { text, pass_key<proxy::clipboard> {} };
 };
 
-void proxy::clipboard::operator()(std::string_view text)
+void proxy::clipboard::text(std::string_view text)
 {
     HAL_ASSERT_VITAL(::SDL_SetClipboardText(text.data()) == 0, debug::last_error());
 }

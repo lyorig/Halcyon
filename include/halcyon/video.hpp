@@ -33,10 +33,10 @@ namespace hal
 
             // Get current clipboard text.
             // This has to be freed, so a custom wrapper is returned.
-            sdl::string operator()() const;
+            sdl::string text() const;
 
             // Set clipboard text.
-            void operator()(std::string_view text);
+            void text(std::string_view text);
 
             bool has_text() const;
         };
