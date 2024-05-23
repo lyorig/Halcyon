@@ -7,7 +7,11 @@
 
 #include <SDL_endian.h>
 
-#define HAL_NO_SIZE [[no_unique_address]]
+#ifdef _MSC_VER
+    #define HAL_NO_SIZE [[msvc::no_unique_address]]
+#else
+    #define HAL_NO_SIZE [[no_unique_address]]
+#endif
 
 // types/numeric.hpp:
 // Various type aliases and related stuff. These are not guaranteed to be

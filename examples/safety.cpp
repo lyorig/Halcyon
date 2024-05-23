@@ -90,5 +90,3 @@ private:
 
     HAL_NO_SIZE hal::system::video m_vid;
 };
-
-static_assert(std::is_empty_v<halcyon>);
