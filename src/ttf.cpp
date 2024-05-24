@@ -13,7 +13,7 @@ builder::font_text font::render(std::string_view text) const
     return { *this, text, pass_key<font> {} };
 }
 
-builder::font_glyph font::render(std::uint32_t glyph) const
+builder::font_glyph font::render(char32_t glyph) const
 {
     return { *this, glyph, pass_key<font> {} };
 }
@@ -132,12 +132,13 @@ surface bft::operator()(font::render_type rt)
     }
 
     HAL_PANIC("Unknown render type given.");
+
     return {};
 }
 
 using bfg = builder::font_glyph;
 
-bfg::font_glyph(const font& fnt, std::uint32_t glyph, pass_key<font> pk)
+bfg::font_glyph(const font& fnt, char32_t glyph, pass_key<font> pk)
     : font_builder_base { fnt, pk }
     , m_glyph { glyph }
 {

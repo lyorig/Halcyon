@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
     static_assert(hal::meta::is_correct_main<main>);
 
     constexpr hal::pixel_point padding { 20, 20 };
+    constexpr hal::font::pt_t  font_size { 128 };
 
     if (argc == 1)
     {
@@ -25,25 +26,18 @@ int main(int argc, char* argv[])
     hal::window         wnd { vid.make_window("Text renderer", { 100, 100 }) };
     hal::event::handler evt { vid.events };
 
+    hal::renderer rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
+    hal::texture  tex;
+
     // Deallocate as much as we can before the main loop.
     {
-        hal::renderer     rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
         hal::ttf::context tctx;
 
-        const hal::texture tex { rnd.make_texture(tctx.load("assets/m5x7.ttf", 16).render(argv[1]).fg(hal::palette::black)()) };
-
-        const hal::pixel_rect draw_rect {
-            padding / 2, hal::scale::width(512)(tex.size())
-        };
-
-        wnd.size(draw_rect.size + padding);
-        rnd.color(hal::palette::weezer_blue);
-
-        rnd.clear();
-
-        rnd.render(tex).to(draw_rect)();
-        rnd.present();
+        tex = { rnd.make_texture(tctx.load("assets/m5x7.ttf", font_size).render(argv[1]).fg(hal::palette::black)()) };
     }
+
+    wnd.size(tex.size() + padding);
+    rnd.color(hal::palette::weezer_blue);
 
     while (true)
     {
@@ -63,6 +57,9 @@ int main(int argc, char* argv[])
 
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(20ms);
+
+        rnd.render(tex).to(padding / 2)();
+        rnd.present();
     }
 
     return EXIT_SUCCESS;
