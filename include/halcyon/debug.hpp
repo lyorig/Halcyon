@@ -191,7 +191,6 @@ namespace hal
 
 #ifdef HAL_DEBUG_ENABLED
 
-    #define HAL_DEBUG(...) __VA_ARGS__
     #define HAL_PRINT      hal::debug::print
     #define HAL_PANIC(...) hal::debug::panic(__PRETTY_FUNCTION__, __FILE_NAME__, __LINE__, __VA_ARGS__)
 
@@ -208,15 +207,13 @@ namespace hal
         #warning HAL_DEBUG_ENABLED is not defined, but HAL_DEBUG_ADVANCED is - this will have no effect
     #endif
 
-    #define HAL_DEBUG(...)
+    #define HAL_PRINT(...) (static_cast<void>(0))
+    #define HAL_PANIC(...) (static_cast<void>(0))
 
-    #define HAL_PRINT(...)
-    #define HAL_PANIC(...)
-
-    #define HAL_WARN_IF(...)
+    #define HAL_WARN_IF(...)             (static_cast<void>(0))
     #define HAL_WARN_IF_VITAL(cond, ...) (static_cast<void>(cond))
 
-    #define HAL_ASSERT(...)
+    #define HAL_ASSERT(...)             (static_cast<void>(0))
     #define HAL_ASSERT_VITAL(cond, ...) (static_cast<void>(cond))
 
 #endif
