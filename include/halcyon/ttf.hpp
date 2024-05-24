@@ -31,6 +31,8 @@ namespace hal
             lcd
         };
 
+        static constexpr render_type default_render_type { render_type::solid };
+
         font() = default;
 
         // [private] Fonts are loaded with ttf::context::load().
@@ -40,7 +42,7 @@ namespace hal
         [[nodiscard]] builder::font_text render(std::string_view text) const;
 
         // Render a single glyph to a surface.
-        [[nodiscard]] builder::font_glyph render(std::uint32_t glyph) const;
+        [[nodiscard]] builder::font_glyph render(char32_t glyph) const;
 
         // When sizing text, it's important to know that the vertical size
         // doesn't necessarily have to match that of the rendered surface.
@@ -137,7 +139,8 @@ namespace hal
             }
 
             const hal::font& m_font;
-            color            m_fg, m_bg;
+
+            color m_fg, m_bg;
         };
     };
 
@@ -152,7 +155,7 @@ namespace hal
             // Zero means only wrap on newlines.
             [[nodiscard]] font_text& wrap(pixel_t wl);
 
-            [[nodiscard]] surface operator()(font::render_type rt = font::render_type::solid);
+            [[nodiscard]] surface operator()(font::render_type rt = font::default_render_type);
 
         private:
             consteval static pixel_t invalid()
@@ -167,12 +170,12 @@ namespace hal
         class font_glyph : public detail::font_builder_base<font_glyph>
         {
         public:
-            [[nodiscard]] font_glyph(const font& fnt, std::uint32_t glyph, pass_key<font>);
+            [[nodiscard]] font_glyph(const font& fnt, char32_t glyph, pass_key<font>);
 
-            [[nodiscard]] surface operator()(font::render_type rt = font::render_type::solid);
+            [[nodiscard]] surface operator()(font::render_type rt = font::default_render_type);
 
         private:
-            std::uint32_t m_glyph;
+            char32_t m_glyph;
         };
     }
 
