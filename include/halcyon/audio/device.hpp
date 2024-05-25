@@ -1,5 +1,7 @@
 #pragma once
 
+#include <span>
+
 #include <halcyon/audio/types.hpp>
 
 #include <halcyon/internal/raii_object.hpp>
@@ -72,6 +74,8 @@ namespace hal
             device(const char* name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>);
             ~device();
 
+            void queue(std::span<const std::byte> data);
+            
             void pause(bool p);
 
             void lock();

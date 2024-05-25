@@ -22,12 +22,12 @@ namespace hal
 
             void clear();
 
-            void put(std::span<std::byte> data);
+            void put(std::span<const std::byte> data);
 
-            template <typename T>
-            i32 get_processed(std::span<T> buffer)
+            template <meta::buffer T>
+            i32 get_processed(T& buffer)
             {
-                const int ret { ::SDL_AudioStreamGet(get(), buffer.data(), buffer.size_bytes()) };
+                const int ret { ::SDL_AudioStreamGet(get(), std::data(buffer), std::size(buffer)) };
 
                 HAL_ASSERT(ret != -1, debug::last_error());
 

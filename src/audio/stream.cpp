@@ -22,7 +22,7 @@ void audio::stream::clear()
     ::SDL_AudioStreamClear(get());
 }
 
-void audio::stream::put(std::span<std::byte> data)
+void audio::stream::put(std::span<const std::byte> data)
 {
-    HAL_ASSERT_VITAL(::SDL_AudioStreamPut(get(), data.data(), static_cast<int>(data.size())) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_AudioStreamPut(get(), data.data(), static_cast<int>(data.size_bytes())) == 0, debug::last_error());
 }

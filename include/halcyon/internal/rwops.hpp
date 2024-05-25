@@ -41,25 +41,6 @@ namespace hal
         };
     }
 
-    namespace meta
-    {
-        // A type that can be used as a string.
-        template <typename T>
-        concept string_like = std::is_assignable_v<std::string_view, T>;
-
-        // A type that represents a static/dynamic array that can be read from.
-        // The element type must be 1 byte large.
-        template <typename T>
-        concept accessor_buffer = !string_like<T>
-            && requires(const T& x) {std::data(x); std::size(x); }
-            && sizeof(*std::data(std::declval<T&>())) == 1;
-
-        // A type that represents a static/dynamic array that can be written to.
-        template <typename T>
-        concept outputter_buffer = accessor_buffer<T>
-            && !std::is_const_v<decltype(*std::data(std::declval<T&>()))>;
-    }
-
     // An abstraction of various methods of accessing data.
     class accessor : public detail::rwops
     {
@@ -77,7 +58,7 @@ namespace hal
         // This constructor accepts any object that cannot be non-explicitly assigned to a std::string_view.
         // In addition, std::data() and std::size() must be available for use with it.
         // Consult the meta::accessor_buffer concept for more info.
-        template <meta::accessor_buffer T>
+        template <meta::rwops_buffer T>
         accessor(const T& buffer)
             requires(sizeof(std::remove_pointer_t<decltype(std::data(buffer))>) == 1)
             : rwops { ::SDL_RWFromConstMem(std::data(buffer), std::size(buffer)) }
@@ -110,7 +91,7 @@ namespace hal
         // This constructor accepts any container that cannot be assigned to a std::string_view.
         // In addition, std::data() and std::size() must be available for use with it.
         // Consult the meta::outputter_buffer concept for more info.
-        template <meta::outputter_buffer T>
+        template <meta::rwops_buffer T>
         outputter(T& buffer)
             : rwops { ::SDL_RWFromMem(std::data(buffer), std::size(buffer)) }
         {
