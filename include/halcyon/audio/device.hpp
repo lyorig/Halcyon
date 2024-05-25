@@ -69,7 +69,7 @@ namespace hal
             // amount of devices etc., but don't intend it to be an error.
             constexpr static id_t invalid_id { static_cast<id_t>(-1) };
 
-            device(std::string_view name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>);
+            device(const char* name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>);
             ~device();
 
             void pause(bool p);

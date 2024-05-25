@@ -63,8 +63,8 @@ audio::device adb::operator()(audio::spec& obtained)
     return { m_name, m_capture, m_spec.get(pass_key<device> {}), obtained.get(pass_key<device> {}), m_allowedChanges, pass_key<device> {} };
 }
 
-audio::device::device(std::string_view name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>)
-    : m_id { ::SDL_OpenAudioDevice(name.data(), capture, desired, obtained, allowed_changes) }
+audio::device::device(const char* name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>)
+    : m_id { ::SDL_OpenAudioDevice(name, capture, desired, obtained, allowed_changes) }
 {
     HAL_ASSERT(m_id != 0, debug::last_error());
 }
