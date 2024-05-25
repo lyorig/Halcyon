@@ -10,6 +10,8 @@ set(HALCYON_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/include/)
 
 # Sources.
 set(HALCYON_SOURCES
+audio/device.cpp
+audio/stream.cpp
 events/handler.cpp
 events/keyboard.cpp
 events/mouse.cpp
@@ -24,6 +26,7 @@ video/message_box.cpp
 video/renderer.cpp
 video/texture.cpp
 video/window.cpp
+audio.cpp
 context.cpp
 debug.cpp
 events.cpp

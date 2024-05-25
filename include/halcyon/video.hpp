@@ -22,14 +22,10 @@ namespace hal
 {
     namespace proxy
     {
-        using video = detail::subsystem<detail::system::video>;
-
         class clipboard
         {
         public:
-            using authority_t = video;
-
-            clipboard(pass_key<authority_t>);
+            clipboard(pass_key<video>);
 
             // Get current clipboard text.
             // This has to be freed, so a custom wrapper is returned.
@@ -44,9 +40,7 @@ namespace hal
         class display
         {
         public:
-            using authority_t = video;
-
-            display(pass_key<authority_t>);
+            display(pass_key<video>);
 
             hal::display::id_t size() const;
 
@@ -61,12 +55,8 @@ namespace hal
         template <>
         class subsystem<system::video>
         {
-            using event_proxy = subsystem<system::events>;
-
         public:
-            using parent_t = subinit<system::video>;
-
-            subsystem(pass_key<parent_t>);
+            subsystem(pass_key<hal::system::video>);
 
             // Create a window.
             [[nodiscard]] window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {}) &;

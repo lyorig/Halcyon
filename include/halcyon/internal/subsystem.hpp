@@ -16,8 +16,9 @@ namespace hal
     {
         // Available systems. More will be added as Halcyon adds
         // more features from SDL.
-        enum class system
+        enum class system : u16
         {
+            audio  = SDL_INIT_AUDIO,
             video  = SDL_INIT_VIDEO,
             events = SDL_INIT_EVENTS
         };
@@ -30,6 +31,9 @@ namespace hal
 
         switch (s)
         {
+        case audio:
+            return "Audio";
+
         case video:
             return "Video";
 
@@ -83,12 +87,14 @@ namespace hal
 
     namespace proxy
     {
+        using audio  = detail::subsystem<detail::system::audio>;
         using video  = detail::subsystem<detail::system::video>;
         using events = detail::subsystem<detail::system::events>;
     }
 
     namespace system
     {
+        using audio  = detail::subinit<detail::system::audio>;
         using video  = detail::subinit<detail::system::video>;
         using events = detail::subinit<detail::system::events>;
     }

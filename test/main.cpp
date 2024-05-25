@@ -1,4 +1,4 @@
-#include <halcyon/events.hpp>
+#include <halcyon/audio.hpp>
 #include <halcyon/video.hpp>
 
 #include "data.hpp"
@@ -242,6 +242,18 @@ namespace test
         return EXIT_SUCCESS;
     }
 
+    int audio_init()
+    {
+        hal::context       ctx;
+        hal::system::audio a { ctx };
+
+        hal::audio::spec   gotten;
+        hal::audio::device dev = a.make_device().spec({ 44100, hal::audio::format::f32, 2, 4096 })(gotten);
+        hal::audio::stream str = a.make_stream(hal::audio::format::i32, 2, 44100, hal::audio::format::u8, 1, 48000);
+
+        return EXIT_SUCCESS;
+    }
+
     // Passing a zeroed-out buffer to a function expecting valid image data.
     // This test should fail.
     int invalid_buffer()
@@ -305,6 +317,7 @@ int main(int argc, char* argv[])
         { "--outputter", test::outputter },
         { "--png-check", test::png_check },
         { "--metaprogramming", test::metaprogramming },
+        { "--audio-init", test::audio_init },
         { "--invalid-buffer", test::invalid_buffer },
         { "--invalid-texture", test::invalid_texture },
         { "--invalid-event", test::invalid_event }

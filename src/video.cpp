@@ -5,11 +5,11 @@
 
 using namespace hal;
 
-proxy::clipboard::clipboard(pass_key<authority_t>)
+proxy::clipboard::clipboard(pass_key<video>)
 {
 }
 
-proxy::display::display(pass_key<authority_t>)
+proxy::display::display(pass_key<video>)
 {
 }
 
@@ -56,7 +56,7 @@ display proxy::display::operator[](hal::display::id_t idx) const
     return { idx, pass_key<proxy::display> {} };
 }
 
-proxy::video::subsystem(pass_key<parent_t>)
+proxy::video::subsystem(pass_key<hal::system::video>)
     : subsystem {}
 
 {
