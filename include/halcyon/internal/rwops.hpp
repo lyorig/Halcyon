@@ -41,6 +41,18 @@ namespace hal
         };
     }
 
+    namespace meta
+    {
+        // A type that can be used as a string.
+        template <typename T>
+        concept rwops_path = std::is_assignable_v<std::string_view, T>;
+
+        // A type that represents a static/dynamic array.
+        // The element type must be 1 byte large.
+        template <typename T>
+        concept rwops_buffer = !rwops_path<T> && buffer<T>;
+    }
+
     // An abstraction of various methods of accessing data.
     class accessor : public detail::rwops
     {
@@ -48,7 +60,7 @@ namespace hal
         // Access a file.
         // This constructor accepts anything that can be non-explicitly assigned to a std::string_view.
         // Consult the meta::string_like concept for more info.
-        template <meta::string_like T>
+        template <meta::rwops_path T>
         accessor(const T& path)
             : rwops { ::SDL_RWFromFile(string_data(path), "r") }
         {
@@ -81,7 +93,7 @@ namespace hal
         // Output to a file.
         // This accepts anything that can be assigned (not explicitly) to a std::string_view.
         // Consult the meta::string_like concept for more info.
-        template <meta::string_like T>
+        template <meta::rwops_path T>
         outputter(const T& path)
             : rwops { ::SDL_RWFromFile(string_data(path), "w") }
         {
