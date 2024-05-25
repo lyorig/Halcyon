@@ -1,12 +1,11 @@
 #pragma once
 
-#include <span>
-
 #include <halcyon/audio/types.hpp>
 
 #include <halcyon/internal/raii_object.hpp>
 #include <halcyon/internal/subsystem.hpp>
 
+#include <halcyon/utility/concepts.hpp>
 #include <halcyon/utility/pass_key.hpp>
 
 namespace hal
@@ -74,8 +73,12 @@ namespace hal
             device(const char* name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>);
             ~device();
 
-            void queue(std::span<const std::byte> data);
-            
+            template <meta::buffer T>
+            void queue(const T& data)
+            {
+                HAL_ASSERT_VITAL(::SDL_QueueAudio(m_id, std::data(data), static_cast<int>(std::size(data))) == 0, debug::last_error());
+            }
+
             void pause(bool p);
 
             void lock();

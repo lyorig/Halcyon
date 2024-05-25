@@ -6,6 +6,8 @@
 
 #include <halcyon/debug.hpp>
 
+#include <halcyon/types/numeric.hpp>
+
 #include <halcyon/utility/pass_key.hpp>
 
 namespace hal

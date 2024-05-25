@@ -49,7 +49,7 @@ audio::builder::device proxy::audio::make_device() &
     return { pass_key<proxy::audio> {} };
 }
 
-audio::stream proxy::audio::make_stream(audio::format src_fmt, u8 src_channels, i32 src_rate, audio::format dst_fmt, u8 dst_channels, i32 dst_rate) &
+audio::stream proxy::audio::make_stream(hal::audio::format src_fmt, u8 src_channels, i32 src_rate, hal::audio::format dst_fmt, u8 dst_channels, i32 dst_rate) &
 {
     return { src_fmt, src_channels, src_rate, dst_fmt, dst_channels, dst_rate, pass_key<proxy::audio> {} };
 }

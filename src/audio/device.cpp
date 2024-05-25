@@ -69,11 +69,6 @@ audio::device::device(const char* name, bool capture, const SDL_AudioSpec* desir
     HAL_ASSERT(m_id != 0, debug::last_error());
 }
 
-void audio::device::queue(std::span<const std::byte> data)
-{
-    HAL_ASSERT_VITAL(::SDL_QueueAudio(m_id, data.data(), data.size_bytes()) == 0, debug::last_error());
-}
-
 audio::device::~device()
 {
     ::SDL_CloseAudioDevice(m_id);

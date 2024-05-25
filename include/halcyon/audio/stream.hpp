@@ -7,6 +7,8 @@
 #include <halcyon/internal/raii_object.hpp>
 #include <halcyon/internal/subsystem.hpp>
 
+#include <halcyon/utility/concepts.hpp>
+
 namespace hal
 {
     namespace audio
