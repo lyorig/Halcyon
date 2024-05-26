@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/audio/types.hpp>
+#include <halcyon/audio/spec.hpp>
 
 #include <halcyon/internal/raii_object.hpp>
 #include <halcyon/internal/subsystem.hpp>
@@ -12,23 +12,6 @@ namespace hal
 {
     namespace audio
     {
-        namespace builder
-        {
-            class device;
-        }
-
-        class spec : private SDL_AudioSpec
-        {
-        public:
-            // Default constructor.
-            // Warning - it doesn't initialize the members within.
-            spec() = default;
-
-            spec(i32 freq, audio::format fmt, u8 channels, u16 buffer_size_in_frames);
-
-            SDL_AudioSpec* get(pass_key<builder::device>);
-        };
-
         class device;
 
         namespace builder
@@ -49,17 +32,15 @@ namespace hal
                 device& changes(std::initializer_list<change> vals);
 
                 audio::device operator()();
-                audio::device operator()(audio::spec& obtained);
+                audio::device operator()(sdl::spec& obtained);
 
             private:
-                audio::spec m_spec;
+                sdl::spec   m_spec;
                 const char* m_name;
                 int         m_allowedChanges;
                 bool        m_capture;
             };
         }
-
-        static_assert(sizeof(spec) == sizeof(SDL_AudioSpec));
 
         class device
         {
@@ -83,6 +64,8 @@ namespace hal
 
             void lock();
             void unlock();
+
+            id_t id() const;
 
         private:
             id_t m_id;

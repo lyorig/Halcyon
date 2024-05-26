@@ -4,21 +4,6 @@
 
 using namespace hal;
 
-audio::spec::spec(i32 freq, audio::format fmt, u8 channels, u16 buffer_size_in_frames)
-    : SDL_AudioSpec {
-        .freq     = freq,
-        .format   = static_cast<SDL_AudioFormat>(fmt),
-        .channels = channels,
-        .samples  = buffer_size_in_frames
-    }
-{
-}
-
-SDL_AudioSpec* audio::spec::get(pass_key<builder::device>)
-{
-    return this;
-}
-
 using adb = audio::builder::device;
 
 adb::device(pass_key<proxy::audio>)
@@ -58,7 +43,7 @@ audio::device adb::operator()()
     return { m_name, m_capture, m_spec.get(pass_key<device> {}), nullptr, m_allowedChanges, pass_key<device> {} };
 }
 
-audio::device adb::operator()(audio::spec& obtained)
+audio::device adb::operator()(sdl::spec& obtained)
 {
     return { m_name, m_capture, m_spec.get(pass_key<device> {}), obtained.get(pass_key<device> {}), m_allowedChanges, pass_key<device> {} };
 }
@@ -87,4 +72,9 @@ void audio::device::lock()
 void audio::device::unlock()
 {
     ::SDL_UnlockAudioDevice(m_id);
+}
+
+audio::device::id_t audio::device::id() const
+{
+    return m_id;
 }

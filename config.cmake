@@ -11,6 +11,7 @@ set(HALCYON_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/include/)
 # Sources.
 set(HALCYON_SOURCES
 audio/device.cpp
+audio/spec.cpp
 audio/stream.cpp
 events/handler.cpp
 events/keyboard.cpp

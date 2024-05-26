@@ -6,39 +6,34 @@
 
 using namespace hal;
 
-display::display(id_t disp_idx, pass_key<authority_t>)
-    : m_index { disp_idx }
+display::display(const sdl::display& src)
+    : size { src.size() }
+    , hz { src.hz() }
 {
-    SDL_DisplayMode dm;
-
-    HAL_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(disp_idx, &dm) == 0, debug::last_error());
-
-    m_size.x = static_cast<pixel_t>(dm.w);
-    m_size.y = static_cast<pixel_t>(dm.h);
-
-    m_hz = static_cast<hz_t>(dm.refresh_rate);
 }
 
-hal::pixel_point display::size() const
+sdl::display::display(hal::display::id_t id, pass_key<proxy::display>)
 {
-    return m_size;
+    HAL_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(id, this) == 0, debug::last_error());
 }
 
-display::hz_t display::hz() const
+sdl::display::display(const hal::display& src)
+    : SDL_DisplayMode {
+        // TODO: Format???
+        .w            = src.size.x,
+        .h            = src.size.y,
+        .refresh_rate = src.hz,
+        .driverdata   = nullptr
+    }
 {
-    return m_hz;
 }
 
-display::id_t display::index() const
+pixel_point sdl::display::size() const
 {
-    return m_index;
+    return { w, h };
 }
 
-std::string_view display::name() const
+display::hz_t sdl::display::hz() const
 {
-    const char* name { ::SDL_GetDisplayName(m_index) };
-
-    HAL_ASSERT(name != nullptr, debug::last_error());
-
-    return name;
+    return static_cast<hal::display::hz_t>(refresh_rate);
 }

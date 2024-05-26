@@ -17,27 +17,39 @@ namespace hal
         class display;
     }
 
-    // Display device data.
+    namespace sdl
+    {
+        class display;
+    }
+
     class display
     {
     public:
-        using id_t = u8;
-        using hz_t = u16;
+        using id_t = hal::u8;
+        using hz_t = hal::u16;
 
-        using authority_t = proxy::display;
+        display() = default;
+        display(const sdl::display& src);
 
-        // [private] Display info is provided by the display proxy in hal::system::video.
-        display(id_t disp_idx, pass_key<authority_t>);
-
-        pixel_point size() const;
-        hz_t        hz() const;
-        id_t        index() const;
-
-        std::string_view name() const;
-
-    private:
-        pixel_point m_size;
-        hz_t        m_hz;
-        id_t        m_index;
+        pixel_point size;
+        hz_t        hz;
     };
+
+    namespace sdl
+    {
+        // Display device data.
+        class display : private SDL_DisplayMode
+        {
+        public:
+            display() = default;
+            display(hal::display::id_t id, pass_key<proxy::display>);
+            display(const hal::display& src);
+
+            pixel_point        size() const;
+            hal::display::hz_t hz() const;
+        };
+
+        static_assert(sizeof(display) == sizeof(SDL_DisplayMode));
+    }
+
 }
