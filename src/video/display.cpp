@@ -6,20 +6,21 @@
 
 using namespace hal;
 
-display::display(const sdl::display& src)
+info::display::display(const sdl::display& src)
     : size { src.size() }
+    , fmt { src.format() }
     , hz { src.hz() }
 {
 }
 
-sdl::display::display(hal::display::id_t id, pass_key<proxy::display>)
+info::sdl::display::display(hal::display::id_t id, pass_key<proxy::display>)
 {
     HAL_ASSERT_VITAL(::SDL_GetDesktopDisplayMode(id, this) == 0, debug::last_error());
 }
 
-sdl::display::display(const hal::display& src)
+info::sdl::display::display(const info::display& src)
     : SDL_DisplayMode {
-        // TODO: Format???
+        .format       = static_cast<Uint32>(src.fmt),
         .w            = src.size.x,
         .h            = src.size.y,
         .refresh_rate = src.hz,
@@ -28,12 +29,17 @@ sdl::display::display(const hal::display& src)
 {
 }
 
-pixel_point sdl::display::size() const
+pixel_point info::sdl::display::size() const
 {
     return { w, h };
 }
 
-display::hz_t sdl::display::hz() const
+pixel_format info::sdl::display::format() const
+{
+    return static_cast<pixel_format>(SDL_DisplayMode::format);
+}
+
+hal::display::hz_t info::sdl::display::hz() const
 {
     return static_cast<hal::display::hz_t>(refresh_rate);
 }

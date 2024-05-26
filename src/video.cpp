@@ -51,7 +51,7 @@ display::id_t proxy::display::size() const
     return static_cast<hal::display::id_t>(ret);
 }
 
-sdl::display proxy::display::operator[](hal::display::id_t idx) const
+info::sdl::display proxy::display::operator[](hal::display::id_t idx) const
 {
     return { idx, pass_key<proxy::display> {} };
 }

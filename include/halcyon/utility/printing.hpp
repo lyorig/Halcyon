@@ -31,16 +31,16 @@ namespace hal
         return str << '{' << rect.pos << ' ' << rect.size << '}';
     }
 
-    class display;
     struct color;
 
     namespace info
     {
+        class display;
         class renderer;
     }
 
-    std::ostream& operator<<(std::ostream& str, const display& disp);
     std::ostream& operator<<(std::ostream& str, color c);
+    std::ostream& operator<<(std::ostream& str, const info::display& disp);
     std::ostream& operator<<(std::ostream& str, const info::renderer& inf);
 
     namespace meta

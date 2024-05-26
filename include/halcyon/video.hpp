@@ -44,7 +44,7 @@ namespace hal
 
             hal::display::id_t size() const;
 
-            sdl::display operator[](hal::display::id_t idx) const;
+            info::sdl::display operator[](hal::display::id_t idx) const;
         };
     }
 

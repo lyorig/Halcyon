@@ -32,7 +32,7 @@ namespace hal
             display& event_type(type t);
 
             hal::display::id_t display_index() const;
-            display&           display_index(hal::display::id_t);
+            display&            display_index(hal::display::id_t);
 
             // As of April 2024, there are no events using the "data1" member.
         };

@@ -17,39 +17,46 @@ namespace hal
         class display;
     }
 
-    namespace sdl
+    namespace display
     {
-        class display;
+        using id_t = u8;
+        using hz_t = hal::u16;
     }
 
-    class display
+    namespace info
     {
-    public:
-        using id_t = hal::u8;
-        using hz_t = hal::u16;
+        namespace sdl
+        {
+            class display;
+        }
 
-        display() = default;
-        display(const sdl::display& src);
-
-        pixel_point size;
-        hz_t        hz;
-    };
-
-    namespace sdl
-    {
-        // Display device data.
-        class display : private SDL_DisplayMode
+        class display
         {
         public:
             display() = default;
-            display(hal::display::id_t id, pass_key<proxy::display>);
-            display(const hal::display& src);
+            display(const sdl::display& src);
 
-            pixel_point        size() const;
-            hal::display::hz_t hz() const;
+            pixel_point        size;
+            pixel_format       fmt;
+            hal::display::hz_t hz;
         };
 
-        static_assert(sizeof(display) == sizeof(SDL_DisplayMode));
-    }
+        namespace sdl
+        {
+            // Display device data.
+            class display : private SDL_DisplayMode
+            {
+            public:
+                display() = default;
+                display(hal::display::id_t id, pass_key<proxy::display>);
+                display(const info::display& src);
 
+                pixel_point        size() const;
+                pixel_format       format() const;
+                hal::display::hz_t hz() const;
+            };
+
+            static_assert(sizeof(display) == sizeof(SDL_DisplayMode));
+        }
+    }
 }

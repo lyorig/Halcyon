@@ -18,6 +18,7 @@ events/keyboard.cpp
 events/mouse.cpp
 internal/rwops.cpp
 internal/string.cpp
+types/render.cpp
 utility/printing.cpp
 utility/strutil.cpp
 utility/timer.cpp
