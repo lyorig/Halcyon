@@ -87,7 +87,7 @@ void renderer::size(scaler scl)
     size(scl(size()));
 }
 
-info::renderer renderer::info() const
+info::sdl::renderer renderer::info() const
 {
     return { *this, pass_key<renderer> {} };
 }
@@ -102,7 +102,7 @@ target_texture renderer::make_target_texture(pixel_point size) &
     SDL_Window* wnd { ::SDL_RenderGetWindow(get()) };
     HAL_ASSERT(wnd != nullptr, debug::last_error());
 
-    const pixel_format fmt { static_cast<pixel_format>(::SDL_GetWindowPixelFormat(wnd)) };
+    const enum pixel_format fmt { static_cast<enum pixel_format>(::SDL_GetWindowPixelFormat(wnd)) };
     HAL_ASSERT(fmt != pixel_format::unknown, debug::last_error());
 
     return { *this, fmt, size };
@@ -146,24 +146,30 @@ void renderer::internal_target(SDL_Texture* target)
     HAL_ASSERT_VITAL(::SDL_SetRenderTarget(get(), target) == 0, debug::last_error());
 }
 
-// Renderer information.
+// Renderer information (SDL).
 
-info::renderer::renderer(const hal::renderer& rnd, pass_key<hal::renderer>)
+info::sdl::renderer::renderer(const hal::renderer& rnd, pass_key<hal::renderer>)
 {
     HAL_ASSERT_VITAL(::SDL_GetRendererInfo(rnd.get(), static_cast<SDL_RendererInfo*>(this)) == 0, debug::last_error());
 }
 
-std::string_view info::renderer::name() const
+std::string_view info::sdl::renderer::name() const
 {
     return SDL_RendererInfo::name;
 }
 
-info::renderer::flag_bitset info::renderer::flags() const
+renderer::flag_bitset info::sdl::renderer::flags() const
 {
     return SDL_RendererInfo::flags;
 }
 
-pixel_point info::renderer::max_texture_size() const
+std::span<const pixel_format> info::sdl::renderer::formats() const
+{
+    static_assert(sizeof(pixel_format) == sizeof(Uint32));
+    return { reinterpret_cast<const pixel_format*>(texture_formats), static_cast<std::size_t>(num_texture_formats) };
+}
+
+pixel_point info::sdl::renderer::max_texture_size() const
 {
     return {
         static_cast<pixel_t>(max_texture_width),
@@ -171,9 +177,32 @@ pixel_point info::renderer::max_texture_size() const
     };
 }
 
-std::ostream& hal::info::operator<<(std::ostream& str, const info::renderer& inf)
+std::ostream& info::sdl::operator<<(std::ostream& str, const info::sdl::renderer& inf)
 {
-    return str << '[' << inf.name() << ", flags: 0x" << std::hex << inf.flags().mask() << std::dec << ", MTS: " << inf.max_texture_size() << ']';
+    str << "[name: " << inf.name() << ", flags: 0x" << std::hex << inf.flags().mask() << std::dec << ", formats: [";
+
+    const auto span = inf.formats();
+
+    for (auto iter = span.begin(); iter != span.end(); ++iter)
+    {
+        if (iter != span.begin())
+            str << ", ";
+
+        str << hal::to_string(*iter);
+    }
+
+    return str << "], MTS: " << inf.max_texture_size() << "]]";
+}
+
+// Renderer information (compressed).
+
+info::renderer::renderer(const sdl::renderer& src)
+    : name { src.name() }
+    , max_texture_size { src.max_texture_size() }
+    , flags { src.flags() }
+{
+    const auto span = src.formats();
+    std::copy(span.begin(), span.end(), std::back_inserter(formats));
 }
 
 // Copyer.

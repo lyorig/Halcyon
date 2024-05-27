@@ -214,7 +214,7 @@ namespace hal
 
         friend std::ostream& operator<<(std::ostream& str, const point& pt)
         {
-            return str << '[' << to_printable_int(pt.x) << ',' << to_printable_int(pt.y) << ']';
+            return str << '[' << to_printable_int(pt.x) << ", " << to_printable_int(pt.y) << ']';
         }
     };
 

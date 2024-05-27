@@ -88,7 +88,7 @@ namespace hal
 
         friend std::ostream& operator<<(std::ostream& str, const rectangle& rect)
         {
-            return str << '{' << rect.pos << ' ' << rect.size << '}';
+            return str << '[' << rect.pos << ' ' << rect.size << ']';
         }
     };
 

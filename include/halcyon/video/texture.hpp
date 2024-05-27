@@ -37,13 +37,15 @@ namespace hal
             blend_mode blend() const;
             void       blend(blend_mode bm);
 
+            pixel_format pixel_format() const;
+
         protected:
             texture_base() = default;
 
             texture_base(SDL_Texture* ptr);
 
         private:
-            void query(std::uint32_t* format, int* access, int* w, int* h) const;
+            void query(Uint32* format, int* access, int* w, int* h) const;
         };
     }
 
@@ -67,6 +69,6 @@ namespace hal
         target_texture() = default;
 
         // [private] Target textures are created with renderer::load().
-        target_texture(renderer& rnd, pixel_format fmt, pixel_point size);
+        target_texture(renderer& rnd, enum pixel_format fmt, pixel_point size);
     };
 }

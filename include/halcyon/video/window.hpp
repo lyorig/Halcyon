@@ -56,6 +56,8 @@ namespace hal
         // Get the index of the display this window is currently on.
         display::id_t display_index() const;
 
+        pixel_format pixel_format() const;
+
         // Get/set this window's title.
         std::string_view title() const;
         void             title(std::string_view val);
