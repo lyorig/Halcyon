@@ -2,17 +2,24 @@
 
 #include <halcyon/internal/helpers.hpp>
 
+#include <halcyon/video.hpp>
+
 using namespace hal;
 
-window::window(std::string_view title, pixel_point size, std::initializer_list<flags> flags, pass_key<authority_t>)
+window::window(proxy::video&, std::string_view title, pixel_point size, std::initializer_list<flags> flags)
     : raii_object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
 {
     HAL_PRINT(debug::severity::init, "Created window \"", title, "\" [size: ", size, ", flags: 0x", std::hex, ::SDL_GetWindowFlags(get()), ", ID: ", to_printable_int(id()), ']');
 }
 
+window::window(proxy::video& sys, std::string_view title, HAL_TAG_NAME(fullscreen))
+    : window { sys, title, sys.displays[0].size(), { flags::fullscreen } }
+{
+}
+
 renderer window::make_renderer(std::initializer_list<renderer::flags> flags) &
 {
-    return { *this, flags, pass_key<window> {} };
+    return { *this, flags };
 }
 
 hal::pixel_point window::pos() const

@@ -12,6 +12,8 @@
 
 namespace hal
 {
+    HAL_TAG(fullscreen);
+
     extern template class detail::raii_object<SDL_Window, ::SDL_DestroyWindow>;
 
     // A window. Not much more to say.
@@ -35,7 +37,11 @@ namespace hal
 
         window() = default;
 
-        window(std::string_view title, pixel_point size, std::initializer_list<flags> flags, pass_key<authority_t> sys);
+        window(proxy::video& sys, std::string_view title, pixel_point size, std::initializer_list<flags> flags);
+
+        // Create a window in fullscreen window.
+        // Warning: This has some issues on macOS due to its DPI scaling stuff.
+        window(proxy::video& sys, std::string_view title, HAL_TAG_NAME(fullscreen));
 
         [[nodiscard]] renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated }) &;
 

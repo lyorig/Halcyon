@@ -90,13 +90,12 @@ hal::surface context::load(accessor src, load_format fmt) const
 
     case xv:
         return { ::IMG_LoadXV_RW(ptr), pk };
-
-    case unknown:
+    
+    default:
         break;
     };
 
     HAL_PANIC("Trying to load image of unknown type");
-    return {};
 }
 
 void context::save(const surface& surf, save_format fmt, outputter dst) const

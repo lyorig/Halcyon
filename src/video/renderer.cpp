@@ -9,7 +9,7 @@
 
 using namespace hal;
 
-renderer::renderer(const hal::window& wnd, std::initializer_list<flags> f, pass_key<window>)
+renderer::renderer(const hal::window& wnd, std::initializer_list<flags> f)
     : raii_object { ::SDL_CreateRenderer(wnd.get(), -1, detail::to_bitmask<std::uint32_t>(f)) }
 {
     HAL_PRINT("Created renderer for \"", wnd.title(), "\" ", info());

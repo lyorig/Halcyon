@@ -19,7 +19,7 @@ namespace hal
             class device
             {
             public:
-                device(pass_key<proxy::audio>);
+                device(proxy::audio& sys);
 
                 // Choose a specific audio device.
                 device& name(std::string_view name);
@@ -50,6 +50,7 @@ namespace hal
             // Device querying functions return -1 to signalize an unknown
             // amount of devices etc., but don't intend it to be an error.
             constexpr static id_t invalid_id { static_cast<id_t>(-1) };
+            static_assert(static_cast<int>(-1) == invalid_id);
 
             device(const char* name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>);
             ~device();

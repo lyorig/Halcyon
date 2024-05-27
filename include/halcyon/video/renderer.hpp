@@ -64,7 +64,7 @@ namespace hal
 
         renderer() = default;
 
-        renderer(const hal::window& wnd, std::initializer_list<flags> f, pass_key<window>);
+        renderer(const hal::window& wnd, std::initializer_list<flags> f);
 
         // Clear (fill) the render target with the current draw color.
         void clear();
