@@ -1,7 +1,7 @@
 #pragma once
 
 #include <halcyon/types/color.hpp>
-#include <halcyon/types/render.hpp>
+#include <halcyon/video/types.hpp>
 
 // locks.hpp:
 // CTAD enabled locks.

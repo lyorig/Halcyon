@@ -48,8 +48,6 @@ namespace hal
         };
     }
 
-    HAL_TAG(fullscreen);
-
     namespace detail
     {
         template <>
@@ -58,10 +56,8 @@ namespace hal
         public:
             subsystem(pass_key<hal::system::video>);
 
-            // Create a window.
             [[nodiscard]] window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {}) &;
 
-            // Warning: This has some issues on macOS due to its DPI scaling stuff.
             [[nodiscard]] window make_window(std::string_view title, HAL_TAG_NAME(fullscreen)) &;
 
             HAL_NO_SIZE proxy::events events;

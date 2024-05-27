@@ -10,7 +10,7 @@
 #include <halcyon/internal/scaler.hpp>
 
 #include <halcyon/types/color.hpp>
-#include <halcyon/types/render.hpp>
+#include <halcyon/video/types.hpp>
 
 // video/renderer.hpp:
 // A proxy for creating and rendering textures etc. - more info below.
@@ -39,7 +39,7 @@ namespace hal
         both = SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL
     };
 
-    namespace info
+    namespace info::sdl
     {
         class renderer;
     }
@@ -62,9 +62,11 @@ namespace hal
             target_texture = SDL_RENDERER_TARGETTEXTURE
         };
 
+        using flag_bitset = detail::enum_bitset<flags, decltype(SDL_RendererInfo::flags)>;
+
         renderer() = default;
 
-        renderer(const hal::window& wnd, std::initializer_list<flags> f, pass_key<window>);
+        renderer(const hal::window& wnd, std::initializer_list<flags> f);
 
         // Clear (fill) the render target with the current draw color.
         void clear();
@@ -102,7 +104,9 @@ namespace hal
         void        size(pixel_point sz);
         void        size(scaler scl);
 
-        info::renderer info() const;
+        pixel_format pixel_format() const;
+
+        info::sdl::renderer info() const;
 
         // Texture creation functions.
         [[nodiscard]] texture        make_texture(const surface& surf) &;
@@ -118,18 +122,38 @@ namespace hal
 
     namespace info
     {
-        class renderer : SDL_RendererInfo
+        class renderer;
+
+        namespace sdl
+        {
+            class renderer : SDL_RendererInfo
+            {
+            public:
+                renderer(const hal::renderer& rnd, pass_key<hal::renderer>);
+
+                std::string_view name() const;
+
+                hal::renderer::flag_bitset flags() const;
+
+                std::span<const pixel_format> formats() const;
+
+                pixel_point max_texture_size() const;
+
+                friend std::ostream& operator<<(std::ostream& str, const info::sdl::renderer& inf);
+            };
+        }
+
+        class renderer
         {
         public:
-            using flag_bitset = detail::enum_bitset<hal::renderer::flags, decltype(SDL_RendererInfo::flags)>;
+            // Compress native renderer info.
+            renderer(const sdl::renderer& src);
 
-            renderer(const hal::renderer& rnd, pass_key<hal::renderer>);
+            std::string_view name;
+            pixel_point      max_texture_size;
 
-            std::string_view name() const;
-
-            flag_bitset flags() const;
-
-            pixel_point max_texture_size() const;
+            hal::renderer::flag_bitset flags;
+            std::vector<pixel_format>  formats;
         };
     }
 

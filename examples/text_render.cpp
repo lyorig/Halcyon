@@ -34,6 +34,8 @@ int main(int argc, char* argv[])
         hal::ttf::context tctx;
 
         tex = { rnd.make_texture(tctx.load("assets/m5x7.ttf", font_size).render(argv[1]).fg(hal::palette::black)()) };
+
+        HAL_PRINT("Texture pixel format: ", hal::to_string(tex.pixel_format()));
     }
 
     wnd.size(tex.size() + padding);

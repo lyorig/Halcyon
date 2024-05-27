@@ -132,8 +132,6 @@ surface bft::operator()(font::render_type rt)
     }
 
     HAL_PANIC("Unknown render type given.");
-
-    return {};
 }
 
 using bfg = builder::font_glyph;

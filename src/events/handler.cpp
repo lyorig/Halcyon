@@ -589,10 +589,8 @@ std::string_view hal::to_string(event::type evt)
         return "Clipboard updated";
 
     default:
-        return "[unimplemented]";
+        return "[unknown]";
     }
-
-    std::unreachable();
 }
 
 std::string_view hal::to_string(enum event::display::type evt)
@@ -614,10 +612,8 @@ std::string_view hal::to_string(enum event::display::type evt)
         return "Moved";
 
     default:
-        return "[unimplemented]";
+        return "[unknown]";
     }
-
-    std::unreachable();
 }
 
 std::string_view hal::to_string(enum event::window::type evt)
@@ -681,8 +677,6 @@ std::string_view hal::to_string(enum event::window::type evt)
         return "Display changed";
 
     default:
-        return "[unimplemented]";
+        return "[unknown]";
     }
-
-    std::unreachable();
 }

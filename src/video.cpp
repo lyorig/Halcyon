@@ -15,12 +15,12 @@ proxy::display::display(pass_key<video>)
 
 window proxy::video::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags) &
 {
-    return { title, size, flags, pass_key<proxy::video> {} };
+    return { *this, title, size, flags };
 }
 
 window proxy::video::make_window(std::string_view title, HAL_TAG_NAME(fullscreen)) &
 {
-    return { title, displays[0].size(), { hal::window::flags::fullscreen }, pass_key<proxy::video> {} };
+    return { *this, title, tag::fullscreen };
 }
 
 string proxy::clipboard::text() const

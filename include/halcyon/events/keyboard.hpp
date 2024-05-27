@@ -7,7 +7,7 @@
 
 #include <halcyon/internal/enum_bitset.hpp>
 
-#include <halcyon/types/render.hpp>
+#include <halcyon/video/types.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
 

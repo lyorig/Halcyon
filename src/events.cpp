@@ -13,7 +13,7 @@ mouse::state proxy::mouse::state() const
 
 pixel_point proxy::mouse::pos_abs() const
 {
-    sdl::pixel_point ret;
+    pixel_point ret;
 
     static_cast<void>(::SDL_GetGlobalMouseState(&ret.x, &ret.y));
 
@@ -22,7 +22,7 @@ pixel_point proxy::mouse::pos_abs() const
 
 pixel_point proxy::mouse::pos_rel() const
 {
-    sdl::pixel_point ret;
+    pixel_point ret;
 
     static_cast<void>(::SDL_GetMouseState(&ret.x, &ret.y));
 

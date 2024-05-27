@@ -15,8 +15,8 @@ int main(int, char*[])
     hal::context       ctx;
     hal::system::video vid { ctx };
 
-    hal::window   wnd { vid.make_window("Halcyon Structure Showcase", { 640, 480 }, { wf::resizable }) };
-    hal::renderer rnd { wnd.make_renderer({ rf::accelerated, rf::vsync }) };
+    hal::window   wnd { vid, "Halcyon Structure Showcase", { 640, 480 }, { wf::resizable } };
+    hal::renderer rnd { wnd, { rf::accelerated, rf::vsync } };
 
     hal::event::handler eh { vid.events };
 

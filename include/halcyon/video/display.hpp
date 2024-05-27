@@ -1,11 +1,9 @@
 #pragma once
 
-#include <string_view>
-
 #include <halcyon/internal/subsystem.hpp>
 
-#include <halcyon/types/render.hpp>
 #include <halcyon/utility/pass_key.hpp>
+#include <halcyon/video/types.hpp>
 
 // video/display.hpp:
 // A representation of a monitor.
@@ -39,6 +37,8 @@ namespace hal
             pixel_point        size;
             pixel_format       fmt;
             hal::display::hz_t hz;
+
+            friend std::ostream& operator<<(std::ostream& str, const info::display& disp);
         };
 
         namespace sdl

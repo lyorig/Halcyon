@@ -4,6 +4,7 @@
 
 #include <halcyon/internal/tags.hpp>
 #include <halcyon/types/sdl.hpp>
+#include <halcyon/utility/printing.hpp>
 
 // types/point.hpp:
 // A 2D point class, there's really not much more to say.
@@ -210,6 +211,11 @@ namespace hal
         {
             return reinterpret_cast<const detail::sdl_point<T>*>(this);
         }
+
+        friend std::ostream& operator<<(std::ostream& str, const point& pt)
+        {
+            return str << '[' << to_printable_int(pt.x) << ", " << to_printable_int(pt.y) << ']';
+        }
     };
 
     extern template struct point<std::int8_t>;
@@ -230,12 +236,5 @@ namespace hal
     {
         const point<T> dist { lhs - rhs };
         return static_cast<f64>(std::sqrt(dist.x * dist.x + dist.y * dist.y));
-    }
-
-    // Wrappers for native SDL types.
-    namespace sdl
-    {
-        using pixel_point = point<pixel_t>;
-        using coord_point = point<coord_t>;
     }
 }

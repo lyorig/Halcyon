@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/types/render.hpp>
+#include <halcyon/video/types.hpp>
 
 // internal/scaler.hpp:
 // A way to scale points in-place.
