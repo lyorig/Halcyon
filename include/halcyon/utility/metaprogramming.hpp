@@ -162,7 +162,7 @@ namespace hal
         };
 
         // Check whether the main function is correctly written out.
-        // This will throw a weird compilation error upon failure - haven't found
+        // On Windows, this will throw a weird compilation error upon failure - haven't found
         // a workaround yet, but in a certain way, this is desirable, since you'll notice it.
         // This is due to SDL's cross-platform hackery; on Windows, it redefines "main"
         // to be SDL_main, which hides away the OS' custom GUI application main function.

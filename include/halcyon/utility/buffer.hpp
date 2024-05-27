@@ -7,6 +7,8 @@
 
 namespace hal
 {
+    // A class that holds a heap-allocated buffer whose size won't change after construction.
+    // So basically a vector, but without the need for storing a separate capacity.
     template <typename T>
     class buffer
     {
