@@ -10,6 +10,9 @@
 #include <halcyon/internal/scaler.hpp>
 
 #include <halcyon/types/color.hpp>
+
+#include <halcyon/utility/buffer.hpp>
+
 #include <halcyon/video/types.hpp>
 
 // video/renderer.hpp:
@@ -153,7 +156,7 @@ namespace hal
             pixel_point      max_texture_size;
 
             hal::renderer::flag_bitset flags;
-            std::vector<pixel_format>  formats;
+            buffer<pixel_format>       formats;
         };
     }
 

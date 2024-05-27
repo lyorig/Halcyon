@@ -199,10 +199,9 @@ std::ostream& info::sdl::operator<<(std::ostream& str, const info::sdl::renderer
 info::renderer::renderer(const sdl::renderer& src)
     : name { src.name() }
     , max_texture_size { src.max_texture_size() }
+    , formats { src.formats() }
     , flags { src.flags() }
 {
-    const auto span = src.formats();
-    std::copy(span.begin(), span.end(), std::back_inserter(formats));
 }
 
 // Copyer.
