@@ -6,7 +6,7 @@
 
 #include <halcyon/internal/raii_object.hpp>
 #include <halcyon/types/color.hpp>
-#include <halcyon/types/render.hpp>
+#include <halcyon/video/types.hpp>
 
 // video/texture.cpp:
 // Proper textures that can be drawn to a window (or a target texture).
@@ -57,7 +57,7 @@ namespace hal
         texture() = default;
 
         // [private] Textures are created with renderer::load().
-        texture(const renderer& rnd, const surface& surf, pass_key<renderer>);
+        texture(renderer& rnd, const surface& surf);
     };
 
     // A texture that can be drawn onto.
@@ -67,6 +67,6 @@ namespace hal
         target_texture() = default;
 
         // [private] Target textures are created with renderer::load().
-        target_texture(const renderer& rnd, SDL_PixelFormatEnum fmt, pixel_point size, pass_key<renderer>);
+        target_texture(renderer& rnd, pixel_format fmt, pixel_point size);
     };
 }

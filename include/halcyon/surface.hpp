@@ -103,7 +103,7 @@ namespace hal
     private:
         // [private] Construct a new surface from an existing one
         // and convert it to a specified format.
-        surface(const surface& cvt, SDL_PixelFormatEnum fmt);
+        surface(const surface& cvt, pixel_format fmt);
 
         // Convert a color to a mapped value using this surface's pixel format.
         std::uint32_t mapped(color c) const;

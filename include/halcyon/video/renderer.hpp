@@ -10,7 +10,7 @@
 #include <halcyon/internal/scaler.hpp>
 
 #include <halcyon/types/color.hpp>
-#include <halcyon/types/render.hpp>
+#include <halcyon/video/types.hpp>
 
 // video/renderer.hpp:
 // A proxy for creating and rendering textures etc. - more info below.
@@ -130,6 +130,8 @@ namespace hal
             flag_bitset flags() const;
 
             pixel_point max_texture_size() const;
+
+            friend std::ostream& operator<<(std::ostream& str, const info::renderer& inf);
         };
     }
 

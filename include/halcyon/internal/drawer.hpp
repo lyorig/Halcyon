@@ -1,5 +1,5 @@
 #pragma once
-#include <halcyon/types/render.hpp>
+#include <halcyon/video/types.hpp>
 
 #include <halcyon/utility/pass_key.hpp>
 

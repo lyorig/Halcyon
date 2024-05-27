@@ -1,10 +1,12 @@
 #pragma once
 
-#include <halcyon/types/rectangle.hpp>
 #include <ostream>
 
+#include <halcyon/types/numeric.hpp>
+#include <halcyon/utility/concepts.hpp>
+
 // printing.hpp:
-// Stream insertion support for custom types.
+// Extra utility stuff for printing.
 
 namespace hal
 {
@@ -18,30 +20,6 @@ namespace hal
     {
         return static_cast<printable_int_t<T>>(val);
     }
-
-    template <meta::arithmetic T>
-    std::ostream& operator<<(std::ostream& str, const point<T>& pt)
-    {
-        return str << '[' << to_printable_int(pt.x) << ',' << to_printable_int(pt.y) << ']';
-    }
-
-    template <meta::arithmetic T>
-    std::ostream& operator<<(std::ostream& str, const rectangle<T>& rect)
-    {
-        return str << '{' << rect.pos << ' ' << rect.size << '}';
-    }
-
-    struct color;
-
-    namespace info
-    {
-        class display;
-        class renderer;
-    }
-
-    std::ostream& operator<<(std::ostream& str, color c);
-    std::ostream& operator<<(std::ostream& str, const info::display& disp);
-    std::ostream& operator<<(std::ostream& str, const info::renderer& inf);
 
     namespace meta
     {

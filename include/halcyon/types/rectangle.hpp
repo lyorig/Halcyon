@@ -85,6 +85,11 @@ namespace hal
         {
             return reinterpret_cast<const detail::sdl_rect<T>*>(this);
         }
+
+        friend std::ostream& operator<<(std::ostream& str, const rectangle& rect)
+        {
+            return str << '{' << rect.pos << ' ' << rect.size << '}';
+        }
     };
 
     extern template struct rectangle<std::int8_t>;

@@ -10,10 +10,10 @@
 using namespace hal;
 
 // Set the depth accordingly upon changing this value.
-constexpr SDL_PixelFormatEnum default_format { SDL_PIXELFORMAT_RGBA32 };
+constexpr pixel_format default_format { pixel_format::rgba32 };
 
 surface::surface(pixel_point sz)
-    : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, default_format) }
+    : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, static_cast<Uint32>(default_format)) }
 {
 }
 
@@ -57,7 +57,7 @@ surface surface::resize(pixel_point sz)
     surface     ret { sz };
     lock::blend bl { *this, blend_mode::none };
 
-    if (get()->format->format == default_format)
+    if (get()->format->format == static_cast<Uint32>(default_format))
         blit(ret).to(tag::fill)();
 
     else
@@ -144,8 +144,8 @@ pixel_reference surface::operator[](const pixel_point& pos) const
     return { static_cast<std::byte*>(get()->pixels), get()->pitch, get()->format, pos, pass_key<surface> {} };
 }
 
-surface::surface(const surface& cvt, SDL_PixelFormatEnum fmt)
-    : raii_object { ::SDL_ConvertSurfaceFormat(cvt.get(), fmt, 0) }
+surface::surface(const surface& cvt, pixel_format fmt)
+    : raii_object { ::SDL_ConvertSurfaceFormat(cvt.get(), static_cast<Uint32>(fmt), 0) }
 {
 }
 

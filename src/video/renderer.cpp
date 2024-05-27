@@ -94,7 +94,7 @@ info::renderer renderer::info() const
 
 texture renderer::make_texture(const surface& surf) &
 {
-    return { *this, surf, pass_key<renderer> {} };
+    return { *this, surf };
 }
 
 target_texture renderer::make_target_texture(pixel_point size) &
@@ -102,10 +102,10 @@ target_texture renderer::make_target_texture(pixel_point size) &
     SDL_Window* wnd { ::SDL_RenderGetWindow(get()) };
     HAL_ASSERT(wnd != nullptr, debug::last_error());
 
-    const SDL_PixelFormatEnum fmt { static_cast<SDL_PixelFormatEnum>(::SDL_GetWindowPixelFormat(wnd)) };
-    HAL_ASSERT(fmt != SDL_PIXELFORMAT_UNKNOWN, debug::last_error());
+    const pixel_format fmt { static_cast<pixel_format>(::SDL_GetWindowPixelFormat(wnd)) };
+    HAL_ASSERT(fmt != pixel_format::unknown, debug::last_error());
 
-    return { *this, fmt, size, pass_key<renderer> {} };
+    return { *this, fmt, size };
 }
 
 color renderer::color() const
@@ -169,6 +169,11 @@ pixel_point info::renderer::max_texture_size() const
         static_cast<pixel_t>(max_texture_width),
         static_cast<pixel_t>(max_texture_height)
     };
+}
+
+std::ostream& hal::info::operator<<(std::ostream& str, const info::renderer& inf)
+{
+    return str << '[' << inf.name() << ", flags: 0x" << std::hex << inf.flags().mask() << std::dec << ", MTS: " << inf.max_texture_size() << ']';
 }
 
 // Copyer.

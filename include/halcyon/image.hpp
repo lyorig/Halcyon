@@ -11,7 +11,6 @@
 // SDL_image wrappers for image loading.
 
 namespace hal
-
 {
     namespace image
     {
@@ -94,5 +93,117 @@ namespace hal
         static_assert(::IMG_GetError == ::SDL_GetError);
     }
 
-    std::string_view to_string(image::init_format fmt);
+    constexpr std::string_view to_string(image::init_format fmt)
+    {
+        using enum image::init_format;
+
+        switch (fmt)
+        {
+        case jpg:
+            return "JPG";
+
+        case png:
+            return "PNG";
+
+        case tif:
+            return "TIF";
+
+        case webp:
+            return "WEBP";
+
+        case jxl:
+            return "JXL";
+
+        case avif:
+            return "AVIF";
+
+        default:
+            return "[unknown]";
+        }
+    }
+
+    constexpr std::string_view to_string(image::save_format fmt)
+    {
+        using enum image::save_format;
+
+        switch (fmt)
+        {
+        case png:
+            return "PNG";
+
+        case jpg:
+            return "JPG";
+
+        default:
+            return "[unknown]";
+        }
+    }
+
+    constexpr std::string_view to_string(image::load_format fmt)
+    {
+        using enum image::load_format;
+
+        switch (fmt)
+        {
+        case avif:
+            return "AVIF";
+
+        case ico:
+            return "ICO";
+
+        case cur:
+            return "CUR";
+
+        case bmp:
+            return "BMP";
+
+        case gif:
+            return "GIF";
+
+        case jpg:
+            return "JPG";
+
+        case jxl:
+            return "JXL";
+
+        case lbm:
+            return "LBM";
+
+        case pcx:
+            return "PCX";
+
+        case png:
+            return "PNG";
+
+        case pnm:
+            return "PNM";
+
+        case svg:
+            return "SVG";
+
+        case qoi:
+            return "QOI";
+
+        case tif:
+            return "TIF";
+
+        case xcf:
+            return "XCF";
+
+        case xpm:
+            return "XPM";
+
+        case xv:
+            return "XV";
+
+        case webp:
+            return "WebP";
+
+        case unknown:
+            return "Unknown";
+
+        default:
+            return "[unknown]";
+        }
+    }
 }

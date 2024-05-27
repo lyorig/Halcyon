@@ -1,7 +1,8 @@
 #pragma once
 
-#include <halcyon/utility/metaprogramming.hpp>
 #include <string_view>
+
+#include <halcyon/utility/metaprogramming.hpp>
 
 // concepts.hpp:
 // An extension of STL concepts.

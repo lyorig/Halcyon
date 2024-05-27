@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <iosfwd>
 #include <limits> // MSVC wants this.
 
 #include <SDL_pixels.h>
@@ -102,6 +103,8 @@ namespace hal
                 static_cast<value_t>(a.a - b.a),
             };
         }
+
+        friend std::ostream& operator<<(std::ostream& str, color c);
     };
 
     // Predefined colors in RGB form.

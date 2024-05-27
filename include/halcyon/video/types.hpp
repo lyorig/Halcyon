@@ -49,6 +49,8 @@ namespace hal
     // Warning: not exhaustive.
     enum class pixel_format : u32
     {
+        unknown = SDL_PIXELFORMAT_UNKNOWN,
+
         rgb24 = SDL_PIXELFORMAT_RGB24,
         bgr24 = SDL_PIXELFORMAT_BGR24,
 
@@ -70,7 +72,70 @@ namespace hal
         nv21 = SDL_PIXELFORMAT_NV21
     };
 
-    std::string_view to_string(pixel_format fmt);
+    constexpr std::string_view to_string(pixel_format fmt)
+    {
+        using enum pixel_format;
+
+        switch (fmt)
+        {
+        case unknown:
+            return "Unknown";
+
+        case rgb24:
+            return "RGB24";
+
+        case bgr24:
+            return "BGR24";
+
+        case rgba32:
+            return "RGBA32";
+
+        case argb32:
+            return "ARGB32";
+
+        case bgra32:
+            return "BGRA32";
+
+        case abgr32:
+            return "ABGR32";
+
+        case rgbx32:
+            return "RGBx32";
+
+        case xrgb32:
+            return "xRGB32";
+
+        case bgrx32:
+            return "BGRx32";
+
+        case xbgr32:
+            return "xBGR32";
+
+        case yv12:
+            return "YV12";
+
+        case iyuv:
+            return "IYUV";
+
+        case yuy2:
+            return "YUY2";
+
+        case uyvy:
+            return "UYVY";
+
+        case yvyu:
+            return "YVYU";
+
+        case nv12:
+            return "NV12";
+
+        case nv21:
+            return "NV21";
+
+        default:
+            return "[unknown]";
+        }
+    }
 
     using pixel_point = point<pixel_t>;
     using pixel_rect  = rectangle<pixel_t>;
