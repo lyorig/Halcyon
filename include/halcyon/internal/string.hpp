@@ -10,34 +10,31 @@ namespace hal
         class clipboard;
     }
 
-    namespace sdl
+    // SDL sometimes returns string pointers that we have to free via
+    // its own function afterwards. This is a wrapper of that functionality
+    // that attempts to mimic std::string as best as it can.
+    class string : public detail::raii_object<char, ::SDL_free>
     {
-        // SDL sometimes returns string pointers that we have to free via
-        // its own function afterwards. This is a wrapper of that functionality
-        // that attempts to mimic std::string as best as it can.
-        class string : public detail::raii_object<char, ::SDL_free>
-        {
-        public:
-            using authority_t = proxy::clipboard;
+    public:
+        using authority_t = proxy::clipboard;
 
-            string(char* ptr, pass_key<authority_t>);
+        string(char* ptr, pass_key<authority_t>);
 
-            std::size_t size() const;
+        std::size_t size() const;
 
-            char* begin();
-            char* end();
+        char* begin();
+        char* end();
 
-            const char* begin() const;
-            const char* end() const;
+        const char* begin() const;
+        const char* end() const;
 
-            char*       data();
-            const char* data() const;
+        char*       data();
+        const char* data() const;
 
-            const char* c_str() const;
+        const char* c_str() const;
 
-            operator std::string_view() const;
-        };
+        operator std::string_view() const;
+    };
 
-        bool operator==(string lhs, std::string_view rhs);
-    }
+    bool operator==(string lhs, std::string_view rhs);
 }

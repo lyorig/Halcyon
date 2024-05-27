@@ -12,7 +12,9 @@ namespace hal
     template <meta::arithmetic T>
     using printable_int_t = std::conditional_t<sizeof(T) == 1, std::conditional_t<std::is_signed_v<T>, i16, u16>, T>;
 
-    // Convenience function.
+    // Ensure a number is printable; that is, if 'val' is of a type tbat
+    // would cause it to be interpreted as a character by output streams,
+    // it'll be widened to the next smallest integer type.
     template <meta::arithmetic T>
     constexpr printable_int_t<T> to_printable_int(T val)
     {

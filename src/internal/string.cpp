@@ -6,57 +6,57 @@
 
 using namespace hal;
 
-sdl::string::string(char* ptr, pass_key<authority_t>)
+string::string(char* ptr, pass_key<authority_t>)
     : raii_object { ptr }
 {
 }
 
-std::size_t sdl::string::size() const
+std::size_t string::size() const
 {
     return std::strlen(get());
 }
 
-char* sdl::string::begin()
+char* string::begin()
 {
     return get();
 }
 
-char* sdl::string::end()
+char* string::end()
 {
     return get() + size();
 }
 
-const char* sdl::string::begin() const
+const char* string::begin() const
 {
     return get();
 }
 
-const char* sdl::string::end() const
+const char* string::end() const
 {
     return get() + size();
 }
 
-char* sdl::string::data()
+char* string::data()
 {
     return get();
 }
 
-const char* sdl::string::data() const
+const char* string::data() const
 {
     return get();
 }
 
-const char* sdl::string::c_str() const
+const char* string::c_str() const
 {
     return get();
 }
 
-sdl::string::operator std::string_view() const
+string::operator std::string_view() const
 {
     return get();
 }
 
-bool sdl::operator==(string lhs, std::string_view rhs)
+bool hal::operator==(string lhs, std::string_view rhs)
 {
     return rhs == lhs.c_str();
 }
