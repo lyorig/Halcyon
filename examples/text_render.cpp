@@ -33,9 +33,12 @@ int main(int argc, char* argv[])
     {
         hal::ttf::context tctx;
 
-        tex = { rnd.make_texture(tctx.load("assets/m5x7.ttf", font_size).render(argv[1]).fg(hal::palette::black)()) };
+        const hal::font    fnt { tctx.load("assets/m5x7.ttf", font_size) };
+        const hal::surface surf { fnt.render(argv[1]).fg(hal::palette::black)() };
 
-        HAL_PRINT("Texture pixel format: ", hal::to_string(tex.pixel_format()));
+        HAL_PRINT("Pixel format: ", hal::to_string(surf.pixel_format()));
+
+        tex = { rnd.make_texture(surf) };
     }
 
     wnd.size(tex.size() + padding);

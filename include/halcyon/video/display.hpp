@@ -37,8 +37,6 @@ namespace hal
             pixel_point        size;
             pixel_format       fmt;
             hal::display::hz_t hz;
-
-            friend std::ostream& operator<<(std::ostream& str, const info::display& disp);
         };
 
         namespace sdl
@@ -54,6 +52,8 @@ namespace hal
                 pixel_point        size() const;
                 pixel_format       format() const;
                 hal::display::hz_t hz() const;
+
+                friend std::ostream& operator<<(std::ostream& str, const info::display& disp);
             };
 
             static_assert(sizeof(display) == sizeof(SDL_DisplayMode));

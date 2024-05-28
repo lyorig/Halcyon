@@ -23,7 +23,7 @@ namespace hal
         using diff_t = i16;
 
         // A single R, G, B or A value.
-        using value_t = std::uint8_t;
+        using value_t = decltype(SDL_Color::r);
 
         // Helper struct that represents the difference of two colors.
         struct diff

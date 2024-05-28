@@ -42,7 +42,11 @@ namespace hal
         public:
             display(pass_key<video>);
 
+            // Get the amount of video displays.
             hal::display::id_t size() const;
+
+            // Get the name of a display.
+            std::string_view name(hal::display::id_t id) const;
 
             info::sdl::display operator[](hal::display::id_t idx) const;
         };

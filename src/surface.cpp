@@ -12,8 +12,8 @@ using namespace hal;
 // Set the depth accordingly upon changing this value.
 constexpr pixel_format default_format { pixel_format::rgba32 };
 
-surface::surface(pixel_point sz)
-    : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, static_cast<Uint32>(default_format)) }
+surface::surface(pixel_point sz, enum pixel_format fmt)
+    : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, static_cast<Uint32>(fmt)) }
 {
 }
 
@@ -57,11 +57,7 @@ surface surface::resize(pixel_point sz)
     surface     ret { sz };
     lock::blend bl { *this, blend_mode::none };
 
-    if (get()->format->format == static_cast<Uint32>(default_format))
-        blit(ret).to(tag::fill)();
-
-    else
-        surface { *this, default_format }.blit(ret).to(tag::fill)();
+    blit(ret).to(tag::fill)();
 
     return ret;
 }
@@ -81,9 +77,9 @@ blitter surface::blit(surface& dst) const
     return { dst, *this, pass_key<surface> {} };
 }
 
-surface surface::convert() const
+surface surface::convert(enum pixel_format fmt) const
 {
-    return { *this, default_format };
+    return { *this, fmt };
 }
 
 pixel_point surface::size() const
@@ -92,6 +88,11 @@ pixel_point surface::size() const
         pixel_t(get()->w),
         pixel_t(get()->h)
     };
+}
+
+pixel_format surface::pixel_format() const
+{
+    return static_cast<enum pixel_format>(get()->format->format);
 }
 
 blend_mode surface::blend() const
@@ -144,7 +145,7 @@ pixel_reference surface::operator[](const pixel_point& pos) const
     return { static_cast<std::byte*>(get()->pixels), get()->pitch, get()->format, pos, pass_key<surface> {} };
 }
 
-surface::surface(const surface& cvt, pixel_format fmt)
+surface::surface(const surface& cvt, enum pixel_format fmt)
     : raii_object { ::SDL_ConvertSurfaceFormat(cvt.get(), static_cast<Uint32>(fmt), 0) }
 {
 }
@@ -172,30 +173,30 @@ void pixel_reference::color(struct color c)
     set_mapped(::SDL_MapRGBA(m_fmt, c.r, c.g, c.b, c.a));
 }
 
-std::uint32_t pixel_reference::get_mapped() const
+Uint32 pixel_reference::get_mapped() const
 {
-    std::uint32_t ret { 0 };
+    Uint32 ret { 0 };
 
     if constexpr (SDL_BYTEORDER == SDL_LIL_ENDIAN)
         std::memcpy(&ret, m_ptr, m_fmt->BytesPerPixel);
 
     else
     {
-        const u8 offset = sizeof(std::uint32_t) - m_fmt->BytesPerPixel;
+        const u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
         std::memcpy(&ret + offset, m_ptr + offset, m_fmt->BytesPerPixel);
     }
 
     return ret;
 }
 
-void pixel_reference::set_mapped(std::uint32_t mapped)
+void pixel_reference::set_mapped(Uint32 mapped)
 {
     if constexpr (compile_settings::byte_order == byte_order::lil_endian)
         std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
 
     else
     {
-        const u8 offset = sizeof(std::uint32_t) - m_fmt->BytesPerPixel;
+        const u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
         std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->BytesPerPixel);
     }
 }

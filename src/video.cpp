@@ -51,6 +51,15 @@ display::id_t proxy::display::size() const
     return static_cast<hal::display::id_t>(ret);
 }
 
+std::string_view proxy::display::name(hal::display::id_t id) const
+{
+    const char* ret { ::SDL_GetDisplayName(id) };
+
+    HAL_ASSERT(ret != nullptr, debug::last_error());
+
+    return ret;
+}
+
 info::sdl::display proxy::display::operator[](hal::display::id_t idx) const
 {
     return { idx, pass_key<proxy::display> {} };

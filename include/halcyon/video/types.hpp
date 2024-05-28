@@ -51,6 +51,8 @@ namespace hal
     {
         unknown = SDL_PIXELFORMAT_UNKNOWN,
 
+        index8 = SDL_PIXELFORMAT_INDEX8,
+
         rgb24 = SDL_PIXELFORMAT_RGB24,
         bgr24 = SDL_PIXELFORMAT_BGR24,
 
@@ -80,6 +82,9 @@ namespace hal
         {
         case unknown:
             return "Unknown";
+
+        case index8:
+            return "Index 8";
 
         case rgb24:
             return "RGB24";

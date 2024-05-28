@@ -44,7 +44,7 @@ hal::display::hz_t info::sdl::display::hz() const
     return static_cast<hal::display::hz_t>(refresh_rate);
 }
 
-std::ostream& hal::info::operator<<(std::ostream& str, const info::display& disp)
+std::ostream& hal::info::sdl::operator<<(std::ostream& str, const info::display& disp)
 {
     return str << "[size: " << disp.size << ", format: " << to_string(disp.fmt) << ", Hz: " << disp.hz << ']';
 }

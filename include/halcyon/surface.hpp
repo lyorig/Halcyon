@@ -40,10 +40,12 @@ namespace hal
     class surface : public detail::raii_object<SDL_Surface, ::SDL_FreeSurface>
     {
     public:
+        static constexpr pixel_format default_pixel_format { pixel_format::rgba32 };
+
         surface() = default;
 
-        // Create a sized surface.
-        surface(pixel_point sz);
+        // Create a sized surface with an optional pixel format.
+        surface(pixel_point sz, pixel_format fmt = default_pixel_format);
 
         // Load a BMP image. This works natively without having to initialize anything.
         surface(accessor src);
@@ -76,22 +78,28 @@ namespace hal
         void save(outputter dst) const;
 
         // Create a blitter.
+        // Not all pixel formats can be blitted,
         [[nodiscard]] blitter blit(surface& dst) const;
 
         // Convert this surface into a blittable format.
         // Use with text.
-        [[nodiscard]] surface convert() const;
+        [[nodiscard]] surface convert(pixel_format fmt) const;
 
         // Get surface dimensions.
         pixel_point size() const;
+
+        // Get this surface's pixel format.
+        pixel_format pixel_format() const;
 
         // Get/set this surface's blend mode.
         blend_mode blend() const;
         void       blend(blend_mode bm);
 
+        // Get/set this surface's color modifiers.
         color color_mod() const;
         void  color_mod(color col);
 
+        // Get/set this surface's alpha modifier.
         color::value_t alpha_mod() const;
         void           alpha_mod(color::value_t val);
 
@@ -101,12 +109,11 @@ namespace hal
         pixel_reference operator[](const pixel_point& pos) const;
 
     private:
-        // [private] Construct a new surface from an existing one
-        // and convert it to a specified format.
-        surface(const surface& cvt, pixel_format fmt);
+        // [private] Convert an existing surface to a different format with surface::convert().
+        surface(const surface& cvt, enum pixel_format fmt);
 
         // Convert a color to a mapped value using this surface's pixel format.
-        std::uint32_t mapped(color c) const;
+        Uint32 mapped(color c) const;
     };
 
     // A reference to a pixel in a surface for easy access and modification.
@@ -120,10 +127,10 @@ namespace hal
 
     private:
         // Retrieve the color in a mapped format.
-        std::uint32_t get_mapped() const;
+        Uint32 get_mapped() const;
 
         // Set the color to a mapped value.
-        void set_mapped(std::uint32_t mv);
+        void set_mapped(Uint32 mv);
 
         std::byte*             m_ptr; // A pointer to the current color.
         const SDL_PixelFormat* m_fmt;
