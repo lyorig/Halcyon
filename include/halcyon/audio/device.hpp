@@ -1,5 +1,7 @@
 #pragma once
 
+#include <span>
+
 #include <halcyon/audio/spec.hpp>
 
 #include <halcyon/internal/raii_object.hpp>
@@ -52,14 +54,11 @@ namespace hal
             constexpr static id_t invalid_id { static_cast<id_t>(-1) };
             static_assert(static_cast<int>(-1) == invalid_id);
 
+            // [private] Construct an audio device via hal::audio::builder::device.
             device(const char* name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>);
             ~device();
 
-            template <meta::buffer T>
-            void queue(const T& data)
-            {
-                HAL_ASSERT_VITAL(::SDL_QueueAudio(m_id, std::data(data), static_cast<int>(std::size(data))) == 0, debug::last_error());
-            }
+            void queue(std::span<std::byte> bytes);
 
             void pause(bool p);
 

@@ -59,6 +59,11 @@ audio::device::~device()
     ::SDL_CloseAudioDevice(m_id);
 }
 
+void audio::device::queue(std::span<std::byte> bytes)
+{
+    HAL_ASSERT_VITAL(::SDL_QueueAudio(m_id, bytes.data(), bytes.size_bytes()) == 0, debug::last_error());
+}
+
 void audio::device::pause(bool p)
 {
     ::SDL_PauseAudioDevice(m_id, p);
