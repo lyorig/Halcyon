@@ -45,38 +45,76 @@ namespace hal
         }
     }
 
-    // Formats in which pixels are stored.
-    // Warning: not exhaustive.
-    enum class pixel_format : u32
+    std::ostream& operator<<(std::ostream& str, blend_mode bm);
+
+    namespace pixel
     {
-        unknown = SDL_PIXELFORMAT_UNKNOWN,
+        using point = point<pixel_t>;
+        using rect  = rectangle<pixel_t>;
 
-        index8 = SDL_PIXELFORMAT_INDEX8,
+        // Formats in which pixels are stored.
+        // Warning: not exhaustive.
+        enum class format : u32
+        {
+            unknown = SDL_PIXELFORMAT_UNKNOWN,
 
-        rgb24 = SDL_PIXELFORMAT_RGB24,
-        bgr24 = SDL_PIXELFORMAT_BGR24,
+            index8 = SDL_PIXELFORMAT_INDEX8,
 
-        rgba32 = SDL_PIXELFORMAT_RGBA32,
-        argb32 = SDL_PIXELFORMAT_ARGB32,
-        bgra32 = SDL_PIXELFORMAT_BGRA32,
-        abgr32 = SDL_PIXELFORMAT_ABGR32,
-        rgbx32 = SDL_PIXELFORMAT_RGBX32,
-        xrgb32 = SDL_PIXELFORMAT_XRGB32,
-        bgrx32 = SDL_PIXELFORMAT_BGRX32,
-        xbgr32 = SDL_PIXELFORMAT_XBGR32,
+            rgb24 = SDL_PIXELFORMAT_RGB24,
+            bgr24 = SDL_PIXELFORMAT_BGR24,
 
-        yv12 = SDL_PIXELFORMAT_YV12,
-        iyuv = SDL_PIXELFORMAT_IYUV,
-        yuy2 = SDL_PIXELFORMAT_YUY2,
-        uyvy = SDL_PIXELFORMAT_UYVY,
-        yvyu = SDL_PIXELFORMAT_YVYU,
-        nv12 = SDL_PIXELFORMAT_NV12,
-        nv21 = SDL_PIXELFORMAT_NV21
-    };
+            rgba32 = SDL_PIXELFORMAT_RGBA32,
+            argb32 = SDL_PIXELFORMAT_ARGB32,
+            bgra32 = SDL_PIXELFORMAT_BGRA32,
+            abgr32 = SDL_PIXELFORMAT_ABGR32,
+            rgbx32 = SDL_PIXELFORMAT_RGBX32,
+            xrgb32 = SDL_PIXELFORMAT_XRGB32,
+            bgrx32 = SDL_PIXELFORMAT_BGRX32,
+            xbgr32 = SDL_PIXELFORMAT_XBGR32,
 
-    constexpr std::string_view to_string(pixel_format fmt)
+            yv12 = SDL_PIXELFORMAT_YV12,
+            iyuv = SDL_PIXELFORMAT_IYUV,
+            yuy2 = SDL_PIXELFORMAT_YUY2,
+            uyvy = SDL_PIXELFORMAT_UYVY,
+            yvyu = SDL_PIXELFORMAT_YVYU,
+            nv12 = SDL_PIXELFORMAT_NV12,
+            nv21 = SDL_PIXELFORMAT_NV21
+        };
+
+        std::ostream& operator<<(std::ostream& str, pixel::format fmt);
+
+        // Exhaustive list of all pixel representation types.
+        enum class type
+        {
+            unknown = SDL_PIXELTYPE_UNKNOWN,
+
+            index1 = SDL_PIXELTYPE_INDEX1,
+            index2 = SDL_PIXELTYPE_INDEX2,
+            index4 = SDL_PIXELTYPE_INDEX4,
+            index8 = SDL_PIXELTYPE_INDEX8,
+
+            packed8  = SDL_PIXELTYPE_PACKED8,
+            packed16 = SDL_PIXELTYPE_PACKED16,
+            packed32 = SDL_PIXELTYPE_PACKED32,
+
+            array_u8  = SDL_PIXELTYPE_ARRAYU8,
+            array_u16 = SDL_PIXELTYPE_ARRAYU16,
+            array_u32 = SDL_PIXELTYPE_ARRAYU32,
+            array_f16 = SDL_PIXELTYPE_ARRAYF16,
+            array_f32 = SDL_PIXELTYPE_ARRAYF32
+        };
+
+        std::ostream& operator<<(std::ostream& str, pixel::type tp);
+
+        constexpr type type_of(format fmt)
+        {
+            return static_cast<type>(SDL_PIXELTYPE(static_cast<SDL_PixelFormatEnum>(fmt)));
+        }
+    }
+
+    constexpr std::string_view to_string(pixel::format fmt)
     {
-        using enum pixel_format;
+        using enum pixel::format;
 
         switch (fmt)
         {
@@ -142,11 +180,61 @@ namespace hal
         }
     }
 
-    using pixel_point = point<pixel_t>;
-    using pixel_rect  = rectangle<pixel_t>;
+    constexpr std::string_view to_string(pixel::type tp)
+    {
+        using enum pixel::type;
 
-    using coord_point = point<coord_t>;
-    using coord_rect  = rectangle<coord_t>;
+        switch (tp)
+        {
+        case unknown:
+            return "Unknown";
+
+        case index1:
+            return "Index 1";
+
+        case index2:
+            return "Index 2";
+
+        case index4:
+            return "Index 4";
+
+        case index8:
+            return "Index 8";
+
+        case packed8:
+            return "Packed 8";
+
+        case packed16:
+            return "Packed 16";
+
+        case packed32:
+            return "Packed 32";
+
+        case array_u8:
+            return "Array u8";
+
+        case array_u16:
+            return "Array u16";
+
+        case array_u32:
+            return "Array u32";
+
+        case array_f16:
+            return "Array f16";
+
+        case array_f32:
+            return "Array f32";
+
+        default:
+            return "[unknown]";
+        }
+    }
+
+    namespace coord
+    {
+        using point = point<coord_t>;
+        using rect  = rectangle<coord_t>;
+    }
 
     namespace literals
     {

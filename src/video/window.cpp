@@ -6,7 +6,7 @@
 
 using namespace hal;
 
-window::window(proxy::video&, std::string_view title, pixel_point size, std::initializer_list<flags> flags)
+window::window(proxy::video&, std::string_view title, pixel::point size, std::initializer_list<flags> flags)
     : raii_object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, detail::to_bitmask<std::uint32_t>(flags)) }
 {
     HAL_PRINT(debug::severity::init, "Created window \"", title, "\" [size: ", size, ", flags: 0x", std::hex, ::SDL_GetWindowFlags(get()), std::dec, ", ID: ", to_printable_int(id()), ']');
@@ -22,7 +22,7 @@ renderer window::make_renderer(std::initializer_list<renderer::flags> flags) &
     return { *this, flags };
 }
 
-hal::pixel_point window::pos() const
+hal::pixel::point window::pos() const
 {
     point<int> ret;
 
@@ -31,12 +31,12 @@ hal::pixel_point window::pos() const
     return ret;
 }
 
-void window::pos(hal::pixel_point ps)
+void window::pos(hal::pixel::point ps)
 {
     ::SDL_SetWindowPosition(get(), ps.x, ps.y);
 }
 
-hal::pixel_point window::size() const
+hal::pixel::point window::size() const
 {
     point<int> size;
 
@@ -45,7 +45,7 @@ hal::pixel_point window::size() const
     return size;
 }
 
-void window::size(pixel_point sz)
+void window::size(pixel::point sz)
 {
     HAL_WARN_IF(fullscreen(), "Setting size of fullscreen window - this does nothing");
 
@@ -66,9 +66,9 @@ display::id_t window::display_index() const
     return static_cast<display::id_t>(ret);
 }
 
-pixel_format window::pixel_format() const
+pixel::format window::pixel_format() const
 {
-    return static_cast<enum pixel_format>(::SDL_GetWindowPixelFormat(get()));
+    return static_cast<pixel::format>(::SDL_GetWindowPixelFormat(get()));
 }
 
 std::string_view window::title() const

@@ -78,16 +78,16 @@ namespace hal
         void present();
 
         // Draw a single point (pixel) with the current color.
-        void draw(coord_point pt);
+        void draw(coord::point pt);
 
         // Draw a line with the current color.
-        void draw(coord_point from, coord_point to);
+        void draw(coord::point from, coord::point to);
 
         // Outline a rectangle with the current color.
-        void draw(coord_rect area);
+        void draw(coord::rect area);
 
-        void fill(coord_rect area);
-        void fill(std::span<const coord_rect> areas);
+        void fill(coord::rect area);
+        void fill(std::span<const coord::rect> areas);
         void fill();
 
         // Get/set the rendering target.
@@ -103,17 +103,17 @@ namespace hal
         void       blend(blend_mode bm);
 
         // Get/set the size of the "drawing board."
-        pixel_point size() const;
-        void        size(pixel_point sz);
-        void        size(scaler scl);
+        pixel::point size() const;
+        void         size(pixel::point sz);
+        void         size(scaler scl);
 
-        pixel_format pixel_format() const;
+        pixel::format pixel_format() const;
 
         info::sdl::renderer info() const;
 
         // Texture creation functions.
         [[nodiscard]] texture        make_texture(const surface& surf) &;
-        [[nodiscard]] target_texture make_target_texture(pixel_point size) &;
+        [[nodiscard]] target_texture make_target_texture(pixel::point size) &;
 
         // Render a texture via a builder.
         [[nodiscard]] copyer render(const detail::texture_base& tex);
@@ -138,9 +138,9 @@ namespace hal
 
                 hal::renderer::flag_bitset flags() const;
 
-                std::span<const pixel_format> formats() const;
+                std::span<const pixel::format> formats() const;
 
-                pixel_point max_texture_size() const;
+                pixel::point max_texture_size() const;
 
                 friend std::ostream& operator<<(std::ostream& str, const info::sdl::renderer& inf);
             };
@@ -153,10 +153,10 @@ namespace hal
             renderer(const sdl::renderer& src);
 
             std::string_view name;
-            pixel_point      max_texture_size;
+            pixel::point     max_texture_size;
 
             hal::renderer::flag_bitset flags;
-            buffer<pixel_format>       formats;
+            buffer<pixel::format>      formats;
         };
     }
 

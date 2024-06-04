@@ -10,9 +10,9 @@
 using namespace hal;
 
 // Set the depth accordingly upon changing this value.
-constexpr pixel_format default_format { pixel_format::rgba32 };
+constexpr pixel::format default_format { pixel::format::rgba32 };
 
-surface::surface(pixel_point sz, enum pixel_format fmt)
+surface::surface(pixel::point sz, pixel::format fmt)
     : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, static_cast<Uint32>(fmt)) }
 {
 }
@@ -42,17 +42,17 @@ void surface::fill(color clr)
     HAL_ASSERT_VITAL(::SDL_FillRect(get(), nullptr, mapped(clr)) == 0, debug::last_error());
 }
 
-void surface::fill(pixel_rect area, color clr)
+void surface::fill(pixel::rect area, color clr)
 {
     HAL_ASSERT_VITAL(::SDL_FillRect(get(), area.addr(), mapped(clr)) == 0, debug::last_error());
 }
 
-void surface::fill(std::span<const pixel_rect> areas, color clr)
+void surface::fill(std::span<const pixel::rect> areas, color clr)
 {
     HAL_ASSERT_VITAL(::SDL_FillRects(get(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(clr)) == 0, debug::last_error());
 }
 
-surface surface::resize(pixel_point sz)
+surface surface::resize(pixel::point sz)
 {
     surface     ret { sz };
     lock::blend bl { *this, blend_mode::none };
@@ -77,12 +77,12 @@ blitter surface::blit(surface& dst) const
     return { dst, *this, pass_key<surface> {} };
 }
 
-surface surface::convert(enum pixel_format fmt) const
+surface surface::convert(pixel::format fmt) const
 {
     return { *this, fmt };
 }
 
-pixel_point surface::size() const
+pixel::point surface::size() const
 {
     return {
         pixel_t(get()->w),
@@ -90,9 +90,9 @@ pixel_point surface::size() const
     };
 }
 
-pixel_format surface::pixel_format() const
+pixel::format surface::pixel_format() const
 {
-    return static_cast<enum pixel_format>(get()->format->format);
+    return static_cast<pixel::format>(get()->format->format);
 }
 
 blend_mode surface::blend() const
@@ -137,7 +137,7 @@ void surface::alpha_mod(color::value_t val)
     HAL_ASSERT_VITAL(::SDL_SetSurfaceAlphaMod(get(), val) == 0, debug::last_error());
 }
 
-pixel_reference surface::operator[](const pixel_point& pos) const
+pixel_reference surface::operator[](const pixel::point& pos) const
 {
     HAL_ASSERT(pos.x < get()->w, "Out-of-range width");
     HAL_ASSERT(pos.y < get()->h, "Out-of-range height");
@@ -145,7 +145,7 @@ pixel_reference surface::operator[](const pixel_point& pos) const
     return { static_cast<std::byte*>(get()->pixels), get()->pitch, get()->format, pos, pass_key<surface> {} };
 }
 
-surface::surface(const surface& cvt, enum pixel_format fmt)
+surface::surface(const surface& cvt, pixel::format fmt)
     : raii_object { ::SDL_ConvertSurfaceFormat(cvt.get(), static_cast<Uint32>(fmt), 0) }
 {
 }
@@ -155,7 +155,7 @@ std::uint32_t surface::mapped(color c) const
     return ::SDL_MapRGBA(get()->format, c.r, c.g, c.b, c.a);
 }
 
-pixel_reference::pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>)
+pixel_reference::pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel::point pos, pass_key<surface>)
     : m_ptr { pixels + pos.y * pitch + pos.x * fmt->BytesPerPixel }
     , m_fmt { fmt }
 {
@@ -214,7 +214,7 @@ void blitter::operator()()
 
 void blitter::operator()(HAL_TAG_NAME(keep_dst)) const
 {
-    pixel_rect copy { m_dst };
+    pixel::rect copy { m_dst };
 
     HAL_ASSERT_VITAL(::SDL_BlitScaled(
                          m_this.get(),

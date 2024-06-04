@@ -26,27 +26,27 @@ void renderer::clear()
     HAL_ASSERT_VITAL(::SDL_RenderClear(get()) == 0, debug::last_error());
 }
 
-void renderer::draw(coord_point pt)
+void renderer::draw(coord::point pt)
 {
     ::SDL_RenderDrawPointF(get(), pt.x, pt.y);
 }
 
-void renderer::draw(coord_point from, coord_point to)
+void renderer::draw(coord::point from, coord::point to)
 {
     HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(get(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
 }
 
-void renderer::draw(coord_rect area)
+void renderer::draw(coord::rect area)
 {
     HAL_ASSERT_VITAL(::SDL_RenderDrawRectF(get(), area.addr()) == 0, debug::last_error());
 }
 
-void renderer::fill(coord_rect area)
+void renderer::fill(coord::rect area)
 {
     HAL_ASSERT_VITAL(::SDL_RenderFillRectF(get(), area.addr()) == 0, debug::last_error());
 }
 
-void renderer::fill(std::span<const coord_rect> areas)
+void renderer::fill(std::span<const coord::rect> areas)
 {
     HAL_ASSERT_VITAL(::SDL_RenderFillRectsF(get(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
 }
@@ -66,7 +66,7 @@ void renderer::reset_target()
     this->internal_target(nullptr);
 }
 
-pixel_point renderer::size() const
+pixel::point renderer::size() const
 {
     hal::point<int> sz;
     ::SDL_RenderGetLogicalSize(get(), &sz.x, &sz.y);
@@ -74,10 +74,10 @@ pixel_point renderer::size() const
     if (sz.x == 0)
         HAL_ASSERT_VITAL(::SDL_GetRendererOutputSize(get(), &sz.x, &sz.y) == 0, debug::last_error());
 
-    return static_cast<pixel_point>(sz);
+    return static_cast<pixel::point>(sz);
 }
 
-void renderer::size(pixel_point sz)
+void renderer::size(pixel::point sz)
 {
     HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(get(), sz.x, sz.y) == 0, debug::last_error());
 }
@@ -97,13 +97,13 @@ texture renderer::make_texture(const surface& surf) &
     return { *this, surf };
 }
 
-target_texture renderer::make_target_texture(pixel_point size) &
+target_texture renderer::make_target_texture(pixel::point size) &
 {
     SDL_Window* wnd { ::SDL_RenderGetWindow(get()) };
     HAL_ASSERT(wnd != nullptr, debug::last_error());
 
-    const enum pixel_format fmt { static_cast<enum pixel_format>(::SDL_GetWindowPixelFormat(wnd)) };
-    HAL_ASSERT(fmt != pixel_format::unknown, debug::last_error());
+    const pixel::format fmt { static_cast<pixel::format>(::SDL_GetWindowPixelFormat(wnd)) };
+    HAL_ASSERT(fmt != pixel::format::unknown, debug::last_error());
 
     return { *this, fmt, size };
 }
@@ -163,13 +163,13 @@ renderer::flag_bitset info::sdl::renderer::flags() const
     return SDL_RendererInfo::flags;
 }
 
-std::span<const pixel_format> info::sdl::renderer::formats() const
+std::span<const pixel::format> info::sdl::renderer::formats() const
 {
-    static_assert(sizeof(pixel_format) == sizeof(Uint32));
-    return { reinterpret_cast<const pixel_format*>(texture_formats), static_cast<std::size_t>(num_texture_formats) };
+    static_assert(sizeof(pixel::format) == sizeof(Uint32));
+    return { reinterpret_cast<const pixel::format*>(texture_formats), static_cast<std::size_t>(num_texture_formats) };
 }
 
-pixel_point info::sdl::renderer::max_texture_size() const
+pixel::point info::sdl::renderer::max_texture_size() const
 {
     return {
         static_cast<pixel_t>(max_texture_width),

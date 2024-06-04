@@ -11,18 +11,18 @@ mouse::state proxy::mouse::state() const
     return { pass_key<proxy::mouse> {} };
 }
 
-pixel_point proxy::mouse::pos_abs() const
+pixel::point proxy::mouse::pos_abs() const
 {
-    pixel_point ret;
+    pixel::point ret;
 
     static_cast<void>(::SDL_GetGlobalMouseState(&ret.x, &ret.y));
 
     return ret;
 }
 
-pixel_point proxy::mouse::pos_rel() const
+pixel::point proxy::mouse::pos_rel() const
 {
-    pixel_point ret;
+    pixel::point ret;
 
     static_cast<void>(::SDL_GetMouseState(&ret.x, &ret.y));
 

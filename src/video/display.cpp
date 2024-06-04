@@ -29,14 +29,14 @@ info::sdl::display::display(const info::display& src)
 {
 }
 
-pixel_point info::sdl::display::size() const
+pixel::point info::sdl::display::size() const
 {
     return { w, h };
 }
 
-pixel_format info::sdl::display::format() const
+pixel::format info::sdl::display::format() const
 {
-    return static_cast<pixel_format>(SDL_DisplayMode::format);
+    return static_cast<pixel::format>(SDL_DisplayMode::format);
 }
 
 hal::display::hz_t info::sdl::display::hz() const

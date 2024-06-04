@@ -3,7 +3,7 @@
 // events.cpp:
 // An example event loop in a game.
 
-constexpr hal::pixel_point window_size_mod { 20, 20 };
+constexpr hal::pixel::point window_size_mod { 20, 20 };
 
 int main(int, char*[])
 {
@@ -25,7 +25,7 @@ int main(int, char*[])
     {
         while (eh.poll()) // As long as there are events to process...
         {
-            switch (eh.event_type())
+            switch (eh.kind())
             {
                 using enum hal::event::type;
 
@@ -42,7 +42,7 @@ int main(int, char*[])
                     using enum hal::keyboard::key;
 
                 case esc: // Quit.
-                    eh.event_type(quit_requested);
+                    eh.kind(quit_requested);
                     eh.push();
                     break;
 
@@ -59,8 +59,7 @@ int main(int, char*[])
                     break;
 
                 default:
-                    HAL_PRINT("Unhandled key press: ",
-                        hal::to_string(eh.keyboard().key()), eh.keyboard().repeat() ? " [REPEAT]" : "");
+                    HAL_PRINT("Unhandled key press: ", eh.keyboard().key(), eh.keyboard().repeat() ? " [REPEAT]" : "");
                 }
                 break;
 
@@ -79,16 +78,16 @@ int main(int, char*[])
                 break;
 
             case window_event:
-                HAL_PRINT("Window event occurred: ", hal::to_string(eh.window().event_type()));
+                HAL_PRINT("Window event occurred: ", eh.window().kind());
                 break;
 
             case display_event:
-                HAL_PRINT("Display event occurred: ", hal::to_string(eh.display().event_type()));
+                HAL_PRINT("Display event occurred: ", eh.display().kind());
                 break;
 
             default:
-                if (auto tp = eh.event_type(); tp != hal::event::type::mouse_moved)
-                    HAL_PRINT("Unhandled event occurred: ", hal::to_string(tp));
+                if (auto tp = eh.kind(); tp != hal::event::type::mouse_moved)
+                    HAL_PRINT("Unhandled event occurred: ", tp);
                 break;
             }
         }

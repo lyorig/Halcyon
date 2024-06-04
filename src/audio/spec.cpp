@@ -1,5 +1,9 @@
 #include <halcyon/audio/spec.hpp>
 
+#include <iostream>
+
+#include <halcyon/utility/printing.hpp>
+
 using namespace hal;
 
 using ass = audio::sdl::spec;
@@ -42,6 +46,21 @@ u16 ass::buffer_size() const
 SDL_AudioSpec* ass::get(pass_key<builder::device>)
 {
     return this;
+}
+
+SDL_AudioSpec* ass::get(pass_key<proxy::audio_outputs>)
+{
+    return this;
+}
+
+SDL_AudioSpec* ass::get(pass_key<proxy::audio_inputs>)
+{
+    return this;
+}
+
+std::ostream& hal::audio::sdl::operator<<(std::ostream& str, const sdl::spec& s)
+{
+    return str << '[' << s.hz() << " Hz, format: " << s.format() << ", channels: " << hal::to_printable_int(s.channels()) << ", buffer size: " << s.buffer_size() << ']';
 }
 
 audio::spec::spec(freq_t samples_per_second, audio::format fmt, u8 channels, u16 buffer_size_in_frames)

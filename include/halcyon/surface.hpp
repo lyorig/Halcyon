@@ -40,12 +40,12 @@ namespace hal
     class surface : public detail::raii_object<SDL_Surface, ::SDL_FreeSurface>
     {
     public:
-        static constexpr pixel_format default_pixel_format { pixel_format::rgba32 };
+        static constexpr pixel::format default_pixel_format { pixel::format::rgba32 };
 
         surface() = default;
 
         // Create a sized surface with an optional pixel format.
-        surface(pixel_point sz, pixel_format fmt = default_pixel_format);
+        surface(pixel::point sz, pixel::format fmt = default_pixel_format);
 
         // Load a BMP image. This works natively without having to initialize anything.
         surface(accessor src);
@@ -63,14 +63,14 @@ namespace hal
         void fill(color clr);
 
         // Fill a rectangle with a color.
-        void fill(pixel_rect area, color clr);
+        void fill(pixel::rect area, color clr);
 
         // Fill an array of rectangles with a color.
-        void fill(std::span<const pixel_rect> areas, color clr);
+        void fill(std::span<const pixel::rect> areas, color clr);
 
         // Get a resized copy of the surface. Useful for saving
         // memory after converting to a texture.
-        surface resize(pixel_point sz);
+        surface resize(pixel::point sz);
         surface resize(scaler scl);
 
         // Save this surface in a BMP format.
@@ -83,13 +83,13 @@ namespace hal
 
         // Convert this surface into a blittable format.
         // Use with text.
-        [[nodiscard]] surface convert(pixel_format fmt) const;
+        [[nodiscard]] surface convert(pixel::format fmt) const;
 
         // Get surface dimensions.
-        pixel_point size() const;
+        pixel::point size() const;
 
         // Get this surface's pixel format.
-        pixel_format pixel_format() const;
+        pixel::format pixel_format() const;
 
         // Get/set this surface's blend mode.
         blend_mode blend() const;
@@ -106,11 +106,11 @@ namespace hal
         // Get pixel at position.
         // This functionality is exclusive to surfaces, as textures
         // are extremely slow to retrieve pixel information.
-        pixel_reference operator[](const pixel_point& pos) const;
+        pixel_reference operator[](const pixel::point& pos) const;
 
     private:
         // [private] Convert an existing surface to a different format with surface::convert().
-        surface(const surface& cvt, enum pixel_format fmt);
+        surface(const surface& cvt, pixel::format fmt);
 
         // Convert a color to a mapped value using this surface's pixel format.
         Uint32 mapped(color c) const;
@@ -120,7 +120,7 @@ namespace hal
     class pixel_reference
     {
     public:
-        pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel_point pos, pass_key<surface>);
+        pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel::point pos, pass_key<surface>);
 
         color color() const;
         void  color(hal::color c);

@@ -22,7 +22,7 @@ namespace test
     // Resizing a window and checking whether the event handler was notified.
     int window_resize()
     {
-        constexpr hal::pixel_point new_size { 120, 120 };
+        constexpr hal::pixel::point new_size { 120, 120 };
 
         hal::context       ctx;
         hal::system::video vid { ctx };
@@ -37,15 +37,15 @@ namespace test
         wnd.size(new_size);
         e.poll();
 
-        if (e.event_type() != hal::event::type::window_event)
+        if (e.kind() != hal::event::type::window_event)
         {
-            HAL_PRINT("HalTest: Event type mismatch (desired window event, actually ", hal::to_string(e.event_type()), ')');
+            HAL_PRINT("HalTest: Event type mismatch (desired window event, actually ", hal::to_string(e.kind()), ')');
             return EXIT_FAILURE;
         }
 
-        if (e.window().event_type() != hal::event::window::type::size_changed)
+        if (e.window().kind() != hal::event::window::type::size_changed)
         {
-            HAL_PRINT("HalTest: Window event type mismatch (desired resized, actually ", hal::to_string(e.window().event_type()), ')');
+            HAL_PRINT("HalTest: Window event type mismatch (desired resized, actually ", hal::to_string(e.window().kind()), ')');
             return EXIT_FAILURE;
         }
 
@@ -122,10 +122,10 @@ namespace test
         while (eh.poll())
             ;
 
-        eh.event_type(quit_requested);
+        eh.kind(quit_requested);
         eh.push();
 
-        if (!(eh.poll() && eh.event_type() == quit_requested))
+        if (!(eh.poll() && eh.kind() == quit_requested))
             return EXIT_FAILURE;
 
         constexpr std::string_view text { "aaaaaaaaaabbbbbbbbbbccccccccccd" };
@@ -135,13 +135,13 @@ namespace test
         while (eh.poll())
             ;
 
-        eh.event_type(hal::event::type::text_input);
+        eh.kind(hal::event::type::text_input);
         eh.text_input().text(text);
         eh.push();
 
-        if (!(eh.poll() && eh.event_type() == text_input && eh.text_input().text() == text))
+        if (!(eh.poll() && eh.kind() == text_input && eh.text_input().text() == text))
         {
-            HAL_PRINT(hal::to_string(eh.event_type()));
+            HAL_PRINT(hal::to_string(eh.kind()));
             return EXIT_FAILURE;
         }
 
@@ -175,8 +175,8 @@ namespace test
 
     int scaler()
     {
-        constexpr hal::pixel_point src { 50, 100 };
-        constexpr hal::pixel_point dst { 100, 200 };
+        constexpr hal::pixel::point src { 50, 100 };
+        constexpr hal::pixel::point dst { 100, 200 };
 
         if (hal::scale::width(100)(src) != dst)
             return EXIT_FAILURE;

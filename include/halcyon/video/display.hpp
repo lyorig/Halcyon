@@ -34,8 +34,8 @@ namespace hal
             display() = default;
             display(const sdl::display& src);
 
-            pixel_point        size;
-            pixel_format       fmt;
+            pixel::point       size;
+            pixel::format      fmt;
             hal::display::hz_t hz;
         };
 
@@ -49,8 +49,8 @@ namespace hal
                 display(hal::display::id_t id, pass_key<proxy::display>);
                 display(const info::display& src);
 
-                pixel_point        size() const;
-                pixel_format       format() const;
+                pixel::point       size() const;
+                pixel::format      format() const;
                 hal::display::hz_t hz() const;
 
                 friend std::ostream& operator<<(std::ostream& str, const info::display& disp);

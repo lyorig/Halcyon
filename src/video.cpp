@@ -13,7 +13,7 @@ proxy::display::display(pass_key<video>)
 {
 }
 
-window proxy::video::make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags) &
+window proxy::video::make_window(std::string_view title, pixel::point size, std::initializer_list<window::flags> flags) &
 {
     return { *this, title, size, flags };
 }

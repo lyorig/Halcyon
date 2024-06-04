@@ -18,13 +18,13 @@ builder::font_glyph font::render(char32_t glyph) const
     return { *this, glyph, pass_key<font> {} };
 }
 
-pixel_point font::size_text(const std::string_view& text) const
+pixel::point font::size_text(const std::string_view& text) const
 {
     point<int> size;
 
     ::TTF_SizeUTF8(get(), text.data(), &size.x, &size.y);
 
-    return pixel_point(size);
+    return pixel::point(size);
 }
 
 pixel_t font::height() const

@@ -69,7 +69,7 @@ namespace hal::detail
 
         // Set the source rectangle.
         // Can be called at any time.
-        [[nodiscard]] this_ref from(const pixel_rect& src)
+        [[nodiscard]] this_ref from(const pixel::rect& src)
         {
             m_src      = src;
             m_dst.size = dst_point(src.size);

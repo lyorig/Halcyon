@@ -1,5 +1,7 @@
 #pragma once
 
+#include <halcyon/context.hpp>
+
 #include <halcyon/audio/device.hpp>
 #include <halcyon/audio/stream.hpp>
 
@@ -16,6 +18,7 @@ namespace hal
 
             hal::audio::device::id_t size() const;
             std::string_view         name(hal::audio::device::id_t idx) const;
+            hal::audio::sdl::spec    spec(hal::audio::device::id_t idx) const;
         };
 
         class audio_inputs
@@ -25,6 +28,7 @@ namespace hal
 
             hal::audio::device::id_t size() const;
             std::string_view         name(hal::audio::device::id_t idx) const;
+            hal::audio::sdl::spec    spec(hal::audio::device::id_t idx) const;
         };
     }
 

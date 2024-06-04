@@ -44,6 +44,11 @@ namespace hal
             return *this;
         }
 
+        clock::time_point time_point() const
+        {
+            return m_epoch;
+        }
+
     private:
         clock::time_point m_epoch;
     };

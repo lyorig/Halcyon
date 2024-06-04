@@ -6,6 +6,12 @@
 
 namespace hal
 {
+    namespace proxy
+    {
+        class audio_outputs;
+        class audio_inputs;
+    }
+
     namespace audio
     {
         class spec;
@@ -36,6 +42,10 @@ namespace hal
                 u16           buffer_size() const;
 
                 SDL_AudioSpec* get(pass_key<builder::device>);
+                SDL_AudioSpec* get(pass_key<proxy::audio_outputs>);
+                SDL_AudioSpec* get(pass_key<proxy::audio_inputs>);
+
+                friend std::ostream& operator<<(std::ostream& str, const spec& s);
             };
 
             static_assert(sizeof(spec) == sizeof(SDL_AudioSpec));

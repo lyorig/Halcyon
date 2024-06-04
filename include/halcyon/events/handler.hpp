@@ -28,14 +28,16 @@ namespace hal
 
             display() = delete;
 
-            type     event_type() const;
-            display& event_type(type t);
+            type     kind() const;
+            display& kind(type t);
 
             hal::display::id_t display_index() const;
-            display&            display_index(hal::display::id_t);
+            display&           display_index(hal::display::id_t);
 
             // As of April 2024, there are no events using the "data1" member.
         };
+
+        std::ostream& operator<<(std::ostream&, display::type);
 
         static_assert(sizeof(display) == sizeof(SDL_DisplayEvent));
 
@@ -66,8 +68,8 @@ namespace hal
 
             window() = delete;
 
-            type    event_type() const;
-            window& event_type(type t);
+            type    kind() const;
+            window& kind(type t);
 
             hal::window::id_t window_id() const;
             window&           window_id(hal::window::id_t id);
@@ -79,12 +81,14 @@ namespace hal
             window& display_index(hal::display::id_t id);
 
             // Valid for: resized, size_changed, moved.
-            pixel_point point() const;
+            pixel::point point() const;
 
             // The provided type must be resized, size_changed, or moved.
             // This function automatically sets the event type.
-            window& point(pixel_point pt, type t);
+            window& point(pixel::point pt, type t);
         };
+
+        std::ostream& operator<<(std::ostream&, window::type);
 
         static_assert(sizeof(window) == sizeof(SDL_WindowEvent));
 
@@ -119,11 +123,11 @@ namespace hal
             mouse::state  state() const;
             mouse_motion& state(mouse::state s);
 
-            pixel_point   pos() const;
-            mouse_motion& pos(pixel_point p);
+            pixel::point  pos() const;
+            mouse_motion& pos(pixel::point p);
 
-            pixel_point   rel() const;
-            mouse_motion& rel(pixel_point rel);
+            pixel::point  rel() const;
+            mouse_motion& rel(pixel::point rel);
         };
 
         static_assert(sizeof(mouse_motion) == sizeof(SDL_MouseMotionEvent));
@@ -142,8 +146,8 @@ namespace hal
             u8            click_amount() const;
             mouse_button& click_amount(u8 amnt);
 
-            pixel_point   pos() const;
-            mouse_button& pos(pixel_point pt);
+            pixel::point  pos() const;
+            mouse_button& pos(pixel::point pt);
         };
 
         static_assert(sizeof(mouse_button) == sizeof(SDL_MouseButtonEvent));
@@ -156,8 +160,8 @@ namespace hal
             hal::window::id_t window_id() const;
             mouse_wheel&      window_id(hal::window::id_t id);
 
-            pixel_point  pos() const;
-            mouse_wheel& pos(pixel_point p);
+            pixel::point pos() const;
+            mouse_wheel& pos(pixel::point p);
 
             point<i16>   scroll() const;
             mouse_wheel& scroll(point<i16> s);
@@ -219,14 +223,14 @@ namespace hal
             clipboard_updated = SDL_CLIPBOARDUPDATE
         };
 
+        std::ostream& operator<<(std::ostream&, type);
+
         class handler
         {
         public:
-            using authority = detail::subsystem<detail::system::events>;
-
             // Constructor that disables unused events.
             // This should reduce heap allocations on SDL's part.
-            explicit handler(authority&);
+            explicit handler(proxy::events&);
 
             // Get an event from the event queue.
             // Returns true if the polled event is valid, false if there are no more to process.
@@ -244,8 +248,8 @@ namespace hal
             // Get/set this event's current type.
             // Setting is only useful for events which carry no important data;
             // otherwise, accessing events directly does this automatically.
-            type event_type() const;
-            void event_type(type t);
+            type kind() const;
+            void kind(type t);
 
             // Valid for: display
             const event::display& display() const;
@@ -308,7 +312,153 @@ namespace hal
         };
     }
 
-    std::string_view to_string(event::type evt);
-    std::string_view to_string(event::display::type evt);
-    std::string_view to_string(event::window::type evt);
+    constexpr std::string_view to_string(event::type evt)
+    {
+        using enum event::type;
+
+        switch (evt)
+        {
+        case quit_requested:
+            return "Quit requested";
+
+        case terminated:
+            return "Terminated";
+
+        case low_memory:
+            return "Low memory";
+
+        case will_enter_background:
+            return "Will enter background";
+
+        case entered_background:
+            return "Entered background";
+
+        case will_enter_foreground:
+            return "Will enter foreground";
+
+        case entered_foreground:
+            return "Will enter foreground";
+
+        case display_event:
+            return "Display";
+
+        case window_event:
+            return "Window";
+
+        case key_pressed:
+            return "Key pressed";
+
+        case key_released:
+            return "Key released";
+
+        case text_input:
+            return "Text input";
+
+        case mouse_moved:
+            return "Mouse moved";
+
+        case mouse_pressed:
+            return "Mouse pressed";
+
+        case mouse_released:
+            return "Mouse released";
+
+        case mouse_wheel_moved:
+            return "Mouse wheel moved";
+
+        case clipboard_updated:
+            return "Clipboard updated";
+
+        default:
+            return "[unknown]";
+        }
+    }
+
+    constexpr std::string_view to_string(enum event::display::type evt)
+    {
+        using enum event::display::type;
+
+        switch (evt)
+        {
+        case reoriented:
+            return "Reoriented";
+
+        case connected:
+            return "Connected";
+
+        case disconnected:
+            return "Disconnected";
+
+        case moved:
+            return "Moved";
+
+        default:
+            return "[unknown]";
+        }
+    }
+
+    constexpr std::string_view to_string(enum event::window::type evt)
+    {
+        using enum event::window::type;
+
+        switch (evt)
+        {
+        case shown:
+            return "Shown";
+
+        case hidden:
+            return "Hidden";
+
+        case exposed:
+            return "Exposed";
+
+        case moved:
+            return "Moved";
+
+        case resized:
+            return "Resized";
+
+        case size_changed:
+            return "Size changed";
+
+        case minimized:
+            return "Minimized";
+
+        case maximized:
+            return "Maximized";
+
+        case restored:
+            return "Restored";
+
+        case got_mouse_focus:
+            return "Got mouse focus";
+
+        case lost_mouse_focus:
+            return "Lost mouse focus";
+
+        case got_keyboard_focus:
+            return "Got keyboard focus";
+
+        case lost_keyboard_focus:
+            return "Lost keyboard focus";
+
+        case closed:
+            return "Closed";
+
+        case focus_offered:
+            return "Focus offered";
+
+        case hit_test:
+            return "Hit test";
+
+        case icc_profile_changed:
+            return "ICC profile changed";
+
+        case display_changed:
+            return "Display changed";
+
+        default:
+            return "[unknown]";
+        }
+    }
 }

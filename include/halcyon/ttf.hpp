@@ -46,7 +46,7 @@ namespace hal
 
         // When sizing text, it's important to know that the vertical size
         // doesn't necessarily have to match that of the rendered surface.
-        pixel_point size_text(const std::string_view& text) const;
+        pixel::point size_text(const std::string_view& text) const;
 
         pixel_t height() const;
         pixel_t skip() const;

@@ -60,7 +60,7 @@ namespace hal
         public:
             subsystem(pass_key<hal::system::video>);
 
-            [[nodiscard]] window make_window(std::string_view title, pixel_point size, std::initializer_list<window::flags> flags = {}) &;
+            [[nodiscard]] window make_window(std::string_view title, pixel::point size, std::initializer_list<window::flags> flags = {}) &;
 
             [[nodiscard]] window make_window(std::string_view title, HAL_TAG_NAME(fullscreen)) &;
 

@@ -23,7 +23,7 @@ namespace hal
         class texture_base : public detail::raii_object<SDL_Texture, &::SDL_DestroyTexture>
         {
         public:
-            pixel_point size() const;
+            pixel::point size() const;
 
             color::value_t opacity() const;
             void           opacity(color::value_t value);
@@ -37,7 +37,7 @@ namespace hal
             blend_mode blend() const;
             void       blend(blend_mode bm);
 
-            pixel_format pixel_format() const;
+            pixel::format pixel_format() const;
 
         protected:
             texture_base() = default;
@@ -69,6 +69,6 @@ namespace hal
         target_texture() = default;
 
         // [private] Target textures are created with renderer::load().
-        target_texture(renderer& rnd, enum pixel_format fmt, pixel_point size);
+        target_texture(renderer& rnd, pixel::format fmt, pixel::point size);
     };
 }

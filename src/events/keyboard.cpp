@@ -2,6 +2,16 @@
 
 using namespace hal;
 
+std::ostream& keyboard::operator<<(std::ostream& str, button b)
+{
+    return str << to_string(b);
+}
+
+std::ostream& keyboard::operator<<(std::ostream& str, key k)
+{
+    return str << to_string(k);
+}
+
 keyboard::key keyboard::to_key(button btn)
 {
     return static_cast<keyboard::key>(::SDL_GetKeyFromScancode(static_cast<SDL_Scancode>(btn)));

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #include <SDL_audio.h>
 
 #include <halcyon/types/numeric.hpp>
@@ -34,6 +36,8 @@ namespace hal
             f32_msb = AUDIO_F32MSB
         };
 
+        std::ostream& operator<<(std::ostream& str, format fmt);
+
         // Which changes to allow if the desired audio spec cannot be met.
         enum class change : u8
         {
@@ -43,5 +47,74 @@ namespace hal
             samples   = SDL_AUDIO_ALLOW_SAMPLES_CHANGE,
             any       = SDL_AUDIO_ALLOW_ANY_CHANGE
         };
+
+        std::ostream& operator<<(std::ostream& str, change fmt);
+    }
+
+    constexpr std::string_view to_string(audio::format fmt)
+    {
+        using enum audio::format;
+
+        switch (fmt)
+        {
+        case u8:
+            return "u8";
+
+        case i8:
+            return "i8";
+
+        case u16_lsb:
+            return "u16 LSB";
+
+        case u16_msb:
+            return "u16 MSB";
+
+        case i16_lsb:
+            return "i16 LSB";
+
+        case i16_msb:
+            return "i16 MSB";
+
+        case i32_lsb:
+            return "i32 LSB";
+
+        case i32_msb:
+            return "i32 MSB";
+
+        case f32_lsb:
+            return "f32 LSB";
+
+        case f32_msb:
+            return "f32 MSB";
+
+        default:
+            return "[unknown]";
+        }
+    }
+
+    constexpr std::string_view to_string(audio::change ch)
+    {
+        using enum audio::change;
+
+        switch (ch)
+        {
+        case frequency:
+            return "Frequency";
+
+        case format:
+            return "Format";
+
+        case channels:
+            return "Channels";
+
+        case samples:
+            return "Samples";
+
+        case any:
+            return "Any";
+
+        default:
+            return "[unknown]";
+        }
     }
 }

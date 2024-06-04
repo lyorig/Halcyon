@@ -10,8 +10,8 @@ int main(int argc, char* argv[])
 {
     static_assert(hal::meta::is_correct_main<main>);
 
-    constexpr hal::pixel_point padding { 20, 20 };
-    constexpr hal::font::pt_t  font_size { 128 };
+    constexpr hal::pixel::point padding { 20, 20 };
+    constexpr hal::font::pt_t   font_size { 128 };
 
     if (argc == 1)
     {
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     hal::window         wnd { vid.make_window("Text renderer", { 100, 100 }) };
     hal::event::handler evt { vid.events };
 
-    hal::renderer rnd { wnd.make_renderer({ hal::renderer::flags::vsync }) };
+    hal::renderer rnd { wnd.make_renderer() };
     hal::texture  tex;
 
     // Deallocate as much as we can before the main loop.
@@ -36,9 +36,9 @@ int main(int argc, char* argv[])
         const hal::font    fnt { tctx.load("assets/m5x7.ttf", font_size) };
         const hal::surface surf { fnt.render(argv[1]).fg(hal::palette::black)() };
 
-        HAL_PRINT("Pixel format: ", hal::to_string(surf.pixel_format()));
+        tex = rnd.make_texture(surf);
 
-        tex = { rnd.make_texture(surf) };
+        HAL_PRINT("Pixel format: ", tex.pixel_format(), ", type: ", hal::pixel::type_of(tex.pixel_format()));
     }
 
     wnd.size(tex.size() + padding);
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     {
         while (evt.poll())
         {
-            switch (evt.event_type())
+            switch (evt.kind())
             {
                 using enum hal::event::type;
 

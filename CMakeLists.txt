@@ -47,6 +47,7 @@ set_tests_properties(AssertFail InvalidBuffer InvalidTexture InvalidEvent PROPER
 # Examples.
 
 set(EXAMPLE_SOURCES
+audio.cpp
 invertor.cpp
 message_box.cpp
 metaprogramming.cpp

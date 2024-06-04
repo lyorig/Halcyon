@@ -24,10 +24,10 @@ namespace hal
             hal::mouse::state state() const;
 
             // Get the current mouse state relative to the desktop.
-            pixel_point pos_abs() const;
+            pixel::point pos_abs() const;
 
             // Get the current mouse state relative to the focus window.
-            pixel_point pos_rel() const;
+            pixel::point pos_rel() const;
         };
 
         class keyboard

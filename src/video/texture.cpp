@@ -6,7 +6,7 @@
 
 using namespace hal;
 
-pixel_point detail::texture_base::size() const
+pixel::point detail::texture_base::size() const
 {
     point<int> size;
 
@@ -62,13 +62,13 @@ void detail::texture_base::blend(blend_mode bm)
     HAL_ASSERT_VITAL(::SDL_SetTextureBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-pixel_format detail::texture_base::pixel_format() const
+pixel::format detail::texture_base::pixel_format() const
 {
     Uint32 ret;
 
     query(&ret, nullptr, nullptr, nullptr);
 
-    return static_cast<enum pixel_format>(ret);
+    return static_cast<pixel::format>(ret);
 }
 
 u8 detail::texture_base::opacity() const
@@ -97,7 +97,7 @@ texture::texture(renderer& rnd, const surface& surf)
 {
 }
 
-target_texture::target_texture(renderer& rnd, enum pixel_format fmt, pixel_point size)
+target_texture::target_texture(renderer& rnd, pixel::format fmt, pixel::point size)
     : texture_base { ::SDL_CreateTexture(rnd.get(), static_cast<Uint32>(fmt), SDL_TEXTUREACCESS_TARGET, size.x, size.y) }
 {
 }

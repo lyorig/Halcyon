@@ -30,9 +30,9 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    const hal::pixel_point size { surf.size() };
+    const hal::pixel::point size { surf.size() };
 
-    for (hal::pixel_point i { 0, 0 }; i.y < size.y; ++i.y)
+    for (hal::pixel::point i { 0, 0 }; i.y < size.y; ++i.y)
     {
         for (i.x = 0; i.x < size.x; ++i.x)
         {

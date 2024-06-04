@@ -37,26 +37,26 @@ namespace hal
 
         window() = default;
 
-        window(proxy::video& sys, std::string_view title, pixel_point size, std::initializer_list<flags> flags);
+        window(proxy::video& sys, std::string_view title, pixel::point size, std::initializer_list<flags> flags);
 
         // Create a window in fullscreen window.
         // Warning: This has some issues on macOS due to its DPI scaling stuff.
         window(proxy::video& sys, std::string_view title, HAL_TAG_NAME(fullscreen));
 
-        [[nodiscard]] renderer make_renderer(std::initializer_list<renderer::flags> flags = { renderer::flags::accelerated }) &;
+        [[nodiscard]] renderer make_renderer(std::initializer_list<renderer::flags> flags = {}) &;
 
-        pixel_point pos() const;
-        void        pos(pixel_point ps);
+        pixel::point pos() const;
+        void         pos(pixel::point ps);
 
         // Get/set this window's size. Expect weird behavior in fullscreen mode.
-        pixel_point size() const;
-        void        size(pixel_point sz);
-        void        size(scaler scl);
+        pixel::point size() const;
+        void         size(pixel::point sz);
+        void         size(scaler scl);
 
         // Get the index of the display this window is currently on.
         display::id_t display_index() const;
 
-        pixel_format pixel_format() const;
+        pixel::format pixel_format() const;
 
         // Get/set this window's title.
         std::string_view title() const;
