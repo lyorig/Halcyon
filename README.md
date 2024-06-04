@@ -41,14 +41,14 @@ int main(int argc, char* argv[]) {
 
   while (true) {
     while (evt.poll()) {
-      if (evt.event_type() == hal::event::type::quit_requested)
+      if (evt.kind() == hal::event::type::quit_requested)
         return EXIT_SUCCESS; // Normal termination.
     }
 
     rnd.present();
   }
 
-  return EXIT_FAILURE; // Abnormal termination.
+  return EXIT_SUCCESS;
 }
 ```
 
