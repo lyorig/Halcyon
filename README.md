@@ -19,7 +19,7 @@ Halcyon wraps SDL with several concepts:
 > [!TIP]
 These are empty classes. You are encouraged to use them with `[[no_unique_address]]` (also defined as `HAL_NO_SIZE`).
 
-Both of the above also act as factories for classes that depend on their initialization. Such member functions are usually called `make_(classname)`, with some exceptions, where a more fitting name was chosen.
+Both of the above also act as factories for classes that depend on their initialization. Such member functions are usually called `make_/build_(classname)`, with some exceptions, where a more fitting name was chosen.
 
 [^1]: Currently SDL2, SDL2_image, and SDL2_ttf.
 

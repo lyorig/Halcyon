@@ -62,7 +62,7 @@ proxy::audio::subsystem(pass_key<hal::system::audio>)
 {
 }
 
-audio::builder::device proxy::audio::make_device() &
+audio::builder::device proxy::audio::build_device() &
 {
     return *this;
 }
