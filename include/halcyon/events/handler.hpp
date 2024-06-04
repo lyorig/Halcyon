@@ -290,22 +290,22 @@ namespace hal
             {
                 union
                 {
-                    std::uint32_t m_type;
+                    std::uint32_t type;
 
-                    SDL_CommonEvent m_common;
+                    SDL_CommonEvent common;
 
-                    event::display  m_display;
-                    event::window   m_window;
-                    event::keyboard m_key;
+                    event::display  display;
+                    event::window   window;
+                    event::keyboard key;
 
-                    event::text_input m_textInput;
+                    event::text_input text_input;
 
-                    event::mouse_motion m_motion;
-                    event::mouse_button m_button;
-                    event::mouse_wheel  m_wheel;
-                } m_data;
+                    event::mouse_motion motion;
+                    event::mouse_button button;
+                    event::mouse_wheel  wheel;
+                } data;
 
-                std::byte padding[sizeof(SDL_Event) - sizeof(m_data)] {};
+                std::byte padding[sizeof(SDL_Event) - sizeof(data)] {};
             } m_event;
 
             static_assert(sizeof(m_event) == sizeof(SDL_Event));

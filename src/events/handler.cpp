@@ -368,12 +368,12 @@ event::handler::handler(proxy::events&)
 
 bool event::handler::poll()
 {
-    return ::SDL_PollEvent(reinterpret_cast<SDL_Event*>(&m_event.m_data)) == 1;
+    return ::SDL_PollEvent(reinterpret_cast<SDL_Event*>(&m_event.data)) == 1;
 }
 
 void event::handler::push()
 {
-    HAL_ASSERT_VITAL(::SDL_PushEvent(reinterpret_cast<SDL_Event*>(&m_event.m_data)) >= 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_PushEvent(reinterpret_cast<SDL_Event*>(&m_event.data)) >= 0, debug::last_error());
 }
 
 void event::handler::text_input_start()
@@ -388,110 +388,110 @@ void event::handler::text_input_stop()
 
 event::type event::handler::kind() const
 {
-    return static_cast<type>(m_event.m_data.m_type);
+    return static_cast<type>(m_event.data.type);
 }
 
 void event::handler::kind(event::type t)
 {
-    m_event.m_data.m_type = std::to_underlying(t);
+    m_event.data.type = std::to_underlying(t);
 }
 
 const event::display& event::handler::display() const
 {
     HAL_ASSERT(kind() == type::display_event, "Invalid type");
 
-    return m_event.m_data.m_display;
+    return m_event.data.display;
 }
 
 event::display& event::handler::display()
 {
     HAL_ASSERT(kind() == type::display_event, "Invalid type");
 
-    return m_event.m_data.m_display;
+    return m_event.data.display;
 }
 
 const event::window& event::handler::window() const
 {
     HAL_ASSERT(kind() == type::window_event, "Invalid type");
 
-    return m_event.m_data.m_window;
+    return m_event.data.window;
 }
 
 event::window& event::handler::window()
 {
     HAL_ASSERT(kind() == type::window_event, "Invalid type");
 
-    return m_event.m_data.m_window;
+    return m_event.data.window;
 }
 
 const event::keyboard& event::handler::keyboard() const
 {
     HAL_ASSERT(kind() == type::key_pressed || kind() == type::key_released, "Invalid type");
 
-    return m_event.m_data.m_key;
+    return m_event.data.key;
 }
 
 event::keyboard& event::handler::keyboard()
 {
     HAL_ASSERT(kind() == type::key_pressed || kind() == type::key_released, "Invalid type");
 
-    return m_event.m_data.m_key;
+    return m_event.data.key;
 }
 
 const event::text_input& event::handler::text_input() const
 {
     HAL_ASSERT(kind() == type::text_input, "Invalid type");
 
-    return m_event.m_data.m_textInput;
+    return m_event.data.text_input;
 }
 
 event::text_input& event::handler::text_input()
 {
     HAL_ASSERT(kind() == type::text_input, "Invalid type");
 
-    return m_event.m_data.m_textInput;
+    return m_event.data.text_input;
 }
 
 const event::mouse_motion& event::handler::mouse_motion() const
 {
     HAL_ASSERT(kind() == type::mouse_moved, "Invalid type");
 
-    return m_event.m_data.m_motion;
+    return m_event.data.motion;
 }
 
 event::mouse_motion& event::handler::mouse_motion()
 {
     HAL_ASSERT(kind() == type::mouse_moved, "Invalid type");
 
-    return m_event.m_data.m_motion;
+    return m_event.data.motion;
 }
 
 const event::mouse_button& event::handler::mouse_button() const
 {
     HAL_ASSERT(kind() == type::mouse_pressed || kind() == type::mouse_released, "Invalid type");
 
-    return m_event.m_data.m_button;
+    return m_event.data.button;
 }
 
 event::mouse_button& event::handler::mouse_button()
 {
     HAL_ASSERT(kind() == type::mouse_pressed || kind() == type::mouse_released, "Invalid type");
 
-    return m_event.m_data.m_button;
+    return m_event.data.button;
 }
 
 const event::mouse_wheel& event::handler::mouse_wheel() const
 {
     HAL_ASSERT(kind() == type::mouse_wheel_moved, "Invalid type");
 
-    return m_event.m_data.m_wheel;
+    return m_event.data.wheel;
 }
 
 event::mouse_wheel& event::handler::mouse_wheel()
 {
     HAL_ASSERT(kind() == type::mouse_wheel_moved, "Invalid type");
 
-    return m_event.m_data.m_wheel;
+    return m_event.data.wheel;
 }
 
 bool event::handler::pending() const
