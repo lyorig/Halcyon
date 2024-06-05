@@ -42,6 +42,9 @@ namespace hal
 
         case mul:
             return "Mul";
+
+        default:
+            return "[unknown]";
         }
     }
 
@@ -58,11 +61,57 @@ namespace hal
         {
             unknown = SDL_PIXELFORMAT_UNKNOWN,
 
+            index1_lsb = SDL_PIXELFORMAT_INDEX1LSB,
+            index1_msb = SDL_PIXELFORMAT_INDEX1MSB,
+
+            index2_lsb = SDL_PIXELFORMAT_INDEX2LSB,
+            index2_msb = SDL_PIXELFORMAT_INDEX2MSB,
+
+            index4_lsb = SDL_PIXELFORMAT_INDEX4LSB,
+            index4_msb = SDL_PIXELFORMAT_INDEX4MSB,
+
             index8 = SDL_PIXELFORMAT_INDEX8,
+
+            rgb332 = SDL_PIXELFORMAT_RGB332,
+            rgb565 = SDL_PIXELFORMAT_RGB565,
+
+            bgr565 = SDL_PIXELFORMAT_BGR565,
 
             rgb24 = SDL_PIXELFORMAT_RGB24,
             bgr24 = SDL_PIXELFORMAT_BGR24,
 
+            rgba4444 = SDL_PIXELFORMAT_RGBA4444,
+            rgba5551 = SDL_PIXELFORMAT_RGBA5551,
+            rgba8888 = SDL_PIXELFORMAT_RGBA8888,
+
+            rgbx8888 = SDL_PIXELFORMAT_RGBX8888,
+
+            xrgb4444 = SDL_PIXELFORMAT_XRGB4444,
+            xrgb1555 = SDL_PIXELFORMAT_XRGB1555,
+            xrgb8888 = SDL_PIXELFORMAT_XRGB8888,
+
+            argb4444 = SDL_PIXELFORMAT_ARGB4444,
+            argb1555 = SDL_PIXELFORMAT_ARGB1555,
+            argb8888 = SDL_PIXELFORMAT_ARGB8888,
+
+            abgr4444 = SDL_PIXELFORMAT_ABGR4444,
+            abgr1555 = SDL_PIXELFORMAT_ABGR1555,
+            abgr8888 = SDL_PIXELFORMAT_ABGR8888,
+
+            bgra4444 = SDL_PIXELFORMAT_BGRA4444,
+            bgra5551 = SDL_PIXELFORMAT_BGRA5551,
+            bgra8888 = SDL_PIXELFORMAT_BGRA8888,
+
+            bgrx8888 = SDL_PIXELFORMAT_BGRX8888,
+
+            xbgr4444 = SDL_PIXELFORMAT_XBGR4444,
+            xbgr1555 = SDL_PIXELFORMAT_XBGR1555,
+            xbgr8888 = SDL_PIXELFORMAT_XBGR8888,
+
+            argb2101010 = SDL_PIXELFORMAT_ARGB2101010,
+
+            // Endianness-dependent aliases.
+            // As such, they aren't checked for in hal::to_string.
             rgba32 = SDL_PIXELFORMAT_RGBA32,
             argb32 = SDL_PIXELFORMAT_ARGB32,
             bgra32 = SDL_PIXELFORMAT_BGRA32,
@@ -121,8 +170,35 @@ namespace hal
         case unknown:
             return "Unknown";
 
+        case index1_lsb:
+            return "Index 1 LSB";
+
+        case index1_msb:
+            return "Index 1 MSB";
+
+        case index2_lsb:
+            return "Index 2 LSB";
+
+        case index2_msb:
+            return "Index 2 MSB";
+
+        case index4_lsb:
+            return "Index 4 LSB";
+
+        case index4_msb:
+            return "Index 4 MSB";
+
         case index8:
             return "Index 8";
+
+        case rgb332:
+            return "RGB332";
+
+        case rgb565:
+            return "RGB565";
+
+        case bgr565:
+            return "BGR565";
 
         case rgb24:
             return "RGB24";
@@ -130,29 +206,68 @@ namespace hal
         case bgr24:
             return "BGR24";
 
-        case rgba32:
-            return "RGBA32";
+        case rgba4444:
+            return "RGBA4444";
 
-        case argb32:
-            return "ARGB32";
+        case rgba5551:
+            return "RGBA5551";
 
-        case bgra32:
-            return "BGRA32";
+        case rgba8888:
+            return "RGBA8888";
 
-        case abgr32:
-            return "ABGR32";
+        case rgbx8888:
+            return "RGBX8888";
 
-        case rgbx32:
-            return "RGBx32";
+        case xrgb4444:
+            return "XRGB4444";
 
-        case xrgb32:
-            return "xRGB32";
+        case xrgb1555:
+            return "XRGB1555";
 
-        case bgrx32:
-            return "BGRx32";
+        case xrgb8888:
+            return "XRGB8888";
 
-        case xbgr32:
-            return "xBGR32";
+        case argb4444:
+            return "ARGB4444";
+
+        case argb1555:
+            return "ARGB1555";
+
+        case argb8888:
+            return "ARGB8888";
+
+        case abgr4444:
+            return "ABGR4444";
+
+        case abgr1555:
+            return "ABGR1555";
+
+        case abgr8888:
+            return "ABGR8888";
+
+        case bgra4444:
+            return "BGRA4444";
+
+        case bgra5551:
+            return "BGRA5551";
+
+        case bgra8888:
+            return "BGRA8888";
+
+        case bgrx8888:
+            return "BGRX8888";
+
+        case xbgr4444:
+            return "XBGR4444";
+
+        case xbgr1555:
+            return "XBGR1555";
+
+        case xbgr8888:
+            return "XBGR8888";
+
+        case argb2101010:
+            return "ARGB2101010";
 
         case yv12:
             return "YV12";
@@ -258,16 +373,4 @@ namespace hal
             return static_cast<coord_t>(v);
         }
     }
-
-    namespace sdl
-    {
-        template <meta::arithmetic T>
-        using point_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Point, SDL_FPoint>;
-
-        template <meta::arithmetic T>
-        using rect_t = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Rect, SDL_FRect>;
-    }
-
-    // Paranoia.
-    static_assert(std::is_signed_v<pixel_t>);
 }

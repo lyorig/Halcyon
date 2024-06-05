@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
     hal::context       ctx;
     hal::system::audio aud { ctx };
 
-    hal::audio::device dev { aud.make_device().changes({ hal::audio::change::any }).spec({ 44100, hal::audio::format::f32, 2, 2048 })() };
+    hal::audio::device dev { aud.build_device().changes({ hal::audio::change::any }).spec({ 44100, hal::audio::format::f32, 2, 2048 })() };
 
     {
         hal::audio::device::id_t id;
@@ -24,4 +24,6 @@ int main(int argc, char* argv[])
     /* fill buffer with data... */
 
     dev.queue(buffer);
+
+    return EXIT_SUCCESS;
 }

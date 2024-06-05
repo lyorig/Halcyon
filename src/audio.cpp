@@ -67,7 +67,7 @@ audio::builder::device proxy::audio::build_device() &
     return *this;
 }
 
-audio::stream proxy::audio::make_stream(hal::audio::format src_fmt, u8 src_channels, i32 src_rate, hal::audio::format dst_fmt, u8 dst_channels, i32 dst_rate) &
+audio::stream proxy::audio::make_stream(hal::audio::config src, hal::audio::config dst) &
 {
-    return { *this, src_fmt, src_channels, src_rate, dst_fmt, dst_channels, dst_rate };
+    return { *this, src, dst };
 }

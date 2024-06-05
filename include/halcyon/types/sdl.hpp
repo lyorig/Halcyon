@@ -13,6 +13,9 @@ namespace hal
     using pixel_t = decltype(SDL_Rect::x);
     using coord_t = decltype(SDL_FRect::x);
 
+    // Paranoia.
+    static_assert(std::is_signed_v<pixel_t>);
+
     namespace detail
     {
         template <meta::arithmetic T>

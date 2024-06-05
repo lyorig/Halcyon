@@ -41,7 +41,7 @@ namespace hal
             subsystem(pass_key<hal::system::audio>);
 
             [[nodiscard]] audio::builder::device build_device() &;
-            [[nodiscard]] audio::stream          make_stream(audio::format src_fmt, u8 src_channels, i32 src_rate, audio::format dst_fmt, u8 dst_channels, i32 dst_rate) &;
+            [[nodiscard]] audio::stream          make_stream(audio::config src, audio::config dst) &;
 
             HAL_NO_SIZE proxy::audio_outputs outputs;
             HAL_NO_SIZE proxy::audio_inputs inputs;

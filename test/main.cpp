@@ -248,8 +248,8 @@ namespace test
         hal::system::audio a { ctx };
 
         hal::audio::sdl::spec gotten;
-        hal::audio::device    dev = a.make_device().spec({ 44100, hal::audio::format::f32, 2, 4096 })(gotten);
-        hal::audio::stream    str = a.make_stream(hal::audio::format::i32, 2, 44100, hal::audio::format::u8, 1, 48000);
+        hal::audio::device    dev = a.build_device().spec({ 44100, hal::audio::format::f32, 2, 4096 })(gotten);
+        hal::audio::stream    str = a.make_stream({ hal::audio::format::i32, 2, 44100 }, { hal::audio::format::u8, 1, 48000 });
 
         // Also enumerate devices while we're at it.
         for (hal::audio::device::id_t i = 0; i < a.outputs.size(); ++i)

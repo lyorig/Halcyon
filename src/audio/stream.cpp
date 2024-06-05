@@ -2,8 +2,8 @@
 
 using namespace hal;
 
-audio::stream::stream(proxy::audio&, format src_fmt, u8 src_channels, i32 src_rate, format dst_fmt, u8 dst_channels, i32 dst_rate)
-    : raii_object { ::SDL_NewAudioStream(static_cast<SDL_AudioFormat>(src_fmt), src_channels, src_rate, static_cast<SDL_AudioFormat>(dst_fmt), dst_channels, dst_rate) }
+audio::stream::stream(proxy::audio&, config src, config dst)
+    : raii_object { ::SDL_NewAudioStream(static_cast<SDL_AudioFormat>(src.fmt), src.channels, src.rate, static_cast<SDL_AudioFormat>(dst.fmt), dst.channels, dst.rate) }
 {
 }
 

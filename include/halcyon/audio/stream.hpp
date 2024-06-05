@@ -13,10 +13,17 @@ namespace hal
 {
     namespace audio
     {
+        struct config
+        {
+            format fmt;
+            u8     channels;
+            i32    rate;
+        };
+
         class stream : public detail::raii_object<SDL_AudioStream, SDL_FreeAudioStream>
         {
         public:
-            stream(proxy::audio& sys, format src_fmt, u8 src_channels, i32 src_rate, format dst_fmt, u8 dst_channels, i32 dst_rate);
+            stream(proxy::audio& sys, config src, config dst);
 
             i32 available() const;
 
