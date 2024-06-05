@@ -27,7 +27,7 @@ namespace hal
                 device& name(std::string_view name);
 
                 // Have this be a capture device.
-                device& capture();
+                device& capture(bool val = true);
 
                 device& spec(const spec& s);
 

@@ -20,9 +20,9 @@ adb& adb::name(std::string_view name)
     return *this;
 }
 
-adb& adb::capture()
+adb& adb::capture(bool val)
 {
-    m_capture = true;
+    m_capture = val;
     return *this;
 }
 

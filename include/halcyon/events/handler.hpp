@@ -246,8 +246,6 @@ namespace hal
             void text_input_stop();
 
             // Get/set this event's current type.
-            // Setting is only useful for events which carry no important data;
-            // otherwise, accessing events directly does this automatically.
             type kind() const;
             void kind(type t);
 
