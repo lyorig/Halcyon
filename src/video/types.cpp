@@ -12,7 +12,7 @@ std::ostream& pixel::operator<<(std::ostream& str, pixel::format fmt)
     return str << to_string(fmt);
 }
 
-std::ostream& pixel::operator<<(std::ostream& str, pixel::type tp)
+std::ostream& pixel::operator<<(std::ostream& str, pixel::storage tp)
 {
     return str << to_string(tp);
 }

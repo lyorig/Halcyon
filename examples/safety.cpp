@@ -48,6 +48,7 @@ int main(int, char*[])
     // the loading itself, and can be discarded immediately afterwards.
     using img = hal::image::context;
     using enum hal::image::init_format;
+    using namespace std::string_view_literals;
 
     hal::texture tex { rnd.make_texture(img { png }.load("assets/file.png")) };
 

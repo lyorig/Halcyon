@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 
         tex = rnd.make_texture(surf);
 
-        HAL_PRINT("Pixel format: ", tex.pixel_format(), ", type: ", hal::pixel::type_of(tex.pixel_format()));
+        HAL_PRINT("Pixel format: ", tex.pixel_format(), ", type: ", hal::pixel::storage_of(tex.pixel_format()));
     }
 
     wnd.size(tex.size() + padding);

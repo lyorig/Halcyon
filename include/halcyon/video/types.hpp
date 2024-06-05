@@ -56,7 +56,6 @@ namespace hal
         using rect  = rectangle<pixel_t>;
 
         // Formats in which pixels are stored.
-        // Warning: not exhaustive.
         enum class format : u32
         {
             unknown = SDL_PIXELFORMAT_UNKNOWN,
@@ -111,7 +110,7 @@ namespace hal
             argb2101010 = SDL_PIXELFORMAT_ARGB2101010,
 
             // Endianness-dependent aliases.
-            // As such, they aren't checked for in hal::to_string.
+            // As such, hal::to_string'ing them will return the actual format it's referencing.
             rgba32 = SDL_PIXELFORMAT_RGBA32,
             argb32 = SDL_PIXELFORMAT_ARGB32,
             bgra32 = SDL_PIXELFORMAT_BGRA32,
@@ -132,8 +131,8 @@ namespace hal
 
         std::ostream& operator<<(std::ostream& str, pixel::format fmt);
 
-        // Exhaustive list of all pixel representation types.
-        enum class type
+        // Ways in which pixels are stored.
+        enum class storage
         {
             unknown = SDL_PIXELTYPE_UNKNOWN,
 
@@ -153,11 +152,11 @@ namespace hal
             array_f32 = SDL_PIXELTYPE_ARRAYF32
         };
 
-        std::ostream& operator<<(std::ostream& str, pixel::type tp);
+        std::ostream& operator<<(std::ostream& str, pixel::storage tp);
 
-        constexpr type type_of(format fmt)
+        constexpr storage storage_of(format fmt)
         {
-            return static_cast<type>(SDL_PIXELTYPE(static_cast<SDL_PixelFormatEnum>(fmt)));
+            return static_cast<storage>(SDL_PIXELTYPE(static_cast<SDL_PixelFormatEnum>(fmt)));
         }
     }
 
@@ -295,9 +294,9 @@ namespace hal
         }
     }
 
-    constexpr std::string_view to_string(pixel::type tp)
+    constexpr std::string_view to_string(pixel::storage tp)
     {
-        using enum pixel::type;
+        using enum pixel::storage;
 
         switch (tp)
         {

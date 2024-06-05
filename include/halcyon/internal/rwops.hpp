@@ -1,10 +1,11 @@
 #pragma once
 
+#include <span>
+
 #include <SDL_rwops.h>
 
 #include <halcyon/internal/raii_object.hpp>
 
-#include <halcyon/utility/concepts.hpp>
 #include <halcyon/utility/pass_key.hpp>
 
 namespace hal
@@ -28,29 +29,7 @@ namespace hal
         {
         protected:
             using raii_object::raii_object;
-
-            template <typename T>
-            static const char* string_data(const T& obj)
-            {
-                if constexpr (std::is_same_v<meta::remove_pointer_to_const<T>, char*>)
-                    return obj;
-
-                else
-                    return std::data(obj);
-            }
         };
-    }
-
-    namespace meta
-    {
-        // A type that can be used as a string.
-        template <typename T>
-        concept rwops_path = std::is_assignable_v<std::string_view, T>;
-
-        // A type that represents a static/dynamic array.
-        // The element type must be 1 byte large.
-        template <typename T>
-        concept rwops_buffer = !rwops_path<T> && buffer<T>;
     }
 
     // An abstraction of various methods of accessing data.
@@ -58,22 +37,13 @@ namespace hal
     {
     public:
         // Access a file.
-        // This constructor accepts anything that can be non-explicitly assigned to a std::string_view.
-        // Consult the meta::string_like concept for more info.
-        template <meta::rwops_path T>
-        accessor(const T& path)
-            : rwops { ::SDL_RWFromFile(string_data(path), "r") }
-        {
-        }
+        accessor(const char* path);
+        accessor(std::string_view path);
 
         // Access a buffer.
-        // This constructor accepts any object that cannot be non-explicitly assigned to a std::string_view.
-        // In addition, std::data() and std::size() must be available for use with it.
-        // Consult the meta::accessor_buffer concept for more info.
-        template <meta::rwops_buffer T>
-        accessor(const T& buffer)
-            requires(sizeof(std::remove_pointer_t<decltype(std::data(buffer))>) == 1)
-            : rwops { ::SDL_RWFromConstMem(std::data(buffer), std::size(buffer)) }
+        template <std::size_t Size>
+        accessor(std::span<const std::byte, Size> buffer)
+            : rwops { ::SDL_RWFromConstMem(buffer.data(), buffer.size_bytes()) }
         {
         }
 
@@ -86,26 +56,25 @@ namespace hal
         SDL_RWops* use(pass_key<ttf::context>);   // Font loading.
     };
 
+    // Shorthand for creating a readable byte span from a compatible array-like object.
+    template <meta::buffer T>
+    auto as_bytes(const T& buffer)
+    {
+        return std::as_bytes(std::span(buffer));
+    }
+
     // An abstraction of various methods of outputting data.
     class outputter : public detail::rwops
     {
     public:
         // Output to a file.
-        // This accepts anything that can be assigned (not explicitly) to a std::string_view.
-        // Consult the meta::string_like concept for more info.
-        template <meta::rwops_path T>
-        outputter(const T& path)
-            : rwops { ::SDL_RWFromFile(string_data(path), "w") }
-        {
-        }
+        outputter(const char* path);
+        outputter(std::string_view path);
 
-        // Output data to an array.
-        // This constructor accepts any container that cannot be assigned to a std::string_view.
-        // In addition, std::data() and std::size() must be available for use with it.
-        // Consult the meta::outputter_buffer concept for more info.
-        template <meta::rwops_buffer T>
-        outputter(T& buffer)
-            : rwops { ::SDL_RWFromMem(std::data(buffer), std::size(buffer)) }
+        // Output to an array.
+        template <std::size_t Size>
+        outputter(std::span<std::byte, Size> buffer)
+            : rwops { ::SDL_RWFromMem(buffer.data(), buffer.size_bytes()) }
         {
         }
 
@@ -113,4 +82,11 @@ namespace hal
         SDL_RWops* use(pass_key<surface>);        // BMP saving.
         SDL_RWops* use(pass_key<image::context>); // Image saving.
     };
+
+    // Shorthand for creating a writeable byte span from a compatible array-like object.
+    template <meta::buffer T>
+    auto as_bytes(T& buffer)
+    {
+        return std::as_writable_bytes(std::span(buffer));
+    }
 }

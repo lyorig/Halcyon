@@ -101,7 +101,7 @@ namespace test
     {
         hal::image::context ictx { hal::image::init_format::png };
 
-        hal::surface s { ictx.load(png_2x1) };
+        hal::surface s { ictx.load(hal::as_bytes(png_2x1)) };
 
         if (s[{ 0, 0 }].color() != hal::palette::red || s[{ 1, 0 }].color() != hal::palette::blue)
             return EXIT_FAILURE;
@@ -202,8 +202,8 @@ namespace test
         s.save("DontSueMeDaddyGates.bmp");
 
         std::byte buf[1000];
-
-        s.save(buf);
+        
+        s.save(hal::as_bytes(buf));
 
         return EXIT_SUCCESS;
     }
@@ -212,9 +212,7 @@ namespace test
     {
         hal::image::context ictx { hal::image::init_format::png };
 
-        hal::accessor ag { png_2x1 };
-
-        if (ictx.query(png_2x1) != hal::image::load_format::png)
+        if (ictx.query(hal::as_bytes(png_2x1)) != hal::image::load_format::png)
             return EXIT_FAILURE;
 
         return EXIT_SUCCESS;
@@ -270,7 +268,7 @@ namespace test
         hal::image::context ictx { hal::image::init_format::png };
 
         // Failure should occur here.
-        const hal::surface s { ictx.load(data) };
+        const hal::surface s { ictx.load(hal::as_bytes(data)) };
 
         return EXIT_SUCCESS;
     }
