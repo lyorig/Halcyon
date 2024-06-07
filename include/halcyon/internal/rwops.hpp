@@ -38,6 +38,9 @@ namespace hal
     public:
         // Access a file.
         accessor(const char* path);
+        accessor(std::nullptr_t) = delete;
+
+        // Access a file.
         accessor(std::string_view path);
 
         // Access a buffer.
@@ -69,6 +72,9 @@ namespace hal
     public:
         // Output to a file.
         outputter(const char* path);
+        outputter(std::nullptr_t) = delete;
+
+        // Output to a file.
         outputter(std::string_view path);
 
         // Output to an array.
