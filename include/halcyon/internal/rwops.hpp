@@ -11,13 +11,9 @@
 namespace hal
 {
     class surface;
+    class font;
 
     namespace image
-    {
-        class context;
-    }
-
-    namespace ttf
     {
         class context;
     }
@@ -55,8 +51,8 @@ namespace hal
 
         // use() functions call release(), so the class gets "consumed".
         SDL_RWops* use(pass_key<surface>);        // BMP loading.
+        SDL_RWops* use(pass_key<font>);           // Font loading.
         SDL_RWops* use(pass_key<image::context>); // Image loading.
-        SDL_RWops* use(pass_key<ttf::context>);   // Font loading.
     };
 
     // Shorthand for creating a readable byte span from a compatible array-like object.

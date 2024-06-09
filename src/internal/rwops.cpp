@@ -23,12 +23,12 @@ SDL_RWops* accessor::use(pass_key<surface>)
     return raii_object::release();
 }
 
-SDL_RWops* accessor::use(pass_key<image::context>)
+SDL_RWops* accessor::use(pass_key<font>)
 {
     return raii_object::release();
 }
 
-SDL_RWops* accessor::use(pass_key<ttf::context>)
+SDL_RWops* accessor::use(pass_key<image::context>)
 {
     return raii_object::release();
 }

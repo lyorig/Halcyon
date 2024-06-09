@@ -2,8 +2,8 @@
 
 using namespace hal;
 
-font::font(TTF_Font* ptr, pass_key<ttf::context>)
-    : raii_object { ptr }
+font::font(accessor src, pt_t size, pass_key<ttf::context>)
+    : raii_object { ::TTF_OpenFontRW(src.use(pass_key<font> {}), true, size) }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }
@@ -65,9 +65,9 @@ ttf::context::~context()
     HAL_PRINT("TTF context destroyed");
 }
 
-font ttf::context::load(accessor data, u8 pt) &
+font ttf::context::load(accessor data, font::pt_t size) &
 {
-    return { ::TTF_OpenFontRW(data.use(pass_key<context> {}), true, pt), pass_key<context> {} };
+    return { std::move(data), size, pass_key<context> {} };
 }
 
 bool ttf::context::initialized()

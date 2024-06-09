@@ -18,6 +18,11 @@ namespace hal
         class font_glyph;
     }
 
+    namespace ttf
+    {
+        class context;
+    }
+
     class font : public detail::raii_object<TTF_Font, &::TTF_CloseFont>
     {
     public:
@@ -36,7 +41,7 @@ namespace hal
         font() = default;
 
         // [private] Fonts are loaded with ttf::context::load().
-        font(TTF_Font* ptr, pass_key<ttf::context>);
+        font(accessor src, pt_t size, pass_key<ttf::context>);
 
         // Render text to a surface.
         [[nodiscard]] builder::font_text render(std::string_view text) const;
@@ -94,7 +99,7 @@ namespace hal
             ~context();
 
             // Font loading function.
-            [[nodiscard]] font load(accessor data, font::pt_t pt) &;
+            [[nodiscard]] font load(accessor data, font::pt_t size) &;
 
             static bool initialized();
         };
