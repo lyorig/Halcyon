@@ -4,8 +4,8 @@
 
 #include <halcyon/surface.hpp>
 
-#include <halcyon/internal/enum_bitset.hpp>
 #include <halcyon/internal/rwops.hpp>
+#include <halcyon/utility/enum_bitset.hpp>
 
 // image.hpp:
 // SDL_image wrappers for image loading.
@@ -58,7 +58,7 @@ namespace hal
         class context
         {
         public:
-            using enum_bitset = detail::enum_bitset<init_format, int>;
+            using enum_bitset = enum_bitset<init_format, int>;
 
             // Initialize the image context with chosen types.
             context(std::initializer_list<init_format> types);
