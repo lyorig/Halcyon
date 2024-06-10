@@ -9,9 +9,6 @@
 
 using namespace hal;
 
-// Set the depth accordingly upon changing this value.
-constexpr pixel::format default_format { pixel::format::rgba32 };
-
 surface::surface(pixel::point sz, pixel::format fmt)
     : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, static_cast<Uint32>(fmt)) }
 {

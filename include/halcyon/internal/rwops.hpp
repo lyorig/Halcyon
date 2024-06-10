@@ -6,6 +6,7 @@
 
 #include <halcyon/internal/raii_object.hpp>
 
+#include <halcyon/utility/concepts.hpp>
 #include <halcyon/utility/pass_key.hpp>
 
 namespace hal

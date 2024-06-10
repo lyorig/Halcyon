@@ -29,8 +29,6 @@ hal::surface context::load(accessor src) const
 
 hal::surface context::load(accessor src, load_format fmt) const
 {
-    constexpr pass_key<context> pk;
-
     using enum load_format;
 
     constexpr std::pair<load_format, func_ptr<SDL_Surface*, SDL_RWops*>> dispatch[] {

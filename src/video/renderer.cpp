@@ -199,8 +199,9 @@ std::ostream& info::sdl::operator<<(std::ostream& str, const info::sdl::renderer
 info::renderer::renderer(const sdl::renderer& src)
     : name { src.name() }
     , max_texture_size { src.max_texture_size() }
-    , formats { src.formats() }
     , flags { src.flags() }
+    , formats { src.formats() }
+
 {
 }
 

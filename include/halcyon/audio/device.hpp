@@ -54,6 +54,9 @@ namespace hal
             constexpr static id_t invalid_id { static_cast<id_t>(-1) };
             static_assert(static_cast<int>(-1) == invalid_id);
 
+            // Default constructor. Creates an invalid device.
+            device();
+
             // [private] Construct an audio device via hal::audio::builder::device.
             device(const char* name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>);
             ~device();

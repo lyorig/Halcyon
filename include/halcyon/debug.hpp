@@ -197,7 +197,7 @@ namespace hal
     #endif
 
     #define HAL_PRINT(...) (static_cast<void>(0))
-    #define HAL_PANIC(...) (static_cast<void>(0))
+    #define HAL_PANIC(...) std::unreachable()
 
     #define HAL_WARN_IF(...)             (static_cast<void>(0))
     #define HAL_WARN_IF_VITAL(cond, ...) (static_cast<void>(cond))

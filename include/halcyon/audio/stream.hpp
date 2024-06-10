@@ -23,6 +23,9 @@ namespace hal
         class stream : public detail::raii_object<SDL_AudioStream, SDL_FreeAudioStream>
         {
         public:
+            // Default constructor. Creates an invalid stream.
+            stream() = default;
+
             stream(proxy::audio& sys, config src, config dst);
 
             i32 available() const;

@@ -20,5 +20,5 @@ namespace hal::meta
 
     // A sized array (static or dynamic) that can be written to or read from.
     template <typename T>
-    concept buffer = requires(T& x) {std::data(x); std::size(x); } && sizeof(*std::data(std::declval<const T&>())) == 1;
+    concept buffer = requires(T& x) {std::begin(x); std::end(x); std::data(x); std::size(x); };
 }
