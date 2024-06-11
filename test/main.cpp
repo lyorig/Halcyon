@@ -7,11 +7,6 @@
 // A single test-runner executable that contains all tests.
 // Tests are added to CTest by specifiying the appropriate command-line argument.
 
-template <std::size_t N>
-void blah(const char (&arr)[N])
-{
-}
-
 namespace test
 {
     // Debug assertion testing.

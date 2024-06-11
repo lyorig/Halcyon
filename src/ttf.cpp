@@ -47,6 +47,11 @@ std::string_view font::style() const
     return ::TTF_FontFaceStyleName(get());
 }
 
+bool font::mono() const
+{
+    return ::TTF_FontFaceIsFixedWidth(get());
+}
+
 ttf::context::context()
 {
     HAL_WARN_IF(initialized(), "TTF context already exists");

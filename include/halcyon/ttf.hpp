@@ -58,6 +58,8 @@ namespace hal
 
         std::string_view family() const;
         std::string_view style() const;
+
+        bool mono() const;
     };
 
     constexpr std::string_view to_string(font::render_type rt)
