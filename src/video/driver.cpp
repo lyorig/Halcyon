@@ -3,6 +3,7 @@
 #include <SDL_video.h>
 
 #include <halcyon/debug.hpp>
+#include <halcyon/video/renderer.hpp>
 
 using namespace hal;
 
@@ -29,6 +30,15 @@ std::string_view driver::name(index_t idx)
     const char* ret { ::SDL_GetVideoDriver(idx) };
 
     HAL_ASSERT(ret != nullptr, debug::last_error());
+
+    return ret;
+}
+
+info::sdl::renderer driver::info(index_t idx)
+{
+    info::sdl::renderer ret;
+
+    HAL_ASSERT_VITAL(::SDL_GetRenderDriverInfo(idx, ret.get()) == 0, debug::last_error());
 
     return ret;
 }

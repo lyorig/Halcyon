@@ -8,6 +8,11 @@
 
 namespace hal
 {
+    namespace info::sdl
+    {
+        class renderer;
+    }
+
     namespace driver
     {
         using index_t = u8;
@@ -20,5 +25,9 @@ namespace hal
 
         // Get the name of the video driver at [idx].
         std::string_view name(index_t idx);
+
+        // Get rendering info of the driver at [idx].
+        // This does not provide the maximum texture size.
+        info::sdl::renderer info(index_t idx);
     };
 }

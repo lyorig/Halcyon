@@ -132,6 +132,7 @@ namespace hal
             class renderer : SDL_RendererInfo
             {
             public:
+                renderer() = default;
                 renderer(const hal::renderer& rnd, pass_key<hal::renderer>);
 
                 std::string_view name() const;
@@ -142,6 +143,8 @@ namespace hal
 
                 pixel::point max_texture_size() const;
 
+                SDL_RendererInfo* get();
+
                 friend std::ostream& operator<<(std::ostream& str, const info::sdl::renderer& inf);
             };
         }
@@ -149,6 +152,7 @@ namespace hal
         class renderer
         {
         public:
+            renderer() = default;
             // Compress native renderer info.
             renderer(const sdl::renderer& src);
 

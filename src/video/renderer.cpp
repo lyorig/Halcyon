@@ -12,7 +12,7 @@ using namespace hal;
 renderer::renderer(const hal::window& wnd, std::initializer_list<flags> f)
     : raii_object { ::SDL_CreateRenderer(wnd.get(), -1, detail::to_bitmask<std::uint32_t>(f)) }
 {
-    HAL_PRINT("Created renderer for \"", wnd.title(), "\" ", info());
+    HAL_PRINT("Created renderer for \"", wnd.title(), "\" ");
 }
 
 void renderer::present()
@@ -175,6 +175,11 @@ pixel::point info::sdl::renderer::max_texture_size() const
         static_cast<pixel_t>(max_texture_width),
         static_cast<pixel_t>(max_texture_height)
     };
+}
+
+SDL_RendererInfo* info::sdl::renderer::get()
+{
+    return this;
 }
 
 std::ostream& info::sdl::operator<<(std::ostream& str, const info::sdl::renderer& inf)

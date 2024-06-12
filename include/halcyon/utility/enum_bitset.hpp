@@ -9,11 +9,17 @@
 
 namespace hal
 {
+    // A bitset-like class for enums defined as bit masks (i.e. 0b1, 0b10, 0b100...).
     template <typename Enum, typename Value>
         requires(std::is_enum_v<Enum>)
     class enum_bitset
     {
     public:
+        enum_bitset()
+            : m_mask { 0 }
+        {
+        }
+
         enum_bitset(Value val)
             : m_mask { val }
         {

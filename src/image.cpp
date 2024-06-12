@@ -10,7 +10,7 @@ context::context(std::initializer_list<init_format> types)
 
     HAL_ASSERT_VITAL(::IMG_Init(detail::to_bitmask<int>(types)) == detail::to_bitmask<int>(types), ::IMG_GetError());
 
-    HAL_PRINT(debug::severity::init, "Initialized image context, flags = 0x", std::hex, detail::to_bitmask<int>(types));
+    HAL_PRINT(debug::severity::init, "Initialized image context [flags: 0x", std::hex, detail::to_bitmask<int>(types), ']');
 }
 
 context::~context()
