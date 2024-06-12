@@ -103,3 +103,12 @@ void window::fullscreen(bool set)
             == 0,
         debug::last_error());
 }
+
+const surface* window::surface() const
+{
+    const SDL_Surface* ptr { ::SDL_GetWindowSurface(get()) };
+
+    HAL_ASSERT(ptr != nullptr, debug::last_error());
+
+    return reinterpret_cast<const class surface*>(ptr);
+}

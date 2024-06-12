@@ -64,9 +64,12 @@ namespace hal
 
         id_t id() const;
 
-        // Returns true if the window is fullscreen.
-        // Fullscreen borderless mode is also considered as such.
+        // Returns true if the window is fullscreen or fullscreen borderless.
         bool fullscreen() const;
         void fullscreen(bool set);
+
+        // Get the surface associated with this window.
+        // Returns a pointer... for now. Some reinterpret_cast magic might be required.
+        const surface* surface() const;
     };
 }
