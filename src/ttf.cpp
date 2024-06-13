@@ -2,23 +2,19 @@
 
 using namespace hal;
 
-font::font(accessor&& src, pt_t size, pass_key<ttf::context>)
-    : raii_object { ::TTF_OpenFontRW(src.use(pass_key<font> {}), true, size) }
+using fv = view::font;
+
+builder::font_text fv::render(std::string_view text) const
 {
-    HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
+    return { *this, text, pass_key<fv> {} };
 }
 
-builder::font_text font::render(std::string_view text) const
+builder::font_glyph fv::render(char32_t glyph) const
 {
-    return { *this, text, pass_key<font> {} };
+    return { *this, glyph, pass_key<fv> {} };
 }
 
-builder::font_glyph font::render(char32_t glyph) const
-{
-    return { *this, glyph, pass_key<font> {} };
-}
-
-pixel::point font::size_text(const std::string_view& text) const
+pixel::point fv::size_text(const std::string_view& text) const
 {
     point<int> size;
 
@@ -27,29 +23,35 @@ pixel::point font::size_text(const std::string_view& text) const
     return pixel::point(size);
 }
 
-pixel_t font::height() const
+pixel_t fv::height() const
 {
     return static_cast<pixel_t>(::TTF_FontHeight(get()));
 }
 
-pixel_t font::skip() const
+pixel_t fv::skip() const
 {
     return static_cast<pixel_t>(::TTF_FontLineSkip(get()));
 }
 
-std::string_view font::family() const
+std::string_view fv::family() const
 {
     return ::TTF_FontFaceFamilyName(get());
 }
 
-std::string_view font::style() const
+std::string_view fv::style() const
 {
     return ::TTF_FontFaceStyleName(get());
 }
 
-bool font::mono() const
+bool fv::mono() const
 {
     return ::TTF_FontFaceIsFixedWidth(get());
+}
+
+font::font(accessor&& src, pt_t size, pass_key<ttf::context>)
+    : raii_object { ::TTF_OpenFontRW(src.use(pass_key<font> {}), true, size) }
+{
+    HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
 }
 
 ttf::context::context()
@@ -70,7 +72,7 @@ ttf::context::~context()
     HAL_PRINT("TTF context destroyed");
 }
 
-font ttf::context::load(accessor&& data, font::pt_t size) &
+font ttf::context::load(accessor data, font::pt_t size) &
 {
     return { std::move(data), size, pass_key<context> {} };
 }
@@ -82,7 +84,7 @@ bool ttf::context::initialized()
 
 using bft = builder::font_text;
 
-bft::font_text(const font& fnt, std::string_view text, pass_key<font> pk)
+bft::font_text(const view::font& fnt, std::string_view text, pass_key<view::font> pk)
     : font_builder_base { fnt, pk }
     , m_text { text.data() }
     , m_wrapLength { invalid() }
@@ -141,7 +143,7 @@ surface bft::operator()(font::render_type rt)
 
 using bfg = builder::font_glyph;
 
-bfg::font_glyph(const font& fnt, char32_t glyph, pass_key<font> pk)
+bfg::font_glyph(const view::font& fnt, char32_t glyph, pass_key<view::font> pk)
     : font_builder_base { fnt, pk }
     , m_glyph { glyph }
 {

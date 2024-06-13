@@ -2,14 +2,16 @@
 
 using namespace hal;
 
+using sv = audio::view::stream;
+
+i32 sv::available() const
+{
+    return static_cast<bool>(::SDL_AudioStreamAvailable(get()));
+}
+
 audio::stream::stream(proxy::audio&, config src, config dst)
     : raii_object { ::SDL_NewAudioStream(static_cast<SDL_AudioFormat>(src.fmt), src.channels, src.rate, static_cast<SDL_AudioFormat>(dst.fmt), dst.channels, dst.rate) }
 {
-}
-
-i32 audio::stream::available() const
-{
-    return static_cast<bool>(::SDL_AudioStreamAvailable(get()));
 }
 
 void audio::stream::flush()

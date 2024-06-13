@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include <halcyon/debug.hpp>
 
@@ -138,9 +139,15 @@ namespace hal
         using renderer = detail::view_impl<SDL_Renderer>;
 
         using surface = detail::view_impl<SDL_Surface>;
-
         using texture = detail::view_impl<SDL_Texture>;
 
+        using font = detail::view_impl<TTF_Font>;
+
         using string = detail::view_impl<char>;
+    }
+
+    namespace audio::view
+    {
+        using stream = detail::view_impl<SDL_AudioStream>;
     }
 }

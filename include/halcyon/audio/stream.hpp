@@ -16,7 +16,10 @@ namespace hal
         template <>
         class view_impl<SDL_AudioStream> : public view_base<SDL_AudioStream>
         {
+        public:
             using view_base::view_base;
+
+            i32 available() const;
         };
     }
 
@@ -36,8 +39,6 @@ namespace hal
             stream() = default;
 
             stream(proxy::audio& sys, config src, config dst);
-
-            i32 available() const;
 
             void flush();
 

@@ -28,7 +28,26 @@ namespace hal
         template <>
         class view_impl<TTF_Font> : public view_base<TTF_Font>
         {
+        public:
             using view_base::view_base;
+
+            // Render text to a surface.
+            [[nodiscard]] builder::font_text render(std::string_view text) const;
+
+            // Render a single glyph to a surface.
+            [[nodiscard]] builder::font_glyph render(char32_t glyph) const;
+
+            // When sizing text, it's important to know that the vertical size
+            // doesn't necessarily have to match that of the rendered surface.
+            pixel::point size_text(const std::string_view& text) const;
+
+            pixel_t height() const;
+            pixel_t skip() const;
+
+            std::string_view family() const;
+            std::string_view style() const;
+
+            bool mono() const;
         };
     }
 
@@ -51,24 +70,6 @@ namespace hal
 
         // [private] Fonts are loaded with ttf::context::load().
         font(accessor&& src, pt_t size, pass_key<ttf::context>);
-
-        // Render text to a surface.
-        [[nodiscard]] builder::font_text render(std::string_view text) const;
-
-        // Render a single glyph to a surface.
-        [[nodiscard]] builder::font_glyph render(char32_t glyph) const;
-
-        // When sizing text, it's important to know that the vertical size
-        // doesn't necessarily have to match that of the rendered surface.
-        pixel::point size_text(const std::string_view& text) const;
-
-        pixel_t height() const;
-        pixel_t skip() const;
-
-        std::string_view family() const;
-        std::string_view style() const;
-
-        bool mono() const;
     };
 
     constexpr std::string_view to_string(font::render_type rt)
@@ -105,12 +106,12 @@ namespace hal
             context();
 
             context(const context&) = delete;
-            context(context&&)      = delete;
+            context(context&&)      = default;
 
             ~context();
 
             // Font loading function.
-            [[nodiscard]] font load(accessor&& data, font::pt_t size) &;
+            [[nodiscard]] font load(accessor data, font::pt_t size) &;
 
             static bool initialized();
         };
@@ -124,7 +125,7 @@ namespace hal
         class font_builder_base
         {
         public:
-            [[nodiscard]] font_builder_base(const hal::font& fnt, pass_key<font>)
+            [[nodiscard]] font_builder_base(const hal::view::font& fnt, pass_key<view::font>)
                 : m_font { fnt }
                 , m_fg { hal::palette::white }
                 , m_bg { hal::palette::transparent }
@@ -154,7 +155,7 @@ namespace hal
                 return static_cast<Derived&>(*this);
             }
 
-            const hal::font& m_font;
+            const hal::view::font& m_font;
 
             color m_fg, m_bg;
         };
@@ -165,7 +166,7 @@ namespace hal
         class font_text : public detail::font_builder_base<font_text>
         {
         public:
-            [[nodiscard]] font_text(const font& fnt, std::string_view text, pass_key<font>);
+            [[nodiscard]] font_text(const view::font& fnt, std::string_view text, pass_key<view::font>);
 
             // How many characters to wrap this text at.
             // Zero means only wrap on newlines.
@@ -186,7 +187,7 @@ namespace hal
         class font_glyph : public detail::font_builder_base<font_glyph>
         {
         public:
-            [[nodiscard]] font_glyph(const font& fnt, char32_t glyph, pass_key<font>);
+            [[nodiscard]] font_glyph(const view::font& fnt, char32_t glyph, pass_key<view::font>);
 
             [[nodiscard]] surface operator()(font::render_type rt = font::default_render_type);
 
