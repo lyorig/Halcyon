@@ -67,7 +67,7 @@ namespace hal
 
         window() = default;
 
-        window(proxy::video& sys, std::string_view title, pixel::point size, std::initializer_list<flags> flags);
+        window(proxy::video& sys, std::string_view title, pixel::point size, std::initializer_list<flags> flags = {});
 
         // Create a window in fullscreen window.
         // Warning: This has some issues on macOS due to its DPI scaling stuff.
