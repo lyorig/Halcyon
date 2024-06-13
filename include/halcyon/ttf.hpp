@@ -23,6 +23,15 @@ namespace hal
         class context;
     }
 
+    namespace detail
+    {
+        template <>
+        class view_impl<TTF_Font> : public view_base<TTF_Font>
+        {
+            using view_base::view_base;
+        };
+    }
+
     class font : public detail::raii_object<TTF_Font, &::TTF_CloseFont>
     {
     public:
@@ -41,7 +50,7 @@ namespace hal
         font() = default;
 
         // [private] Fonts are loaded with ttf::context::load().
-        font(accessor src, pt_t size, pass_key<ttf::context>);
+        font(accessor&& src, pt_t size, pass_key<ttf::context>);
 
         // Render text to a surface.
         [[nodiscard]] builder::font_text render(std::string_view text) const;
@@ -101,7 +110,7 @@ namespace hal
             ~context();
 
             // Font loading function.
-            [[nodiscard]] font load(accessor data, font::pt_t size) &;
+            [[nodiscard]] font load(accessor&& data, font::pt_t size) &;
 
             static bool initialized();
         };

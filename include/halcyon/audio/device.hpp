@@ -61,6 +61,9 @@ namespace hal
             device(const char* name, bool capture, const SDL_AudioSpec* desired, SDL_AudioSpec* obtained, int allowed_changes, pass_key<builder::device>);
             ~device();
 
+            device(const device&)             = delete;
+            device& operator==(const device&) = delete;
+
             void queue(std::span<std::byte> bytes);
 
             void pause(bool p);

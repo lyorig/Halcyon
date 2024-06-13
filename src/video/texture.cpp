@@ -6,7 +6,9 @@
 
 using namespace hal;
 
-pixel::point detail::texture_base::size() const
+using tv = view::texture;
+
+pixel::point tv::size() const
 {
     point<int> size;
 
@@ -15,12 +17,7 @@ pixel::point detail::texture_base::size() const
     return size;
 }
 
-void detail::texture_base::opacity(color::value_t value)
-{
-    HAL_ASSERT_VITAL(::SDL_SetTextureAlphaMod(get(), value) == 0, debug::last_error());
-}
-
-color::value_t detail::texture_base::alpha_mod() const
+color::value_t tv::alpha_mod() const
 {
     color::value_t ret;
 
@@ -29,12 +26,7 @@ color::value_t detail::texture_base::alpha_mod() const
     return ret;
 }
 
-void detail::texture_base::alpha_mod(color::value_t val)
-{
-    ::SDL_SetTextureAlphaMod(get(), val);
-}
-
-color detail::texture_base::color_mod() const
+color tv::color_mod() const
 {
     color c;
 
@@ -43,12 +35,7 @@ color detail::texture_base::color_mod() const
     return c;
 }
 
-void detail::texture_base::color_mod(color clr)
-{
-    HAL_ASSERT_VITAL(::SDL_SetTextureColorMod(get(), clr.r, clr.g, clr.b) == 0, debug::last_error());
-}
-
-blend_mode detail::texture_base::blend() const
+blend_mode tv::blend() const
 {
     SDL_BlendMode bm;
 
@@ -57,12 +44,7 @@ blend_mode detail::texture_base::blend() const
     return blend_mode(bm);
 }
 
-void detail::texture_base::blend(blend_mode bm)
-{
-    HAL_ASSERT_VITAL(::SDL_SetTextureBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
-}
-
-pixel::format detail::texture_base::pixel_format() const
+pixel::format tv::pixel_format() const
 {
     Uint32 ret;
 
@@ -71,7 +53,7 @@ pixel::format detail::texture_base::pixel_format() const
     return static_cast<pixel::format>(ret);
 }
 
-u8 detail::texture_base::opacity() const
+u8 tv::opacity() const
 {
     Uint8 alpha;
 
@@ -81,15 +63,35 @@ u8 detail::texture_base::opacity() const
     return alpha;
 }
 
+void tv::query(Uint32* format, int* access, int* w, int* h) const
+{
+    HAL_ASSERT_VITAL(::SDL_QueryTexture(get(), format, access, w, h) == 0, debug::last_error());
+}
+
+void detail::texture_base::opacity(color::value_t value)
+{
+    HAL_ASSERT_VITAL(::SDL_SetTextureAlphaMod(get(), value) == 0, debug::last_error());
+}
+
+void detail::texture_base::alpha_mod(color::value_t val)
+{
+    ::SDL_SetTextureAlphaMod(get(), val);
+}
+
+void detail::texture_base::color_mod(color clr)
+{
+    HAL_ASSERT_VITAL(::SDL_SetTextureColorMod(get(), clr.r, clr.g, clr.b) == 0, debug::last_error());
+}
+
+void detail::texture_base::blend(blend_mode bm)
+{
+    HAL_ASSERT_VITAL(::SDL_SetTextureBlendMode(get(), static_cast<SDL_BlendMode>(bm)) == 0, debug::last_error());
+}
+
 detail::texture_base::texture_base(SDL_Texture* ptr)
     : raii_object { ptr }
 {
     this->blend(blend_mode::blend);
-}
-
-void detail::texture_base::query(Uint32* format, int* access, int* w, int* h) const
-{
-    HAL_ASSERT_VITAL(::SDL_QueryTexture(get(), format, access, w, h) == 0, debug::last_error());
 }
 
 texture::texture(renderer& rnd, const surface& surf)

@@ -11,6 +11,15 @@
 
 namespace hal
 {
+    namespace detail
+    {
+        template <>
+        class view_impl<SDL_AudioStream> : public view_base<SDL_AudioStream>
+        {
+            using view_base::view_base;
+        };
+    }
+
     namespace audio
     {
         struct config

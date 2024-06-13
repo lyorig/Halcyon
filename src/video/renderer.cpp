@@ -9,6 +9,41 @@
 
 using namespace hal;
 
+using rv = view::renderer;
+
+pixel::point rv::size() const
+{
+    hal::point<int> sz;
+    ::SDL_RenderGetLogicalSize(get(), &sz.x, &sz.y);
+
+    if (sz.x == 0)
+        HAL_ASSERT_VITAL(::SDL_GetRendererOutputSize(get(), &sz.x, &sz.y) == 0, debug::last_error());
+
+    return static_cast<pixel::point>(sz);
+}
+
+info::sdl::renderer rv::info() const
+{
+    return { *this, pass_key<rv> {} };
+}
+
+color rv::color() const
+{
+    hal::color ret;
+
+    HAL_ASSERT_VITAL(::SDL_GetRenderDrawColor(get(), &ret.r, &ret.g, &ret.b, &ret.a) == 0, debug::last_error());
+
+    return ret;
+}
+blend_mode rv::blend() const
+{
+    SDL_BlendMode bm;
+
+    HAL_ASSERT_VITAL(::SDL_GetRenderDrawBlendMode(get(), &bm) == 0, debug::last_error());
+
+    return static_cast<blend_mode>(bm);
+}
+
 renderer::renderer(const hal::window& wnd, std::initializer_list<flags> f)
     : raii_object { ::SDL_CreateRenderer(wnd.get(), -1, detail::to_bitmask<std::uint32_t>(f)) }
 {
@@ -66,17 +101,6 @@ void renderer::reset_target()
     this->internal_target(nullptr);
 }
 
-pixel::point renderer::size() const
-{
-    hal::point<int> sz;
-    ::SDL_RenderGetLogicalSize(get(), &sz.x, &sz.y);
-
-    if (sz.x == 0)
-        HAL_ASSERT_VITAL(::SDL_GetRendererOutputSize(get(), &sz.x, &sz.y) == 0, debug::last_error());
-
-    return static_cast<pixel::point>(sz);
-}
-
 void renderer::size(pixel::point sz)
 {
     HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(get(), sz.x, sz.y) == 0, debug::last_error());
@@ -85,11 +109,6 @@ void renderer::size(pixel::point sz)
 void renderer::size(scaler scl)
 {
     size(scl(size()));
-}
-
-info::sdl::renderer renderer::info() const
-{
-    return { *this, pass_key<renderer> {} };
 }
 
 texture renderer::make_texture(const surface& surf) &
@@ -108,27 +127,9 @@ target_texture renderer::make_target_texture(pixel::point size) &
     return { *this, fmt, size };
 }
 
-color renderer::color() const
-{
-    hal::color ret;
-
-    HAL_ASSERT_VITAL(::SDL_GetRenderDrawColor(get(), &ret.r, &ret.g, &ret.b, &ret.a) == 0, debug::last_error());
-
-    return ret;
-}
-
 void renderer::color(hal::color clr)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawColor(get(), clr.r, clr.g, clr.b, clr.a) == 0, debug::last_error());
-}
-
-blend_mode renderer::blend() const
-{
-    SDL_BlendMode bm;
-
-    HAL_ASSERT_VITAL(::SDL_GetRenderDrawBlendMode(get(), &bm) == 0, debug::last_error());
-
-    return static_cast<blend_mode>(bm);
 }
 
 void renderer::blend(blend_mode bm)
@@ -138,7 +139,7 @@ void renderer::blend(blend_mode bm)
 
 copyer renderer::render(const detail::texture_base& tex)
 {
-    return { *this, tex, pass_key<renderer> {} };
+    return { *this, tex };
 }
 
 void renderer::internal_target(SDL_Texture* target)
@@ -148,7 +149,7 @@ void renderer::internal_target(SDL_Texture* target)
 
 // Renderer information (SDL).
 
-info::sdl::renderer::renderer(const hal::renderer& rnd, pass_key<hal::renderer>)
+info::sdl::renderer::renderer(const view::renderer& rnd, pass_key<view::renderer>)
 {
     HAL_ASSERT_VITAL(::SDL_GetRendererInfo(rnd.get(), static_cast<SDL_RendererInfo*>(this)) == 0, debug::last_error());
 }

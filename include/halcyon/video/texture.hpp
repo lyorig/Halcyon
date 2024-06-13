@@ -15,37 +15,50 @@ namespace hal
 {
     class surface;
 
-    extern template class detail::raii_object<SDL_Texture, ::SDL_DestroyTexture>;
-
     namespace detail
     {
+        template <>
+        class view_impl<SDL_Texture> : public view_base<SDL_Texture>
+        {
+        public:
+            using view_base::view_base;
+
+            pixel::point size() const;
+
+            color::value_t opacity() const;
+
+            color::value_t alpha_mod() const;
+
+            color color_mod() const;
+
+            blend_mode blend() const;
+
+            pixel::format pixel_format() const;
+
+        private:
+            void query(Uint32* format, int* access, int* w, int* h) const;
+        };
+
         // Common texture functionality.
         class texture_base : public detail::raii_object<SDL_Texture, &::SDL_DestroyTexture>
         {
         public:
-            pixel::point size() const;
+            using view_impl::opacity;
+            void opacity(color::value_t value);
 
-            color::value_t opacity() const;
-            void           opacity(color::value_t value);
+            using view_impl::alpha_mod;
+            void alpha_mod(color::value_t val);
 
-            color::value_t alpha_mod() const;
-            void           alpha_mod(color::value_t val);
+            using view_impl::color_mod;
+            void color_mod(color mod);
 
-            color color_mod() const;
-            void  color_mod(color mod);
-
-            blend_mode blend() const;
-            void       blend(blend_mode bm);
-
-            pixel::format pixel_format() const;
+            using view_impl::blend;
+            void blend(blend_mode bm);
 
         protected:
             texture_base() = default;
 
             texture_base(SDL_Texture* ptr);
-
-        private:
-            void query(Uint32* format, int* access, int* w, int* h) const;
         };
     }
 

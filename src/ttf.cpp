@@ -2,7 +2,7 @@
 
 using namespace hal;
 
-font::font(accessor src, pt_t size, pass_key<ttf::context>)
+font::font(accessor&& src, pt_t size, pass_key<ttf::context>)
     : raii_object { ::TTF_OpenFontRW(src.use(pass_key<font> {}), true, size) }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
@@ -70,7 +70,7 @@ ttf::context::~context()
     HAL_PRINT("TTF context destroyed");
 }
 
-font ttf::context::load(accessor data, font::pt_t size) &
+font ttf::context::load(accessor&& data, font::pt_t size) &
 {
     return { std::move(data), size, pass_key<context> {} };
 }

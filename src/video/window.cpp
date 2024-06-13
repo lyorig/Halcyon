@@ -6,6 +6,68 @@
 
 using namespace hal;
 
+using wv = view::window;
+
+hal::pixel::point wv::pos() const
+{
+    point<int> ret;
+
+    ::SDL_GetWindowPosition(get(), &ret.x, &ret.y);
+
+    return ret;
+}
+
+hal::pixel::point wv::size() const
+{
+    point<int> size;
+
+    ::SDL_GetWindowSize(get(), &size.x, &size.y);
+
+    return size;
+}
+
+display::id_t wv::display_index() const
+{
+    const auto ret = ::SDL_GetWindowDisplayIndex(get());
+
+    HAL_ASSERT(ret >= 0, debug::last_error());
+
+    return static_cast<display::id_t>(ret);
+}
+
+pixel::format wv::pixel_format() const
+{
+    return static_cast<pixel::format>(::SDL_GetWindowPixelFormat(get()));
+}
+
+std::string_view wv::title() const
+{
+    return ::SDL_GetWindowTitle(get());
+}
+
+window::id_t wv::id() const
+{
+    const auto ret = ::SDL_GetWindowID(get());
+
+    HAL_ASSERT(ret != 0, debug::last_error());
+
+    return static_cast<window::id_t>(ret);
+}
+
+bool wv::fullscreen() const
+{
+    return static_cast<bool>(::SDL_GetWindowFlags(get()) & (std::to_underlying(window::flags::fullscreen) | std::to_underlying(window::flags::fullscreen_borderless)));
+}
+
+view::surface wv::surface() const
+{
+    SDL_Surface* ptr { ::SDL_GetWindowSurface(get()) };
+
+    HAL_ASSERT(ptr != nullptr, debug::last_error());
+
+    return { ptr, pass_key<wv> {} };
+}
+
 window::window(proxy::video&, std::string_view title, pixel::point size, std::initializer_list<flags> flags)
     : raii_object { ::SDL_CreateWindow(title.data(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.x, size.y, detail::to_bitmask<Uint32>(flags)) }
 {
@@ -22,32 +84,14 @@ renderer window::make_renderer(std::initializer_list<renderer::flags> flags) &
     return { *this, flags };
 }
 
-hal::pixel::point window::pos() const
-{
-    point<int> ret;
-
-    ::SDL_GetWindowPosition(get(), &ret.x, &ret.y);
-
-    return ret;
-}
-
 void window::pos(hal::pixel::point ps)
 {
     ::SDL_SetWindowPosition(get(), ps.x, ps.y);
 }
 
-hal::pixel::point window::size() const
-{
-    point<int> size;
-
-    ::SDL_GetWindowSize(get(), &size.x, &size.y);
-
-    return size;
-}
-
 void window::size(pixel::point sz)
 {
-    HAL_WARN_IF(fullscreen(), "Setting size of fullscreen window - this does nothing");
+    HAL_WARN_IF(view_impl::fullscreen(), "Setting size of fullscreen window - this does nothing");
 
     ::SDL_SetWindowSize(get(), sz.x, sz.y);
 }
@@ -57,42 +101,9 @@ void window::size(scaler scl)
     size(scl(size()));
 }
 
-display::id_t window::display_index() const
-{
-    const auto ret = ::SDL_GetWindowDisplayIndex(get());
-
-    HAL_ASSERT(ret >= 0, debug::last_error());
-
-    return static_cast<display::id_t>(ret);
-}
-
-pixel::format window::pixel_format() const
-{
-    return static_cast<pixel::format>(::SDL_GetWindowPixelFormat(get()));
-}
-
-std::string_view window::title() const
-{
-    return ::SDL_GetWindowTitle(get());
-}
-
 void window::title(std::string_view val)
 {
     ::SDL_SetWindowTitle(get(), val.data());
-}
-
-window::id_t window::id() const
-{
-    const auto ret = ::SDL_GetWindowID(get());
-
-    HAL_ASSERT(ret != 0, debug::last_error());
-
-    return static_cast<window::id_t>(ret);
-}
-
-bool window::fullscreen() const
-{
-    return static_cast<bool>(::SDL_GetWindowFlags(get()) & (std::to_underlying(flags::fullscreen) | std::to_underlying(flags::fullscreen_borderless)));
 }
 
 void window::fullscreen(bool set)
@@ -102,13 +113,4 @@ void window::fullscreen(bool set)
                          set * std::to_underlying(flags::fullscreen))
             == 0,
         debug::last_error());
-}
-
-const surface* window::surface() const
-{
-    const SDL_Surface* ptr { ::SDL_GetWindowSurface(get()) };
-
-    HAL_ASSERT(ptr != nullptr, debug::last_error());
-
-    return reinterpret_cast<const class surface*>(ptr);
 }

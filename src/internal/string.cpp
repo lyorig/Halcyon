@@ -6,14 +6,41 @@
 
 using namespace hal;
 
+using sv = view::string;
+
+std::size_t sv::size() const
+{
+    return std::strlen(get());
+}
+
+const char* sv::begin() const
+{
+    return get();
+}
+
+const char* sv::end() const
+{
+    return get() + size();
+}
+
+const char* sv::data() const
+{
+    return get();
+}
+
+const char* sv::c_str() const
+{
+    return get();
+}
+
+sv::operator std::string_view() const
+{
+    return get();
+}
+
 string::string(char* ptr, pass_key<authority_t>)
     : raii_object { ptr }
 {
-}
-
-std::size_t string::size() const
-{
-    return std::strlen(get());
 }
 
 char* string::begin()
@@ -26,32 +53,7 @@ char* string::end()
     return get() + size();
 }
 
-const char* string::begin() const
-{
-    return get();
-}
-
-const char* string::end() const
-{
-    return get() + size();
-}
-
 char* string::data()
-{
-    return get();
-}
-
-const char* string::data() const
-{
-    return get();
-}
-
-const char* string::c_str() const
-{
-    return get();
-}
-
-string::operator std::string_view() const
 {
     return get();
 }

@@ -6,15 +6,43 @@
 #include <halcyon/internal/scaler.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
+#include <halcyon/surface.hpp>
 
 // video/window.hpp:
 // A window. Can't do much by itself.
 
 namespace hal
 {
-    HAL_TAG(fullscreen);
+    namespace detail
+    {
+        template <>
+        class view_impl<SDL_Window> : public view_base<SDL_Window>
+        {
+        public:
+            using view_base::view_base;
 
-    extern template class detail::raii_object<SDL_Window, ::SDL_DestroyWindow>;
+            pixel::point pos() const;
+
+            pixel::point size() const;
+
+            // Get the index of the display this window is currently on.
+            display::id_t display_index() const;
+
+            pixel::format pixel_format() const;
+
+            std::string_view title() const;
+
+            u8 id() const;
+
+            // Returns true if the window is fullscreen or fullscreen borderless.
+            bool fullscreen() const;
+
+            // View the surface associated with this window.
+            view::surface surface() const;
+        };
+    }
+
+    HAL_TAG(fullscreen);
 
     // A window. Not much more to say.
     class window : public detail::raii_object<SDL_Window, ::SDL_DestroyWindow>
@@ -45,31 +73,17 @@ namespace hal
 
         [[nodiscard]] renderer make_renderer(std::initializer_list<renderer::flags> flags = {}) &;
 
-        pixel::point pos() const;
-        void         pos(pixel::point ps);
+        using view_impl::pos;
+        void pos(pixel::point ps);
 
-        // Get/set this window's size. Expect weird behavior in fullscreen mode.
-        pixel::point size() const;
-        void         size(pixel::point sz);
-        void         size(scaler scl);
+        using view_impl::size;
+        void size(pixel::point sz);
+        void size(scaler scl);
 
-        // Get the index of the display this window is currently on.
-        display::id_t display_index() const;
+        using view_impl::title;
+        void title(std::string_view val);
 
-        pixel::format pixel_format() const;
-
-        // Get/set this window's title.
-        std::string_view title() const;
-        void             title(std::string_view val);
-
-        id_t id() const;
-
-        // Returns true if the window is fullscreen or fullscreen borderless.
-        bool fullscreen() const;
+        using view_impl::fullscreen;
         void fullscreen(bool set);
-
-        // Get the surface associated with this window.
-        // Returns a pointer... for now. Some reinterpret_cast magic might be required.
-        const surface* surface() const;
     };
 }

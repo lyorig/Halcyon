@@ -47,7 +47,25 @@ namespace hal
         class renderer;
     }
 
-    extern template class detail::raii_object<SDL_Renderer, ::SDL_DestroyRenderer>;
+    namespace detail
+    {
+        template <>
+        class view_impl<SDL_Renderer> : public view_base<SDL_Renderer>
+        {
+        public:
+            using view_base::view_base;
+
+            hal::color color() const;
+
+            blend_mode blend() const;
+
+            pixel::point size() const;
+
+            pixel::format pixel_format() const;
+
+            info::sdl::renderer info() const;
+        };
+    }
 
     // A wrapper of SDL_Renderer. Essentially, this is the thing that does the rendering, and
     // is attached to a window. Multiple renderers can exist for a single window, i.e. a hardware-
@@ -94,22 +112,17 @@ namespace hal
         void target(target_texture& tx);
         void reset_target();
 
-        // Get/set the color with which line/rect/fill drawing operations happen.
-        hal::color color() const;
-        void       color(hal::color clr);
+        using view_impl::color;
+        void color(hal::color clr);
 
-        // Get/set the way blending happens with line/rect/fill operations.
-        blend_mode blend() const;
-        void       blend(blend_mode bm);
+        using view_impl::blend;
+        void blend(blend_mode bm);
 
-        // Get/set the size of the "drawing board."
-        pixel::point size() const;
-        void         size(pixel::point sz);
-        void         size(scaler scl);
+        using view_impl::size;
+        void size(pixel::point sz);
+        void size(scaler scl);
 
-        pixel::format pixel_format() const;
-
-        info::sdl::renderer info() const;
+        view::window window();
 
         // Texture creation functions.
         [[nodiscard]] texture        make_texture(const surface& surf) &;
@@ -133,7 +146,8 @@ namespace hal
             {
             public:
                 renderer() = default;
-                renderer(const hal::renderer& rnd, pass_key<hal::renderer>);
+
+                renderer(const view::renderer& rnd, pass_key<view::renderer>);
 
                 std::string_view name() const;
 
@@ -153,6 +167,7 @@ namespace hal
         {
         public:
             renderer() = default;
+
             // Compress native renderer info.
             renderer(const sdl::renderer& src);
 

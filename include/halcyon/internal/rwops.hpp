@@ -9,6 +9,8 @@
 #include <halcyon/utility/concepts.hpp>
 #include <halcyon/utility/pass_key.hpp>
 
+struct SDL_Surface;
+
 namespace hal
 {
     class surface;
@@ -21,8 +23,15 @@ namespace hal
 
     namespace detail
     {
+        template <>
+        class view_impl<SDL_RWops> : public view_base<SDL_RWops>
+        {
+        public:
+            using view_base::view_base;
+        };
+
         // Base class for SDL_RWops operations.
-        class rwops : public detail::raii_object<SDL_RWops, ::SDL_RWclose>
+        class rwops : public raii_object<SDL_RWops, ::SDL_RWclose>
         {
         protected:
             using raii_object::raii_object;
@@ -82,8 +91,8 @@ namespace hal
         }
 
         // use() functions call release(), so the class gets "consumed".
-        SDL_RWops* use(pass_key<surface>);        // BMP saving.
-        SDL_RWops* use(pass_key<image::context>); // Image saving.
+        SDL_RWops* use(pass_key<detail::view_impl<SDL_Surface>>); // BMP saving.
+        SDL_RWops* use(pass_key<image::context>);                 // Image saving.
     };
 
     // Shorthand for creating a writeable byte span from a compatible array-like object.

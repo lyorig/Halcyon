@@ -16,6 +16,8 @@
 // Offers fast pixel retrieval and manipulation, which textures do not,
 // but surface-on-surface blitting is slower due to not being GPU accelerated.
 
+struct SDL_Window;
+
 namespace hal
 {
     // Forward definitions for helper classes.
@@ -33,9 +35,52 @@ namespace hal
         class font_glyph;
     }
 
-    HAL_TAG(keep_dst);
+    namespace detail
+    {
+        template <>
+        class view_impl<SDL_Surface> : public view_base<SDL_Surface>
+        {
+        public:
+            using view_base::view_base;
 
-    extern template class detail::raii_object<SDL_Surface, ::SDL_FreeSurface>;
+            // [private] Window surface views are obtained via window::surface().
+            view_impl(SDL_Surface* ptr, pass_key<view::window>);
+
+            // Save this surface in a BMP format.
+            // More formats are made available by the image context.
+            void save(outputter dst) const;
+
+            // Create a blitter.
+            // Not all pixel formats can be blitted,
+            [[nodiscard]] blitter blit(surface& dst) const;
+
+            // Convert this surface into a blittable format.
+            // Use with text.
+            [[nodiscard]] surface convert(pixel::format fmt) const;
+
+            // Get surface dimensions.
+            pixel::point size() const;
+
+            // Get this surface's pixel format.
+            pixel::format pixel_format() const;
+
+            blend_mode blend() const;
+
+            color color_mod() const;
+
+            color::value_t alpha_mod() const;
+
+            // Get a resized copy of the surface. Useful for saving
+            // memory after converting to a texture.
+            surface resize(pixel::point sz) const;
+            surface resize(scaler scl) const;
+
+            // Get pixel at position.
+            // This functionality is exclusive to surfaces, as textures
+            // are extremely slow to retrieve pixel information.
+            pixel_reference operator[](pixel::point pos) const;
+        };
+    }
 
     class surface : public detail::raii_object<SDL_Surface, ::SDL_FreeSurface>
     {
@@ -49,6 +94,9 @@ namespace hal
 
         // Load a BMP image. This works natively without having to initialize anything.
         surface(accessor src);
+
+        // [private] Surfaces are converted with view::surface::convert().
+        surface(SDL_Surface*, pass_key<view::surface>);
 
         // [private] Images are loaded with image::context::load().
         surface(SDL_Surface* ptr, pass_key<image::context>);
@@ -68,59 +116,27 @@ namespace hal
         // Fill an array of rectangles with a color.
         void fill(std::span<const pixel::rect> areas, color clr);
 
-        // Get a resized copy of the surface. Useful for saving
-        // memory after converting to a texture.
-        surface resize(pixel::point sz);
-        surface resize(scaler scl);
-
-        // Save this surface in a BMP format.
-        // More formats are made available by the image context.
-        void save(outputter dst) const;
-
-        // Create a blitter.
-        // Not all pixel formats can be blitted,
-        [[nodiscard]] blitter blit(surface& dst) const;
-
-        // Convert this surface into a blittable format.
-        // Use with text.
-        [[nodiscard]] surface convert(pixel::format fmt) const;
-
-        // Get surface dimensions.
-        pixel::point size() const;
-
-        // Get this surface's pixel format.
-        pixel::format pixel_format() const;
-
         // Get/set this surface's blend mode.
-        blend_mode blend() const;
-        void       blend(blend_mode bm);
+        using view_impl::blend;
+        void blend(blend_mode bm);
 
         // Get/set this surface's color modifiers.
-        color color_mod() const;
-        void  color_mod(color col);
+        using view_impl::color_mod;
+        void color_mod(color col);
 
         // Get/set this surface's alpha modifier.
-        color::value_t alpha_mod() const;
-        void           alpha_mod(color::value_t val);
-
-        // Get pixel at position.
-        // This functionality is exclusive to surfaces, as textures
-        // are extremely slow to retrieve pixel information.
-        pixel_reference operator[](const pixel::point& pos) const;
+        using view_impl::alpha_mod;
+        void alpha_mod(color::value_t val);
 
     private:
-        // [private] Convert an existing surface to a different format with surface::convert().
-        surface(const surface& cvt, pixel::format fmt);
-
-        // Convert a color to a mapped value using this surface's pixel format.
-        Uint32 mapped(color c) const;
     };
 
     // A reference to a pixel in a surface for easy access and modification.
     class pixel_reference
     {
     public:
-        pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel::point pos, pass_key<surface>);
+        // [private] Obtain a pixel reference via surface::view::operator[].
+        pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel::point pos, pass_key<view::surface>);
 
         color color() const;
         void  color(hal::color c);
@@ -136,8 +152,10 @@ namespace hal
         const SDL_PixelFormat* m_fmt;
     };
 
+    HAL_TAG(keep_dst);
+
     // A builder pattern drawing proxy for surfaces.
-    class blitter : public detail::drawer<surface, pixel_t, const surface, blitter>
+    class blitter : public detail::drawer<const view::surface, pixel_t, surface, blitter>
     {
     public:
         using drawer::drawer;

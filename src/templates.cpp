@@ -1,9 +1,4 @@
-#include <SDL_render.h>
-#include <SDL_surface.h>
-
 #include <halcyon/types/rectangle.hpp>
-
-#include <halcyon/internal/raii_object.hpp>
 
 namespace hal
 {
@@ -34,13 +29,4 @@ namespace hal
 
     template struct rectangle<float>;
     template struct rectangle<double>;
-
-    // SDL RAII objects.
-    template class detail::raii_object<SDL_Window, ::SDL_DestroyWindow>;
-    template class detail::raii_object<SDL_Renderer, ::SDL_DestroyRenderer>;
-
-    template class detail::raii_object<SDL_Surface, ::SDL_FreeSurface>;
-    template class detail::raii_object<SDL_Texture, ::SDL_DestroyTexture>;
-
-    template class detail::raii_object<SDL_RWops, ::SDL_RWclose>;
 }
