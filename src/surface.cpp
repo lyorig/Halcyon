@@ -11,7 +11,7 @@ using namespace hal;
 
 namespace
 {
-    // Convert a color to a mapped value using this surface's pixel format.
+    // Convert a color to a mapped value using a surface's pixel format.
     Uint32 mapped(const SDL_PixelFormat* fmt, color c)
     {
         return ::SDL_MapRGBA(fmt, c.r, c.g, c.b, c.a);
@@ -184,12 +184,14 @@ Uint32 pixel_reference::get_mapped() const
 {
     Uint32 ret { 0 };
 
-    if constexpr (SDL_BYTEORDER == SDL_LIL_ENDIAN)
+    if constexpr (compile_settings::byte_order == hal::byte_order::lil_endian)
+    {
         std::memcpy(&ret, m_ptr, m_fmt->BytesPerPixel);
+    }
 
     else
     {
-        const u8 offset = sizeof(Uint32) - m_fmt->BytesPerPixel;
+        const u8 offset { static_cast<u8>(sizeof(Uint32) - m_fmt->BytesPerPixel) };
         std::memcpy(&ret + offset, m_ptr + offset, m_fmt->BytesPerPixel);
     }
 
@@ -199,7 +201,9 @@ Uint32 pixel_reference::get_mapped() const
 void pixel_reference::set_mapped(Uint32 mapped)
 {
     if constexpr (compile_settings::byte_order == byte_order::lil_endian)
+    {
         std::memcpy(m_ptr, &mapped, m_fmt->BytesPerPixel);
+    }
 
     else
     {

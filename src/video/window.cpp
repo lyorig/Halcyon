@@ -8,6 +8,11 @@ using namespace hal;
 
 using wv = view::window;
 
+wv::view_impl(SDL_Window* ptr, pass_key<view::renderer>)
+    : view_base { ptr }
+{
+}
+
 hal::pixel::point wv::pos() const
 {
     point<int> ret;
@@ -61,11 +66,7 @@ bool wv::fullscreen() const
 
 view::surface wv::surface() const
 {
-    SDL_Surface* ptr { ::SDL_GetWindowSurface(get()) };
-
-    HAL_ASSERT(ptr != nullptr, debug::last_error());
-
-    return { ptr, pass_key<wv> {} };
+    return { ::SDL_GetWindowSurface(get()), pass_key<wv> {} };
 }
 
 window::window(proxy::video&, std::string_view title, pixel::point size, std::initializer_list<flags> flags)

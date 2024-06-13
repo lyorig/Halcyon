@@ -22,11 +22,6 @@ pixel::point rv::size() const
     return static_cast<pixel::point>(sz);
 }
 
-info::sdl::renderer rv::info() const
-{
-    return { *this, pass_key<rv> {} };
-}
-
 color rv::color() const
 {
     hal::color ret;
@@ -35,6 +30,7 @@ color rv::color() const
 
     return ret;
 }
+
 blend_mode rv::blend() const
 {
     SDL_BlendMode bm;
@@ -42,6 +38,16 @@ blend_mode rv::blend() const
     HAL_ASSERT_VITAL(::SDL_GetRenderDrawBlendMode(get(), &bm) == 0, debug::last_error());
 
     return static_cast<blend_mode>(bm);
+}
+
+info::sdl::renderer rv::info() const
+{
+    return { *this, pass_key<rv> {} };
+}
+
+view::window rv::window() const
+{
+    return { ::SDL_RenderGetWindow(get()), pass_key<rv> {} };
 }
 
 renderer::renderer(const hal::window& wnd, std::initializer_list<flags> f)

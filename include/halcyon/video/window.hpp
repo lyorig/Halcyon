@@ -21,6 +21,8 @@ namespace hal
         public:
             using view_base::view_base;
 
+            view_impl(SDL_Window* ptr, pass_key<view::renderer>);
+
             pixel::point pos() const;
 
             pixel::point size() const;

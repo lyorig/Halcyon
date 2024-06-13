@@ -64,6 +64,8 @@ namespace hal
             pixel::format pixel_format() const;
 
             info::sdl::renderer info() const;
+
+            view::window window() const;
         };
     }
 
@@ -121,8 +123,6 @@ namespace hal
         using view_impl::size;
         void size(pixel::point sz);
         void size(scaler scl);
-
-        view::window window();
 
         // Texture creation functions.
         [[nodiscard]] texture        make_texture(const surface& surf) &;
