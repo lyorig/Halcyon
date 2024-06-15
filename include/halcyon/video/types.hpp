@@ -48,8 +48,6 @@ namespace hal
         }
     }
 
-    std::ostream& operator<<(std::ostream& str, blend_mode bm);
-
     namespace pixel
     {
         using point = point<pixel_t>;
@@ -129,8 +127,6 @@ namespace hal
             nv21 = SDL_PIXELFORMAT_NV21
         };
 
-        std::ostream& operator<<(std::ostream& str, pixel::format fmt);
-
         // Ways in which pixels are stored.
         enum class storage
         {
@@ -151,8 +147,6 @@ namespace hal
             array_f16 = SDL_PIXELTYPE_ARRAYF16,
             array_f32 = SDL_PIXELTYPE_ARRAYF32
         };
-
-        std::ostream& operator<<(std::ostream& str, pixel::storage tp);
 
         constexpr storage storage_of(format fmt)
         {

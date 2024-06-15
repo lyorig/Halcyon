@@ -101,6 +101,9 @@ namespace hal
         template <typename T>
         using remove_pointer_to_const = detail::remove_pointer_to_const<T>::type;
 
+        template <typename T>
+        using value_or_cref = std::conditional_t<sizeof(T) <= sizeof(void*), T, const T&>;
+
         // A holder, of sorts, of a parameter pack.
         // Provides basic functionality.
         template <typename... Ts>

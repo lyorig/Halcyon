@@ -37,8 +37,6 @@ namespace hal
             // As of April 2024, there are no events using the "data1" member.
         };
 
-        std::ostream& operator<<(std::ostream&, display::type);
-
         static_assert(sizeof(display) == sizeof(SDL_DisplayEvent));
 
         class window : SDL_WindowEvent
@@ -87,8 +85,6 @@ namespace hal
             // This function automatically sets the event type.
             window& point(pixel::point pt, type t);
         };
-
-        std::ostream& operator<<(std::ostream&, window::type);
 
         static_assert(sizeof(window) == sizeof(SDL_WindowEvent));
 
@@ -222,8 +218,6 @@ namespace hal
 
             clipboard_updated = SDL_CLIPBOARDUPDATE
         };
-
-        std::ostream& operator<<(std::ostream&, type);
 
         class handler
         {

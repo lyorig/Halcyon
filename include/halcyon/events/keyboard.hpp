@@ -100,8 +100,6 @@ namespace hal
             minus = SDL_SCANCODE_KP_MINUS,
         };
 
-        std::ostream& operator<<(std::ostream& str, button b);
-
         // A representation of a locale- and layout-dependent key.
         enum class key : detail::cft<u32, std::underlying_type_t<SDL_KeyCode>>
         {
@@ -178,8 +176,6 @@ namespace hal
             plus  = SDLK_PLUS,
             minus = SDLK_MINUS
         };
-
-        std::ostream& operator<<(std::ostream& str, key k);
 
         enum class mod : u16
         {

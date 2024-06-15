@@ -13,7 +13,6 @@ set(HALCYON_SOURCES
 audio/device.cpp
 audio/spec.cpp
 audio/stream.cpp
-audio/types.cpp
 events/handler.cpp
 events/keyboard.cpp
 events/mouse.cpp
@@ -27,7 +26,6 @@ video/driver.cpp
 video/message_box.cpp
 video/renderer.cpp
 video/texture.cpp
-video/types.cpp
 video/window.cpp
 audio.cpp
 context.cpp

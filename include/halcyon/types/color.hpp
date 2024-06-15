@@ -103,9 +103,9 @@ namespace hal
                 static_cast<value_t>(a.a - b.a),
             };
         }
-
-        friend std::ostream& operator<<(std::ostream& str, color c);
     };
+
+    std::ostream& operator<<(std::ostream& str, color c);
 
     // Predefined colors in RGB form.
     namespace palette

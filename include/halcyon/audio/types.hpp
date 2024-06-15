@@ -5,6 +5,7 @@
 #include <SDL_audio.h>
 
 #include <halcyon/types/numeric.hpp>
+#include <halcyon/utility/metaprogramming.hpp>
 
 namespace hal
 {
@@ -36,8 +37,6 @@ namespace hal
             f32_msb = AUDIO_F32MSB
         };
 
-        std::ostream& operator<<(std::ostream& str, format fmt);
-
         // Which changes to allow if the desired audio spec cannot be met.
         enum class change : u8
         {
@@ -47,8 +46,6 @@ namespace hal
             samples   = SDL_AUDIO_ALLOW_SAMPLES_CHANGE,
             any       = SDL_AUDIO_ALLOW_ANY_CHANGE
         };
-
-        std::ostream& operator<<(std::ostream& str, change fmt);
     }
 
     constexpr std::string_view to_string(audio::format fmt)

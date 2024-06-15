@@ -32,11 +32,6 @@ event::display& event::display::display_index(hal::display::id_t disp)
     return *this;
 }
 
-std::ostream& event::operator<<(std::ostream& str, event::display::type t)
-{
-    return str << to_string(t);
-}
-
 // Window event.
 
 enum event::window::type event::window::kind() const
@@ -96,11 +91,6 @@ event::window& event::window::point(pixel::point pt, type t)
     data2 = pt.y;
 
     return *this;
-}
-
-std::ostream& event::operator<<(std::ostream& str, event::window::type t)
-{
-    return str << to_string(t);
 }
 
 // Keyboard event.
@@ -350,11 +340,6 @@ event::text_input& event::text_input::text(std::string_view t)
     std::strcpy(SDL_TextInputEvent::text, t.data());
 
     return *this;
-}
-
-std::ostream& event::operator<<(std::ostream& str, type t)
-{
-    return str << to_string(t);
 }
 
 // Event handler.

@@ -28,4 +28,33 @@ namespace hal
         template <typename T>
         concept printable = requires(std::ostream& str, const T& val) { str << val; };
     }
+
+    std::string_view to_string();
+
+    template <typename T>
+        requires requires { hal::to_string(std::declval<const T&>()); }
+    std::ostream& operator<<(std::ostream& str, const T& obj)
+    {
+        return str << hal::to_string(obj);
+    }
+
+    namespace event
+    {
+        template <typename T>
+            requires requires { hal::to_string(std::declval<const T&>()); }
+        std::ostream& operator<<(std::ostream& str, const T& obj)
+        {
+            return str << hal::to_string(obj);
+        }
+    }
+
+    namespace audio
+    {
+        template <typename T>
+            requires requires { hal::to_string(std::declval<const T&>()); }
+        std::ostream& operator<<(std::ostream& str, const T& obj)
+        {
+            return str << hal::to_string(obj);
+        }
+    }
 }

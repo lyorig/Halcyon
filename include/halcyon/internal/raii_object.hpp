@@ -62,49 +62,33 @@ namespace hal
             {
                 m_ptr   = o.m_ptr;
                 o.m_ptr = nullptr;
+
+                return *this;
             }
 
             Type* m_ptr;
         };
 
         // A view is essentially a non-owning SDL object.
-        // It contains non-modifying/querying member functions,
+        // It contains non-modifying/querying (const-qualified) member functions,
         // and is then extended by raii_object, which adds modifiers and
         // a destructor that disposes of the contained pointer.
         template <typename Type>
         class view_impl;
 
+        // An owning SDL object. Extends a view with modifiying functions.
         template <typename Type, auto Deleter>
             requires std::is_invocable_v<decltype(Deleter), Type*>
         class raii_object : public view_impl<Type>
         {
+        private:
             using super = view_impl<Type>;
 
         public:
-            raii_object() = default;
+            using super::super;
 
-            raii_object(super::pointer p)
-                : super { p }
-            {
-            }
-
-            raii_object(std::nullptr_t) = delete;
-
-            raii_object(const raii_object&)            = delete;
-            raii_object& operator=(const raii_object&) = delete;
-
-            raii_object(raii_object&& o)
-                : super { std::move(o) }
-            {
-            }
-
-            raii_object& operator=(raii_object&& o)
-            {
-                super::m_ptr = o.m_ptr;
-                o.m_ptr      = nullptr;
-
-                return *this;
-            }
+            raii_object(raii_object&&)            = default;
+            raii_object& operator=(raii_object&&) = default;
 
             ~raii_object()
             {
@@ -124,7 +108,7 @@ namespace hal
             // Release the object.
             view_impl<Type>::pointer release()
             {
-                auto ret { view_impl<Type>::m_ptr };
+                auto ret { super::get() };
 
                 view_impl<Type>::m_ptr = nullptr;
 
