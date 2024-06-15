@@ -38,6 +38,8 @@ int main(int argc, char* argv[])
 
         tex = rnd.make_texture(surf);
 
+        std::cout << tex.pixel_format();
+
         HAL_PRINT("Pixel format: ", tex.pixel_format(), ", type: ", hal::pixel::storage_of(tex.pixel_format()));
     }
 

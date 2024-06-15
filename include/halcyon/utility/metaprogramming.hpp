@@ -10,6 +10,11 @@ namespace hal
     template <typename Return_type, typename... Args>
     using func_ptr = Return_type (*)(Args...);
 
+    consteval void consteval_static_assert(bool b)
+    {
+        static_cast<void>(0 / b);
+    }
+
     namespace detail
     {
         // Primary template.

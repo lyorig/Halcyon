@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <halcyon/utility/ostream.hpp>
 #include <halcyon/utility/printing.hpp>
 
 using namespace hal;

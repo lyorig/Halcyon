@@ -7,6 +7,8 @@
 
 #include <halcyon/internal/subsystem.hpp>
 
+#include <halcyon/utility/ostream.hpp>
+
 namespace hal
 {
     namespace proxy
