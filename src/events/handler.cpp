@@ -1,6 +1,8 @@
 // Due to strcpy. Don't worry, it's used "safely" here.
 #define _CRT_SECURE_NO_WARNINGS
 
+#include <cstring>
+
 #include <halcyon/debug.hpp>
 #include <halcyon/events/handler.hpp>
 
