@@ -5,8 +5,6 @@
 #include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>
 
-#include <halcyon/internal/helpers.hpp>
-
 using namespace hal;
 
 using rv = view::renderer;

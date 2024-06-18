@@ -7,7 +7,7 @@
 #include <halcyon/internal/drawer.hpp>
 #include <halcyon/internal/raii_object.hpp>
 #include <halcyon/internal/scaler.hpp>
-#include <halcyon/utility/enum_bitset.hpp>
+#include <halcyon/utility/enum_bits.hpp>
 
 #include <halcyon/types/color.hpp>
 
@@ -85,7 +85,7 @@ namespace hal
             target_texture = SDL_RENDERER_TARGETTEXTURE
         };
 
-        using flag_bitset = enum_bitset<flags, decltype(SDL_RendererInfo::flags)>;
+        using flag_bitset = enum_bitmask<flags, decltype(SDL_RendererInfo::flags)>;
 
         renderer() = default;
 

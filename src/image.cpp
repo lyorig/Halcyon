@@ -1,7 +1,5 @@
 #include <halcyon/image.hpp>
 
-#include <halcyon/internal/helpers.hpp>
-
 using namespace hal::image;
 
 context::context(std::initializer_list<init_format> types)

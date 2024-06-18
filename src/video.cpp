@@ -1,8 +1,6 @@
 #include <halcyon/events.hpp>
 #include <halcyon/video.hpp>
 
-#include <halcyon/internal/helpers.hpp>
-
 using namespace hal;
 
 proxy::clipboard::clipboard(pass_key<video>)

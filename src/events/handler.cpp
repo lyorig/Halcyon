@@ -216,7 +216,7 @@ mouse::button event::mouse_button::button() const
 
 event::mouse_button& event::mouse_button::button(mouse::button btn)
 {
-    SDL_MouseButtonEvent::button = std::to_underlying(btn);
+    SDL_MouseButtonEvent::button = static_cast<Uint8>(btn);
 
     return *this;
 }
@@ -344,31 +344,9 @@ event::text_input& event::text_input::text(std::string_view t)
 
 // Event handler.
 
-event::handler::handler(proxy::events&)
+event::handler::handler()
     : m_event { { std::numeric_limits<std::uint32_t>::max() } } // Start with an invalid event.
 {
-    disable_unused();
-    text_input_stop();
-}
-
-bool event::handler::poll()
-{
-    return ::SDL_PollEvent(reinterpret_cast<SDL_Event*>(&m_event.data)) == 1;
-}
-
-void event::handler::push()
-{
-    HAL_ASSERT_VITAL(::SDL_PushEvent(reinterpret_cast<SDL_Event*>(&m_event.data)) >= 0, debug::last_error());
-}
-
-void event::handler::text_input_start()
-{
-    ::SDL_StartTextInput();
-}
-
-void event::handler::text_input_stop()
-{
-    ::SDL_StopTextInput();
 }
 
 event::type event::handler::kind() const
@@ -484,49 +462,7 @@ bool event::handler::pending() const
     return ::SDL_PollEvent(nullptr) == 1;
 }
 
-void event::handler::disable_unused()
+SDL_Event* event::handler::get(pass_key<proxy::events>) const
 {
-    // Disable unused events.
-    for (SDL_EventType type : {
-             SDL_LOCALECHANGED,
-             SDL_SYSWMEVENT,
-             SDL_KEYMAPCHANGED,
-             SDL_TEXTEDITING_EXT,
-             SDL_JOYAXISMOTION,
-             SDL_JOYBALLMOTION,
-             SDL_JOYHATMOTION,
-             SDL_JOYBUTTONDOWN,
-             SDL_JOYBUTTONUP,
-             SDL_JOYDEVICEADDED,
-             SDL_JOYDEVICEREMOVED,
-             SDL_JOYBATTERYUPDATED,
-             SDL_CONTROLLERAXISMOTION,
-             SDL_CONTROLLERBUTTONDOWN,
-             SDL_CONTROLLERBUTTONUP,
-             SDL_CONTROLLERDEVICEADDED,
-             SDL_CONTROLLERDEVICEREMOVED,
-             SDL_CONTROLLERDEVICEREMAPPED,
-             SDL_CONTROLLERTOUCHPADDOWN,
-             SDL_CONTROLLERTOUCHPADMOTION,
-             SDL_CONTROLLERTOUCHPADUP,
-             SDL_CONTROLLERSENSORUPDATE,
-             // SDL_CONTROLLERSTEAMHANDLEUPDATED, <- Unsupported on Windows, apparently
-             SDL_FINGERDOWN,
-             SDL_FINGERUP,
-             SDL_FINGERMOTION,
-             SDL_DOLLARGESTURE,
-             SDL_DOLLARRECORD,
-             SDL_MULTIGESTURE,
-             SDL_DROPFILE,
-             SDL_DROPTEXT,
-             SDL_DROPBEGIN,
-             SDL_DROPCOMPLETE,
-             SDL_AUDIODEVICEADDED,
-             SDL_AUDIODEVICEREMOVED,
-             SDL_SENSORUPDATE,
-             SDL_RENDER_TARGETS_RESET,
-             SDL_RENDER_DEVICE_RESET })
-    {
-        ::SDL_EventState(type, SDL_IGNORE);
-    }
+    return reinterpret_cast<SDL_Event*>(const_cast<dummy_event*>(&m_event));
 }

@@ -13,17 +13,17 @@ keyboard::button keyboard::to_button(key k)
 }
 
 keyboard::state_reference::state_reference(pass_key<authority_t>)
-    : enum_bitset { ::SDL_GetKeyboardState(nullptr) }
+    : enum_bitmask { ::SDL_GetKeyboardState(nullptr) }
 {
 }
 
 bool keyboard::state_reference::operator[](key k) const
 {
-    return enum_bitset::operator[](static_cast<button>(::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k))));
+    return enum_bitmask::operator[](static_cast<button>(::SDL_GetScancodeFromKey(static_cast<SDL_KeyCode>(k))));
 }
 
 keyboard::mod_state::mod_state(pass_key<authority_t>)
-    : enum_bitset { ::SDL_GetModState() }
+    : enum_bitmask { ::SDL_GetModState() }
 {
 }
 

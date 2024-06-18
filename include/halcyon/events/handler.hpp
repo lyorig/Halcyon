@@ -224,20 +224,7 @@ namespace hal
         public:
             // Constructor that disables unused events.
             // This should reduce heap allocations on SDL's part.
-            explicit handler(proxy::events&);
-
-            // Get an event from the event queue.
-            // Returns true if the polled event is valid, false if there are no more to process.
-            bool poll();
-
-            // Push this event into the event queue.
-            void push();
-
-            // Start receiving text_input events.
-            void text_input_start();
-
-            // Stop receiving text_input events.
-            void text_input_stop();
+            handler();
 
             // Get/set this event's current type.
             type kind() const;
@@ -274,11 +261,11 @@ namespace hal
             // Check whether there are any pending event in the event queue.
             bool pending() const;
 
-        private:
-            void disable_unused();
+            SDL_Event* get(pass_key<proxy::events>) const;
 
+        private:
             // A union that impersonates SDL_Event.
-            struct
+            struct dummy_event
             {
                 union
                 {

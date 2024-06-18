@@ -49,8 +49,8 @@ namespace hal
                 HAL_ASSERT(valid(), debug::last_error());
             }
 
-            view_base(const view_base&)            = delete;
-            view_base& operator=(const view_base&) = delete;
+            view_base(const view_base&)            = default;
+            view_base& operator=(const view_base&) = default;
 
             view_base(view_base&& o)
                 : m_ptr { o.m_ptr }

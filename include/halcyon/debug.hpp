@@ -106,10 +106,16 @@ namespace hal
         }
 
         template <meta::printable... Args>
+        static void warn(Args&&... extra_info)
+        {
+            debug::print(severity::warning, std::forward<Args>(extra_info)...);
+        }
+
+        template <meta::printable... Args>
         static void warn_if(bool condition, Args&&... extra_info)
         {
             if (condition) [[unlikely]]
-                debug::print(severity::warning, std::forward<Args>(extra_info)...);
+                debug::warn(std::forward<Args>(extra_info)...);
         }
 
         // Check a condition, and panic if it's false.
@@ -183,6 +189,8 @@ namespace hal
     #define HAL_PRINT      ::hal::debug::print
     #define HAL_PANIC(...) ::hal::debug::panic(__PRETTY_FUNCTION__, __FILE_NAME__, __LINE__, __VA_ARGS__)
 
+    #define HAL_WARN(...) ::hal::debug::warn(__VA_ARGS__)
+
     #define HAL_WARN_IF(cond, ...)       HAL_WARN_IF_VITAL(cond, __VA_ARGS__)
     #define HAL_WARN_IF_VITAL(cond, ...) ::hal::debug::warn_if(cond, __VA_ARGS__)
 
@@ -194,6 +202,8 @@ namespace hal
 
     #define HAL_PRINT(...) (static_cast<void>(0))
     #define HAL_PANIC(...) std::unreachable()
+
+    #define HAL_WARN(...) (static_cast<void>(0))
 
     #define HAL_WARN_IF(...)             (static_cast<void>(0))
     #define HAL_WARN_IF_VITAL(cond, ...) (static_cast<void>(cond))

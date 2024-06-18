@@ -1,6 +1,6 @@
 #include <halcyon/audio/device.hpp>
 
-#include <halcyon/internal/helpers.hpp>
+#include <halcyon/utility/enum_bits.hpp>
 
 using namespace hal;
 

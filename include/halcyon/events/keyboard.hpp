@@ -5,7 +5,7 @@
 #include <SDL_keyboard.h>
 #include <SDL_mouse.h>
 
-#include <halcyon/utility/enum_bitset.hpp>
+#include <halcyon/utility/enum_bits.hpp>
 
 #include <halcyon/video/types.hpp>
 
@@ -210,7 +210,7 @@ namespace hal
         // A reference to the keyboard state. Unlike that mouse state,
         // you can keep this object around, as it always references the current
         // state as long as you keep polling for event in your application loop.
-        class state_reference : public enum_bitset<button, const std::uint8_t*>
+        class state_reference : public enum_bitmask<button, const std::uint8_t*>
         {
         public:
             using authority_t = proxy::keyboard;
@@ -221,7 +221,7 @@ namespace hal
             bool operator[](key k) const;
         };
 
-        class mod_state : public enum_bitset<mod, SDL_Keymod>
+        class mod_state : public enum_bitmask<mod, SDL_Keymod>
         {
         public:
             using authority_t = proxy::keyboard;

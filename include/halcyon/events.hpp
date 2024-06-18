@@ -57,6 +57,15 @@ namespace hal
             subsystem(pass_key<authority_t>);
             subsystem(pass_key<parent_t>);
 
+            bool poll(event::handler& eh);
+
+            void push(const event::handler& eh);
+
+            bool pending();
+
+            void text_input_start();
+            void text_input_stop();
+
             HAL_NO_SIZE proxy::mouse mouse;
             HAL_NO_SIZE proxy::keyboard keyboard;
 

@@ -98,7 +98,7 @@ namespace hal
         template <meta::arithmetic Mul>
         constexpr auto operator*(const point<Mul>& pt) const
         {
-            point<decltype(x * pt.x)> ret { *this };
+            point<decltype(x * pt.x)> ret = *this;
             ret *= pt;
             return ret;
         }
@@ -106,7 +106,7 @@ namespace hal
         template <meta::arithmetic Div>
         constexpr auto operator/(const point<Div>& pt) const
         {
-            point<decltype(x / pt.x)> ret { *this };
+            point<decltype(x / pt.x)> ret = *this;
             ret /= pt;
             return ret;
         }
@@ -114,7 +114,7 @@ namespace hal
         template <meta::arithmetic Mod>
         constexpr auto operator%(const point<Mod>& pt) const
         {
-            point<decltype(x % pt.x)> ret { *this };
+            point<decltype(x % pt.x)> ret = *this;
             ret %= pt;
             return ret;
         }
