@@ -106,7 +106,7 @@ namespace hal
 
         constexpr bool operator[](Enum e) const
         {
-            return static_cast<bool>(super::mask() & static_cast<Value>(e));
+            return static_cast<bool>(super::mask() & (1 << static_cast<Value>(e)));
         }
     };
 }
