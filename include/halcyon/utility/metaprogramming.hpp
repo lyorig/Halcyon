@@ -12,7 +12,7 @@ namespace hal
 
     consteval void consteval_static_assert(bool b)
     {
-        static_cast<void>(0 / b);
+        static_cast<void>(0 / static_cast<int>(b));
     }
 
     namespace detail
