@@ -226,16 +226,14 @@ namespace test
 
         using list = hal::meta::type_list<first_t, second_t>;
 
-        if constexpr (!(std::is_same_v<first_t, list::at<0>>
-                          && std::is_same_v<second_t, list::at<1>>))
-            return EXIT_FAILURE;
+        static_assert(std::is_same_v<first_t, list::at<0>>
+            && std::is_same_v<second_t, list::at<1>>);
 
         using info = hal::meta::func_info<ret_t(first_t, second_t)>;
 
-        if constexpr (!(std::is_same_v<ret_t, info::return_type>
-                          && std::is_same_v<first_t, info::args::at<0>>
-                          && std::is_same_v<second_t, info::args::at<1>>))
-            return EXIT_FAILURE;
+        static_assert(std::is_same_v<ret_t, info::return_type>
+            && std::is_same_v<first_t, info::args::at<0>>
+            && std::is_same_v<second_t, info::args::at<1>>);
 
         return EXIT_SUCCESS;
     }
