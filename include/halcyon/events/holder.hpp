@@ -219,12 +219,12 @@ namespace hal
             clipboard_updated = SDL_CLIPBOARDUPDATE
         };
 
-        class handler
+        class holder
         {
         public:
             // Constructor that disables unused events.
             // This should reduce heap allocations on SDL's part.
-            handler();
+            holder();
 
             // Get/set this event's current type.
             type kind() const;

@@ -13,7 +13,7 @@ set(HALCYON_SOURCES
 audio/device.cpp
 audio/spec.cpp
 audio/stream.cpp
-events/handler.cpp
+events/holder.cpp
 events/keyboard.cpp
 events/mouse.cpp
 internal/rwops.cpp

@@ -4,7 +4,7 @@
 #include <cstring>
 
 #include <halcyon/debug.hpp>
-#include <halcyon/events/handler.hpp>
+#include <halcyon/events/holder.hpp>
 
 using namespace hal;
 
@@ -346,125 +346,125 @@ event::text_input& event::text_input::text(std::string_view t)
 
 // Event handler.
 
-event::handler::handler()
+event::holder::holder()
     : m_event { { std::numeric_limits<std::uint32_t>::max() } } // Start with an invalid event.
 {
 }
 
-event::type event::handler::kind() const
+event::type event::holder::kind() const
 {
     return static_cast<type>(m_event.data.type);
 }
 
-void event::handler::kind(event::type t)
+void event::holder::kind(event::type t)
 {
     m_event.data.type = std::to_underlying(t);
 }
 
-const event::display& event::handler::display() const
+const event::display& event::holder::display() const
 {
     HAL_ASSERT(kind() == type::display_event, "Invalid type");
 
     return m_event.data.display;
 }
 
-event::display& event::handler::display()
+event::display& event::holder::display()
 {
     HAL_ASSERT(kind() == type::display_event, "Invalid type");
 
     return m_event.data.display;
 }
 
-const event::window& event::handler::window() const
+const event::window& event::holder::window() const
 {
     HAL_ASSERT(kind() == type::window_event, "Invalid type");
 
     return m_event.data.window;
 }
 
-event::window& event::handler::window()
+event::window& event::holder::window()
 {
     HAL_ASSERT(kind() == type::window_event, "Invalid type");
 
     return m_event.data.window;
 }
 
-const event::keyboard& event::handler::keyboard() const
+const event::keyboard& event::holder::keyboard() const
 {
     HAL_ASSERT(kind() == type::key_pressed || kind() == type::key_released, "Invalid type");
 
     return m_event.data.key;
 }
 
-event::keyboard& event::handler::keyboard()
+event::keyboard& event::holder::keyboard()
 {
     HAL_ASSERT(kind() == type::key_pressed || kind() == type::key_released, "Invalid type");
 
     return m_event.data.key;
 }
 
-const event::text_input& event::handler::text_input() const
+const event::text_input& event::holder::text_input() const
 {
     HAL_ASSERT(kind() == type::text_input, "Invalid type");
 
     return m_event.data.text_input;
 }
 
-event::text_input& event::handler::text_input()
+event::text_input& event::holder::text_input()
 {
     HAL_ASSERT(kind() == type::text_input, "Invalid type");
 
     return m_event.data.text_input;
 }
 
-const event::mouse_motion& event::handler::mouse_motion() const
+const event::mouse_motion& event::holder::mouse_motion() const
 {
     HAL_ASSERT(kind() == type::mouse_moved, "Invalid type");
 
     return m_event.data.motion;
 }
 
-event::mouse_motion& event::handler::mouse_motion()
+event::mouse_motion& event::holder::mouse_motion()
 {
     HAL_ASSERT(kind() == type::mouse_moved, "Invalid type");
 
     return m_event.data.motion;
 }
 
-const event::mouse_button& event::handler::mouse_button() const
+const event::mouse_button& event::holder::mouse_button() const
 {
     HAL_ASSERT(kind() == type::mouse_pressed || kind() == type::mouse_released, "Invalid type");
 
     return m_event.data.button;
 }
 
-event::mouse_button& event::handler::mouse_button()
+event::mouse_button& event::holder::mouse_button()
 {
     HAL_ASSERT(kind() == type::mouse_pressed || kind() == type::mouse_released, "Invalid type");
 
     return m_event.data.button;
 }
 
-const event::mouse_wheel& event::handler::mouse_wheel() const
+const event::mouse_wheel& event::holder::mouse_wheel() const
 {
     HAL_ASSERT(kind() == type::mouse_wheel_moved, "Invalid type");
 
     return m_event.data.wheel;
 }
 
-event::mouse_wheel& event::handler::mouse_wheel()
+event::mouse_wheel& event::holder::mouse_wheel()
 {
     HAL_ASSERT(kind() == type::mouse_wheel_moved, "Invalid type");
 
     return m_event.data.wheel;
 }
 
-bool event::handler::pending() const
+bool event::holder::pending() const
 {
     return ::SDL_PollEvent(nullptr) == 1;
 }
 
-SDL_Event* event::handler::get(pass_key<proxy::events>) const
+SDL_Event* event::holder::get(pass_key<proxy::events>) const
 {
     return reinterpret_cast<SDL_Event*>(const_cast<dummy_event*>(&m_event));
 }

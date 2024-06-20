@@ -1,6 +1,6 @@
 #pragma once
 
-#include <halcyon/events/handler.hpp>
+#include <halcyon/events/holder.hpp>
 
 #include <halcyon/internal/subsystem.hpp>
 
@@ -57,9 +57,9 @@ namespace hal
             subsystem(pass_key<authority_t>);
             subsystem(pass_key<parent_t>);
 
-            bool poll(event::handler& eh);
+            bool poll(event::holder& eh);
 
-            void push(const event::handler& eh);
+            void push(const event::holder& eh);
 
             bool pending();
 

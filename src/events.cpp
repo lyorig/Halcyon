@@ -102,12 +102,12 @@ proxy::events::subsystem()
     }
 }
 
-bool proxy::events::poll(event::handler& eh)
+bool proxy::events::poll(event::holder& eh)
 {
     return static_cast<bool>(::SDL_PollEvent(eh.get(pass_key<subsystem> {})));
 }
 
-void proxy::events::push(const event::handler& eh)
+void proxy::events::push(const event::holder& eh)
 {
     HAL_ASSERT_VITAL(::SDL_PushEvent(eh.get(pass_key<subsystem> {})) == 0, debug::last_error());
 }
