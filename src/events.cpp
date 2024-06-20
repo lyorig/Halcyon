@@ -109,7 +109,10 @@ bool proxy::events::poll(event::holder& eh)
 
 void proxy::events::push(const event::holder& eh)
 {
-    HAL_ASSERT_VITAL(::SDL_PushEvent(eh.get(pass_key<subsystem> {})) == 0, debug::last_error());
+    const int ret { ::SDL_PushEvent(eh.get(pass_key<subsystem> {})) };
+
+    HAL_ASSERT(ret >= 0, debug::last_error());
+    HAL_WARN_IF(ret == 0, "Event of type ", eh.kind(), " was filtered");
 }
 
 bool proxy::events::pending()

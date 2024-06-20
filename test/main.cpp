@@ -29,13 +29,13 @@ namespace test
 
         hal::window wnd { vid.make_window("HalTest: Window resize", { 640, 480 }, { hal::window::flags::hidden }) };
 
-        hal::event::handler e { vid.events };
+        hal::event::holder e;
 
-        while (e.poll()) // Clear events.
+        while (vid.events.poll(e)) // Clear events.
             ;
 
         wnd.size(new_size);
-        e.poll();
+        vid.events.poll(e);
 
         if (e.kind() != hal::event::type::window_event)
         {
@@ -72,8 +72,8 @@ namespace test
         hal::window   wnd { vid.make_window("HalTest: Basic init", { 640, 480 }, { hal::window::flags::hidden }) };
         hal::renderer rnd { wnd.make_renderer() };
 
-        hal::event::handler e { vid.events };
-        e.poll();
+        hal::event::holder e;
+        vid.events.poll(e);
 
         rnd.present();
 
@@ -115,31 +115,31 @@ namespace test
         hal::context        ctx;
         hal::system::events evt { ctx };
 
-        hal::event::handler eh { evt };
+        hal::event::holder eh;
 
         using enum hal::event::type;
 
-        while (eh.poll())
+        while (evt.poll(eh))
             ;
 
         eh.kind(quit_requested);
-        eh.push();
+        evt.push(eh);
 
-        if (!(eh.poll() && eh.kind() == quit_requested))
+        if (!(evt.poll(eh) && eh.kind() == quit_requested))
             return EXIT_FAILURE;
 
         constexpr std::string_view text { "aaaaaaaaaabbbbbbbbbbccccccccccd" };
 
         static_assert(text.size() <= hal::event::text_input::max_size());
 
-        while (eh.poll())
+        while (evt.poll(eh))
             ;
 
         eh.kind(hal::event::type::text_input);
         eh.text_input().text(text);
-        eh.push();
+        evt.push(eh);
 
-        if (!(eh.poll() && eh.kind() == text_input && eh.text_input().text() == text))
+        if (!(evt.poll(eh) && eh.kind() == text_input && eh.text_input().text() == text))
         {
             HAL_PRINT(hal::to_string(eh.kind()));
             return EXIT_FAILURE;
@@ -296,7 +296,7 @@ namespace test
         hal::context        ctx;
         hal::system::events sys { ctx };
 
-        hal::event::handler eh { sys };
+        hal::event::holder eh;
         eh.text_input().text("amogus sus").window_id(69);
 
         return EXIT_SUCCESS;

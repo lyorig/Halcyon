@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
 
     hal::system::video vid { ctx };
 
-    hal::window         wnd { vid.make_window("Text renderer", { 100, 100 }) };
-    hal::event::handler evt { vid.events };
+    hal::window        wnd { vid.make_window("Text renderer", { 100, 100 }) };
+    hal::event::holder evt;
 
     hal::renderer rnd { wnd.make_renderer() };
     hal::texture  tex;
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 
     while (true)
     {
-        while (evt.poll())
+        while (vid.events.poll(evt))
         {
             switch (evt.kind())
             {

@@ -18,12 +18,12 @@ int main(int, char*[])
     hal::window   wnd { vid, "Halcyon Structure Showcase", { 640, 480 }, { wf::resizable } };
     hal::renderer rnd { wnd, { rf::accelerated, rf::vsync } };
 
-    hal::event::handler eh { vid.events };
+    hal::event::holder eh;
 
     // The application's main loop starts here.
     while (true) // As long as the program is running...
     {
-        while (eh.poll()) // As long as there are events to process...
+        while (vid.events.poll(eh)) // As long as there are events to process...
         {
             switch (eh.kind())
             {
@@ -43,7 +43,7 @@ int main(int, char*[])
 
                 case esc: // Quit.
                     eh.kind(quit_requested);
-                    eh.push();
+                    vid.events.push(eh);
                     break;
 
                 case W: // Increase window size.
