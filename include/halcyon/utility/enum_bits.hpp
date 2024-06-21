@@ -53,13 +53,12 @@ namespace hal
             {
             }
 
-        public:
             constexpr Value mask() const
             {
                 return m_mask;
             }
 
-        private:
+        protected:
             Value m_mask;
         };
     }
@@ -87,14 +86,34 @@ namespace hal
             else
                 return static_cast<bool>(super::mask() & std::to_underlying(e));
         }
+
+        constexpr enum_bitmask& operator+=(Enum e)
+        {
+            super::m_mask |= static_cast<Value>(e);
+            return *this;
+        }
+
+        constexpr enum_bitmask& operator-=(Enum e)
+        {
+            super::m_mask &= ~static_cast<Value>(e);
+            return *this;
+        }
+
+        constexpr enum_bitmask& operator^=(Enum e)
+        {
+            super::m_mask ^= static_cast<Value>(e);
+        }
     };
 
+    // A bitset-like class for enums defined as indices (i.e. 1, 2, 3, 4...)
     template <typename Enum, typename Value>
         requires std::is_enum_v<Enum>
     class enum_bitset : public detail::enum_bit_base<Enum, Value>
     {
     private:
         using super = detail::enum_bit_base<Enum, Value>;
+
+        constexpr static Value one { 1 };
 
     public:
         using super::super;
@@ -106,7 +125,24 @@ namespace hal
 
         constexpr bool operator[](Enum e) const
         {
-            return static_cast<bool>(super::mask() & (1 << static_cast<Value>(e)));
+            return static_cast<bool>(super::mask() & (one << static_cast<Value>(e)));
+        }
+
+        constexpr enum_bitset& operator+=(Enum e)
+        {
+            super::m_mask |= (one << static_cast<Value>(e));
+            return *this;
+        }
+
+        constexpr enum_bitset& operator-=(Enum e)
+        {
+            super::m_mask &= ~(one << static_cast<Value>(e));
+            return *this;
+        }
+
+        constexpr enum_bitset& operator^=(Enum e)
+        {
+            super::m_mask ^= (one << static_cast<Value>(e));
         }
     };
 }

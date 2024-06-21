@@ -33,8 +33,7 @@ namespace hal
             // This has to be freed, so a custom wrapper is returned.
             string text() const;
 
-            // Set clipboard text.
-            void text(std::string_view text);
+            void text(std::string_view what);
 
             bool has_text() const;
         };

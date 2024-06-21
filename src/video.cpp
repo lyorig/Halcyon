@@ -30,9 +30,9 @@ string proxy::clipboard::text() const
     return { text, pass_key<proxy::clipboard> {} };
 };
 
-void proxy::clipboard::text(std::string_view text)
+void proxy::clipboard::text(std::string_view what)
 {
-    HAL_ASSERT_VITAL(::SDL_SetClipboardText(text.data()) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_SetClipboardText(what.data()) == 0, debug::last_error());
 }
 
 bool proxy::clipboard::has_text() const
