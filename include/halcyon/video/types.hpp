@@ -343,41 +343,4 @@ namespace hal
         using point = point<coord_t>;
         using rect  = rectangle<coord_t>;
     }
-
-    namespace literals
-    {
-        consteval pixel_t operator""_px(unsigned long long v)
-        {
-            return static_cast<pixel_t>(v);
-        }
-
-        consteval pixel_t operator""_px(long double v)
-        {
-            return static_cast<pixel_t>(v);
-        }
-
-        consteval coord_t operator""_crd(unsigned long long v)
-        {
-            return static_cast<coord_t>(v);
-        }
-
-        consteval coord_t operator""_crd(long double v)
-        {
-            return static_cast<coord_t>(v);
-        }
-
-        consteval std::byte operator""_b(unsigned long long v)
-        {
-            using lim = std::numeric_limits<std::underlying_type_t<std::byte>>;
-            consteval_static_assert(v >= lim::min() && v <= lim::max());
-            return static_cast<std::byte>(v);
-        }
-
-        consteval std::byte operator""_b(long double v)
-        {
-            using lim = std::numeric_limits<std::underlying_type_t<std::byte>>;
-            consteval_static_assert(v >= lim::min() && v <= lim::max());
-            return static_cast<std::byte>(v);
-        }
-    }
 }

@@ -10,9 +10,12 @@ namespace hal
     template <typename Return_type, typename... Args>
     using func_ptr = Return_type (*)(Args...);
 
-    consteval void consteval_static_assert(bool b)
+    namespace meta
     {
-        static_cast<void>(0 / static_cast<int>(b));
+        consteval void consteval_static_assert(bool b)
+        {
+            static_cast<void>(0 / static_cast<int>(b));
+        }
     }
 
     namespace detail
@@ -71,6 +74,18 @@ namespace hal
         {
             using type = T*;
         };
+
+        template <typename T, bool = std::is_enum_v<T>>
+        struct underlying_type
+        {
+            using type = std::underlying_type_t<T>;
+        };
+
+        template <typename T>
+        struct underlying_type<T, false>
+        {
+            using type = T;
+        };
     }
 
     namespace meta
@@ -106,8 +121,11 @@ namespace hal
         template <typename T>
         using remove_pointer_to_const = detail::remove_pointer_to_const<T>::type;
 
+        // Get the underlying type:
+        //  - for enums, this returns the underlying type.
+        //  - for everything else, this returns T.
         template <typename T>
-        using value_or_cref = std::conditional_t<sizeof(T) <= sizeof(void*), T, const T&>;
+        using underlying_type = detail::underlying_type<T>::type;
 
         // A holder, of sorts, of a parameter pack.
         // Provides basic functionality.

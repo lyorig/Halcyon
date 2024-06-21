@@ -7,6 +7,8 @@
 
 #include <SDL_endian.h>
 
+#include <halcyon/internal/literals.hpp>
+
 #ifdef _MSC_VER
     #define HAL_NO_SIZE [[msvc::no_unique_address]]
 #else
@@ -73,4 +75,23 @@ namespace hal
 
     // Pure paranoia, but it never hurts to check stuff at compile time.
     static_assert(std::numeric_limits<f32>::is_iec559 && std::numeric_limits<f64>::is_iec559);
+
+    namespace literals
+    {
+        // Signed integers
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(i8, i8);
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(i16, i16);
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(i32, i32);
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(i64, i64);
+
+        // Unsigned integers
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(u8, u8);
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(u16, u16);
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(u32, u32);
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(u64, u64);
+
+        // Floats
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(f32, f32);
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(f64, f64);
+    }
 }

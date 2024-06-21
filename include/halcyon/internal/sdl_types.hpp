@@ -1,10 +1,11 @@
 #pragma once
 
-#include <halcyon/utility/concepts.hpp>
-
 #include <SDL_rect.h>
 
-// types/sdl.hpp:
+#include <halcyon/internal/literals.hpp>
+#include <halcyon/utility/concepts.hpp>
+
+// internal/sdl_types.hpp:
 // Type aliases for base library types.
 // Also prevents circular includes in other files.
 
@@ -23,5 +24,11 @@ namespace hal
 
         template <meta::arithmetic T>
         using sdl_rect = std::conditional_t<std::is_same_v<T, pixel_t>, SDL_Rect, SDL_FRect>;
+    }
+
+    namespace literals
+    {
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(pixel_t, px);
+        HAL_DETAIL_DEFINE_LITERAL_OPERATOR(coord_t, crd);
     }
 }
