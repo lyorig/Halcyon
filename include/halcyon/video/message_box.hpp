@@ -76,7 +76,7 @@ namespace hal
         private:
             std::vector<SDL_MessageBoxButtonData> m_btn;
 
-            SDL_MessageBoxData m_data;
+            SDL_MessageBoxData        m_data;
             SDL_MessageBoxColorScheme m_col;
         };
     };

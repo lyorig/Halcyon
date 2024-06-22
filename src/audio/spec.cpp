@@ -14,7 +14,12 @@ ass::spec(freq_t samples_per_second, audio::format fmt, u8 channels, u16 buffer_
         .freq     = static_cast<int>(samples_per_second),
         .format   = static_cast<SDL_AudioFormat>(fmt),
         .channels = channels,
-        .samples  = static_cast<Uint16>(buffer_size_in_frames)
+        .silence  = 0,
+        .samples  = static_cast<Uint16>(buffer_size_in_frames),
+        .padding  = 0,
+        .size     = 0,
+        .callback = nullptr,
+        .userdata = nullptr
     }
 {
 }

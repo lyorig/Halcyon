@@ -78,7 +78,7 @@ namespace hal
 
         // An owning SDL object. Extends a view with modifiying functions.
         template <typename Type, auto Deleter>
-            requires std::is_invocable_v<decltype(Deleter), Type*>
+        requires std::is_invocable_v<decltype(Deleter), Type*>
         class raii_object : public view_impl<Type>
         {
         private:
