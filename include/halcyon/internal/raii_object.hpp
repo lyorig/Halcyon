@@ -69,7 +69,7 @@ namespace hal
             Type* m_ptr;
         };
 
-        // A view is essentially a non-owning SDL object.
+        // A view is a non-owning SDL object.
         // It contains non-modifying/querying (const-qualified) member functions,
         // and is then extended by raii_object, which adds modifiers and
         // a destructor that disposes of the contained pointer.
