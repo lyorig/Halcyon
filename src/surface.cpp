@@ -18,29 +18,31 @@ namespace
     }
 }
 
-using sv = view::surface;
+using cv = view<const surface>;
 
-sv::view_impl(SDL_Surface* ptr, pass_key<view::window>)
+// Const surface view.
+
+cv::view(SDL_Surface* ptr, pass_key<view<const window>>)
     : view_base { ptr }
 {
 }
 
-void sv::save(outputter dst) const
+void cv::save(outputter dst) const
 {
-    HAL_ASSERT_VITAL(::SDL_SaveBMP_RW(get(), dst.use(pass_key<sv> {}), true) == 0, debug::last_error());
+    HAL_ASSERT_VITAL(::SDL_SaveBMP_RW(get(), dst.use(pass_key<cv> {}), true) == 0, debug::last_error());
 }
 
-blitter sv::blit(surface& dst) const
+blitter cv::blit(surface& dst) const
 {
     return { dst, *this };
 }
 
-surface sv::convert(pixel::format fmt) const
+surface cv::convert(pixel::format fmt) const
 {
-    return { ::SDL_ConvertSurfaceFormat(get(), static_cast<Uint32>(fmt), 0), pass_key<sv> {} };
+    return { ::SDL_ConvertSurfaceFormat(get(), static_cast<Uint32>(fmt), 0), pass_key<cv> {} };
 }
 
-pixel::point sv::size() const
+pixel::point cv::size() const
 {
     return {
         pixel_t(get()->w),
@@ -48,12 +50,12 @@ pixel::point sv::size() const
     };
 }
 
-pixel::format sv::pixel_format() const
+pixel::format cv::pixel_format() const
 {
     return static_cast<pixel::format>(get()->format->format);
 }
 
-blend_mode sv::blend() const
+blend_mode cv::blend() const
 {
     SDL_BlendMode bm;
 
@@ -62,7 +64,7 @@ blend_mode sv::blend() const
     return blend_mode(bm);
 }
 
-color sv::color_mod() const
+color cv::color_mod() const
 {
     color ret;
 
@@ -71,7 +73,7 @@ color sv::color_mod() const
     return ret;
 }
 
-color::value_t sv::alpha_mod() const
+color::value_t cv::alpha_mod() const
 {
     color::value_t ret;
 
@@ -80,7 +82,7 @@ color::value_t sv::alpha_mod() const
     return ret;
 }
 
-surface sv::resize(pixel::point sz) const
+surface cv::resize(pixel::point sz) const
 {
     surface ret { sz };
 
@@ -89,18 +91,59 @@ surface sv::resize(pixel::point sz) const
     return ret;
 }
 
-surface sv::resize(scaler scl) const
+surface cv::resize(scaler scl) const
 {
     return resize(scl(size()));
 }
 
-pixel_reference sv::operator[](pixel::point pos) const
+const_pixel_reference cv::operator[](pixel::point pos) const
 {
     HAL_ASSERT(pos.x < get()->w, "Out-of-range width");
     HAL_ASSERT(pos.y < get()->h, "Out-of-range height");
 
-    return { static_cast<std::byte*>(get()->pixels), get()->pitch, get()->format, pos, pass_key<sv> {} };
+    return { static_cast<std::byte*>(get()->pixels), get()->pitch, get()->format, pos, pass_key<cv> {} };
 }
+
+// Surface view.
+
+using v = view<surface>;
+
+void v::fill(color clr)
+{
+    HAL_ASSERT_VITAL(::SDL_FillRect(get(), nullptr, mapped(get()->format, clr)) == 0, debug::last_error());
+}
+
+void v::fill(pixel::rect area, color clr)
+{
+    HAL_ASSERT_VITAL(::SDL_FillRect(get(), area.addr(), mapped(get()->format, clr)) == 0, debug::last_error());
+}
+
+void v::fill(std::span<const pixel::rect> areas, color clr)
+{
+    HAL_ASSERT_VITAL(::SDL_FillRects(get(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(get()->format, clr)) == 0, debug::last_error());
+}
+
+void v::blend(blend_mode bm)
+{
+    HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
+}
+
+void v::color_mod(color col)
+{
+    HAL_ASSERT_VITAL(::SDL_SetSurfaceColorMod(get(), col.r, col.g, col.b) == 0, debug::last_error());
+}
+
+void v::alpha_mod(color::value_t val)
+{
+    HAL_ASSERT_VITAL(::SDL_SetSurfaceAlphaMod(get(), val) == 0, debug::last_error());
+}
+
+pixel_reference v::operator[](pixel::point pos)
+{
+    return { static_cast<std::byte*>(get()->pixels), get()->pitch, get()->format, pos, pass_key<v> {} };
+}
+
+// RAII surface.
 
 surface::surface(pixel::point sz, pixel::format fmt)
     : raii_object { ::SDL_CreateRGBSurfaceWithFormat(0, sz.x, sz.y, CHAR_BIT * 4, static_cast<Uint32>(fmt)) }
@@ -112,7 +155,7 @@ surface::surface(accessor src)
 {
 }
 
-surface::surface(SDL_Surface* ptr, pass_key<view::surface>)
+surface::surface(SDL_Surface* ptr, pass_key<view<const surface>>)
     : raii_object { ptr }
 {
 }
@@ -132,55 +175,29 @@ surface::surface(SDL_Surface* ptr, pass_key<builder::font_glyph>)
 {
 }
 
-void surface::fill(color clr)
+// Const pixel reference.
+
+const_pixel_reference::const_pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel::point pos, pass_key<view<const surface>>)
+    : const_pixel_reference { pixels, pitch, fmt, pos }
 {
-    HAL_ASSERT_VITAL(::SDL_FillRect(get(), nullptr, mapped(get()->format, clr)) == 0, debug::last_error());
 }
 
-void surface::fill(pixel::rect area, color clr)
-{
-    HAL_ASSERT_VITAL(::SDL_FillRect(get(), area.addr(), mapped(get()->format, clr)) == 0, debug::last_error());
-}
-
-void surface::fill(std::span<const pixel::rect> areas, color clr)
-{
-    HAL_ASSERT_VITAL(::SDL_FillRects(get(), reinterpret_cast<const SDL_Rect*>(areas.data()), static_cast<int>(areas.size()), mapped(get()->format, clr)) == 0, debug::last_error());
-}
-
-void surface::blend(blend_mode bm)
-{
-    HAL_ASSERT_VITAL(::SDL_SetSurfaceBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
-}
-
-void surface::color_mod(color col)
-{
-    HAL_ASSERT_VITAL(::SDL_SetSurfaceColorMod(get(), col.r, col.g, col.b) == 0, debug::last_error());
-}
-
-void surface::alpha_mod(color::value_t val)
-{
-    HAL_ASSERT_VITAL(::SDL_SetSurfaceAlphaMod(get(), val) == 0, debug::last_error());
-}
-
-pixel_reference::pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel::point pos, pass_key<view::surface>)
+const_pixel_reference::const_pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel::point pos)
     : m_ptr { pixels + pos.y * pitch + pos.x * fmt->BytesPerPixel }
     , m_fmt { fmt }
 {
 }
 
-color pixel_reference::color() const
+color const_pixel_reference::color() const
 {
     hal::color c;
+
     ::SDL_GetRGBA(get_mapped(), m_fmt, &c.r, &c.g, &c.b, &c.a);
+
     return c;
 }
 
-void pixel_reference::color(struct color c)
-{
-    set_mapped(::SDL_MapRGBA(m_fmt, c.r, c.g, c.b, c.a));
-}
-
-Uint32 pixel_reference::get_mapped() const
+Uint32 const_pixel_reference::get_mapped() const
 {
     Uint32 ret { 0 };
 
@@ -198,6 +215,18 @@ Uint32 pixel_reference::get_mapped() const
     return ret;
 }
 
+// Pixel reference.
+
+pixel_reference::pixel_reference(std::byte* pixels, int pitch, const SDL_PixelFormat* fmt, pixel::point pos, pass_key<view<surface>>)
+    : const_pixel_reference(pixels, pitch, fmt, pos)
+{
+}
+
+void pixel_reference::color(struct color c)
+{
+    set_mapped(::SDL_MapRGBA(m_fmt, c.r, c.g, c.b, c.a));
+}
+
 void pixel_reference::set_mapped(Uint32 mapped)
 {
     if constexpr (compile_settings::byte_order == byte_order::lil_endian)
@@ -211,6 +240,8 @@ void pixel_reference::set_mapped(Uint32 mapped)
         std::memcpy(m_ptr + offset, &mapped + offset, m_fmt->BytesPerPixel);
     }
 }
+
+// Blitter.
 
 void blitter::operator()()
 {

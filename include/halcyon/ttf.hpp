@@ -23,35 +23,43 @@ namespace hal
         class context;
     }
 
-    namespace detail
+    class font;
+
+    template <>
+    class view<const font> : public detail::view_base<TTF_Font>
     {
-        template <>
-        class view_impl<TTF_Font> : public view_base<TTF_Font>
-        {
-        public:
-            using view_base::view_base;
+    public:
+        using view_base::view_base;
 
-            // Render text to a surface.
-            [[nodiscard]] builder::font_text render(std::string_view text) const;
+        // Render text to a surface.
+        [[nodiscard]] builder::font_text render(std::string_view text) const;
 
-            // Render a single glyph to a surface.
-            [[nodiscard]] builder::font_glyph render(char32_t glyph) const;
+        // Render a single glyph to a surface.
+        [[nodiscard]] builder::font_glyph render(char32_t glyph) const;
 
-            // When sizing text, it's important to know that the vertical size
-            // doesn't necessarily have to match that of the rendered surface.
-            pixel::point size_text(const std::string_view& text) const;
+        // When sizing text, it's important to know that the vertical size
+        // doesn't necessarily have to match that of the rendered surface.
+        pixel::point size_text(const std::string_view& text) const;
 
-            pixel_t height() const;
-            pixel_t skip() const;
+        pixel_t height() const;
+        pixel_t skip() const;
 
-            std::string_view family() const;
-            std::string_view style() const;
+        std::string_view family() const;
+        std::string_view style() const;
 
-            bool mono() const;
-        };
-    }
+        bool mono() const;
+    };
 
-    class font : public detail::raii_object<TTF_Font, &::TTF_CloseFont>
+    template <>
+    class view<font> : public view<const font>
+    {
+        using super = view<const font>;
+
+    public:
+        using super::super;
+    };
+
+    class font : public detail::raii_object<font, TTF_Font, &::TTF_CloseFont>
     {
     public:
         using pt_t = u8;
@@ -69,7 +77,7 @@ namespace hal
         font() = default;
 
         // [private] Fonts are loaded with ttf::context::load().
-        font(accessor&& src, pt_t size, pass_key<ttf::context>);
+        font(accessor src, pt_t size, pass_key<ttf::context>);
     };
 
     constexpr std::string_view to_string(font::render_type rt)
@@ -125,7 +133,7 @@ namespace hal
         class font_builder_base
         {
         public:
-            [[nodiscard]] font_builder_base(const hal::view::font& fnt, pass_key<view::font>)
+            [[nodiscard]] font_builder_base(view<const font> fnt, pass_key<view<const font>>)
                 : m_font { fnt }
                 , m_fg { hal::palette::white }
                 , m_bg { hal::palette::transparent }
@@ -155,7 +163,7 @@ namespace hal
                 return static_cast<Derived&>(*this);
             }
 
-            const hal::view::font& m_font;
+            view<const font> m_font;
 
             color m_fg, m_bg;
         };
@@ -166,7 +174,7 @@ namespace hal
         class font_text : public detail::font_builder_base<font_text>
         {
         public:
-            [[nodiscard]] font_text(const view::font& fnt, std::string_view text, pass_key<view::font>);
+            [[nodiscard]] font_text(view<const font>, std::string_view text, pass_key<view<const font>>);
 
             // How many characters to wrap this text at.
             // Zero means only wrap on newlines.
@@ -187,7 +195,7 @@ namespace hal
         class font_glyph : public detail::font_builder_base<font_glyph>
         {
         public:
-            [[nodiscard]] font_glyph(const view::font& fnt, char32_t glyph, pass_key<view::font>);
+            [[nodiscard]] font_glyph(view<const font>, char32_t glyph, pass_key<view<const font>>);
 
             [[nodiscard]] surface operator()(font::render_type rt = font::default_render_type);
 

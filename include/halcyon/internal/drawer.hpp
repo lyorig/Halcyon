@@ -3,6 +3,7 @@
 
 #include <halcyon/utility/pass_key.hpp>
 
+#include <halcyon/internal/raii_object.hpp>
 #include <halcyon/internal/scaler.hpp>
 
 #include <limits>
@@ -35,7 +36,7 @@ namespace hal::detail
         consteval static U unset_pos() { return std::numeric_limits<U>::max(); }
 
     public:
-        [[nodiscard]] drawer(Pass& ths, const T& src)
+        [[nodiscard]] drawer(view<Pass> ths, view<T> src)
             : m_pass { ths }
             , m_this { src }
             , m_dst { tag::as_size, src.size() }
@@ -122,8 +123,8 @@ namespace hal::detail
             return static_cast<this_ref>(*this);
         }
 
-        Pass&    m_pass;
-        const T& m_this;
+        view<Pass> m_pass;
+        view<T>    m_this;
 
         dst_rect m_dst;
         src_rect m_src;

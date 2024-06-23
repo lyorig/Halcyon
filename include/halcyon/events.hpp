@@ -4,8 +4,6 @@
 
 #include <halcyon/internal/subsystem.hpp>
 
-#include <halcyon/utility/ostream.hpp>
-
 // events.hpp:
 // Master include file for Halcyon Events, plus the events subsystem.
 

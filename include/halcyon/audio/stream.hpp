@@ -11,17 +11,45 @@
 
 namespace hal
 {
-    namespace detail
+    namespace audio
     {
-        template <>
-        class view_impl<SDL_AudioStream> : public view_base<SDL_AudioStream>
-        {
-        public:
-            using view_base::view_base;
-
-            i32 available() const;
-        };
+        class stream;
     }
+
+    template <>
+    class view<const audio::stream> : public detail::view_base<SDL_AudioStream>
+    {
+    public:
+        using view_base::view_base;
+
+        i32 available() const;
+
+        template <meta::buffer T>
+        i32 get_processed(T& buffer) const
+        {
+            const int ret { ::SDL_AudioStreamGet(get(), std::data(buffer), std::size(buffer)) };
+
+            HAL_ASSERT(ret != -1, debug::last_error());
+
+            return ret;
+        }
+    };
+
+    template <>
+    class view<audio::stream> : public view<const audio::stream>
+    {
+    private:
+        using super = view<const audio::stream>;
+
+    public:
+        using super::super;
+
+        void flush();
+
+        void clear();
+
+        void put(std::span<const std::byte> data);
+    };
 
     namespace audio
     {
@@ -32,29 +60,13 @@ namespace hal
             i32    rate;
         };
 
-        class stream : public detail::raii_object<SDL_AudioStream, SDL_FreeAudioStream>
+        class stream : public detail::raii_object<stream, SDL_AudioStream, ::SDL_FreeAudioStream>
         {
         public:
             // Default constructor. Creates an invalid stream.
             stream() = default;
 
             stream(proxy::audio& sys, config src, config dst);
-
-            void flush();
-
-            void clear();
-
-            void put(std::span<const std::byte> data);
-
-            template <meta::buffer T>
-            i32 get_processed(T& buffer)
-            {
-                const int ret { ::SDL_AudioStreamGet(get(), std::data(buffer), std::size(buffer)) };
-
-                HAL_ASSERT(ret != -1, debug::last_error());
-
-                return ret;
-            }
         };
     }
 }

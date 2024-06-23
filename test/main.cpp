@@ -281,7 +281,7 @@ namespace test
         hal::window   wnd { vid.make_window("HalTest: Invalid texture", { 640, 480 }, { hal::window::flags::hidden }) };
         hal::renderer rnd { wnd.make_renderer() };
 
-        hal::texture tex;
+        hal::static_texture tex;
 
         // Failure should occur here.
         rnd.render(tex)();

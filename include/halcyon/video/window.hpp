@@ -13,41 +13,66 @@
 
 namespace hal
 {
-    namespace detail
+    class window;
+
+    template <>
+    class view<const window> : public detail::view_base<SDL_Window>
     {
-        template <>
-        class view_impl<SDL_Window> : public view_base<SDL_Window>
-        {
-        public:
-            using view_base::view_base;
+    public:
+        using view_base::view_base;
 
-            view_impl(SDL_Window* ptr, pass_key<view::renderer>);
+        view(view<const renderer>, pass_key<view<const renderer>>);
 
-            pixel::point pos() const;
+        pixel::point pos() const;
 
-            pixel::point size() const;
+        pixel::point size() const;
 
-            // Get the index of the display this window is currently on.
-            display::id_t display_index() const;
+        // Get the index of the display this window is currently on.
+        display::id_t display_index() const;
 
-            pixel::format pixel_format() const;
+        pixel::format pixel_format() const;
 
-            std::string_view title() const;
+        std::string_view title() const;
 
-            u8 id() const;
+        u8 id() const;
 
-            // Returns true if the window is fullscreen or fullscreen borderless.
-            bool fullscreen() const;
+        // Returns true if the window is fullscreen or fullscreen borderless.
+        bool fullscreen() const;
 
-            // View the surface associated with this window.
-            view::surface surface() const;
-        };
-    }
+        // View the surface associated with this window.
+        view<const surface> surface() const;
+    };
+
+    template <>
+    class view<window> : public view<const window>
+    {
+        using super = view<const window>;
+
+    public:
+        using super::super;
+
+        view(view<renderer> rnd, pass_key<view<renderer>>);
+
+        [[nodiscard]] renderer make_renderer(std::initializer_list<renderer::flags> flags = {}) &;
+
+        using super::pos;
+        void pos(pixel::point ps);
+
+        using super::size;
+        void size(pixel::point sz);
+        void size(scaler scl);
+
+        using super::title;
+        void title(std::string_view val);
+
+        using super::fullscreen;
+        void fullscreen(bool set);
+    };
 
     HAL_TAG(fullscreen);
 
     // A window. Not much more to say.
-    class window : public detail::raii_object<SDL_Window, ::SDL_DestroyWindow>
+    class window : public detail::raii_object<window, SDL_Window, ::SDL_DestroyWindow>
     {
     public:
         using id_t = u8;
@@ -72,20 +97,5 @@ namespace hal
         // Create a window in fullscreen window.
         // Warning: This has some issues on macOS due to its DPI scaling stuff.
         window(proxy::video& sys, std::string_view title, HAL_TAG_NAME(fullscreen));
-
-        [[nodiscard]] renderer make_renderer(std::initializer_list<renderer::flags> flags = {}) &;
-
-        using view_impl::pos;
-        void pos(pixel::point ps);
-
-        using view_impl::size;
-        void size(pixel::point sz);
-        void size(scaler scl);
-
-        using view_impl::title;
-        void title(std::string_view val);
-
-        using view_impl::fullscreen;
-        void fullscreen(bool set);
     };
 }

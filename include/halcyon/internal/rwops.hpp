@@ -23,15 +23,20 @@ namespace hal
 
     namespace detail
     {
-        template <>
-        class view_impl<SDL_RWops> : public view_base<SDL_RWops>
-        {
-        public:
-            using view_base::view_base;
-        };
+        class rwops;
+    }
 
+    template <>
+    class view<detail::rwops> : public detail::view_base<SDL_RWops>
+    {
+    public:
+        using view_base::view_base;
+    };
+
+    namespace detail
+    {
         // Base class for SDL_RWops operations.
-        class rwops : public raii_object<SDL_RWops, ::SDL_RWclose>
+        class rwops : public raii_object<rwops, SDL_RWops, ::SDL_RWclose>
         {
         protected:
             using raii_object::raii_object;
@@ -91,8 +96,8 @@ namespace hal
         }
 
         // use() functions call release(), so the class gets "consumed".
-        SDL_RWops* use(pass_key<detail::view_impl<SDL_Surface>>); // BMP saving.
-        SDL_RWops* use(pass_key<image::context>);                 // Image saving.
+        SDL_RWops* use(pass_key<view<const surface>>); // BMP saving.
+        SDL_RWops* use(pass_key<image::context>);      // Image saving.
     };
 
     // Shorthand for creating a writeable byte span from a compatible array-like object.

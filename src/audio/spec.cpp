@@ -1,9 +1,4 @@
-#include <halcyon/audio/spec.hpp>
-
-#include <iostream>
-
-#include <halcyon/utility/ostream.hpp>
-#include <halcyon/utility/printing.hpp>
+#include <halcyon/audio.hpp>
 
 using namespace hal;
 

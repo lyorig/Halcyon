@@ -232,4 +232,14 @@ namespace hal
 
     std::string_view to_string(keyboard::button btn);
     std::string_view to_string(keyboard::key k);
+
+    namespace keyboard
+    {
+        template <typename T>
+            requires requires(const T& x) { hal::to_string(x); }
+        std::ostream& operator<<(std::ostream& str, const T& obj)
+        {
+            return str << hal::to_string(obj);
+        }
+    }
 }

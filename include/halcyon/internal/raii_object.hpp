@@ -12,11 +12,12 @@ namespace hal
 {
     namespace detail
     {
-        template <typename Type>
+        
+        template <typename Underlying_Type>
         class view_base
         {
         public:
-            using value_type = Type;
+            using value_type = Underlying_Type;
 
             using pointer       = value_type*;
             using const_pointer = const value_type*;
@@ -43,7 +44,7 @@ namespace hal
 
             view_base(std::nullptr_t) = delete;
 
-            view_base(Type* ptr)
+            view_base(Underlying_Type* ptr)
                 : m_ptr { ptr }
             {
                 HAL_ASSERT(valid(), debug::last_error());
@@ -66,23 +67,26 @@ namespace hal
                 return *this;
             }
 
-            Type* m_ptr;
+            Underlying_Type* m_ptr;
         };
+    }
 
-        // A view is a non-owning SDL object.
-        // It contains non-modifying/querying (const-qualified) member functions,
-        // and is then extended by raii_object, which adds modifiers and
-        // a destructor that disposes of the contained pointer.
-        template <typename Type>
-        class view_impl;
+    // A view is a non-owning SDL object.
+    // It contains non-modifying/querying (const-qualified) member functions,
+    // and is then extended by raii_object, which adds modifiers and
+    // a destructor that disposes of the contained pointer.
+    template <typename Halcyon>
+    class view;
 
+    namespace detail
+    {
         // An owning SDL object. Extends a view with modifiying functions.
-        template <typename Type, auto Deleter>
-        requires std::is_invocable_v<decltype(Deleter), Type*>
-        class raii_object : public view_impl<Type>
+        template <typename Halcyon, typename Underlying, auto Deleter>
+            requires std::is_invocable_v<decltype(Deleter), Underlying*>
+        class raii_object : public view<Halcyon>
         {
         private:
-            using super = view_impl<Type>;
+            using super = view<Halcyon>;
 
         public:
             using super::super;
@@ -98,40 +102,22 @@ namespace hal
             // Free the object.
             void reset()
             {
-                if (view_impl<Type>::m_ptr)
-                    Deleter(view_impl<Type>::m_ptr);
+                if (super::m_ptr)
+                    Deleter(super::m_ptr);
 
-                view_impl<Type>::m_ptr = nullptr;
+                super::m_ptr = nullptr;
             }
 
         protected:
             // Release the object.
-            view_impl<Type>::pointer release()
+            super::pointer release()
             {
                 auto ret { super::get() };
 
-                view_impl<Type>::m_ptr = nullptr;
+                super::m_ptr = nullptr;
 
                 return ret;
             }
         };
-    }
-
-    namespace view
-    {
-        using window   = detail::view_impl<SDL_Window>;
-        using renderer = detail::view_impl<SDL_Renderer>;
-
-        using surface = detail::view_impl<SDL_Surface>;
-        using texture = detail::view_impl<SDL_Texture>;
-
-        using font = detail::view_impl<TTF_Font>;
-
-        using string = detail::view_impl<char>;
-    }
-
-    namespace audio::view
-    {
-        using stream = detail::view_impl<SDL_AudioStream>;
     }
 }

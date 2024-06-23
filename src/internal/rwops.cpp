@@ -44,7 +44,7 @@ outputter::outputter(std::string_view path)
 {
 }
 
-SDL_RWops* outputter::use(pass_key<detail::view_impl<SDL_Surface>>)
+SDL_RWops* outputter::use(pass_key<view<const surface>>)
 {
     return raii_object::release();
 }

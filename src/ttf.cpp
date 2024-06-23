@@ -2,19 +2,19 @@
 
 using namespace hal;
 
-using fv = view::font;
+using cv = view<const font>;
 
-builder::font_text fv::render(std::string_view text) const
+builder::font_text cv::render(std::string_view text) const
 {
-    return { *this, text, pass_key<fv> {} };
+    return { *this, text, pass_key<cv> {} };
 }
 
-builder::font_glyph fv::render(char32_t glyph) const
+builder::font_glyph cv::render(char32_t glyph) const
 {
-    return { *this, glyph, pass_key<fv> {} };
+    return { *this, glyph, pass_key<cv> {} };
 }
 
-pixel::point fv::size_text(const std::string_view& text) const
+pixel::point cv::size_text(const std::string_view& text) const
 {
     point<int> size;
 
@@ -23,32 +23,32 @@ pixel::point fv::size_text(const std::string_view& text) const
     return pixel::point(size);
 }
 
-pixel_t fv::height() const
+pixel_t cv::height() const
 {
     return static_cast<pixel_t>(::TTF_FontHeight(get()));
 }
 
-pixel_t fv::skip() const
+pixel_t cv::skip() const
 {
     return static_cast<pixel_t>(::TTF_FontLineSkip(get()));
 }
 
-std::string_view fv::family() const
+std::string_view cv::family() const
 {
     return ::TTF_FontFaceFamilyName(get());
 }
 
-std::string_view fv::style() const
+std::string_view cv::style() const
 {
     return ::TTF_FontFaceStyleName(get());
 }
 
-bool fv::mono() const
+bool cv::mono() const
 {
     return ::TTF_FontFaceIsFixedWidth(get());
 }
 
-font::font(accessor&& src, pt_t size, pass_key<ttf::context>)
+font::font(accessor src, pt_t size, pass_key<ttf::context>)
     : raii_object { ::TTF_OpenFontRW(src.use(pass_key<font> {}), true, size) }
 {
     HAL_WARN_IF(height() != skip(), '\"', family(), ' ', style(), "\" has different height (", height(), "px) & skip (", skip(), "px). size_text() might not return accurate vertical results.");
@@ -84,7 +84,7 @@ bool ttf::context::initialized()
 
 using bft = builder::font_text;
 
-bft::font_text(const view::font& fnt, std::string_view text, pass_key<view::font> pk)
+bft::font_text(cv fnt, std::string_view text, pass_key<cv> pk)
     : font_builder_base { fnt, pk }
     , m_text { text.data() }
     , m_wrapLength { invalid() }
@@ -143,7 +143,7 @@ surface bft::operator()(font::render_type rt)
 
 using bfg = builder::font_glyph;
 
-bfg::font_glyph(const view::font& fnt, char32_t glyph, pass_key<view::font> pk)
+bfg::font_glyph(cv fnt, char32_t glyph, pass_key<cv> pk)
     : font_builder_base { fnt, pk }
     , m_glyph { glyph }
 {

@@ -12,13 +12,10 @@
 #include <halcyon/video/driver.hpp>
 #include <halcyon/video/message_box.hpp>
 #include <halcyon/video/renderer.hpp>
-#include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>
 
 #include <halcyon/internal/string.hpp>
 #include <halcyon/internal/subsystem.hpp>
-
-#include <halcyon/utility/ostream.hpp>
 
 namespace hal
 {
@@ -73,5 +70,12 @@ namespace hal
         private:
             subsystem();
         };
+    }
+
+    template <typename T>
+        requires requires(const T& x) { hal::to_string(x); }
+    std::ostream& operator<<(std::ostream& str, const T& obj)
+    {
+        return str << hal::to_string(obj);
     }
 }

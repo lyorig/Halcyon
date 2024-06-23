@@ -26,8 +26,8 @@ int main(int argc, char* argv[])
     hal::window        wnd { vid.make_window("Text renderer", { 100, 100 }) };
     hal::event::holder evt;
 
-    hal::renderer rnd { wnd.make_renderer() };
-    hal::texture  tex;
+    hal::renderer       rnd { wnd.make_renderer() };
+    hal::static_texture tex;
 
     // Deallocate as much as we can before the main loop.
     {
@@ -37,8 +37,6 @@ int main(int argc, char* argv[])
         const hal::surface surf { fnt.render(argv[1]).fg(hal::palette::black)() };
 
         tex = rnd.make_texture(surf);
-
-        std::cout << tex.pixel_format();
 
         HAL_PRINT("Pixel format: ", tex.pixel_format(), ", type: ", hal::pixel::storage_of(tex.pixel_format()));
     }

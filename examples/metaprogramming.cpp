@@ -1,6 +1,8 @@
-#include <halcyon/utility/metaprogramming.hpp>
-#include <print>
+#include <ctime>
+#include <iostream>
 #include <variant>
+
+#include <halcyon/utility/metaprogramming.hpp>
 
 // metaprogramming.cpp:
 // Showcase of Halcyon metaprogramming.
@@ -30,7 +32,7 @@ int main(int, char*[])
     else
         var.emplace<joined::back>(nullptr);
 
-    std::println("Variant holds a {}", std::holds_alternative<int>(var) ? "number" : "pointer");
+    std::cout << "Variant holds a {}" << (std::holds_alternative<int>(var) ? "number" : "pointer");
 
     return EXIT_SUCCESS;
 }

@@ -11,6 +11,8 @@
 
 int main(int argc, char* argv[])
 {
+    static_assert(hal::meta::is_correct_main<main>);
+
     if (argc == 1)
     {
         std::cout << "Usage: " << argv[0] << " [image path]\n";

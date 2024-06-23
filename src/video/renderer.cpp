@@ -7,9 +7,9 @@
 
 using namespace hal;
 
-using rv = view::renderer;
+using cv = view<const renderer>;
 
-pixel::point rv::size() const
+pixel::point cv::size() const
 {
     hal::point<int> sz;
     ::SDL_RenderGetLogicalSize(get(), &sz.x, &sz.y);
@@ -20,7 +20,7 @@ pixel::point rv::size() const
     return static_cast<pixel::point>(sz);
 }
 
-color rv::color() const
+color cv::color() const
 {
     hal::color ret;
 
@@ -29,7 +29,7 @@ color rv::color() const
     return ret;
 }
 
-blend_mode rv::blend() const
+blend_mode cv::blend() const
 {
     SDL_BlendMode bm;
 
@@ -38,89 +38,90 @@ blend_mode rv::blend() const
     return static_cast<blend_mode>(bm);
 }
 
-info::sdl::renderer rv::info() const
+info::sdl::renderer cv::info() const
 {
-    return { *this, pass_key<rv> {} };
+    return { *this, pass_key<cv> {} };
 }
 
-view::window rv::window() const
+view<const window> cv::window() const
 {
-    return { ::SDL_RenderGetWindow(get()), pass_key<rv> {} };
+    return { *this, pass_key<cv> {} };
 }
 
-renderer::renderer(const hal::window& wnd, std::initializer_list<flags> f)
-    : raii_object { ::SDL_CreateRenderer(wnd.get(), -1, detail::to_bitmask<std::uint32_t>(f)) }
-{
-    HAL_PRINT("Created renderer for \"", wnd.title(), "\" ");
-}
+using v = view<renderer>;
 
-void renderer::present()
+void v::present()
 {
     ::SDL_RenderPresent(get());
     this->clear();
 }
 
-void renderer::clear()
+void v::clear()
 {
     HAL_ASSERT_VITAL(::SDL_RenderClear(get()) == 0, debug::last_error());
 }
 
-void renderer::draw(coord::point pt)
+void v::draw(coord::point pt)
 {
     ::SDL_RenderDrawPointF(get(), pt.x, pt.y);
 }
 
-void renderer::draw(coord::point from, coord::point to)
+void v::draw(coord::point from, coord::point to)
 {
     HAL_ASSERT_VITAL(::SDL_RenderDrawLineF(get(), from.x, from.y, to.x, to.y) == 0, debug::last_error());
 }
 
-void renderer::draw(coord::rect area)
+void v::draw(coord::rect area)
 {
     HAL_ASSERT_VITAL(::SDL_RenderDrawRectF(get(), area.addr()) == 0, debug::last_error());
 }
 
-void renderer::fill(coord::rect area)
+void v::fill(coord::rect area)
 {
     HAL_ASSERT_VITAL(::SDL_RenderFillRectF(get(), area.addr()) == 0, debug::last_error());
 }
 
-void renderer::fill(std::span<const coord::rect> areas)
+void v::fill(std::span<const coord::rect> areas)
 {
     HAL_ASSERT_VITAL(::SDL_RenderFillRectsF(get(), areas.front().addr(), static_cast<int>(areas.size())) == 0, debug::last_error());
 }
 
-void renderer::fill()
+void v::fill()
 {
     HAL_ASSERT_VITAL(::SDL_RenderFillRect(get(), nullptr) == 0, debug::last_error());
 }
 
-void renderer::target(target_texture& tx)
+void v::target(target_texture& tx)
 {
     this->internal_target(tx.get());
 }
 
-void renderer::reset_target()
+void v::reset_target()
 {
     this->internal_target(nullptr);
 }
 
-void renderer::size(pixel::point sz)
+void v::size(pixel::point sz)
 {
     HAL_ASSERT_VITAL(::SDL_RenderSetLogicalSize(get(), sz.x, sz.y) == 0, debug::last_error());
 }
 
-void renderer::size(scaler scl)
+void v::size(scaler scl)
 {
     size(scl(size()));
 }
 
-texture renderer::make_texture(const surface& surf) &
+view<window> v::window()
+{
+    return { *this, pass_key<v> {} };
+}
+
+static_texture v::make_texture(const surface& surf) &
 {
     return { *this, surf };
 }
 
-target_texture renderer::make_target_texture(pixel::point size) &
+target_texture v::make_target_texture(pixel::point size) &
 {
     SDL_Window* wnd { ::SDL_RenderGetWindow(get()) };
     HAL_ASSERT(wnd != nullptr, debug::last_error());
@@ -131,29 +132,35 @@ target_texture renderer::make_target_texture(pixel::point size) &
     return { *this, fmt, size };
 }
 
-void renderer::color(hal::color clr)
+void v::color(hal::color clr)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawColor(get(), clr.r, clr.g, clr.b, clr.a) == 0, debug::last_error());
 }
 
-void renderer::blend(blend_mode bm)
+void v::blend(blend_mode bm)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderDrawBlendMode(get(), SDL_BlendMode(bm)) == 0, debug::last_error());
 }
 
-copyer renderer::render(const detail::texture_base& tex)
+copyer v::render(view<const texture> tex)
 {
     return { *this, tex };
 }
 
-void renderer::internal_target(SDL_Texture* target)
+void v::internal_target(SDL_Texture* target)
 {
     HAL_ASSERT_VITAL(::SDL_SetRenderTarget(get(), target) == 0, debug::last_error());
 }
 
+renderer::renderer(view<const class window> wnd, std::initializer_list<flags> f)
+    : raii_object { ::SDL_CreateRenderer(wnd.get(), -1, detail::to_bitmask<std::uint32_t>(f)) }
+{
+    HAL_PRINT("Created renderer for \"", wnd.title(), "\" ");
+}
+
 // Renderer information (SDL).
 
-info::sdl::renderer::renderer(const view::renderer& rnd, pass_key<view::renderer>)
+info::sdl::renderer::renderer(view<const hal::renderer> rnd, pass_key<view<const hal::renderer>>)
 {
     HAL_ASSERT_VITAL(::SDL_GetRendererInfo(rnd.get(), static_cast<SDL_RendererInfo*>(this)) == 0, debug::last_error());
 }
