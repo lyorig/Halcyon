@@ -116,7 +116,7 @@ namespace hal
         using at = detail::at<0, I, Ts...>::type;
 
         template <typename T>
-        constexpr inline std::size_t array_size_v { detail::array_size<T>::value };
+        constexpr inline std::size_t array_size { detail::array_size<T>::value };
 
         template <typename T>
         using remove_pointer_to_const = detail::remove_pointer_to_const<T>::type;

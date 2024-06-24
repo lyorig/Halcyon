@@ -130,7 +130,7 @@ namespace test
 
         constexpr std::string_view text { "aaaaaaaaaabbbbbbbbbbccccccccccd" };
 
-        static_assert(text.size() <= hal::event::text_input::max_size());
+        static_assert(text.size() <= hal::event::text_input::max_size);
 
         while (evt.poll(eh))
             ;
@@ -154,12 +154,10 @@ namespace test
         {
             hal::ttf::context tctx;
 
-            if (!hal::ttf::context::initialized())
-                return EXIT_FAILURE;
+            HAL_ASSERT(hal::ttf::context::initialized());
         }
 
-        if (hal::ttf::context::initialized())
-            return EXIT_FAILURE;
+        HAL_ASSERT(!hal::ttf::context::initialized());
 
         return EXIT_SUCCESS;
     }
@@ -212,8 +210,32 @@ namespace test
     {
         hal::image::context ictx { hal::image::init_format::png };
 
-        if (ictx.query(hal::as_bytes(png_2x1)) != hal::image::load_format::png)
-            return EXIT_FAILURE;
+        using enum hal::image::load_format;
+
+        const hal::image::load_format ret { ictx.query(hal::as_bytes(png_2x1)) };
+
+        HAL_ASSERT(ret == hal::image::load_format::png, "PNG query returned a different type: ", ret);
+
+        return EXIT_SUCCESS;
+    }
+
+    int views()
+    {
+        hal::context       ctx;
+        hal::system::video vid { ctx };
+
+        hal::window            wnd { vid, "HalTest Views", { 128, 128 } };
+        hal::view<hal::window> view = wnd;
+
+        HAL_ASSERT(wnd.get() == view.get(), "RAII and view pointers don't match.");
+
+        hal::view<hal::window> view_copy = view;
+
+        HAL_ASSERT(view.get() == view_copy.get(), "View and its copy have different pointers");
+
+        hal::view<hal::window> view_move = std::move(view);
+
+        HAL_ASSERT(view.get() == nullptr && view_move.get() == wnd.get(), "View move has unexpected results");
 
         return EXIT_SUCCESS;
     }
@@ -319,6 +341,7 @@ int main(int argc, char* argv[])
         { "--scaler", test::scaler },
         { "--outputter", test::outputter },
         { "--png-check", test::png_check },
+        { "--views", test::views },
         { "--metaprogramming", test::metaprogramming },
         { "--audio-init", test::audio_init },
         { "--invalid-buffer", test::invalid_buffer },

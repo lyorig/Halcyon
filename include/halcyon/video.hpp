@@ -71,11 +71,4 @@ namespace hal
             subsystem();
         };
     }
-
-    template <typename T>
-        requires requires(const T& x) { hal::to_string(x); }
-    std::ostream& operator<<(std::ostream& str, const T& obj)
-    {
-        return str << hal::to_string(obj);
-    }
 }

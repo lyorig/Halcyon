@@ -336,7 +336,7 @@ std::string_view event::text_input::text() const
 
 event::text_input& event::text_input::text(std::string_view t)
 {
-    HAL_ASSERT(t.size() <= max_size(), "String too large at ", t.size(), " chars (max: ", max_size(), " chars)");
+    HAL_ASSERT(t.size() <= max_size, "String too large at ", t.size(), " chars (max: ", max_size, " chars)");
 
     // We now know that it's safe to copy this string.
     std::strcpy(SDL_TextInputEvent::text, t.data());
