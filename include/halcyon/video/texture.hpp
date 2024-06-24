@@ -78,7 +78,7 @@ namespace hal
         static_texture() = default;
 
         // [private] Textures are created with renderer::load().
-        static_texture(view<const renderer> rnd, const surface& surf);
+        static_texture(view<const renderer> rnd, view<const surface> surf);
     };
 
     // A texture that can be drawn onto.

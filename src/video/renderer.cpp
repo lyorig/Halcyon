@@ -116,7 +116,7 @@ view<window> v::window()
     return { *this, pass_key<v> {} };
 }
 
-static_texture v::make_texture(const surface& surf) &
+static_texture v::make_texture(view<const surface> surf) &
 {
     return { *this, surf };
 }

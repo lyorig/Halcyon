@@ -12,7 +12,7 @@ namespace hal
 {
     namespace detail
     {
-        
+
         template <typename Underlying_Type>
         class view_base
         {
@@ -91,8 +91,17 @@ namespace hal
         public:
             using super::super;
 
-            raii_object(raii_object&&)            = default;
-            raii_object& operator=(raii_object&&) = default;
+            raii_object(raii_object&&) = default;
+            
+            raii_object& operator=(raii_object&& o)
+            {
+                reset();
+
+                super::m_ptr = o.m_ptr;
+                o.m_ptr      = nullptr;
+
+                return *this;
+            }
 
             ~raii_object()
             {

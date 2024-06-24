@@ -96,7 +96,7 @@ texture::texture(SDL_Texture* ptr)
     this->blend(blend_mode::blend);
 }
 
-static_texture::static_texture(view<const renderer> rnd, const surface& surf)
+static_texture::static_texture(view<const renderer> rnd, view<const surface> surf)
     : texture { ::SDL_CreateTextureFromSurface(rnd.get(), surf.get()) }
 {
 }

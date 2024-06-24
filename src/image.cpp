@@ -57,7 +57,7 @@ hal::surface context::load(accessor src, load_format fmt) const
     HAL_PANIC("Trying to load image of unknown type");
 }
 
-void context::save(const surface& surf, save_format fmt, outputter dst) const
+void context::save(view<const surface> surf, save_format fmt, outputter dst) const
 {
     constexpr u8 jpg_quality { 90 };
 
