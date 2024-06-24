@@ -113,7 +113,7 @@ namespace hal
         pixel_reference operator[](pixel::point pt);
     };
 
-    class surface : public detail::raii_object<surface, SDL_Surface, ::SDL_FreeSurface>
+    class surface : public detail::raii_object<surface, ::SDL_FreeSurface>
     {
     public:
         static constexpr pixel::format default_pixel_format { pixel::format::rgba32 };

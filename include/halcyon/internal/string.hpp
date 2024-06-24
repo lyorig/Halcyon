@@ -52,7 +52,7 @@ namespace hal
     // SDL sometimes returns string pointers that we have to free via
     // its own function afterwards. This is a wrapper of that functionality
     // that attempts to mimic std::string as best as it can.
-    class string : public detail::raii_object<string, char, ::SDL_free>
+    class string : public detail::raii_object<string, ::SDL_free>
     {
     public:
         using authority_t = proxy::clipboard;

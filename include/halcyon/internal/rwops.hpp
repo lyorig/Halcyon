@@ -36,7 +36,7 @@ namespace hal
     namespace detail
     {
         // Base class for SDL_RWops operations.
-        class rwops : public raii_object<rwops, SDL_RWops, ::SDL_RWclose>
+        class rwops : public raii_object<rwops, ::SDL_RWclose>
         {
         protected:
             using raii_object::raii_object;

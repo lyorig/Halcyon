@@ -59,7 +59,7 @@ namespace hal
         using super::super;
     };
 
-    class font : public detail::raii_object<font, TTF_Font, &::TTF_CloseFont>
+    class font : public detail::raii_object<font, &::TTF_CloseFont>
     {
     public:
         using pt_t = u8;

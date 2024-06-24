@@ -12,7 +12,6 @@ namespace hal
 {
     namespace detail
     {
-
         template <typename Underlying_Type>
         class view_base
         {
@@ -75,24 +74,24 @@ namespace hal
     // It contains non-modifying/querying (const-qualified) member functions,
     // and is then extended by raii_object, which adds modifiers and
     // a destructor that disposes of the contained pointer.
-    template <typename Halcyon>
+    template <typename Halcyon_Type>
     class view;
 
     namespace detail
     {
         // An owning SDL object. Extends a view with modifiying functions.
-        template <typename Halcyon, typename Underlying, auto Deleter>
-            requires std::is_invocable_v<decltype(Deleter), Underlying*>
-        class raii_object : public view<Halcyon>
+        template <typename Halcyon_Type, auto Deleter>
+            requires std::is_invocable_v<decltype(Deleter), typename view<Halcyon_Type>::pointer>
+        class raii_object : public view<Halcyon_Type>
         {
         private:
-            using super = view<Halcyon>;
+            using super = view<Halcyon_Type>;
 
         public:
             using super::super;
 
             raii_object(raii_object&&) = default;
-            
+
             raii_object& operator=(raii_object&& o)
             {
                 reset();

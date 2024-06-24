@@ -72,7 +72,7 @@ namespace hal
     HAL_TAG(fullscreen);
 
     // A window. Not much more to say.
-    class window : public detail::raii_object<window, SDL_Window, ::SDL_DestroyWindow>
+    class window : public detail::raii_object<window, ::SDL_DestroyWindow>
     {
     public:
         using id_t = u8;

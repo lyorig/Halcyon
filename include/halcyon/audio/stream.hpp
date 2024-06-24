@@ -60,7 +60,7 @@ namespace hal
             i32    rate;
         };
 
-        class stream : public detail::raii_object<stream, SDL_AudioStream, ::SDL_FreeAudioStream>
+        class stream : public detail::raii_object<stream,  ::SDL_FreeAudioStream>
         {
         public:
             // Default constructor. Creates an invalid stream.

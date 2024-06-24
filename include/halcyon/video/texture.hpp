@@ -60,7 +60,7 @@ namespace hal
     };
 
     // Common texture functionality.
-    class texture : public detail::raii_object<texture, SDL_Texture, &::SDL_DestroyTexture>
+    class texture : public detail::raii_object<texture,&::SDL_DestroyTexture>
     {
     protected:
         texture() = default;
