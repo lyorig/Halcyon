@@ -37,10 +37,10 @@ int main(int argc, char* argv[]) {
   hal::window   wnd{vid.make_window("Example", {640, 480})};
   hal::renderer rnd{wnd.make_renderer()};
 
-  hal::event::handler evt{vid.events};
+  hal::event::holder evt;
 
   while (true) {
-    while (evt.poll()) {
+    while (vid.events.poll(evt)) {
       if (evt.kind() == hal::event::type::quit_requested)
         return EXIT_SUCCESS; // Normal termination.
     }
@@ -58,13 +58,12 @@ Halcyon provides several macro functions for easing your debugging experience.
 - `HAL_PRINT` - print a variadic amount of arguments (must support std::ostream::operator<<).
 - `HAL_ASSERT[_VITAL]` - Assert that a condition is true, panic if not.
 - `HAL_WARN_IF[_VITAL]` - Print a warning message if a condition is true.
-- `HAL_PANIC` - Print where the panic occurred along with variadic user-supplied information. Exits by default.
+- `HAL_PANIC` - Print where the panic occurred along with variadic user-supplied information, then exit.
 
 Halcyon's debugging facilities are configured via several macros.  
 If NDEBUG is not defined, debugging is implicitly enabled in advanced mode.
 - `HAL_DEBUG_ENABLED`: Enables all debugging macros.
 - `HAL_DEBUG_ADVANCED`: Enables time logging, and outputs to an additional file. This adds static variables to your program.
-- `HAL_NO_EXIT_ON_PANIC`: Disables exit-on-panic behavior. Useful for when you want to roll your own error handling, but still want to trace what went wrong.
 
 # Wishlist
 Some things I'd like to eventually implement.  
