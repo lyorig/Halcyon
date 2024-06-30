@@ -42,14 +42,8 @@ namespace hal
         {
         }
 
-        // 0xAARRGGBB value.
-        constexpr color(hex_t argb)
-            : color { argb & 0xFFFFFF, static_cast<value_t>(argb >> 24) }
-        {
-        }
-
         // 0xRRGGBB color, 0 - 255 alpha.
-        constexpr color(hex_t rgb, value_t alpha)
+        constexpr color(hex_t rgb, value_t alpha = SDL_ALPHA_OPAQUE)
             : SDL_Color { static_cast<value_t>((rgb >> 16) & 0xFF),
                 static_cast<value_t>((rgb >> 8) & 0xFF),
                 static_cast<value_t>(rgb & 0xFF),
