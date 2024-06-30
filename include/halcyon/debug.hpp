@@ -187,16 +187,16 @@ namespace hal
 #ifdef HAL_DEBUG_ENABLED
 
     #define HAL_PRINT      ::hal::debug::print
-    #define HAL_PANIC(...) ::hal::debug::panic(__PRETTY_FUNCTION__, __FILE_NAME__, __LINE__ __VA_OPT__(, ) __VA_ARGS__)
+    #define HAL_PANIC(...) ::hal::debug::panic(__PRETTY_FUNCTION__, __FILE_NAME__, __LINE__, __VA_ARGS__)
 
-    #define HAL_WARN(...) ::hal::debug::warn(__VA_OPT__(, ) __VA_ARGS__)
+    #define HAL_WARN(...) ::hal::debug::warn(__VA_ARGS__)
 
-    #define HAL_WARN_IF(cond, ...)       HAL_WARN_IF_VITAL(cond __VA_OPT__(, ) __VA_ARGS__)
-    #define HAL_WARN_IF_VITAL(cond, ...) ::hal::debug::warn_if(cond __VA_OPT__(, ) __VA_ARGS__)
+    #define HAL_WARN_IF(cond, ...)       HAL_WARN_IF_VITAL(cond, __VA_ARGS__)
+    #define HAL_WARN_IF_VITAL(cond, ...) ::hal::debug::warn_if(cond, __VA_ARGS__)
 
-    #define HAL_ASSERT(cond, ...) HAL_ASSERT_VITAL(cond __VA_OPT__(, ) __VA_ARGS__)
+    #define HAL_ASSERT(cond, ...) HAL_ASSERT_VITAL(cond, __VA_ARGS__)
     #define HAL_ASSERT_VITAL(cond, ...) \
-        ::hal::debug::verify(cond, #cond, __PRETTY_FUNCTION__, __FILE_NAME__, __LINE__ __VA_OPT__(, ) __VA_ARGS__)
+        ::hal::debug::verify(cond, #cond, __PRETTY_FUNCTION__, __FILE_NAME__, __LINE__, __VA_ARGS__)
 
 #else
 
