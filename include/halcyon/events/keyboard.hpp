@@ -16,11 +16,6 @@
 
 namespace hal
 {
-    namespace proxy
-    {
-        class keyboard;
-    }
-
     namespace keyboard
     {
         // A representation of a physical, layout- and locale-independent button.
@@ -207,6 +202,11 @@ namespace hal
         key    to_key(button btn);
         button to_button(key k);
 
+        namespace proxy
+        {
+            class keyboard;
+        }
+
         // A reference to the keyboard state. Unlike that mouse state,
         // you can keep this object around, as it always references the current
         // state as long as you keep polling for event in your application loop.
@@ -236,7 +236,6 @@ namespace hal
     namespace keyboard
     {
         template <typename T>
-            requires requires(const T& x) { hal::to_string(x); }
         std::ostream& operator<<(std::ostream& str, const T& obj)
         {
             return str << hal::to_string(obj);

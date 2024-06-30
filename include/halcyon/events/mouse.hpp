@@ -47,7 +47,7 @@ namespace hal
             state(pass_key<authority_t>);
 
             // [private] Constructor meant for events.
-            state(std::uint32_t mask, pass_key<event::mouse_motion>);
+            state(Uint32 mask, pass_key<event::mouse_motion>);
 
             u8 mask() const;
 
@@ -87,7 +87,6 @@ namespace hal
     namespace mouse
     {
         template <typename T>
-            requires requires(const T& x) { hal::to_string(x); }
         std::ostream& operator<<(std::ostream& str, const T& obj)
         {
             return str << hal::to_string(obj);

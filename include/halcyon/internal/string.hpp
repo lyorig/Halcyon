@@ -5,11 +5,6 @@
 
 namespace hal
 {
-    namespace proxy
-    {
-        class clipboard;
-    }
-
     class string;
 
     template <>
@@ -48,6 +43,11 @@ namespace hal
         using super::data;
         char* data();
     };
+
+    namespace proxy
+    {
+        class clipboard;
+    }
 
     // SDL sometimes returns string pointers that we have to free via
     // its own function afterwards. This is a wrapper of that functionality

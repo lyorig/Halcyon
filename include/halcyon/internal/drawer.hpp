@@ -10,12 +10,11 @@
 
 namespace hal::detail
 {
-
     // A base drawer class, implementing the builder method for drawing textures.
     // Designed to be used as an rvalue - all functions should only be called once.
     // It's possible to store it, but this is only recommended for:
     // a) constant textures, and
-    // b) those who know what they're doing. I'm sure you do, though.
+    // b) those who know what they're doing (I'm sure you do, though.)
     // "Now, now, if you follow standard insertion procedures, everything will be fine."
     template <typename T, meta::one_of<pixel_t, coord_t> Dst_type, typename Pass, typename This>
     class drawer

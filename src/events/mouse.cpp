@@ -11,7 +11,7 @@ mouse::state::state(pass_key<authority_t>)
 {
 }
 
-mouse::state::state(std::uint32_t mask, pass_key<event::mouse_motion>)
+mouse::state::state(Uint32 mask, pass_key<event::mouse_motion>)
     : m_state { static_cast<u8>(mask) }
 {
 }
@@ -23,5 +23,5 @@ u8 mouse::state::mask() const
 
 bool mouse::state::operator[](button btn) const
 {
-    return m_state & SDL_BUTTON(std::to_underlying(btn));
+    return static_cast<bool>(m_state & SDL_BUTTON(std::to_underlying(btn)));
 }

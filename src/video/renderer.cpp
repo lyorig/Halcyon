@@ -5,6 +5,8 @@
 #include <halcyon/video/texture.hpp>
 #include <halcyon/video/window.hpp>
 
+#include <halcyon/utility/locks.hpp>
+
 using namespace hal;
 
 using cv = view<const renderer>;
@@ -240,6 +242,12 @@ copyer& copyer::outline()
 {
     m_pass.draw(m_dst);
     return *this;
+}
+
+copyer& copyer::outline(color c)
+{
+    lock::color _ { m_pass, c };
+    return outline();
 }
 
 void copyer::operator()()

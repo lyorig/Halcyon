@@ -60,7 +60,8 @@ namespace hal
             i32    rate;
         };
 
-        class stream : public detail::raii_object<stream,  ::SDL_FreeAudioStream>
+        // A stream that transforms an input of a certain format to an output of another format.
+        class stream : public detail::raii_object<stream, ::SDL_FreeAudioStream>
         {
         public:
             // Default constructor. Creates an invalid stream.

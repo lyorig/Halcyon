@@ -5,7 +5,6 @@
 #include <SDL_audio.h>
 
 #include <halcyon/types/numeric.hpp>
-#include <halcyon/utility/metaprogramming.hpp>
 
 namespace hal
 {

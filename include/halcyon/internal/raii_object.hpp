@@ -1,22 +1,21 @@
 #pragma once
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
 #include <halcyon/debug.hpp>
 
 // internal/raii_object.hpp:
-// An SDL resource base class.
+// SDL view and resource base classes.
+// The hierarchy goes like this:
+// view<const T> -> view<T> -> raii_object<T> -> T
 
 namespace hal
 {
     namespace detail
     {
-        template <typename Underlying_Type>
+        template <typename SDL_Type>
         class view_base
         {
         public:
-            using value_type = Underlying_Type;
+            using value_type = SDL_Type;
 
             using pointer       = value_type*;
             using const_pointer = const value_type*;
@@ -43,7 +42,7 @@ namespace hal
 
             view_base(std::nullptr_t) = delete;
 
-            view_base(Underlying_Type* ptr)
+            view_base(SDL_Type* ptr)
                 : m_ptr { ptr }
             {
                 HAL_ASSERT(valid(), debug::last_error());
@@ -66,7 +65,7 @@ namespace hal
                 return *this;
             }
 
-            Underlying_Type* m_ptr;
+            SDL_Type* m_ptr;
         };
     }
 

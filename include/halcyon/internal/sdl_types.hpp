@@ -6,7 +6,7 @@
 #include <halcyon/utility/concepts.hpp>
 
 // internal/sdl_types.hpp:
-// Type aliases for base library types.
+// Type aliases for underlying library types.
 // Also prevents circular includes in other files.
 
 namespace hal

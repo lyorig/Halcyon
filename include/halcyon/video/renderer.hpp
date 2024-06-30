@@ -118,7 +118,7 @@ namespace hal
     // is attached to a window. Multiple renderers can exist for a single window, i.e. a hardware-
     // accelerated one, plus a software fallback in case the former isn't available.
     // By default, renderers use hardware acceleration. You can override this via renderer flags.
-    class renderer : public detail::raii_object<renderer,  &::SDL_DestroyRenderer>
+    class renderer : public detail::raii_object<renderer, &::SDL_DestroyRenderer>
     {
     public:
         enum class flags : u8
@@ -197,6 +197,11 @@ namespace hal
         // Can be called at any time, but you probably want to call this
         // after properly setting the destination rectangle.
         [[nodiscard]] copyer& outline();
+
+        // Outlines the current destination with a certain color.
+        // Can be called at any time, but you probably want to call this
+        // after properly setting the destination rectangle.
+        [[nodiscard]] copyer& outline(color c);
 
         // Finish the operation.
         void operator()();

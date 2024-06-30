@@ -68,9 +68,10 @@ namespace hal
 
             case multiply:
                 return src * m_data.mul;
-            }
 
-            return {};
+            default:
+                return {};
+            }
         }
 
     private:

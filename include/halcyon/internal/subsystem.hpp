@@ -41,9 +41,10 @@ namespace hal
 
         case events:
             return "Events";
-        }
 
-        return "[unknown]";
+        default:
+            return "[unknown]";
+        }
     }
 
     namespace detail
@@ -103,7 +104,8 @@ namespace hal
 
     namespace compile_settings
     {
-        // Check whether SDL has redefined "main" to be its own SDL_main. Use hal::meta::is_correct_main to check.
+        // Check whether SDL has redefined "main" to be its own SDL_main. Use hal::meta::is_correct_main
+        // to determine whether your main function signature is portable.
         constexpr bool main_redefined {
 #ifdef main
             true

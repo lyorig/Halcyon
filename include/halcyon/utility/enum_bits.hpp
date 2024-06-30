@@ -3,10 +3,9 @@
 #include <utility>
 
 #include <halcyon/utility/concepts.hpp>
-#include <halcyon/utility/pass_key.hpp>
 
 // utility/enum_bitset.hpp:
-// Helper template class for potentially scoped enum bit manipulation.
+// Helper template class for bit manipulation with enums.
 // Aims to keep the safety of scoped enums while taking out the
 // annoying part of writing std::to_underlying() everywhere.
 

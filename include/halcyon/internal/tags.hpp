@@ -24,7 +24,6 @@
 
 namespace hal
 {
-    HAL_TAG(as_size);
-
+    HAL_TAG(as_size)
     HAL_TAG(fill)
 }
