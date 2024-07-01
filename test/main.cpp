@@ -154,10 +154,10 @@ namespace test
         {
             hal::ttf::context tctx;
 
-            HAL_ASSERT(hal::ttf::context::initialized());
+            HAL_ASSERT(hal::ttf::context::initialized(), "TTF context should be initialized");
         }
 
-        HAL_ASSERT(!hal::ttf::context::initialized());
+        HAL_ASSERT(!hal::ttf::context::initialized(), "TTF context should not be initialized");
 
         return EXIT_SUCCESS;
     }
